@@ -5,15 +5,34 @@ Le projet Pirates des Caraïbes fait appel au concept de la téléopération d
 
 ### Dévelopement du projet
 
-Étape pour initialiser l'environnement de dévelopement :
+Étapes pour initialiser l'environnement de dévelopement :
 
 #### Pour windows :
 
-1.	Installer python 3.4.4 <https://www.python.org/ftp/python/3.4.4/python-3.4.4.amd64.msi>
+1.	Installer python 3.4.4 a l'adresse suivante:
+		<https://www.python.org/downloads/windows/>
+2.	Installer les outils d'environnement virtuel avec la commande suivante :
+		```pip install virtualenv```
+3.	Installer l'environnement virtuel :
+		```virtualenv venv``
+4.	Activer l'environnement virtuel :
+		```.\venv\Scripts\activate```
+5.	Installer sur l'environnement virtuel les dépendances du projet :
+		```pip install -r requirements.txt```
+6.	Pour terminer désactiver l'environnement virtuel :
+		```deactivate```
 
+Étapes pour le développement :
+ 
 Dans un terminal: 
  
-1.	Executer : ```./venv/Scripts/activate ```
-2.	Executer : ```pip install -r requirements.txt``` pour installer les dépendances
+1.	Executer : ```.\venv\Scripts\activate ```
+2.	Executer : ```pip install -r requirements.txt --upgrade``` pour mettre a jour les dépendances
 3.	Pour terminer, executer deactivate
 
+Pour mettre à jour la liste de dépendances il faut écrire en UTF-8 les dépendances dans le fichier requirements.txt dans le format suivant :
+
+```
+nose==1.3.7
+module=version.number 
+```
