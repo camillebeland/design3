@@ -7,8 +7,9 @@ Le projet Pirates des Caraïbes fait appel au concept de la téléopération d
 
 Étape pour initialiser l'environnement de dévelopement :
 
-1.	Executer
-		```bash ./venv/Scripts/activate ```
-2.	Executer 
+Dans un terminal: 
+ 
+1.	Executer : ```./venv/Scripts/activate ```
+2.	Executer : ```pip install -r requirements.txt``` pour installer les dépendances
 3.	Pour terminer, executer deactivate
 
