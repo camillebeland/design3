@@ -1,11 +1,12 @@
 # Projet de Design III 
-## Pirates des Caraïbes
+## Pirates des CaraÃ¯bes
 ### Description Sommaire
-Le projet Pirates des Caraïbes fait appel au concept de la téléopération d’un robot autonome.  Un usager utilise un ordinateur (la station de base) pour acheminer, via un lien sansfil, une commande de haut niveau au robot situé sur un terrain à distance. Avec ses capacités de perception, de locomotion, de préhension et son intelligence, le robot exécute sans intervention humaine la tâche demandée. Le robot envoie un signal à la station de base pour confirmer la fin de l’exécution de la tâche lorsque celle-ci est complétée.
+Le projet Pirates des CaraÃ¯bes fait appel au concept de la tÃ©lÃ©opÃ©ration dÂ’un robot autonome.  Un usager utilise un ordinateur (la station de base) pour acheminer, via un lien sansfil, une commande de haut niveau au robot situÃ© sur un terrain Ã  distance. Avec ses capacitÃ©s de perception, de locomotion, de prÃ©hension et son intelligence, le robot exÃ©cute sans intervention humaine la tÃ¢che demandÃ©e. Le robot envoie un signal Ã  la station de base pour confirmer la fin de lÂ’exÃ©cution de la tÃ¢che lorsque celle-ci est complÃ©tÃ©e.
 
-### Dévelopement du projet
+### DÃ©velopement du projet
 
-Étape pour initialiser l'environnement de dévelopement :
+Ã‰tape pour initialiser l'environnement de dÃ©velopement :
+
 1.	Executer ./venv/Scripts/activate
 2.	Pour terminer, Exeucter deactivate
 
