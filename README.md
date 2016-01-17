@@ -7,6 +7,8 @@ Le projet Pirates des Caraïbes fait appel au concept de la téléopération d
 
 Étape pour initialiser l'environnement de dévelopement :
 
-1.	Executer ./venv/Scripts/activate
-2.	Pour terminer, Exeucter deactivate
+1.	Executer
+		```bash ./venv/Scripts/activate ```
+2.	Executer 
+3.	Pour terminer, executer deactivate
 
