@@ -57,8 +57,8 @@ docs/_build/
 target/
 
 # Virtualenv
-# http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
 .Python
+venv/
 [Bb]in
 [Ii]nclude
 [Ll]ib
