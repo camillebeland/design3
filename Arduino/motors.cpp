@@ -2,14 +2,10 @@
 #include "motor.h"
 
 void motor_init(){
-	pinMode(IN_ENCODER_1_CH1, INPUT);
-	pinMode(IN_ENCODER_1_CH2, INPUT);
-	pinMode(IN_ENCODER_2_CH1, INPUT);
-	pinMode(IN_ENCODER_2_CH2, INPUT);
-	pinMode(IN_ENCODER_3_CH1, INPUT);
-	pinMode(IN_ENCODER_3_CH2, INPUT);
-	pinMode(IN_ENCODER_4_CH1, INPUT);
-	pinMode(IN_ENCODER_4_CH2, INPUT);
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_A_CH1), count_tick_A, RISING);
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_B_CH1), count_tick_B, RISING);
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_C_CH1), count_tick_C, RISING);
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_D_CH1), count_tick_D, RISING);	
 	
 	pinMode(OUT_MOTOR_1, OUTPUT);
 	pinMode(OUT_MOTOR_2, OUTPUT);
@@ -22,67 +18,102 @@ void motor_init(){
 	analogWrite(OUT_MOTOR_4, ZERO_SPEED);	
 }
 
+int tick_remaining_A = 0;
+int tick_remaining_B = 0;
+int tick_remaining_C = 0;
+int tick_remaining_D = 0;
+
 void move(int &direction, int & tick){
 	
-	//tick remaining for each motor
-	int tick_left_X = tick;
-	int tick_left_Y = tick;
-	
-	//set motors of interest + initial state + default speed
-	if (direction == FORWARD || direction == LEFT){
-		int OUT_MOTOR_X = OUT_MOTOR_1;
-		int OUT_MOTOR_Y = OUT_MOTOR_3;
-		
-		int motor_X_ch_one = digitalRead(IN_ENCODER_1_CH1);
-		int motor_X_ch_two = digitalRead(IN_ENCODER_1_CH2);
-		int motor_Y_ch_one = digitalRead(IN_ENCODER_3_CH1);
-		int motor_Y_ch_two = digitalRead(IN_ENCODER_3_CH2);	
-		
-		int default_speed = ZERO_SPEED + DEFAULT_SPEED;
+	//set motors of interest + read initial state
+	if (direction == FORWARD || direction == BACKWARD){
+		tick_remaining_A = tick;
+		tick_remaining_C = tick;
+		int OUT_MOTOR_X = OUT_MOTOR_A;
+		int OUT_MOTOR_Y = OUT_MOTOR_C;
+		if (direction == FORWARD){
+			int polarity = 1;
+		}
+		else{
+			int polarity = -1;
+		}
 	}
-	if (direction == BACKWARD || direction == RIGHT){
-		int OUT_MOTOR_X = OUT_MOTOR_2;
-		int OUT_MOTOR_Y = OUT_MOTOR_4;		
-		
-		int motor_X_ch_one = digitalRead(IN_ENCODER_2_CH1);
-		int motor_X_ch_two = digitalRead(IN_ENCODER_2_CH2);
-		int motor_Y_ch_one = digitalRead(IN_ENCODER_4_CH1);
-		int motor_Y_ch_two = digitalRead(IN_ENCODER_4_CH2);
-
-		int start_speed = ZERO_SPEED - DEFAULT_SPEED;
+	else if (direction == LEFT || direction == RIGHT){
+		tick_remaining_B = tick;
+		tick_remaining_D = tick;
+		int OUT_MOTOR_X = OUT_MOTOR_B;
+		int OUT_MOTOR_Y = OUT_MOTOR_D;		
+		if (direction == LEFT){
+			int polarity = 1;
+		}
+		else{
+			int polarity = -1;
+		}
 	}
 	
 	int PID_X = 0;
 	int PID_Y = 0;
 	
-	while (tick_left_X > 0 || tick_left_Y > 0){
-		analogWrite(OUT_MOTOR_X, start_speed + PID_X);
-		analogWrite(OUT_MOTOR_Y, start_speed + PID_Y);
+	unsigned long last_millis = 0;
+	int wanted_speed = DEFAULT_SPEED;
+	int last_tick_remaining_X = tick;
+	int last_tick_remaining_Y = tick;
+	int tick_remaining_X = tick;
+	int tick_remaining_Y = tick;
+	
+	// -------------------------------------------------------------------------//
+	//PID STUFF HERE 
+	while (tick_remaining_X > 0 || tick_remaining_Y > 0){
+		if (millis() - last_millis >= DT)
+		{
+			if (direction == LEFT || direction == RIGHT){
+				tick_remaining_X = tick_remaining_A;
+				tick_remaining_Y = tick_remaining_C;
+			}
+			else if (direction == FORWARD || direction == BACKWARD){
+				tick_remaining_X = tick_remaining_B;
+				tick_remaining_Y = tick_remaining_D;
+			}
+			
+			if (tick_remaining_X < CRITICAL_TICK || tick_remaining_Y < CRITICAL_TICK){
+				wanted_speed = DEFAULT_SPEED / 4;
+			}
 		
-		// THE FOLLOWING TO PUT IN GLOBAL VARIABLE/INTERUPT
-		if (digital(IN_ENCODER_1_CH1) != wheel_one_ch_one){
-			tick_left_X--;
-			motor_X_ch_one = digital(IN_ENCODER_1_CH1);
+			last_millis = millis();
+			int error_X = wanted_speed -  (last_tick_remaining_X - tick_remaining_X);
+			int error_Y = wanted_speed -  (last_tick_remaining_Y - tick_remaining_Y);
+			PID_X +=(error_X * KI);
+			PID_Y +=(error_Y * KI);			
+
+			analogWrite(OUT_MOTOR_X, ZERO_SPEED + (polarity*PID_X));
+			analogWrite(OUT_MOTOR_Y, ZERO_SPEED + (polarity*PID_Y));
+			
+			last_tick_remaining_X = tick_remaining_X;
+			last_tick_remaining_Y = tick_remaining_Y;
 		}
-		if (digitalRead(IN_ENCODER_1_CH2) != wheel_one_ch_two){
-			tick_left_X--;
-			motor_X_ch_two = digitalRead(IN_ENCODER_1_CH2);
-		}
-		if (digital(IN_ENCODER_3_CH1) != wheel_three_ch_one){
-			tick_left_Y--;
-			motor_Y_ch_one = digital(IN_ENCODER_3_CH1) ;
-		}
-		if (digitalRead(IN_ENCODER_3_CH2) != wheel_three_ch_two){
-			tick_left_Y--;
-			motor_Y_ch_two = digitalRead(IN_ENCODER_3_CH2);
-		}
+		// END OF PID STUFF
 		// --------------------------------------------------------------------------------------//
-		// DO THE PID STUFF HERE 
-		// Regulator FOR tick_left (distance left)
-		// Regulator FOR (motor 1 vs motor 3, same speed or position)
-		// --------------------------------------------------------------------------------------//	
 	}
 	//turn off motors
 	analogWrite(OUT_MOTOR_X, ZERO_SPEED);
 	analogWrite(OUT_MOTOR_Y, ZERO_SPEED);
+	
+	//RESETS TICKS
+	tick_remaining_A = 0;
+	tick_remaining_B = 0;
+	tick_remaining_C = 0;
+	tick_remaining_D = 0;
+}
+
+void count_tick_A(){
+	tick_remaining_A--;
+}
+void count_tick_B(){
+	tick_remaining_B--;
+}
+void count_tick_C(){
+	tick_remaining_C--;
+}
+void count_tick_D(){
+	tick_remaining_D--;
 }
