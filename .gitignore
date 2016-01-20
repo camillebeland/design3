@@ -67,3 +67,6 @@ venv/
 [Ss]cripts
 pyvenv.cfg
 pip-selfcheck.json
+*.aux
+Rapport/Rapport.out
+*.toc
