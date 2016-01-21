@@ -68,3 +68,6 @@ venv/
 pyvenv.cfg
 pip-selfcheck.json
 .idea/workspace.xml
+*.aux
+Rapport/Rapport.out
+*.toc
