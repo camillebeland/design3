@@ -1,10 +1,9 @@
 from nose.tools import *
-from robot import *
+from src.robot.robot import * 
 
 def test_print():
     allo = Robot()
     allo.print()
 
 
-test_print()
 
