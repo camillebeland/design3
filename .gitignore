@@ -71,3 +71,4 @@ pip-selfcheck.json
 *.aux
 Rapport/Rapport.out
 *.toc
+src/webapp/node_modules/
