@@ -24,7 +24,8 @@
 #define DT 0.5 // sec
 #define DEFAULT_SPEED 256 // TICKS PER DT
 
-#DEFINE KI 1 // for PID
+#define KS 1 // for delta motors
+#define KI 1 // for PID
 
 #define CRITICAL_TICK 256 // critical distance after what speed is reduced
 
@@ -33,11 +34,20 @@
 #define FORWARD 3
 #define BACKWARD 4
 
+// -------------SETUP ----------------
 void motor_init();
 
-void move(int &direction, int & tick);
 
-// ISR
+//-------------------------------------
+void move_straight(int direction, int tick, int speed);
+void PID_motors();
+void reset();
+void start();
+void stop();
+void stop_wheel(int motor);
+
+
+// ----------------ISR ----------------
 
 void count_tick_A();
 void count_tick_B();
