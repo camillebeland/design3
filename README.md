@@ -14,7 +14,7 @@ Le projet Pirates des Caraïbes fait appel au concept de la téléopération d'u
 2.	Installer les outils d'environnement virtuel avec la commande suivante :
 		```pip install virtualenv```
 3.	Installer l'environnement virtuel :
-		```virtualenv venv``
+		```virtualenv venv```
 4.	Activer l'environnement virtuel :
 		```.\venv\Scripts\activate```
 5.	Installer sur l'environnement virtuel les dépendances du projet :
