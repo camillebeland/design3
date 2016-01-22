@@ -1,5 +1,6 @@
 from threading import Thread
 from time import sleep, clock
+from math import cos, sin
 
 class Robot:
     def __init__ (self, refresh_time = 10):
@@ -33,6 +34,6 @@ class Robot:
         self.vel[1] = vel_y
 
 
-    def move(self, direction, speed):
-        if(direction == 1):
-            self.pos = [self.pos[0] - ticks, self.pos[1]]
+    def move(self, angle, speed):
+        self.vel[0] = cos(angle)*speed
+        self.vel[1] = sin(angle)*speed
