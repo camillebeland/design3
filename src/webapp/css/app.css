@@ -1,7 +1,8 @@
-body{
-    background-color:#42A5F5;
+body {
+    background-color: #42A5F5;
 }
 
-canvas{
-    background-color:white;
+#mapCanvas {
+    /*background-color: white;*/
+    border: 1px solid black;
 }
