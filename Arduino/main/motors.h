@@ -18,11 +18,21 @@
 #define OUT_MOTOR_C 12
 #define OUT_MOTOR_D 13
 
+#define POLARITY_MOTOR_A 20
+#define POLARITY_MOTOR_B 21
+#define POLARITY_MOTOR_C 22
+#define POLARITY_MOTOR_D 23
+
+#define ACTIVATION_MOTOR_A 24
+#define ACTIVATION_MOTOR_B 25
+#define ACTIVATION_MOTOR_C 26
+#define ACTIVATION_MOTOR_D 27
+
 // 0 to 255
 #define ZERO_SPEED 128
 
-#define DT 0.5 // sec
-#define DEFAULT_SPEED 256 // TICKS PER DT
+#define DT 0.2 // sec
+#define DEFAULT_SPEED 100 // TICKS PER DT
 
 #define KS 1 // for delta motors
 #define KI 1 // for PID
@@ -39,12 +49,15 @@ void motor_init();
 
 
 //-------------------------------------
+void move(float angle, int tick, int speed);
+void move_wheel(int wheel, int wheel_tick, int polarity,  int wheel_speed);
+void stop_wheel(int motor);
 void move_straight(int direction, int tick, int speed);
 void PID_motors();
 void reset();
 void start();
 void stop();
-void stop_wheel(int motor);
+
 
 
 // ----------------ISR ----------------
