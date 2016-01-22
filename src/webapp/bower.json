@@ -17,6 +17,7 @@
     "bootstrap": "~3.3.6",
     "angular": "~1.4.9",
     "reset-css": "~2.0.2011012602",
-    "angular-ui-router": "~0.2.15"
+    "angular-ui-router": "~0.2.15",
+    "EaselJS": "easeljs#~0.8.2"
   }
 }
