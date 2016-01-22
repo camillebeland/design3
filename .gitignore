@@ -72,3 +72,4 @@ pip-selfcheck.json
 Rapport/Rapport.out
 *.toc
 src/webapp/node_modules/
+src/webapp/bower_components/
