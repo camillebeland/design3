@@ -7,19 +7,25 @@ website.config(function ($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('home', {
         url: "/",
-        templateUrl: "partials/home.html"
+        templateUrl: "partials/home.html",
+        controller: "homeController"
     })
+
 });
 
-var canvas = angular.element(document.getElementById("mapCanvas"));
-//var stage = new createjs.Stage(canvas);
 
-if (canvas.getContext) {
+
+website.controller('homeController', ['$scope', function ($scope) {
+
+    var canvas = document.getElementById("mapCanvas");
+
+    console.log("drawing");
     var ctx = canvas.getContext("2d");
+    //clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "rgb(200,0,0)";
-    ctx.fillRect(10, 10, 55, 50);
+    ctx.fillRect(50, 50, 55, 50);
 
-    ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
-    ctx.fillRect(30, 30, 55, 50);
-}
+
+}]);
