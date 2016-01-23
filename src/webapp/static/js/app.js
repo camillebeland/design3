@@ -7,7 +7,7 @@ website.config(function ($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('home', {
         url: "/",
-        templateUrl: "partials/home.html",
+        templateUrl: "static/partials/home.html",
         controller: "homeController"
     })
 
