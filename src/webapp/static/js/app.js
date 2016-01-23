@@ -18,14 +18,16 @@ website.config(function ($stateProvider, $urlRouterProvider) {
 website.controller('homeController', ['$scope', function ($scope) {
 
     var canvas = document.getElementById("mapCanvas");
-
-    console.log("drawing");
     var ctx = canvas.getContext("2d");
-    //clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var socket = io();
+    ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
 
     ctx.fillStyle = "rgb(200,0,0)";
-    ctx.fillRect(50, 50, 55, 50);
 
+    setInterval(function(){ socket.emit('message') }, 3000); //Refresh data every 3 seconds
+    socket.on('event', function(msg){
+        ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
+        ctx.fillRect(msg.data, msg.data, msg.data, msg.data);
+    });
 
 }]);
