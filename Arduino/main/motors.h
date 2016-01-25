@@ -50,6 +50,7 @@ void motor_init();
 
 //-------------------------------------
 void move(float angle, int tick, int speed);
+
 void move_wheel(int wheel, int wheel_tick, int polarity,  int wheel_speed);
 void stop_wheel(int motor);
 void move_straight(int direction, int tick, int speed);

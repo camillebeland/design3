@@ -57,15 +57,19 @@ int polarity_B;
 int polarity_C;
 int polarity_D;
 
-int PID_A = 0;
-int PID_B = 0;
-int PID_C = 0;
-int PID_D = 0;
+long PID_A = 0;
+long PID_B = 0;
+long PID_C = 0;
+long PID_D = 0;
 
-int wanted_speed_A = 0;
-int wanted_speed_B = 0;
-int wanted_speed_C = 0;
-int wanted_speed_D = 0;
+long wanted_speed_A = 0;
+long actual_speed_A = 0;
+long wanted_speed_B = 0;
+long actual_speed_B = 0;
+long wanted_speed_C = 0;
+long actual_speed_C = 0;
+long wanted_speed_D = 0;
+long actual_speed_D = 0;
 
 bool straight_X = false;
 bool straight_Y = false;
@@ -153,20 +157,24 @@ void PID_motors(){
 		if (tick_remaining_A > 0 || tick_remaining_B >0 || tick_remaining_C >0 ||tick_remaining_D >0){
 			unsigned long dt = millis() - last_millis;
 			if (dt >= DT){
-
+				
+				actual_speed_A = (last_tick_remaining_A - tick_remaining_A)/dt;
+				actual_speed_B = (last_tick_remaining_B - tick_remaining_B)/dt;
+				actual_speed_C = (last_tick_remaining_C - tick_remaining_C)/dt;
+				actual_speed_D = (last_tick_remaining_D - tick_remaining_D)/dt;
 				// Error = difference to wanted speed
-				int error_A = wanted_speed_A -  (last_tick_remaining_A - tick_remaining_A)/dt ;
-				int error_B = wanted_speed_B -  (last_tick_remaining_B - tick_remaining_B)/dt ;
-				int error_C = wanted_speed_C -  (last_tick_remaining_C - tick_remaining_C)/dt ;
-				int error_D = wanted_speed_D -  (last_tick_remaining_D - tick_remaining_D)/dt ;				
+				int error_A = wanted_speed_A - actual_speed_A;
+				int error_B = wanted_speed_B - actual_speed_B;
+				int error_C = wanted_speed_C - actual_speed_C;
+				int error_D = wanted_speed_D - actual_speed_D;				
 				
 				int delta_motors_X = 0;
 				if (straight_X){
-					delta_motors_X =  (last_tick_remaining_A - tick_remaining_A)/dt  -(last_tick_remaining_C - tick_remaining_C)/dt ;
+					delta_motors_X =  actual_speed_A  - actual_speed_C ;
 				}
 				int delta_motors_Y = 0;
 				if (straight_Y){
-					delta_motors_Y =(last_tick_remaining_B - tick_remaining_B)/dt -  (last_tick_remaining_D - tick_remaining_D)/dt;
+					delta_motors_Y =actual_speed_B - actual_speed_D;
 				}
 				
 				PID_A +=(error_A * KI) - (delta_motors_X*KS);
