@@ -1,7 +1,7 @@
 #ifndef motors_h
 #define motors_h
 
-#define INT_ENCODER_A_CH1 2
+#define INT_ENCODER_A_CH1 18
 #define INT_ENCODER_A_CH2 0
 
 #define INT_ENCODER_B_CH1 3
@@ -18,24 +18,25 @@
 #define OUT_MOTOR_C 12
 #define OUT_MOTOR_D 13
 
-#define POLARITY_MOTOR_A 20
-#define POLARITY_MOTOR_B 21
-#define POLARITY_MOTOR_C 22
-#define POLARITY_MOTOR_D 23
+#define PIN_ONE_MOTOR_A 2
+#define PIN_ONE_MOTOR_B 0
+#define PIN_ONE_MOTOR_C 0
+#define PIN_ONE_MOTOR_D 0
 
-#define ACTIVATION_MOTOR_A 24
-#define ACTIVATION_MOTOR_B 25
-#define ACTIVATION_MOTOR_C 26
-#define ACTIVATION_MOTOR_D 27
+#define PIN_TWO_MOTOR_A 3
+#define PIN_TWO_MOTOR_B 0
+#define PIN_TWO_MOTOR_C 0
+#define PIN_TWO_MOTOR_D 0
 
 // 0 to 255
-#define ZERO_SPEED 128
+#define ZERO_SPEED 0
 
-#define DT 0.2 // sec
+#define DT 250 // sec
 #define DEFAULT_SPEED 100 // TICKS PER DT
 
 #define KS 1 // for delta motors
-#define KI 1 // for PID
+#define KI 0.025 // for PID
+#define KP 0.05 //for PID
 
 #define CRITICAL_TICK 256 // critical distance after what speed is reduced
 
@@ -51,7 +52,7 @@ void motor_init();
 //-------------------------------------
 void move(float angle, int tick, int speed);
 
-void move_wheel(int wheel, int wheel_tick, int polarity,  int wheel_speed);
+void move_wheel(int wheel, int wheel_tick, bool polarity,  int wheel_speed);
 void stop_wheel(int motor);
 void move_straight(int direction, int tick, int speed);
 void PID_motors();
