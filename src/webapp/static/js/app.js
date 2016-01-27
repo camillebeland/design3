@@ -24,10 +24,10 @@ website.controller('homeController', ['$scope', function ($scope) {
 
     ctx.fillStyle = "rgb(200,0,0)";
 
-    setInterval(function(){ socket.emit('message') }, 3000); //Refresh data every 3 seconds
-    socket.on('event', function(msg){
+    setInterval(function(){ socket.emit('fetchPosition') }, 1000); //Refresh data every 1 second
+    socket.on('position', function(msg){
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
-        ctx.fillRect(msg.data, msg.data, msg.data, msg.data);
+        ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
 }]);
