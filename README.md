@@ -1,6 +1,38 @@
-# Projet de Design III 
-## Pirates des CaraÔbes
+#Projet de Design III 
+## Pirates des Cara√Øbes
 ### Description Sommaire
-Le projet Pirates des CaraÔbes fait appel au concept de la tÈlÈopÈration díun robot autonome.  Un usager utilise un ordinateur (la station de base) pour acheminer, via un lien sansfil, une commande de haut niveau au robot situÈ sur un terrain ‡ distance. Avec ses capacitÈs de perception, de locomotion, de prÈhension et son intelligence, le robot exÈcute sans intervention humaine la t‚che demandÈe. Le robot envoie un signal ‡ la station de base pour confirmer la fin de líexÈcution de la t‚che lorsque celle-ci est complÈtÈe.
+Le projet Pirates des Cara√Øbes fait appel au concept de la t√©l√©op√©ration d'un robot autonome.  Un usager utilise un ordinateur (la station de base) pour acheminer, via un lien sansfil, une commande de haut niveau au robot situ√© sur un terrain √† distance. Avec ses capacit√©s de perception, de locomotion, de pr√©hension et son intelligence, le robot ex√©cute sans intervention humaine la t√¢che demand√©e. Le robot envoie un signal √† la station de base pour confirmer la fin de l'ex√©cution de la t√¢che lorsque celle-ci est compl√©t√©e.
 
+### D√©velopement du projet
 
+√âtapes pour initialiser l'environnement de d√©velopement :
+
+#### Pour windows :
+
+1.	Installer python 3.4.4 a l'adresse suivante:
+		<https://www.python.org/downloads/windows/>
+2.	Installer les outils d'environnement virtuel avec la commande suivante :
+		```pip install virtualenv```
+3.	Installer l'environnement virtuel :
+		```virtualenv venv```
+4.	Activer l'environnement virtuel :
+		```.\venv\Scripts\activate```
+5.	Installer sur l'environnement virtuel les d√©pendances du projet :
+		```pip install -r requirements.txt```
+6.	Pour terminer d√©sactiver l'environnement virtuel :
+		```deactivate```
+
+√âtapes pour le d√©veloppement :
+ 
+Dans un terminal: 
+ 
+1.	Executer : ```.\venv\Scripts\activate ```
+2.	Executer : ```pip install -r requirements.txt --upgrade``` pour mettre a jour les d√©pendances
+3.	Pour terminer, executer deactivate
+
+Pour mettre √† jour la liste de d√©pendances il faut √©crire en UTF-8 les d√©pendances dans le fichier requirements.txt dans le format suivant :
+
+```
+nose==1.3.7
+module=version.number 
+```

@@ -1,0 +1,8 @@
+body {
+    background-color: #42A5F5;
+}
+
+#mapCanvas {
+    background-color: white;
+    border: 1px solid black;
+}

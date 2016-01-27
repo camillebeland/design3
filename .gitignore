@@ -80,3 +80,21 @@ target/
 *.out
 *.pdf
 *.synctex.gz
+
+# Virtualenv
+.Python
+venv/
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+pip-selfcheck.json
+.idea/workspace.xml
+*.aux
+Rapport/Rapport.out
+*.toc
+src/webapp/node_modules/
+src/webapp/bower_components/

@@ -1,0 +1,23 @@
+{
+  "name": "design3_ui",
+  "description": "Base station UI",
+  "main": "index.html",
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "angular": "~1.4.9",
+    "reset-css": "~2.0.2011012602",
+    "angular-ui-router": "~0.2.15",
+    "EaselJS": "easeljs#~0.8.2"
+  }
+}
