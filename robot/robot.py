@@ -2,12 +2,12 @@ from threading import Thread
 from time import sleep, clock
 from math import cos, sin
 
-class Robot:
+class Mock_Robot:
     def __init__ (self, refresh_time = 10):
         self.pos = [0,0]
         self.vel = [0,0]
         self.refresh_time = refresh_time
-        
+
     def __update(self, refresh_time):
         print("Starting Thread for time simulation")
         while(self.running):
@@ -19,7 +19,7 @@ class Robot:
 
 
     def __del__(self):
-        self.running = False
+        self.stop()
 
 
     def start(self):
@@ -29,6 +29,9 @@ class Robot:
         self.thread.start()
 
 
+    def stop(self):
+        self.running = False
+        
     def set_vel(self, vel_x, vel_y):
         self.vel[0] = vel_x
         self.vel[1] = vel_y
