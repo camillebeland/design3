@@ -1,14 +1,25 @@
 from nose.tools import *
-from src.robot.robot import * 
+from nose import with_setup
+from robot.robot import *
 from time import sleep
 
+
+robot = Mock_Robot()
+
+def setup():
+    print("Setting things up")
+    robot.__init__()
+
+def teardown():
+    pass
+
+@with_setup(setup, teardown)
 def test_pos():
-    robot = Robot()
     assert_equal([0,0], robot.pos)
 
 
+@with_setup(setup, teardown)
 def test_speed():
-    robot = Robot()
     robot.start()
     sleep(0.1)
     robot.set_vel(2,1)
@@ -22,10 +33,10 @@ def test_speed():
     assert_equal_with_error(x_expected, x_actual, 0.05)
     assert_equal_with_error(y_expected, y_actual, 0.05)
 
+@with_setup(setup, teardown)
 def test_move():
-    robot = Robot()
     robot.move(3.14159, 2.3)
- 
+
     x_vel_actual = robot.vel[0]
     y_vel_actual = robot.vel[1]
     x_vel_expected = -2.3
