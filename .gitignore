@@ -56,6 +56,31 @@ docs/_build/
 # PyBuilder
 target/
 
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.pdf
+*.synctex.gz
+
 # Virtualenv
 .Python
 venv/
@@ -71,5 +96,6 @@ pip-selfcheck.json
 *.aux
 Rapport/Rapport.out
 *.toc
-src/webapp/node_modules/
-src/webapp/bower_components/
+
+**/node_modules/
+**/bower_components/

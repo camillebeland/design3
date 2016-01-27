@@ -1,11 +1,11 @@
 from flask import Flask, render_template
 from flask.ext.socketio import SocketIO
-from src.robot.robot import Robot
+from robot.robot import Mock_Robot
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socket_io = SocketIO(app)
-robot = Robot()
+robot = Mock_Robot()
 robot.start()
 
 @app.route('/')
