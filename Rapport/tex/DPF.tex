@@ -67,66 +67,102 @@ L'ensemble des circuits doivents être montés sur circuits imprimés. Les breadboa
 
 \paragraph{Détecter la position et l'angle du robot:}
 
-Le robot doit être en mesure de se situer dans son environnement à l'aide des différents capteurs à sa disposition.
+Le robot est en mesure de se situer dans son environnement à l'aide des différents capteurs à sa disposition.
 
 \paragraph{Détecter les îles, leurs formes, tailles et couleurs:}
 
-Le robot doit pouvoir détecter les îles placées de façon aléatoire. Il doit identifier leur dimension, leur couleur et leur forme.
+Le robot détecte les îles placées de façon aléatoire. Il identifie leur dimension, leur couleur et leur forme.
 
 \paragraph{Détecter les trésors:}
 
-Le robot doit être en mesure de détecter les trésors dans l'environnement.
+Le robot est en mesure de détecter les trésors dans l'environnement.
 
 \paragraph{Détecter la station de recharge:}
 
-Le robot doit pouvoir identifier la station de recharge en début de cycle de jeu.
+Le robot peut identifier la station de recharge en début de cycle de jeu.
 
 \paragraph{Détecter les limites de la zone de jeu:}
 
-Le robot doit détecter lors de ses déplacement les limites de la zone de jeu afin de ne jamais entrer en contact avec elles.
+Le robot détecte lors de ses déplacement les limites de la zone de jeu afin de ne jamais entrer en contact avec elles.
 
 \subsection{Acéquérir et décoder un code Manchester}
 
 \paragraph{Acquérir le code Manchester sans-fil:}
 
-Le robot doit pouvoir acquérir un code Manchester à l'aide d'un protocole HF.
+Le robot peut acquérir un code Manchester à l'aide d'un protocole HF.
 
 \paragraph{Décoder le code Manchester:}
 
-Le robot doit être en mesure de décoder le code Manchester afin d'obtenir le caractère ASCII correspondant.
+Le robot est en mesure de décoder le code Manchester afin d'obtenir le caractère ASCII correspondant.
 
 \paragraph{Faire une requête serveur:}
 
-Le robot doit effectuer une requête GET ayant comme paramètre le code reçu par le signal HF. 
+Le robot peut effectuer une requête GET ayant comme paramètre le code reçu par le signal HF. 
 
 \subsection{Trouver et manipuler un trésor}
 
 \paragraph{Charger l'électro-aimant à la station de recharge sans-fil:}
 
+Le robot a un dispositif permettant de charger un condensateur par induction afin d'offrir de la puissance à l'électro-aimant.
+
 \paragraph{Choisir un trésor en fonction de sa position:}
+
+Avec ses capteurs, le robot est en mesure de choisir un des trésor sur la zone de jeu en fonction de sa position.
 
 \paragraph{Soulever et déposer un trésor à l'aide d'un électro-aimant:}
 
+Avec son électro-aimant, le robot est en mesure de soulever et de déposer un trésor.
+
 \subsection{Choisir automatiquement la prochaine action:}
+
+Durant tout le cycle de jeu, le robot est en mesure de décider de la prochaine action. Cela comprend entre autres les déplacements, les rotations, le mouvement de la caméra embarqué et la requête serveur pour le code Manchester.
 
 \subsection{Alimenter le système}
 
 \paragraph{Protéger les différents circuits:}
+
+Toutes les alimentation sont protégées avec des fusibles ou des interrupteurs.
+
 \paragraph{Fournir l'alimentation appropriée à chaque composante:}
+
+Chaque composante a des besoins différents en alimentation. Le robot possède donc une alimentation pour les moteur, l'ordinateur embarqué, la caméra embarqué, le micro-contrôleur, le pololu et l'électro-aimant.
 
 \subsection{Déplacer le robot}
 
 \paragraph{Déplacement omnidirectionel du robot:}
+
+Avec ses 4 roues, le robot est en mesure de se déplacer dans toutes les directions dans les axes X et Y.
+
 \paragraph{Rotation du robot sur lui même:}
+
+Le robot peut tourner sur lui-même à gauche ou à droite.
+
 \paragraph{Asservissement des déplacement en position et en vitesse:}
+
+Les 4 roues sont asservis en vitesse de façon à garder une vitesse constante correspondant à la commande.
+
 \paragraph{Déterminer un trajet pour se rendre d'un point A à un point B:}
+
+Pour un objectif en position donné, le robot peut déterminer une série de mouvement à faire pour s'y rendre.
 
 \subsection{Afficher l'état du jeu}
 
 \paragraph{Afficher le voltage du condensateur:}
+
+Le robot envoit à la station de base le voltage du condensateur qui l'affiche en temps réel.
+
 \paragraph{Afficher la carte virtuelle du jeu avec tous ses éléments:}
+
+La station de base affiche une carte correspondant à la zone de jeu et ses éléments, incluant la position estimée du robot.
+
 \paragraph{Afficher les déplacements planifiés du robot sur la carte:}
+
+Les déplacements calculé par le robot sont affichés sur la carte à la station de base.
 
 \subsection{Respecter apparance}
 
+Aucun breadboard n'est utilisé, tous les circuits sont fait sur PCB.
+
 \subsection{Respecter le budget}
+
+Toutes les composantes du robot respecte le budget total de 300\$.
