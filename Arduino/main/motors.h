@@ -4,13 +4,13 @@
 #define INT_ENCODER_A_CH1 18
 #define INT_ENCODER_A_CH2 0
 
-#define INT_ENCODER_B_CH1 3
+#define INT_ENCODER_B_CH1 19
 #define INT_ENCODER_B_CH2 0
 
-#define INT_ENCODER_C_CH1 18
+#define INT_ENCODER_C_CH1 20
 #define INT_ENCODER_C_CH2 0
 
-#define INT_ENCODER_D_CH1 19
+#define INT_ENCODER_D_CH1 21
 #define INT_ENCODER_D_CH2 0
 
 #define OUT_MOTOR_A 10
@@ -19,14 +19,14 @@
 #define OUT_MOTOR_D 13
 
 #define PIN_ONE_MOTOR_A 2
-#define PIN_ONE_MOTOR_B 0
-#define PIN_ONE_MOTOR_C 0
-#define PIN_ONE_MOTOR_D 0
+#define PIN_ONE_MOTOR_B 4
+#define PIN_ONE_MOTOR_C 6
+#define PIN_ONE_MOTOR_D 8
 
 #define PIN_TWO_MOTOR_A 3
-#define PIN_TWO_MOTOR_B 0
-#define PIN_TWO_MOTOR_C 0
-#define PIN_TWO_MOTOR_D 0
+#define PIN_TWO_MOTOR_B 5
+#define PIN_TWO_MOTOR_C 7
+#define PIN_TWO_MOTOR_D 9
 
 // 0 to 255
 #define ZERO_SPEED 0
@@ -46,21 +46,19 @@
 #define BACKWARD 4
 
 // -------------SETUP ----------------
-void motor_init();
-
+void motors_init();
 
 //-------------------------------------
-void move(float angle, int tick, int speed);
-
-void move_wheel(int wheel, int wheel_tick, bool polarity,  int wheel_speed);
-void stop_wheel(int motor);
-void move_straight(int direction, int tick, int speed);
-void PID_motors();
-void reset();
+void start_motor(int motor);
+void brake_motor(int motor);
 void start();
 void stop();
-
-
+void set_motor(int motor, int tick, bool polarity, int motor_speed);
+void reset_motor(int motor);
+void reset_all_motors();
+void move_straight(int direction, int tick, int speed);
+void move(float angle, int tick, int speed);
+void PID_motors();
 
 // ----------------ISR ----------------
 

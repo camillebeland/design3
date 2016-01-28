@@ -9,9 +9,9 @@ void setup() {
   // put your setup code here, to run once:
   serial_init();
   //decoder_init();
-  motor_init();
+  motors_init();
   //magnet_init();
-  move_wheel(OUT_MOTOR_A, 20000, true, 500);
+  set_motor(OUT_MOTOR_A, 20000, true, 500);
   
 }
 
