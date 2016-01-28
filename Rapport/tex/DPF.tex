@@ -1,0 +1,132 @@
+%!TEX encoding = IsoLatin
+
+\chapter{DPF}
+
+\section{Détails des exigences}
+
+\paragraph{10 minutes pour effectuer toutes les tâches:}
+Le temps afin d'effectuer toutes les étapes d'un cycle de jeu est de 10 minutes. Le chronomètre part au moment où le signal de départ est donné au robot. Plusieurs cycles de jeu peuvent être effectué durant le 10 minutes prescrit.
+
+\paragraph{Recharge de l'électro-aimant par induction:}
+Le condensateur qui va contenir la charge que l'électro-aimant va utiliser doit être rechargé par induction à la station de recharge.
+
+\paragraph{Alimenter l'électro-aimant avec un condensateur:}
+L'électro-aimant doit absolument être alimenter par un condensateur et non par un autre type d'alimentation.
+
+\paragraph{Soulever les trésor avec l'électro-aimant:}
+Le trésor doit être soulevé à l'aide d'un électro-aimant alimenté par un condensateur. La charge doit être suffisante afin de transporter le trésor jusqu'à l'île prescrite.
+
+\paragraph{Le robot ne peut toucher aux bords ou aux îles:}
+Dans tous ses déplacements, le robot ne peut toucher aux murs de la zone de jeu. Une seule offense est tolérée.
+
+\paragraph{Afficher la trajectoire planifié du robot:}
+Tous les déplacements du robot doivent être annoncés à l'avance.
+
+\paragraph{Afficher la couleur ou la forme de l'île prescrite:} Une fois la requête serveur faite, le système doit afficher la couleur ou la forme de l'île identifié à la station de base.
+
+\paragraph{Afficher la position du robot:}
+La position estimée du robot doit être affichée sur l'interface utilisateur. Cette position a une incertitude de 15 cm par rapport à la position réelle.
+
+\paragraph{Afficher le voltage au bornes du condensateur:}
+Le voltage du condensateur servvant à alimenter l'électro-aimant doit être affiché sur l'interface utilisateur en tout temps.
+
+\paragraph{Le code Manchester doit être capter sans-fil:}
+La méthode d'aquisition du code Manchester doit être sans-fil, le spectre utilisé n'est pas important.
+
+\paragraph{Le décodage ne doit pas être effectué dans la station de recharge:}
+
+Il faut attendre que le condensateur soit plein avant de décoder le code Manchester.
+
+\paragraph{Une seule requête serveur par cycle de jeu:}
+Après l'aquisition du code Manchester, une seule requête serveur peut être faite par cycle de jeu.
+
+\paragraph{Le trésoir doit être déposé sur la bonne île:}
+Le trésor doit être déposée sur l'île identifier à l'aide du code Manchester et de la requête serveur.
+
+\paragraph{Le robot doit être alimenté par batterie:}
+Tous les systèmes montés sur le robot doivent être alimentés par un système de batterie embarqué sur le robot.
+
+\paragraph{Toutes les alimentations doivent être protégées par fusible et/ou interrupteur:}
+Afin de protéger tout l'équipement du robot, toutes les alimentation se doivent d'être protégées au minimum par un fusible ou un interrupteur.
+
+\paragraph{Autonomie complète du robot:}
+Durant tout le cycle de jeu, le robot doit être entièrement autonome dans ses déplacements et actions. Des touchettes sont alloués avec pénalités.
+
+\paragraph{Rafraichissement de l'IU de minimum 0.2 Hz:}
+L'interface utilisateur affichant par exemple la position du robot, les trajets planifiés ainsi que le voltage du condensateur doit être rafraichit au minimum toutes les 5 secondes.
+
+\paragraph{Budget de 300\$ :}
+En dehors du matériel fournis, l'ensemble du matériel acheté servant au robot doit coûter au maximum 300\$.
+
+\paragraph{Apparance professionelle:}
+L'ensemble des circuits doivents être montés sur circuits imprimés. Les breadboards ne sont pas permis. 
+
+\section{Détail des fonctionalités}
+
+\subsection{Détecter les éléments du jeu}
+
+\paragraph{Détecter la position et l'angle du robot:}
+
+Le robot doit être en mesure de se situer dans son environnement à l'aide des différents capteurs à sa disposition.
+
+\paragraph{Détecter les îles, leurs formes, tailles et couleurs:}
+
+Le robot doit pouvoir détecter les îles placées de façon aléatoire. Il doit identifier leur dimension, leur couleur et leur forme.
+
+\paragraph{Détecter les trésors:}
+
+Le robot doit être en mesure de détecter les trésors dans l'environnement.
+
+\paragraph{Détecter la station de recharge:}
+
+Le robot doit pouvoir identifier la station de recharge en début de cycle de jeu.
+
+\paragraph{Détecter les limites de la zone de jeu:}
+
+Le robot doit détecter lors de ses déplacement les limites de la zone de jeu afin de ne jamais entrer en contact avec elles.
+
+\subsection{Acéquérir et décoder un code Manchester}
+
+\paragraph{Acquérir le code Manchester sans-fil:}
+
+Le robot doit pouvoir acquérir un code Manchester à l'aide d'un protocole HF.
+
+\paragraph{Décoder le code Manchester:}
+
+Le robot doit être en mesure de décoder le code Manchester afin d'obtenir le caractère ASCII correspondant.
+
+\paragraph{Faire une requête serveur:}
+
+Le robot doit effectuer une requête GET ayant comme paramètre le code reçu par le signal HF. 
+
+\subsection{Trouver et manipuler un trésor}
+
+\paragraph{Charger l'électro-aimant à la station de recharge sans-fil:}
+
+\paragraph{Choisir un trésor en fonction de sa position:}
+
+\paragraph{Soulever et déposer un trésor à l'aide d'un électro-aimant:}
+
+\subsection{Choisir automatiquement la prochaine action:}
+
+\subsection{Alimenter le système}
+
+\paragraph{Protéger les différents circuits:}
+\paragraph{Fournir l'alimentation appropriée à chaque composante:}
+
+\subsection{Déplacer le robot}
+
+\paragraph{Déplacement omnidirectionel du robot:}
+\paragraph{Rotation du robot sur lui même:}
+\paragraph{Asservissement des déplacement en position et en vitesse:}
+\paragraph{Déterminer un trajet pour se rendre d'un point A à un point B:}
+
+\subsection{Afficher l'état du jeu}
+
+\paragraph{Afficher le voltage du condensateur:}
+\paragraph{Afficher la carte virtuelle du jeu avec tous ses éléments:}
+\paragraph{Afficher les déplacements planifiés du robot sur la carte:}
+
+\subsection{Respecter apparance}
+
+\subsection{Respecter le budget}
