@@ -61,4 +61,14 @@ le chemin de moindre énergie, il évite ainsi les obstacles.  Il n'y a aucune
 assurance que le chemin trouvé est le chemin optimal.
 (http://www.ibm.com/developerworks/java/library/j-antigrav/)
 
-\section{Reconnaissance d'image}
+\section{Reconnaissance d'images}
+Afin d'expérimenter la reconnaissance d'images, nous sommes allés prendre des photos de la table de jeu avec des îles placées aléatoirement. Les photos ont
+été prises par la caméra monde. Ensuite, nous avons effectué certains traitements sur ces photos avec OpenCV afin d'avoir une idée de ce qui était possible de détecter. Nous avons réussi à détecter les coins de la carte et à isoler les formes
+des îles.
+
+\section{Réflexion sur l'architecture du système}
+Afin de faire les diagrammes demandés au livrable 1, nous avons pensé à une architecture possible pour le système et avons déterminé les traitements qui allaient être effectués sur la station de base et ceux qui allaient plutôt être effectués sur le robot. Nous avons exploré plusieurs techniques qui permettent de passer l'information entre les différentes composantes du système et notre
+choix s'est arrêté sur les websockets. Nous avons aussi décidé d'utiliser le langage de programmation Python pour la logique haut-niveau du système.
+
+\section{Simulateur de robot et interface web}
+Nous avons commencé à programmer, en Python, un simulateur pour le robot. Celui-ci contient des fonctions qui simulent les déplacements du robot sur la carte et enregistre sa position. Nous avons aussi développé une interface web qui est connectée au simulateur de robot par websocket. L'interface communique, à chaque seconde, avec le sereur qui héberge le simulateur afin de recevoir la position du robot qui est ensuite affichée dans un navigateur web.
