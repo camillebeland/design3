@@ -10,9 +10,12 @@ Afin de tester les moteurs, nous avons commencé à interfacer un canal de pont 
 
 \section{Encodeurs}
 
-L'encodeur sur les roues offre 2 canaux, chacun donnant 16 impulsions par tour de moteur. En comptant les fronts montants et descendants de chaque canal, l'encodeur offre 64 steps par tour de moteur. Avec une transmission 100:1, cela offre un potentiel de 6400 steps par révolution de roue.
+L'encodeur sur les roues offre 2 canaux, chacun donnant 16 impulsions par tour de moteur. En comptant les fronts montants et descendants de chaque canal, l'encodeur offre 64 steps par tour de moteur. Avec une transmission 100:1, cela offre un potentiel de 6400 steps par révolution de roue, ce qui est beaucoup, voir trop pour notre application.  Comme premier test, on a branché le canal 1 des 4 encodeurs sur 4 broches d'interruption du Arduino Mega. La fonction ISR de chaque canal d'interruption fut configuré afin de compter le nombre de fronts montants. Pour l'instant, la quantité d'interruption ne semble pas causer de problème à l'intérieur de la boucle principale du programme, mais d'autres tests seront nécéssaire afin d'assurer la robustesse de ce principe d'aquisition.
 
 \section{Asservissement en vitesse des moteurs}
+
+Des tests préliminaires d'asservissement en vitesses furent effectués sur 2 roues comme preuve de concept. 
+
 \section{Observations générales}
   La base en aluminium offre un excellent support aux roues. Cette résistance permet l’ajout d’étage supérieur tout en conservant la solidité structurale du robot. Les bases des étages supérieurs sont légères et non conductrices. Un centre de gravité relativement bas est nécessaire pour éliminer tout débalancement du robot durant ses déplacements. C’est pourquoi les pièces les plus lourdes se situeront autant que possible sur les étages inférieurs.
 
@@ -29,7 +32,7 @@ Les roues possèdent un jeu de quelques degrés en rotation. Ce degré de libert
 
 
 \section{Alimentation}
-  La prise murale utilise une alimentation de 19VDC/4,74A et le régulateur d’alimentation offrent 19VDC/3.5A. Le disque dur SSD nécessite 3.3V et 0.95A. La Caméra Logitech C905, l’Arduino et la carte sans fils DWA-171 sont alimentés par un port USB 2.0 de 5V, 500mA. Les décodeurs ont besoin de 5V, 10mA et sont alimentés par l’Arduino. Le contrôleur de servomoteurs est alimenté en USB 3.0, soit 5V, 900mA. Les deux servomoteurs sont alimentés par le contrôleur de servomoteurs. Les servomoteurs consomment 5V, 150mA lorsqu’ils sont en mouvement sans charge. Le pont en H peut consommer 12V,3A et il alimente au total quatre moteurs roux de 12V.
+  La prise murale de l'ordinateur utilise une alimentation de 19VDC/4,74A et le régulateur d’alimentation offrent 19VDC/3.5A. Le disque dur SSD nécessite 3.3V et 0.95A. La Caméra Logitech C905, l’Arduino et la carte sans fils DWA-171 sont alimentés par un port USB 2.0 de 5V, 500mA. Les décodeurs ont besoin de 5V, 10mA et sont alimentés par l’Arduino. Le contrôleur de servomoteurs est alimenté en USB 3.0, soit 5V, 900mA. Les deux servomoteurs sont alimentés par le contrôleur de servomoteurs. Les servomoteurs consomment 5V, 150mA lorsqu’ils sont en mouvement sans charge. Le pont en H peut consommer 12V,3A et il alimente au total quatre moteurs de 12V.
 
 \section{Consommation maximale}
-L’ordinateur embarqué consomme 36W, et inclut le disque dur SSD. La Caméra, l’Arduino et la carte sans DWA-171 utilisent chacun 2.5W. Le contrôleur de servomoteurs lui consomme 4.5W parce qu’il alimente les deux servomoteurs HS-422. Le pont H avec les moteurs roues utilise 36W. L’alarme Lipo et les régulateurs reste à déterminé. 
+L’ordinateur embarqué consomme 36W, et inclut le disque dur SSD. La Caméra, l’Arduino et la carte sans DWA-171 utilisent chacun 2.5W. Le contrôleur de servomoteurs lui consomme 4.5W parce qu’il alimente les deux servomoteurs HS-422. Le pont H avec les moteurs roues utilise 36W. L’alarme Lipo et les régulateurs restent à déterminer. 
