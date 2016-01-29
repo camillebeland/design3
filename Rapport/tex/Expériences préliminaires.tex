@@ -7,3 +7,24 @@
 \section{Encodeurs}
 
 \section{Asservissement en vitesse des moteurs}
+
+\section{Observations générales}
+  La base en aluminium offre un excellent support aux roues. Cette résistance permet l’ajout d’étage supérieur tout en conservant la solidité structurale du robot. Les bases des étages supérieurs sont légères et non conductrices. Un centre de gravité relativement bas est nécessaire pour éliminer tout débalancement du robot durant ses déplacements. C’est pourquoi les pièces les plus lourdes se situeront autant que possible sur les étages inférieurs.
+
+Les roues possèdent un jeu de quelques degrés en rotation. Ce degré de liberté n’implique pas l’arbre du moteur. En conséquence, les décodeurs raccordés à l’arbre ne détectent pas ce déplacement supplémentaire. Il reste à déterminer si cette caractéristique peut devenir problématique. 
+
+
+\section{Communications sans fil}
+ Une carte interne sans fils de 2.4Ghz à deux sorties est présente sur la carte mère de l’ordinateur embarqué. L’antenne peut être mise dans l’une ou l’autre des sorties. Lors du démarrage de l’ordinateur, le module de la carte sans fils est chargé et prêt à utilisation. Cette carte permet l’établissement d’une connexion avec le point d’accès eduroam pour avoir accès à internet. 
+ 
+ Une seconde carte sans fils USB de 5Ghz permet la communication entre le robot et la station de base. L’installation du module RTL8812au est essentielle pour établir une connexion avec le point d’accès Design3-3109. Le module est chargé à chaque démarrage du système d’exploitation Fedora. Une simple configuration en mode graphique permet une connexion automatique lorsque le réseau est à porter. 
+
+\section{Ordinateur embarqué}
+ Le système d’exploitation Fedora est installé. Le système est préconfiguré et la Caméra Logitech C905 est fonctionnelle.  Il y a présence de 4 ports USB 2.0 et 2 ports USB 3.0, ce qui est amplement suffisant pour nos besoins. L’ordinateur embarqué peut être alimenté de deux façons, avec un transformateur utilisant la prise murale ou avec une batterie et un régulateur d’alimentation. Chaque méthode possède sa propre fiche d’alimentation sur le panneau arrière de l’ordinateur. 
+
+
+\section{Alimentation}
+  La prise murale utilise une alimentation de 19VDC/4,74A et le régulateur d’alimentation offrent 19VDC/3.5A. Le disque dur SSD nécessite 3.3V et 0.95A. La Caméra Logitech C905, l’Arduino et la carte sans fils DWA-171 sont alimentés par un port USB 2.0 de 5V, 500mA. Les décodeurs ont besoin de 5V, 10mA et sont alimentés par l’Arduino. Le contrôleur de servomoteurs est alimenté en USB 3.0, soit 5V, 900mA. Les deux servomoteurs sont alimentés par le contrôleur de servomoteurs. Les servomoteurs consomment 5V, 150mA lorsqu’ils sont en mouvement sans charge. Le pont en H peut consommer 12V,3A et il alimente au total quatre moteurs roux de 12V.
+
+\section{Consommation maximale}
+L’ordinateur embarqué consomme 36W, et inclut le disque dur SSD. La Caméra, l’Arduino et la carte sans DWA-171 utilisent chacun 2.5W. Le contrôleur de servomoteurs lui consomme 4.5W parce qu’il alimente les deux servomoteurs HS-422. Le pont H avec les moteurs roues utilise 36W. L’alarme Lipo et les régulateurs reste à déterminé. 
