@@ -35,3 +35,25 @@ L'ordinateur embarqué consomme 36W, et inclut le disque dur SSD. La Caméra, l'Ar
 
 \section{Démarrage au boot}
 La configuration générique de l'ordinateur embarqué proposait au démarrage une liste avec différente options à exécuter qui est gérer par GRUB. Pour l'instant, nous avons simplement éliminé cette liste de choix et exécutons directement le noyaux 4.2.8-200 avec l'interface graphique légère de base proposé par le cours. De plus, nous sommes fort heureux de savoir que les configurations ont été faite en MBR et non en UEFI. Ceci facilite la tâche lorsqu'il y a plusieurs système d'exploitation sur un même disque. Par contre, pour l'instant, il semble inutile de faire l'installation d'un deuxième système d'exploitation. Il est fort probable qu'éventuellement il y aura élimination de l'interface graphique, séquençage et restriction du nombre de module exécuté au démarrage. C'est-à-dire désactivation des périphériques superflues. Il reste à déterminé si la recompilation du noyau est avantageuse une fois les correctifs apportés.  
+
+
+\section{Recherche de chemin}
+Il y a plusieurs façons de rechercher un chemin entre un point A et un point B.
+La première consiste à discrétiser l'espace, soit de séparer l'espace en
+petits éléments.  On construit avec ces éléments un graphe ou chaque élément
+constitue un noeud du graphe et les éléments adjacents sont reliés par une arête
+du graphe avec un point correspondant a la distance entre les centres des
+éléments.  Les obstacles peuvent être simplement retiré du graphe ou encore le
+poids peut simplement être augmenté artificiellement pour éviter de passer par
+l'obstacle.  Ainsi, la recherche du chemin optimal revient à utiliser un
+algorithme de recherche de chemin dans un graphe.  Les algorithmes de Dijkstra
+ou A* sont d'excellents candidats pour effectuer cette tâche.
+
+La deuxième technique consiste à représenter tous les points par une énergie
+correspondante.  Les chemins souhaitables ont une énergie négative tandis que
+les obstacles des énergies positives.  En ajustant le robot pour qu'il passe par
+le chemin de moindre énergie, il évite ainsi les obstacles.  Il n'y a aucune
+assurance que le chemin trouvé est le chemin optimal.
+(http://www.ibm.com/developerworks/java/library/j-antigrav/)
+
+\section{Reconnaissance d'image}
