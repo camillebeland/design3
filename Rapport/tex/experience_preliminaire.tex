@@ -3,15 +3,20 @@
 
 \section{Arduino Mega}
 
+Comme microcontrôleur, nous avons décidé d’utilise le Arduino Mega. En plus d’offrir un I/O assez généreux, la facilité d’utilisation et l’énorme communauté Arduino en ligne en font une solution accessible et permettant de déployer rapidement de nouvelles fonctionnalités à partir des nombreuses librairies disponibles en ligne. Un pinout préliminaire fut établi afin de confirmer si la quantité de broches et de périphérique était suffisante.
+
 \section{Pont en H et commande de moteur}
 
 Afin de tester les moteurs, nous avons commencé à interfacer un canal de pont en H avec un moteur et le Arduino. Nous avons donc alimenter le circuit avec une source DC 12 V limitée en courant à 1.5 A. Cette limite fut décidé arbitrairement afin d'éviter de mauvaises surprises. Le moteur fut alimenté par le canal 3. Ensuite, les 3 broches de contrôle du canal 3 furent branchées à 3 broches de sortie du Arduino. Ces broches permettent de contrôler l'activation du moteur, sa direction et sa vitesse.  La broche de vitesse fut branché à une sortie de type PWM 8 bits (256 valeurs). Ainsi, nous avons évalué le seuil de départ à vide de la roue ainsi que la consommation à la vitesse maximale. 
 
 \section{Encodeurs}
 
-L'encodeur sur les roues offre 2 canaux, chacun donnant 16 impulsions par tour de moteur. En comptant les fronts montants et descendants de chaque canal, l'encodeur offre 64 steps par tour de moteur. Avec une transmission 100:1, cela offre un potentiel de 6400 steps par révolution de roue.
+L'encodeur sur les roues offre 2 canaux, chacun donnant 16 impulsions par tour de moteur. En comptant les fronts montants et descendants de chaque canal, l'encodeur offre 64 steps par tour de moteur. Avec une transmission 100:1, cela offre un potentiel de 6400 steps par révolution de roue, ce qui est beaucoup, voir trop pour notre application.  Comme premier test, on a branché le canal 1 des 4 encodeurs sur 4 broches d'interruption du Arduino Mega. La fonction ISR de chaque canal d'interruption fut configuré afin de compter le nombre de fronts montants. Pour l'instant, la quantité d'interruption ne semble pas causer de problème à l'intérieur de la boucle principale du programme, mais d'autres tests seront nécéssaire afin d'assurer la robustesse de ce principe d'aquisition.
 
 \section{Asservissement en vitesse des moteurs}
+
+Des tests préliminaires d'asservissement en vitesses furent effectués sur 2 roues comme preuve de concept. Ainsi, un intervalle dt fut établi à 100 ms. Après ce dernier, la vitesse désirée pour chaque roue est comparée avec la vitesse actuelle. Un PID arbitraire fut appliqué ensuite en fonction de cette erreur. Rapidement, on a trouvé des paramètres assez stables, permettant au système de subir quelques perturbations et de revenir rapidement à la vitesse désirée. Durant nos tests, nous avons eu des problèmes à synchroniser deux roues ensemble. En effet, l’utilisation de la fonction AnalogWrite() dans la boucle d’asservissement sur plusieurs broches simultanées entrainait des comportements imprévisibles. Après recherche, nous avons décidé de coder manuellement la fonction de sortie PWM et le problème fut réglé. Par la suite, en comparant la vitesse de deux roues, un facteur supplémentaire fut ajouté à la boucle d’asservissement permettant de ralentir la roue qui va plus vite que l’autre et vice-versa. Ainsi, nos tests préliminaires d’asservissement nous ont permis de synchroniser deux roues en vitesse et en position.
+
 \section{Observations générales}
   La base en aluminium offre un excellent support aux roues. Cette résistance permet lajout d'étage supérieur tout en conservant la solidité structurale du robot. Les bases des étages supérieurs sont légères et non conductrices. Un centre de gravité relativement bas est nécessaire pour éliminer tout débalancement du robot durant ses déplacements. C'est pourquoi les pièces les plus lourdes se situeront autant que possible sur les étages inférieurs.
 
