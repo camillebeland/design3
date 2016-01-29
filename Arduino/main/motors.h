@@ -1,7 +1,14 @@
 #ifndef motors_h
 #define motors_h
 
-#define INT_ENCODER_A_CH1 18
+/*YELLOW = CH1
+	BLUE = encoder power (5V)
+	green = encoder GND
+	RED = motor power +
+	black = motor power -
+	*/
+
+#define INT_ENCODER_A_CH1 18 
 #define INT_ENCODER_A_CH2 0
 
 #define INT_ENCODER_B_CH1 19
@@ -13,10 +20,10 @@
 #define INT_ENCODER_D_CH1 21
 #define INT_ENCODER_D_CH2 0
 
-#define OUT_MOTOR_A 10
+#define OUT_MOTOR_A 13
 #define OUT_MOTOR_B 11
 #define OUT_MOTOR_C 12
-#define OUT_MOTOR_D 13
+#define OUT_MOTOR_D 10
 
 #define PIN_ONE_MOTOR_A 2
 #define PIN_ONE_MOTOR_B 4
@@ -31,12 +38,13 @@
 // 0 to 255
 #define ZERO_SPEED 0
 
-#define DT 250 // sec
+#define DT 100 // sec
 #define DEFAULT_SPEED 100 // TICKS PER DT
 
-#define KS 1 // for delta motors
-#define KI 0.025 // for PID
-#define KP 0.05 //for PID
+#define KSI 0.02 // for delta motors
+#define KSP 0.05
+#define KI 0.02 // for PID
+#define KP 0.1 //for PID
 
 #define CRITICAL_TICK 256 // critical distance after what speed is reduced
 

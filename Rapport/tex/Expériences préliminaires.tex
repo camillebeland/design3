@@ -2,12 +2,17 @@
 
 \chapter{Expériences préliminaires}
 
+\section{Arduino Mega}
+
 \section{Pont en H et commande de moteur}
+
+Afin de tester les moteurs, nous avons commencé à interfacer un canal de pont en H avec un moteur et le Arduino. Nous avons donc alimenter le circuit avec une source DC 12 V limitée en courant à 1.5 A. Cette limite fut décidé arbitrairement afin d'éviter de mauvaises surprises. Le moteur fut alimenté par le canal 3. Ensuite, les 3 broches de contrôle du canal 3 furent branchées à 3 broches de sortie du Arduino. Ces broches permettent de contrôler l'activation du moteur, sa direction et sa vitesse.  La broche de vitesse fut branché à une sortie de type PWM 8 bits (256 valeurs). Ainsi, nous avons évalué le seuil de départ à vide de la roue ainsi que la consommation à la vitesse maximale. 
 
 \section{Encodeurs}
 
-\section{Asservissement en vitesse des moteurs}
+L'encodeur sur les roues offre 2 canaux, chacun donnant 16 impulsions par tour de moteur. En comptant les fronts montants et descendants de chaque canal, l'encodeur offre 64 steps par tour de moteur. Avec une transmission 100:1, cela offre un potentiel de 6400 steps par révolution de roue.
 
+\section{Asservissement en vitesse des moteurs}
 \section{Observations générales}
   La base en aluminium offre un excellent support aux roues. Cette résistance permet l’ajout d’étage supérieur tout en conservant la solidité structurale du robot. Les bases des étages supérieurs sont légères et non conductrices. Un centre de gravité relativement bas est nécessaire pour éliminer tout débalancement du robot durant ses déplacements. C’est pourquoi les pièces les plus lourdes se situeront autant que possible sur les étages inférieurs.
 

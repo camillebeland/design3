@@ -11,12 +11,14 @@ void setup() {
   //decoder_init();
   motors_init();
   //magnet_init();
-  set_motor(OUT_MOTOR_A, 20000, true, 500);
-  
+  //set_motor(OUT_MOTOR_A, 5000, false, 500);
+  //set_motor(OUT_MOTOR_C, 5000, false, 500);
+  move_straight(RIGHT, 30000, 2000);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
   PID_motors();
 //  incomming_byte = serial_read();
   //if (!decode_byte(incomming_byte)){
