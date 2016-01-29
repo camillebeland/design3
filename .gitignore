@@ -97,5 +97,9 @@ pip-selfcheck.json
 Rapport/Rapport.out
 *.toc
 
+#emacs things
+**/auto/
+
+
 **/node_modules/
 **/bower_components/
