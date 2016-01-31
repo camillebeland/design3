@@ -1,114 +1,112 @@
-% !TEX encoding = IsoLatin
-
 \chapter{Cas d'utilisation}
 
 \renewcommand{\labelitemi}{$\bullet$}
 \renewcommand{\labelitemii}{$\circ$}
 
-\section{Le robot veut se charger à la station de recharge}
+\section{Le robot veut se charger Ã  la station de recharge}
 \begin{description}
 \item[Nom]  \hfill \\
   Recharge
 \item[Acteurs] \hfill \\
   Principal : Le robot
-\item[Évènements déclencheurs] \hfill \\
-  Départ d'une séquence
+\item[Ã‰vÃ©nements dÃ©clencheurs] \hfill \\
+  DÃ©part d'une sÃ©quence
 \item[Parties prenantes] \hfill \\
-  Les étudiants : Intérêt envers la complétion de
-  la tâche
-\item[Pré-conditions] \hfill \\
-  Le condensateur est déchargé
+  Les Ã©tudiants : IntÃ©rÃªt envers la complÃ©tion de
+  la tÃ¢che
+\item[PrÃ©-conditions] \hfill \\
+  Le condensateur est dÃ©chargÃ©
 \item[Post-conditions] \hfill \\
-  Le condensateur est chargé
-\item[Scénario nominal] \hfill 
+  Le condensateur est chargÃ©
+\item[ScÃ©nario nominal] \hfill
   \begin{itemize}
-  \item Déterminer la position de la station de recharge
-  \item Déterminer le chemin pour se rendre à la station de recharge
-  \item Se déplacer vers la station de recharge
+  \item DÃ©terminer la position de la station de recharge
+  \item DÃ©terminer le chemin pour se rendre Ã  la station de recharge
+  \item Se dÃ©placer vers la station de recharge
   \item Se recharger
   \end{itemize}
 \item[Contraintes] \hfill
   \begin{itemize}
-  \item Doit éviter les îles lors des déplacements
+  \item Doit Ã©viter les Ã®les lors des dÃ©placements
   \end{itemize}
 \end{description}
 
-\section{Le robot veut connaître l'île de destination.}
+\section{Le robot veut connaÃ®tre l'Ã®le de destination.}
 \begin{description}
 \item[Nom] \hfill \\
-  Transmission de la cible  
+  Transmission de la cible
 \item[Acteurs] \hfill \\
   Principal : Le robot \\
   La station de recharge \\
-  Le serveur d'îles
-\item[Évènements déclencheurs] \hfill \\
-  Le robot se situe à la station de recharge
+  Le serveur d'Ã®les
+\item[Ã‰vÃ©nements dÃ©clencheurs] \hfill \\
+  Le robot se situe Ã  la station de recharge
 \item[Parties prenantes] \hfill \\
-  Les étudiants : Intérêt envers la complétion de la tâche \\
+  Les Ã©tudiants : IntÃ©rÃªt envers la complÃ©tion de la tÃ¢che \\
   Station de recharge : Transmettre son message
-\item[Pré-conditions] \hfill \\
-  Le robot se situe à la station de recharge
+\item[PrÃ©-conditions] \hfill \\
+  Le robot se situe Ã  la station de recharge
 \item[Post-conditions] \hfill \\
-  Le robot connaît les informations de l'île cible
-\item[Scénario nominal] \hfill
+  Le robot connaÃ®t les informations de l'Ã®le cible
+\item[ScÃ©nario nominal] \hfill
   \begin{itemize}
   \item Obtenir la lettre en code Manchester
-  \item Récupérer les caractéristiques de l'île auprès du serveur des îles 
-  \item Associer la lettre à l'île de destination
+  \item RÃ©cupÃ©rer les caractÃ©ristiques de l'Ã®le auprÃ¨s du serveur des Ã®les
+  \item Associer la lettre Ã  l'Ã®le de destination
   \end{itemize}
 \end{description}
 
-\section{Le robot veut aller chercher un trésor}
+\section{Le robot veut aller chercher un trÃ©sor}
 \begin{description}
 \item[Nom] \hfill \\
-  Récupération du trésor
+  RÃ©cupÃ©ration du trÃ©sor
 \item[Acteurs] \hfill \\
   Princpal : Le robot
-\item[Évènements déclencheurs] \hfill \\
-  Le robot connaît sa destination et la recharge est terminée
+\item[Ã‰vÃ©nements dÃ©clencheurs] \hfill \\
+  Le robot connaÃ®t sa destination et la recharge est terminÃ©e
 \item[Parties prenantes] \hfill \\
-  Les étudiants : Intérêt envers la complétion de la tâche \\
-  Le robot : Intérêt à obtenir le trésor
-\item[Pré-conditions] \hfill \\
-  Le robot connaît les informations sur l'île de destination
+  Les Ã©tudiants : IntÃ©rÃªt envers la complÃ©tion de la tÃ¢che \\
+  Le robot : IntÃ©rÃªt Ã  obtenir le trÃ©sor
+\item[PrÃ©-conditions] \hfill \\
+  Le robot connaÃ®t les informations sur l'Ã®le de destination
 \item[Post-conditions] \hfill \\
-  Le robot a pris possession du trésor optimal selon la position de l'île
-\item[Scénario nominal] \hfill
+  Le robot a pris possession du trÃ©sor optimal selon la position de l'Ã®le
+\item[ScÃ©nario nominal] \hfill
   \begin{itemize}
-  \item Selon l'île de destination, déterminer le trésor ayant la position
+  \item Selon l'Ã®le de destination, dÃ©terminer le trÃ©sor ayant la position
     optimale ainsi que le chemin pour s'y rendre
-  \item Se déplacer vers le trésor choisi
-  \item Prendre possession du trésor
+  \item Se dÃ©placer vers le trÃ©sor choisi
+  \item Prendre possession du trÃ©sor
   \end{itemize}
 \item[Contraintes] \hfill \\
-  Doit éviter les îles lors des déplacements
+  Doit Ã©viter les Ã®les lors des dÃ©placements
 \end{description}
 
-\section{Le robot veut déposer le trésor sur l'île de destination}
+\section{Le robot veut dÃ©poser le trÃ©sor sur l'Ã®le de destination}
 \begin{description}
 \item[Nom] \hfill \\
-  Dépôt du trésor
+  DÃ©pÃ´t du trÃ©sor
 \item[Acteurs] \hfill \\
   Principal : Le robot
-\item[Évènements déclencheurs] \hfill \\
-  Le robot a pris posession du trésor
+\item[Ã‰vÃ©nements dÃ©clencheurs] \hfill \\
+  Le robot a pris posession du trÃ©sor
 \item[Parties prenantes] \hfill \\
-  Les étudiants : Intérêt envers la complétion de la tâche \\
-  Le robot : Intérêt à déposer le trésor au bon endroit
-\item[Pré-conditions] \hfill \\
-  Le robot connaît les informations sur l'île de destination et le robot est en posession du trésor
+  Les Ã©tudiants : IntÃ©rÃªt envers la complÃ©tion de la tÃ¢che \\
+  Le robot : IntÃ©rÃªt Ã  dÃ©poser le trÃ©sor au bon endroit
+\item[PrÃ©-conditions] \hfill \\
+  Le robot connaÃ®t les informations sur l'Ã®le de destination et le robot est en posession du trÃ©sor
 \item[Post-conditions] \hfill \\
-  Le trésor est déposé sur l'île
-\item[Scénario nominal] \hfill
+  Le trÃ©sor est dÃ©posÃ© sur l'Ã®le
+\item[ScÃ©nario nominal] \hfill
   \begin{itemize}
-  \item Déterminer le chemin optimal pour se rendre à l'île de destination
-  \item Se rendre à l'île
-  \item Déposer le trésor sur l'île de destination
+  \item DÃ©terminer le chemin optimal pour se rendre Ã  l'Ã®le de destination
+  \item Se rendre Ã  l'Ã®le
+  \item DÃ©poser le trÃ©sor sur l'Ã®le de destination
   \end{itemize}
 \item[Contraintes] \hfill
   \begin{itemize}
-  \item Doit éviter les îles lors des déplacements
-  \item Doit se rendre jusqu'à l'île avant que l'aime ne se décharge
-  \item Le trésor doit toucher à l'île
+  \item Doit Ã©viter les Ã®les lors des dÃ©placements
+  \item Doit se rendre jusqu'Ã  l'Ã®le avant que l'aime ne se dÃ©charge
+  \item Le trÃ©sor doit toucher Ã  l'Ã®le
   \end{itemize}
 \end{description}

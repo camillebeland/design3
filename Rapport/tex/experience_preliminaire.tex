@@ -1,83 +1,143 @@
-%!TEX encoding = IsoLatin
-\chapter{Expériences préliminaires}
+\chapter{ExpÃ©riences prÃ©liminaires}
 
 \section{Arduino Mega}
 
-Comme microcontrôleur, nous avons décidé d'utilise le Arduino Mega. En plus d'offrir un I/O assez généreux, la facilité d'utilisation et l'énorme communauté Arduino en ligne en font une solution accessible et permettant de déployer rapidement de nouvelles fonctionnalités à partir des nombreuses librairies disponibles en ligne. Un pinout préliminaire fut établi afin de confirmer si la quantité de broches et de périphérique était suffisante.
+Comme microcontrÃ´leur, nous avons dÃ©cidÃ© d'utilise le Arduino Mega. En plus d'offrir un I/O assez gÃ©nÃ©reux, la facilitÃ© d'utilisation et l'Ã©norme communautÃ© Arduino en ligne
+en font une solution accessible et permettant de dÃ©ployer rapidement de nouvelles fonctionnalitÃ©s Ã  partir des nombreuses librairies disponibles en ligne. Un pinout prÃ©liminaire fut
+Ã©tabli afin de confirmer si la quantitÃ© de broches et de pÃ©riphÃ©rique Ã©tait suffisante.
 
 \section{Pont en H et commande de moteur}
 
-Afin de tester les moteurs, nous avons commencé à interfacer un canal de pont en H avec un moteur et le Arduino. Nous avons donc alimenter le circuit avec une source DC 12 V limitée en courant à 1.5 A. Cette limite fut décidé arbitrairement afin d'éviter de mauvaises surprises. Le moteur fut alimenté par le canal 3. Ensuite, les 3 broches de contrôle du canal 3 furent branchées à 3 broches de sortie du Arduino. Ces broches permettent de contrôler l'activation du moteur, sa direction et sa vitesse.  La broche de vitesse fut branché à une sortie de type PWM 8 bits (256 valeurs). Ainsi, nous avons évalué le seuil de départ à vide de la roue ainsi que la consommation à la vitesse maximale. 
+Afin de tester les moteurs, nous avons commencÃ© Ã  interfacer un canal de pont en H avec un moteur et le Arduino. Nous avons donc alimenter le circuit avec une source DC 12 V
+limitÃ©e en courant Ã  1.5 A. Cette limite fut dÃ©cidÃ© arbitrairement afin d'Ã©viter de mauvaises surprises. Le moteur fut alimentÃ© par le canal 3. Ensuite, les 3 broches de
+contrÃ´le du canal 3 furent branchÃ©es Ã  3 broches de sortie du Arduino. Ces broches permettent de contrÃ´ler l'activation du moteur, sa direction et sa vitesse.
+La broche de vitesse fut branchÃ© Ã  une sortie de type PWM 8 bits (256 valeurs). Ainsi, nous avons Ã©valuÃ© le seuil de dÃ©part Ã  vide de la roue ainsi que la consommation Ã  la vitesse maximale.
 
 \section{Encodeurs}
 
-L'encodeur sur les roues offre 2 canaux, chacun donnant 16 impulsions par tour de moteur. En comptant les fronts montants et descendants de chaque canal, l'encodeur offre 64 steps par tour de moteur. Avec une transmission 100:1, cela offre un potentiel de 6400 steps par révolution de roue, ce qui est beaucoup, voir trop pour notre application.  Comme premier test, on a branché le canal 1 des 4 encodeurs sur 4 broches d'interruption du Arduino Mega. La fonction ISR de chaque canal d'interruption fut configuré afin de compter le nombre de fronts montants. Pour l'instant, la quantité d'interruption ne semble pas causer de problème à l'intérieur de la boucle principale du programme, mais d'autres tests seront nécéssaire afin d'assurer la robustesse de ce principe d'aquisition.
+L'encodeur sur les roues offre 2 canaux, chacun donnant 16 impulsions par tour de moteur. En comptant les fronts montants et descendants de chaque canal,
+l'encodeur offre 64 steps par tour de moteur. Avec une transmission 100:1, cela offre un potentiel de 6400 steps par rÃ©volution de roue, ce qui est beaucoup,
+voir trop pour notre application.  Comme premier test, on a branchÃ© le canal 1 des 4 encodeurs sur 4 broches d'interruption du Arduino Mega. La fonction ISR de
+chaque canal d'interruption fut configurÃ© afin de compter le nombre de fronts montants. Pour l'instant, la quantitÃ© d'interruption ne semble pas causer de problÃ¨me
+Ã  l'intÃ©rieur de la boucle principale du programme, mais d'autres tests seront nÃ©cÃ©ssaire afin d'assurer la robustesse de ce principe d'aquisition.
 
 \section{Asservissement en vitesse des moteurs}
 
-Des tests préliminaires d'asservissement en vitesses furent effectués sur 2 roues comme preuve de concept. Ainsi, un intervalle dt fut établi à 100 ms. Après ce dernier, la vitesse désirée pour chaque roue est comparée avec la vitesse actuelle. Un PID arbitraire fut appliqué ensuite en fonction de cette erreur. Rapidement, on a trouvé des paramètres assez stables, permettant au système de subir quelques perturbations et de revenir rapidement à la vitesse désirée. Durant nos tests, nous avons eu des problèmes à synchroniser deux roues ensemble. En effet, l'utilisation de la fonction AnalogWrite() dans la boucle d'asservissement sur plusieurs broches simultanées entrainait des comportements imprévisibles. Après recherche, nous avons décidé de coder manuellement la fonction de sortie PWM et le problème fut réglé. Par la suite, en comparant la vitesse de deux roues, un facteur supplémentaire fut ajouté à la boucle d'asservissement permettant de ralentir la roue qui va plus vite que l'autre et vice-versa. Ainsi, nos tests préliminaires d'asservissement nous ont permis de synchroniser deux roues en vitesse et en position.
+Des tests prÃ©liminaires d'asservissement en vitesses furent effectuÃ©s sur 2 roues comme preuve de concept. Ainsi, un intervalle dt fut Ã©tabli Ã  100 ms.
+AprÃ s ce dernier, la vitesse dÃ©sirÃ©e pour chaque roue est comparÃ©e avec la vitesse actuelle. Un PID arbitraire fut appliquÃ© ensuite en fonction de cette erreur.
+Rapidement, on a trouvÃ© des paramÃ¨tres assez stables, permettant au systÃ¨me de subir quelques perturbations et de revenir rapidement Ã  la vitesse dÃ©sirÃ©e.
+Durant nos tests, nous avons eu des problÃ¨mes Ã  synchroniser deux roues ensemble. En effet, l'utilisation de la fonction AnalogWrite() dans la boucle d'asservissement
+sur plusieurs broches simultanÃ©es entrainait des comportements imprÃ©visibles. AprÃ¨s recherche, nous avons dÃ©cidÃ© de coder manuellement la fonction de sortie PWM et le
+problÃ¨me fut rÃ©glÃ©. Par la suite, en comparant la vitesse de deux roues, un facteur supplÃ©mentaire fut ajoutÃ© Ã  la boucle d'asservissement permettant de ralentir la roue
+qui va plus vite que l'autre et vice-versa. Ainsi, nos tests prÃ©liminaires d'asservissement nous ont permis de synchroniser deux roues en vitesse et en position.
 
-\section{Observations générales}
-  La base en aluminium offre un excellent support aux roues. La résistance de la base permet l'ajout d'étage supérieur tout en conservant la solidité structurale du robot. Les bases des étages supérieurs sont légères et non conductrices. Un centre de gravité relativement bas est nécessaire pour éliminer tout débalancement du robot durant ses déplacements. C'est pourquoi les pièces les plus lourdes se situeront autant que possible sur les étages inférieurs.
+\section{Observations gÃ©nÃ©rales}
+  La base en aluminium offre un excellent support aux roues. La rÃ©sistance de la base permet l'ajout d'Ã©tage supÃ©rieur tout en conservant la soliditÃ©
+  structurale du robot. Les bases des Ã©tages supÃ©rieurs sont lÃ©gÃ¨res et non conductrices. Un centre de gravitÃ© relativement bas est nÃ©cessaire pour Ã©liminer
+  tout dÃ©balancement du robot durant ses dÃ©placements. C'est pourquoi les piÃ¨ces les plus lourdes se situeront autant que possible sur les Ã©tages infÃ©rieurs.
 
-Les roues possèdent un jeu de quelques degrés en rotation. Ce degré de liberté n'implique pas l'arbre du moteur. En conséquence, les décodeurs raccordés à l'arbre ne détectent pas ce déplacement supplémentaire. Il reste à déterminer si cette caractéristique peut devenir problématique. 
+Les roues possÃ¨dent un jeu de quelques degrÃ©s en rotation. Ce degrÃ© de libertÃ© n'implique pas l'arbre du moteur. En consÃ©quence, les dÃ©codeurs raccordÃ©s
+Ã  l'arbre ne dÃ©tectent pas ce dÃ©placement supplÃ©mentaire. Il reste Ã  dÃ©terminer si cette caractÃ©ristique peut devenir problÃ©matique.
 
 \section{Communications sans fil}
-  Une carte interne sans fils de 2.4Ghz à deux sorties est présente sur la carte mère de l'ordinateur embarqué. L'antenne peut être mise dans l'une ou l'autre des sorties. Lors du démarrage de l'ordinateur, le module de la carte sans fils est chargé et prêt à utilisation. Cette carte permet l'établissement d'une connexion avec le point d'accès eduroam pour avoir accès à internet. 
- 
- Une seconde carte sans fils USB de 5Ghz permet la communication entre le robot et la station de base. L'installation du module RTL8812au est essentielle pour établir une connexion avec le point d'accès Design3-3109. Le module est chargé à chaque démarrage du système d'exploitation Fedora. Une simple configuration en mode graphique permet une connexion automatique lorsque le réseau est à porter. 
+  Une carte interne sans fils de 2.4Ghz Ã  deux sorties est prÃ©sente sur la carte mÃ¨re de l'ordinateur embarquÃ©. L'antenne peut Ãªtre mise dans l'une ou l'autre des sorties.
+   Lors du dÃ©marrage de l'ordinateur, le module de la carte sans fils est chargÃ© et prÃªt Ã  utilisation. Cette carte permet l'Ã©tablissement d'une connexion avec le point d'accÃ¨s
+   eduroam pour avoir accÃ¨s Ã  internet.
 
-\section{Ordinateur embarqué}
-Le système d'exploitation Fedora est installé par défaut. Le système est préconfiguré et la Caméra Logitech C905 est fonctionnelle.  Il y a présence de 4 ports USB 2.0 et 2 ports USB 3.0, ce qui est amplement suffisant pour nos besoins. L'ordinateur embarqué peut être alimenté de deux façons, avec un transformateur utilisant la prise murale ou avec une batterie et un régulateur d'alimentation. Chaque méthode possède sa propre fiche d'alimentation sur le panneau arrière de l'ordinateur. 
+ Une seconde carte sans fils USB de 5Ghz permet la communication entre le robot et la station de base. L'installation du module RTL8812au est essentielle pour Ã©tablir
+ une connexion avec le point d'accÃ¨s Design3-3109. Le module est chargÃ© Ã  chaque dÃ©marrage du systÃ¨me d'exploitation Fedora. Une simple configuration en mode graphique
+ permet une connexion automatique lorsque le rÃ©seau est Ã  portÃ©e.
+
+\section{Ordinateur embarquÃ©}
+Le systÃ¨me d'exploitation Fedora est installÃ© par dÃ©faut. Le systÃ¨me est prÃ©configurÃ© et la camÃ©ra Logitech C905 est fonctionnelle.  Il y a prÃ©sence de 4 ports USB 2.0 et 2 ports USB 3.0,
+ce qui est amplement suffisant pour nos besoins. L'ordinateur embarquÃ© peut Ãªtre alimentÃ© de deux faÃ§ons, avec un transformateur utilisant la prise murale ou avec une batterie et un rÃ©gulateur d'alimentation.
+Chaque mÃ©thode possÃ¨de sa propre fiche d'alimentation sur le panneau arriÃ¨re de l'ordinateur.
 
 
 \section{Alimentation}
-   La prise murale de l'ordinateur utilise une alimentation de 19VDC/4,74A et le régulateur d'alimentation fournie 19VDC/3.5A. Le disque dur SSD nécessite 3.3V/0.95A. La Caméra Logitech C905, l'Arduino et la carte sans fils DWA-171 sont alimentés par un port USB 2.0 de 5V, 500mA. Les décodeurs ont besoin de 5V, 10mA et sont alimentés par l'Arduino. Le contrôleur de servomoteurs est alimenté en USB 3.0, soit 5V/900mA, parce qu'il alimente à son tour deux servomoteurs servant à l'ajustement de la caméra Logitech. Les servomoteurs HS-422 sont alimentés en 5V, et utilisent 150mA lorsqu'ils sont en mouvement sans charge. Le pont en H peut consommer 12V,3A et il alimente au total quatre moteurs de 12V. L'agencement et le branchement des différentes composantes dans le présent document sont assujettis à tout changement et à n'importe quel moment. Ceci étant dit, toutes modifications de la distributions de l'alimentation outre que celle décrite demandera une seconde évaluation.  
+   La prise murale de l'ordinateur utilise une alimentation de 19VDC/4,74A et le rÃ©gulateur d'alimentation fournie 19VDC/3.5A. Le disque dur SSD nÃ©cessite 3.3V/0.95A. La camÃ©ra Logitech C905,
+   l'Arduino et la carte sans fils DWA-171 sont alimentÃ©s par un port USB 2.0 de 5V, 500mA. Les dÃ©codeurs ont besoin de 5V, 10mA et sont alimentÃ©s par l'Arduino. Le contrÃ´leur de servomoteurs
+   est alimentÃ© en USB 3.0, soit 5V/900mA, parce qu'il alimente Ã  son tour deux servomoteurs servant Ã  l'ajustement de la camÃ©ra Logitech. Les servomoteurs HS-422 sont alimentÃ©s en 5V,
+   et utilisent 150mA lorsqu'ils sont en mouvement sans charge. Le pont en H peut consommer 12V,3A et il alimente au total quatre moteurs de 12V. L'agencement et le branchement des diffÃ©rentes
+   composantes dans le prÃ©sent document sont assujettis Ã  tout changement et Ã  n'importe quel moment. Ceci Ã©tant dit, toutes modifications de la distributions de l'alimentation outre que celle
+   dÃ©crite demandera une seconde Ã©valuation.
 
 \section{Consommation maximale}
-L'ordinateur embarqué est alimenté par le régulateur d'alimentation fourni dans le cadre du cours. Selon les spécifications présentent sur le site web du cours design3, l'ordinateur consomme au maximum 36W et cette puissance inclut le disque SSD. La Caméra Logitech, les décodeurs alimentés par l'Arduino et la carte sans fils DWA-171 utilisent chacun 2.5W, pour un total de 7,5W. Le contrôleur de servomoteurs consomme 4.5W et cette puissance comprend les deux servomoteurs HS-422. Le pont H et les moteurs roues dépense 36W. La consommation de l'alarme Lipo est négligeable étant donné que nos calculs sont effectués sur une base approximative. Les pertes en puissance du régulateur d'alimentation électronique de l'ordinateur sont estimées à partir de la différence entre le voltage avec et sans charge, soit 1,5V et un courant débité maximal de 3.5A. Il y a alors une perte en puissance d'environ 5W. Le dévolteur de 3A nécessaire pour l'alimentation du pont H a une efficacité estimée de 92\%. La perte de puissance est alors approximativement de 3W.
+L'ordinateur embarquÃ© est alimentÃ© par le rÃ©gulateur d'alimentation fourni dans le cadre du cours. Selon les spÃ©cifications prÃ©sentent sur le site web du cours design3,
+l'ordinateur consomme au maximum 36W et cette puissance inclut le disque SSD. La camÃ©ra Logitech, les dÃ©codeurs alimentÃ©s par l'Arduino et la carte sans fils DWA-171 utilisent chacun 2.5W,
+pour un total de 7,5W. Le contrÃ´leur de servomoteurs consomme 4.5W et cette puissance comprend les deux servomoteurs HS-422. Le pont H et les moteurs roues dÃ©pense 36W. La consommation de l'alarme
+Lipo est nÃ©gligeable Ã©tant donnÃ© que nos calculs sont effectuÃ©s sur une base approximative. Les pertes en puissance du rÃ©gulateur d'alimentation Ã©lectronique de l'ordinateur sont estimÃ©es Ã  partir
+de la diffÃ©rence entre le voltage avec et sans charge, soit 1,5V et un courant dÃ©bitÃ© maximal de 3.5A. Il y a alors une perte en puissance d'environ 5W. Le dÃ©volteur de 3A nÃ©cessaire pour
+l'alimentation du pont H a une efficacitÃ© estimÃ©e de 92\%. La perte de puissance est alors approximativement de 3W.
 
 \section{La batterie}
-Le raisonnement débouchant sur le choix de la batterie s'est d'abord basé sur le fait que le régulateur d'alimentation électrique de l'ordinateur embarqué demande une tension de 21V à 30V. À partir de cette restriction, et de la connaissance des différentes tensions  requises pour l'ensemble des composantes du robot, il a été conclu que la présence de dévolteur est nécessaire. Il est estimé que le régulateur d'alimentation de l'ordinateur peut fournir au maximum 66W et qu'il consomme 5W. Ceci est amplement suffisant pour fournir en puissance l'ordinateur embarqué et ses périphériques qui consomment 48W durant les demandes les plus importantes. La batterie doit aussi alimenter le pont H qui exige en période de pointe 36W et des pertes de 3W sont associées au dévolteur. Il y a, au maximum, 92W de puissance consommés par le robot. De plus, la dépense en puissance des roues motrices est fonction du poids du robot. Étant donné que la batterie est fixée au robot, son poids importe. Ainsi, il semble raisonnable de  minimiser le poids de la batterie pour un maximum de puissance, soit une densité massique (Wh/kg) le plus élevée possible. Sachant que les périodes de tests peuvent être longues et que la recharge d'une batterie est considérable, il est préférable d'opter pour une batterie longue durée. Le choix de la batterie s'est fait en fonction des exigences fixées et des couts d'acquisition. Une batterie de type LiPo 6S avec une puissance de 115 Wh a été sélectionnée. Ceci permet, selon nos estimations, une période d'utilisation minimale de 1h15. Finalement, pour des raisons de sécurité, l'acquisition d'une alarme basse tension de la batterie s'est avérée essentielle. 
+Le raisonnement dÃ©bouchant sur le choix de la batterie s'est d'abord basÃ© sur le fait que le rÃ©gulateur d'alimentation Ã©lectrique de l'ordinateur embarquÃ© demande une tension de 21V Ã  30V.
+Ã  partir de cette restriction, et de la connaissance des diffÃ©rentes tensions  requises pour l'ensemble des composantes du robot, il a Ã©tÃ© conclu que la prÃ©sence de dÃ©volteur est nÃ©cessaire.
+Il est estimÃ© que le rÃ©gulateur d'alimentation de l'ordinateur peut fournir au maximum 66W et qu'il consomme 5W. Ceci est amplement suffisant pour fournir en puissance l'ordinateur embarquÃ© et ses
+pÃ©riphÃ©riques qui consomment 48W durant les demandes les plus importantes. La batterie doit aussi alimenter le pont H qui exige en pÃ©riode de pointe 36W et des pertes de 3W sont associÃ©es au dÃ©volteur.
+Il y a, au maximum, 92W de puissance consommÃ©s par le robot. De plus, la dÃ©pense en puissance des roues motrices est fonction du poids du robot. Ã‰tant donnÃ© que la batterie est fixÃ©e au robot, son poids
+importe. Ainsi, il semble raisonnable de  minimiser le poids de la batterie pour un maximum de puissance, soit une densitÃ© massique (Wh/kg) le plus Ã©levÃ©e possible. Sachant que les pÃ©riodes de tests peuvent
+ Ãªtre longues et que la recharge d'une batterie est considÃ©rable, il est prÃ©fÃ©rable d'opter pour une batterie longue durÃ©e. Le choix de la batterie s'est fait en fonction des exigences fixÃ©es et des couts
+ d'acquisition. Une batterie de type LiPo 6S avec une puissance de 115 Wh a Ã©tÃ© sÃ©lectionnÃ©e. Ceci permet, selon nos estimations, une pÃ©riode d'utilisation minimale de 1h15. Finalement, pour des raisons de
+ sÃ©curitÃ©, l'acquisition d'une alarme basse tension de la batterie s'est avÃ©rÃ©e essentielle.
 
 
-\section{Démarrage au boot}
-La configuration générique de l'ordinateur embarqué proposait au démarrage une liste avec différentes options à exécuter qui est gérée par GRUB. Pour l'instant, nous avons simplement éliminé cette liste de choix et exécutons directement le noyau 4.2.8-200 avec l'interface graphique légère de base proposée par le cours. De plus, nous sommes fort heureux de savoir que les configurations ont été faites en MBR et non en UEFI. Ceci facilite la tâche lorsqu'il y a plusieurs systèmes d'exploitation sur un même disque. Par contre, pour l'instant, il semble inutile de faire l'installation d'un deuxième système d'exploitation. Il est fort probable, qu'éventuellement, il y ait élimination de l'interface graphique, séquençage et restriction du nombre de module exécuté au démarrage. C'est-à-dire, la désactivation des périphériques superflue. Il reste à déterminer si la recompilation du noyau est avantageuse une fois les correctifs apportés.    
+\section{DÃ©marrage au boot}
+La configuration gÃ©nÃ©rique de l'ordinateur embarquÃ© proposait au dÃ©marrage une liste avec diffÃ©rentes options Ã  exÃ©cuter qui est gÃ©rÃ©e par GRUB. Pour l'instant, nous avons simplement Ã©liminÃ©
+cette liste de choix et exÃ©cutons directement le noyau 4.2.8-200 avec l'interface graphique lÃ©gÃ¨re de base proposÃ©e par le cours. De plus, nous sommes fort heureux de savoir que les configurations
+ont Ã©tÃ© faites en MBR et non en UEFI. Ceci facilite la tÃ¢che lorsqu'il y a plusieurs systÃ¨mes d'exploitation sur un mÃªme disque. Par contre, pour l'instant, il semble inutile de faire l'installation
+d'un deuxiÃ¨me systÃ¨me d'exploitation. Il est fort probable, qu'Ã©ventuellement, il y ait Ã©limination de l'interface graphique, sÃ©quenÃ§age et restriction du nombre de module exÃ©cutÃ© au dÃ©marrage.
+C'est-Ã -dire, la dÃ©sactivation des pÃ©riphÃ©riques superflue. Il reste Ã  dÃ©terminer si la recompilation du noyau est avantageuse une fois les correctifs apportÃ©s.
 
 
 \section{Recherche de chemin}
-Il y a plusieurs façons de rechercher un chemin entre un point A et un point B.
-La première consiste à discrétiser l'espace, soit de séparer l'espace en
-petits éléments.  On construit avec ces éléments un graphe ou chaque élément
-constitue un noeud du graphe et les éléments adjacents sont reliés par une arête
+Il y a plusieurs faÃ§ons de rechercher un chemin entre un point A et un point B.
+La premiÃ¨re consiste Ã  discrÃ©tiser l'espace, soit de sÃ©parer l'espace en
+petits Ã©lÃ©ments.  On construit avec ces Ã©lÃ©ments un graphe ou chaque Ã©lÃ©ment
+constitue un noeud du graphe et les Ã©lÃ©ments adjacents sont reliÃ©s par une arÃ¨te
 du graphe avec un point correspondant a la distance entre les centres des
-éléments.  Les obstacles peuvent être simplement retiré du graphe ou encore le
-poids peut simplement être augmenté artificiellement pour éviter de passer par
-l'obstacle.  Ainsi, la recherche du chemin optimal revient à utiliser un
+Ã©lÃ©ments.  Les obstacles peuvent Ãªtre simplement retirÃ© du graphe ou encore le
+poids peut simplement Ãªtre augmentÃ© artificiellement pour Ã©viter de passer par
+l'obstacle.  Ainsi, la recherche du chemin optimal revient Ã  utiliser un
 algorithme de recherche de chemin dans un graphe.  Les algorithmes de Dijkstra
-ou A* sont d'excellents candidats pour effectuer cette tâche.
+ou A* sont d'excellents candidats pour effectuer cette tÃ¢che.
 
-La deuxième technique consiste à représenter tous les points par une énergie
-correspondante.  Les chemins souhaitables ont une énergie négative tandis que
-les obstacles des énergies positives.  En ajustant le robot pour qu'il passe par
-le chemin de moindre énergie, il évite ainsi les obstacles.  Il n'y a aucune
-assurance que le chemin trouvé est le chemin optimal.
+La deuxiÃ¨me technique consiste Ã  reprÃ©senter tous les points par une Ã©nergie
+correspondante.  Les chemins souhaitables ont une Ã©nergie nÃ©gative tandis que
+les obstacles des Ã©nergies positives.  En ajustant le robot pour qu'il passe par
+le chemin de moindre Ã©nergie, il Ã©vite ainsi les obstacles.  Il n'y a aucune
+assurance que le chemin trouvÃ© est le chemin optimal.
 (http://www.ibm.com/developerworks/java/library/j-antigrav/)
 
 \section{Reconnaissance d'images}
-Afin d'expérimenter la reconnaissance d'images, nous sommes allés prendre des photos de la table de jeu avec des îles placées aléatoirement. Les photos ont
-été prises par la caméra monde. Ensuite, nous avons effectué certains traitements sur ces photos avec OpenCV afin d'avoir une idée de ce qui était possible de détecter. Nous avons réussi à détecter les coins de la carte et à isoler les formes
-des îles.
+Afin d'expÃ©rimenter la reconnaissance d'images, nous sommes allÃ©s prendre des photos de la table de jeu avec des Ã®les placÃ©es alÃ©atoirement. Les photos ont
+Ã©tÃ© prises par la camÃ©ra monde. Ensuite, nous avons effectuÃ© certains traitements sur ces photos avec OpenCV afin d'avoir une idÃ©e de ce qui Ã©tait possible de dÃ©tecter.
+Nous avons rÃ©ussi Ã  dÃ©tecter les coins de la carte et Ã  isoler les formes des Ã®les.
 
-\section{Réflexion sur l'architecture du système}
-Afin de faire les diagrammes demandés au livrable 1, nous avons pensé à une architecture possible pour le système et avons déterminé les traitements qui allaient être effectués sur la station de base et ceux qui allaient plutôt être effectués sur le robot. Nous avons exploré plusieurs techniques qui permettent de passer l'information entre les différentes composantes du système et notre
-choix s'est arrêté sur les websockets. Nous avons aussi décidé d'utiliser le langage de programmation Python pour la logique haut-niveau du système.
+\section{RÃ©flexion sur l'architecture du systÃ¨me}
+Afin de faire les diagrammes demandÃ©s au livrable 1, nous avons pensÃ© Ã  une architecture possible pour le systÃ¨me et avons dÃ©terminÃ© les traitements qui allaient Ãªtre effectuÃ©s sur la station de base
+et ceux qui allaient plutÃ´t Ãªtre effectuÃ©s sur le robot. Nous avons explorÃ© plusieurs techniques qui permettent de passer l'information entre les diffÃ©rentes composantes du systÃ¨me et notre
+choix s'est arrÃªtÃ© sur les websockets. Nous avons aussi dÃ©cidÃ© d'utiliser le langage de programmation Python pour la logique haut-niveau du systÃ¨me.
 
 \section{Simulateur de robot et interface web}
-Nous avons commencé à programmer, en Python, un simulateur pour le robot. Celui-ci contient des fonctions qui simulent les déplacements du robot sur la carte et enregistre sa position. Nous avons aussi développé une interface web qui est connectée au simulateur de robot par websocket. L'interface communique, à chaque seconde, avec le sereur qui héberge le simulateur afin de recevoir la position du robot qui est ensuite affichée dans un navigateur web.
+Nous avons commencÃ© Ã  programmer, en Python, un simulateur pour le robot. Celui-ci contient des fonctions qui simulent les dÃ©placements du robot sur la carte et enregistre sa position.
+Nous avons aussi dÃ©veloppÃ© une interface web qui est connectÃ©e au simulateur de robot par websocket. L'interface communique, Ã  chaque seconde, avec le sereur qui hÃ©berge
+le simulateur afin de recevoir la position du robot qui est ensuite affichÃ©e dans un navigateur web.
 
-\section{Électroaimant}
-Au niveau de l'électroaimant, la majorité du travail a été  de révisé les notions de magnétisme nécessaire pour la conception d'un électroaimant. La révision s'est effectué sur les sujets suivants: circuits magnétiques, les solénoïdes, le flux magnétique , le champs magnétique et la force crée par un champs magnétique. En plus de cela, on a commencer à examiner les différentes options au niveau du bobinage de la source magnétique. En effet, selon la grosseur de fils qu'on décide de prendre, on augmente ou diminue la résistance électrique ce qui limite la quantité de courant qu'on peut pousser dans la bobine et ainsi notre force magnétomotrice. Finalement, au niveau du matériel, on a regarder les deux options offert par le magasin du département. Il s'agit de coeur de ferrite dans lequel on peut mettre notre bobine. Les deux modèles fournis sont PC-3019 (modèle plus petit) et PC-3622 (modèle plus gros) de la compagnie Elna Ferrite. En se référant au catalogue de code de ferrite d'Elna Ferrite, le symbole C représente les caractéristiques de la pièce. Cela signifie que la pièce est sensé être assez linéaire au niveau de la courbe d'hystérésis et qu'il y a un bon rendement au niveau de l'énergie versus le flux magnétique crée. La prochaine étape de faire un système linéaire du nombre de tours versus le flux magnétique créé afin de trouver les points optimisés.
+\section{Ã‰lectroaimant}
+Au niveau de l'Ã©lectroaimant, la majoritÃ© du travail a Ã©tÃ©  de rÃ©viser les notions de magnÃ©tisme nÃ©cessaires pour la conception d'un Ã©lectroaimant. La rÃ©vision s'est effectuÃ©e sur
+les sujets suivants: circuits magnÃ©tiques, les solÃ©noÃ¯des, le flux magnÃ©tique , le champs magnÃ©tique et la force crÃ©e par un champs magnÃ©tique. En plus de cela, on a commencer Ã  examiner
+les diffÃ©rentes options au niveau du bobinage de la source magnÃ©tique. En effet, selon la grosseur de fils qu'on dÃ©cide de prendre, on augmente ou diminue la rÃ©sistance Ã©lectrique ce qui
+limite la quantitÃ© de courant qu'on peut pousser dans la bobine et ainsi notre force magnÃ©tomotrice. Finalement, au niveau du matÃ©riel, on a regarder les deux options offert par le magasin du dÃ©partement.
+Il s'agit de coeur de ferrite dans lequel on peut mettre notre bobine. Les deux modÃ¨les fournis sont PC-3019 (modÃ¨le plus petit) et PC-3622 (modÃ¨le plus gros) de la compagnie Elna Ferrite. En se rÃ©fÃ©rant
+au catalogue de code de ferrite d'Elna Ferrite, le symbole C reprÃ©sente les caractÃ©ristiques de la piÃ¨ce. Cela signifie que la piÃ¨ce est sensÃ©e Ãªtre assez linÃ©aire au niveau de la courbe d'hystÃ©rÃ©sis et
+qu'il y a un bon rendement au niveau de l'Ã©nergie versus le flux magnÃ©tique crÃ©Ã©. La prochaine Ã©tape de faire un systÃ¨me linÃ©aire du nombre de tours versus le flux magnÃ©tique crÃ©Ã© afin de trouver
+les points optimisÃ©s.
 
 \section{Code manchester}
-On n'a pas jouer directement avec le module de code manchester, à cause que celui-ci n'était pas encore prêt. Mais cependant, on a regardé ce que c'était un code manchester et les divers options pour le transmettre. Aussi c'est nous qui va déterminer la fréquence d'horloge de transmission. Une fréquence en dessous de 100 kHz semble suffisant s'il s'agit de juste transférer un seul byte d'information. Le message n'est pas encodé avec l'horloge en effectuant un XOR avec celle-ci, on transmet directement la lettre du LSB au MSB.Ensuite le protocole de communication se résume à envoyer un bit à 0 , ensutie les 7 bits encodé en manchester suivit enfin de 1 byte d'arrêt à 1. La séquence se répète sans cesse. Pour transmettre ce code sans-fils, deux options semblent être priviligiées. La première consiste à effectuer une modulation numériques notre signal de charge du condensateur. La seconde consisterait a utiliser des modules de type NRF/Zigbee/BlueTooth déjà assemblé. La première option serait à priviliger de par sa simplicité.
+On n'a pas jouer directement avec le module de code manchester, Ã  cause que celui-ci n'Ã©tait pas encore prÃªt. Mais cependant, on a regardÃ© ce que c'Ã©tait un code manchester
+et les divers options pour le transmettre. Aussi c'est nous qui va dÃ©terminer la frÃ©quence d'horloge de transmission. Une frÃ©quence en dessous de 100 kHz semble suffisant s'il s'agit de juste
+transfÃ©rer un seul byte d'information. Le message n'est pas encodÃ© avec l'horloge en effectuant un XOR avec celle-ci, on transmet directement la lettre du LSB au MSB.Ensuite le protocole de communication
+se rÃ©sume Ã  envoyer un bit Ã  0 , ensuite les 7 bits encodÃ©s en manchester suivit enfin de 1 byte d'arrÃªt Ã  1. La sÃ©quence se rÃ©pÃ¨te sans cesse. Pour transmettre ce code sans-fils, deux options semblent
+Ãªtre priviligiÃ©es. La premiÃ¨re consiste Ã  effectuer une modulation numÃ©riques notre signal de charge du condensateur. La seconde consisterait a utiliser des modules de type NRF/Zigbee/BlueTooth dÃ©jÃ 
+assemblÃ©. La premiÃ¨re option serait Ã  priviliger de par sa simplicitÃ©.
