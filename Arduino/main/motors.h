@@ -7,6 +7,26 @@
 	RED = motor power +
 	black = motor power -
 	*/
+	
+/*
+Arduino Pin	Register
+2					OCR3B
+3					OCR3C
+4					OCR4C
+5					OCR3A
+6					OCR4A
+7					OCR4B
+8					OCR4C
+9					OCR2B
+10					OCR2A
+11					OCR1A
+12					OCR1B
+13					OCR0A
+44					OCR5C
+45					OCR5B
+46					OCR5A
+
+*/
 
 #define INT_ENCODER_A_CH1 18 
 #define INT_ENCODER_A_CH2 0
@@ -20,31 +40,31 @@
 #define INT_ENCODER_D_CH1 21
 #define INT_ENCODER_D_CH2 0
 
-#define OUT_MOTOR_A 13
-#define OUT_MOTOR_B 11
-#define OUT_MOTOR_C 12
-#define OUT_MOTOR_D 10
+#define OUT_MOTOR_A 13 // OCR0A
+#define OUT_MOTOR_B 12 // OCR1B
+#define OUT_MOTOR_C 44 // OCR5C
+#define OUT_MOTOR_D 46 // OCR0A
 
-#define PIN_ONE_MOTOR_A 2
-#define PIN_ONE_MOTOR_B 4
-#define PIN_ONE_MOTOR_C 6
-#define PIN_ONE_MOTOR_D 8
+#define PIN_ONE_MOTOR_A 53
+#define PIN_ONE_MOTOR_B 49
+#define PIN_ONE_MOTOR_C 45
+#define PIN_ONE_MOTOR_D 41
 
-#define PIN_TWO_MOTOR_A 3
-#define PIN_TWO_MOTOR_B 5
-#define PIN_TWO_MOTOR_C 7
-#define PIN_TWO_MOTOR_D 9
+#define PIN_TWO_MOTOR_A 51
+#define PIN_TWO_MOTOR_B 47
+#define PIN_TWO_MOTOR_C 43
+#define PIN_TWO_MOTOR_D 39
 
-// 0 to 255
-#define ZERO_SPEED 0
+#define ZERO_SPEED 30
 
 #define DT 100 // sec
-#define DEFAULT_SPEED 100 // TICKS PER DT
+#define DEFAULT_SPEED 300 // TICKS PER DT
+#define ROTATE_DIAMETER 10000//in TICKS
 
-#define KSI 0.02 // for delta motors
-#define KSP 0.05
-#define KI 0.02 // for PID
-#define KP 0.1 //for PID
+#define KSI 0 // for delta motors
+#define KSP 0.1 // for delta motors
+#define KI 0.02 // for speed PID
+#define KP 0.1 //for speed PID
 
 #define CRITICAL_TICK 256 // critical distance after what speed is reduced
 
@@ -65,7 +85,7 @@ void set_motor(int motor, int tick, bool polarity, int motor_speed);
 void reset_motor(int motor);
 void reset_all_motors();
 void move_straight(int direction, int tick, int speed);
-void move(float angle, int tick, int speed);
+void rotate(int direction, int angle);
 void PID_motors();
 
 // ----------------ISR ----------------

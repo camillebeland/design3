@@ -13,6 +13,6 @@ void decoder_init();
 //-------------------------------------
 
 
-bool decode_byte(int byte);
+bool decode_byte(char byte);
 
 #endif // decoder.h

@@ -12,35 +12,35 @@ void motors_init(){
 	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_C_CH1), count_tick_C, RISING);
 	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_D_CH1), count_tick_D, RISING);	
 	
-	//pinMode(OUT_MOTOR_A, OUTPUT);
-	//pinMode(OUT_MOTOR_B, OUTPUT);
-	//pinMode(OUT_MOTOR_C, OUTPUT);
+	pinMode(OUT_MOTOR_A, OUTPUT);
+	pinMode(OUT_MOTOR_B, OUTPUT);
+	pinMode(OUT_MOTOR_C, OUTPUT);
 	//pinMode(OUT_MOTOR_D, OUTPUT);
 	
 	pinMode(PIN_ONE_MOTOR_A, OUTPUT);
 	pinMode(PIN_ONE_MOTOR_B, OUTPUT);
 	pinMode(PIN_ONE_MOTOR_C, OUTPUT);
-	pinMode(PIN_ONE_MOTOR_D, OUTPUT);
+	//pinMode(PIN_ONE_MOTOR_D, OUTPUT);
 	
 	pinMode(PIN_TWO_MOTOR_A, OUTPUT);
 	pinMode(PIN_TWO_MOTOR_B, OUTPUT);
 	pinMode(PIN_TWO_MOTOR_C, OUTPUT);
-	pinMode(PIN_TWO_MOTOR_D, OUTPUT);
+	//pinMode(PIN_TWO_MOTOR_D, OUTPUT);
 
 	digitalWrite(PIN_ONE_MOTOR_A, LOW);
 	digitalWrite(PIN_ONE_MOTOR_B, LOW);
 	digitalWrite(PIN_ONE_MOTOR_C, LOW);
-	digitalWrite(PIN_ONE_MOTOR_D, LOW);
+	//digitalWrite(PIN_ONE_MOTOR_D, LOW);
 	
-	digitalWrite(PIN_TWO_MOTOR_A, LOW);
+	digitalWrite(PIN_ONE_MOTOR_A, LOW);
 	digitalWrite(PIN_TWO_MOTOR_B, LOW);
 	digitalWrite(PIN_TWO_MOTOR_C, LOW);
-	digitalWrite(PIN_TWO_MOTOR_D, LOW);
+	//digitalWrite(PIN_TWO_MOTOR_D, LOW);
 	
-	analogWrite(OUT_MOTOR_A, 1);	
-	analogWrite(OUT_MOTOR_B, 1);	
+	analogWrite(OUT_MOTOR_A, 1);
+	analogWrite(OUT_MOTOR_B, 10);	
 	analogWrite(OUT_MOTOR_C, 1);	
-	analogWrite(OUT_MOTOR_D, 1);	
+	//analogWrite(OUT_MOTOR_D, 10);	
 	
 }
 
@@ -89,6 +89,7 @@ void start_motor(int motor){
 	if (motor == OUT_MOTOR_A){
 		if (tick_remaining_A>0){
 			if (polarity_A){
+				
 				digitalWrite(PIN_ONE_MOTOR_A, HIGH);
 				digitalWrite(PIN_TWO_MOTOR_A, LOW);
 			}
@@ -229,7 +230,6 @@ void reset_motor(int motor){
 		last_tick_remaining_A = 0;
 		wanted_speed_A = 0;
 		integrator_A = 0;
-		analogWrite(OUT_MOTOR_A, ZERO_SPEED);
 		brake_motor(OUT_MOTOR_A);
 	}
 	
@@ -238,7 +238,6 @@ void reset_motor(int motor){
 		last_tick_remaining_B = 0;
 		wanted_speed_B = 0;
 		integrator_B = 0;
-		analogWrite(OUT_MOTOR_A, ZERO_SPEED);
 		brake_motor(OUT_MOTOR_B);
 	}
 	else if (motor == OUT_MOTOR_C){
@@ -246,7 +245,6 @@ void reset_motor(int motor){
 		last_tick_remaining_C = 0;
 		wanted_speed_C = 0;
 		integrator_C = 0;
-		analogWrite(OUT_MOTOR_A, ZERO_SPEED);
 		brake_motor(OUT_MOTOR_C);
 	}
 	else if(motor == OUT_MOTOR_D){
@@ -254,7 +252,6 @@ void reset_motor(int motor){
 		last_tick_remaining_D = 0;
 		wanted_speed_D = 0;
 		integrator_D = 0;
-		analogWrite(OUT_MOTOR_A, ZERO_SPEED);
 		brake_motor(OUT_MOTOR_D);
 	}
 }
@@ -272,34 +269,47 @@ void reset_all_motors(){
 void move_straight(int direction, int tick, int speed){
 	
 	//set movement parameters, choose the appropriate motors to use
-
 	if (direction == LEFT){
-		set_motor(OUT_MOTOR_A, tick, false, speed);
+		set_motor(OUT_MOTOR_A, tick, true, speed);
 		set_motor(OUT_MOTOR_C, tick, false, speed);
 		straight_X = true;
 	}
 	else if (direction == RIGHT){
-		set_motor(OUT_MOTOR_A, tick, true, speed);
+		set_motor(OUT_MOTOR_A, tick, false, speed);
 		set_motor(OUT_MOTOR_C, tick, true, speed);
 		straight_X = true;
 	}
 	else if (direction == FORWARD){
 		set_motor(OUT_MOTOR_B, tick, false, speed);
-		set_motor(OUT_MOTOR_D, tick, true, speed);
+		//set_motor(OUT_MOTOR_D, tick, true, speed);
 		straight_Y = true;
 	}
 	else	if (direction == BACKWARD){
 		set_motor(OUT_MOTOR_B, tick, true, speed);
-		set_motor(OUT_MOTOR_D, tick, false, speed);
+		//set_motor(OUT_MOTOR_D, tick, false, speed);
 		straight_Y = true;
 	}
 	
 }
 
-void move(float angle, int tick, int speed){
-	//to implement using 2 move_straight calls
+void rotate(int direction, int angle){
+	int wanted_polarity;
+	straight_X = true;
+	straight_Y = true;
+	if (direction == LEFT){
+		wanted_polarity = true;
+	}
+	else if(direction == RIGHT){
+		wanted_polarity = false;
+	}
+	int ticks = ROTATE_DIAMETER*PI*(float(angle)/360);
+	
+	set_motor(OUT_MOTOR_A, ticks, wanted_polarity, DEFAULT_SPEED);
+	set_motor(OUT_MOTOR_B, ticks, wanted_polarity, DEFAULT_SPEED);
+	set_motor(OUT_MOTOR_C, ticks, wanted_polarity, DEFAULT_SPEED);
+	//set_motor(OUT_MOTOR_D, ticks, wanted_polarity, DEFAULT_SPEED);
+	
 }
-
 
 // PID for every wheel 
 // TO DO -> modify regulator
@@ -314,6 +324,7 @@ void PID_motors(){
 		
 			dt = millis() - last_millis;
 			if (dt >= DT){
+				
 				//speed is tick/dt
 				actual_speed_A = (last_tick_remaining_A - tick_remaining_A)/(dt/1000);
 				actual_speed_B = (last_tick_remaining_B - tick_remaining_B)/(dt/1000);
@@ -329,58 +340,43 @@ void PID_motors(){
 				int delta_motors_X = 0;
 				if (straight_X){
 					delta_motors_X =  actual_speed_A  - actual_speed_C ;
-					Serial.println(delta_motors_X);
 				}
 				int delta_motors_Y = 0;
 				if (straight_Y){
 					delta_motors_Y =actual_speed_B - actual_speed_D;
 				}
 				
-				integrator_A +=(error_A * KI);//- (delta_motors_X*KSI);
+				integrator_A +=(error_A * KI);
 				integrator_B +=(error_B * KI);
-				integrator_C +=(error_C * KI);//- (delta_motors_X*KSI);
+				integrator_C +=(error_C * KI);
 				integrator_D +=(error_D * KI);	
 				
-				if (tick_remaining_A >0){						
-					//if (!connected_A){
-						//analogWrite(OUT_MOTOR_A, 1);
-						//connected_A = true;
-					//}
-					//else{
-						OCR0A = (ZERO_SPEED + (integrator_A) + (error_A*KP) - (delta_motors_X*KSP) );
-					//}
+
+				if (tick_remaining_A >0){	
+					OCR0A = ZERO_SPEED + (integrator_A) + (error_A*KP)-(delta_motors_X*KSP);
 				}
 				else{
 					reset_motor(OUT_MOTOR_A);
 				}
-				
 				if (tick_remaining_B >0){
-					analogWrite(OUT_MOTOR_B, ZERO_SPEED + (integrator_B) + (error_B*KP) + (delta_motors_Y*KSP));
+					OCR1B = (ZERO_SPEED + (integrator_B) + (error_B*KP));// - (delta_motors_Y*KSP) );
 				}
 				else{
 					reset_motor(OUT_MOTOR_B);
 				}
 				
 				if (tick_remaining_C >0){
-					//if (!connected_C){
-						//analogWrite(OUT_MOTOR_C, 1);
-						//connected_C = true;
-					//}
-					//else{
-						OCR1B = (ZERO_SPEED + (integrator_C) + (error_C*KP) + (delta_motors_X*KSP));
-					//}
+					OCR5C = (ZERO_SPEED + (integrator_C) + (error_C*KP)) +(delta_motors_X*KSP);
 				}
 				else{
 					reset_motor(OUT_MOTOR_C);
 				}
 				if (tick_remaining_D >0){
-					analogWrite(OUT_MOTOR_D, ZERO_SPEED + (integrator_D) + (error_D*KP) + (delta_motors_Y*KSP));
-
+					OCR0A = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP));
 				}
 				else{
 					reset_motor(OUT_MOTOR_D);
 				}		
-				
 				
 				last_tick_remaining_A = tick_remaining_A;
 				last_tick_remaining_B = tick_remaining_B;
