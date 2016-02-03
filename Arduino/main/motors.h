@@ -58,7 +58,8 @@ Arduino Pin	Register
 #define ZERO_SPEED 30
 
 #define DT 100 // sec
-#define DEFAULT_SPEED 300 // TICKS PER DT
+#define DEFAULT_SPEED 500 // TICKS PER DT
+#define SLOW_SPEED 250
 #define ROTATE_DIAMETER 10000//in TICKS
 
 #define KSI 0 // for delta motors
@@ -67,11 +68,9 @@ Arduino Pin	Register
 #define KP 0.1 //for speed PID
 
 #define CRITICAL_TICK 256 // critical distance after what speed is reduced
+#define TICKS_PER_MM 5
 
-#define LEFT 1
-#define RIGHT 2
-#define FORWARD 3
-#define BACKWARD 4
+enum Direction {LEFT, RIGHT, FORWARD, BACKWARD};
 
 // -------------SETUP ----------------
 void motors_init();
@@ -84,8 +83,9 @@ void stop();
 void set_motor(int motor, int tick, bool polarity, int motor_speed);
 void reset_motor(int motor);
 void reset_all_motors();
-void move_straight(int direction, int tick, int speed);
-void rotate(int direction, int angle);
+void move_straight(Direction direction, int tick, int speed);
+void move(int x, int y, int speed);
+void rotate(Direction direction, int angle);
 void PID_motors();
 
 // ----------------ISR ----------------

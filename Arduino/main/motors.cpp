@@ -266,7 +266,7 @@ void reset_all_motors(){
 }
 
 // move forward, backward, left or right
-void move_straight(int direction, int tick, int speed){
+void move_straight(Direction direction, int tick, int speed){
 	
 	//set movement parameters, choose the appropriate motors to use
 	if (direction == LEFT){
@@ -292,7 +292,27 @@ void move_straight(int direction, int tick, int speed){
 	
 }
 
-void rotate(int direction, int angle){
+void move(int x, int y, int speed){
+	int ticks_X = x*TICKS_PER_MM;
+	int ticks_Y = y*TICKS_PER_MM;
+	
+	if (y >0){
+		move_straight(FORWARD, ticks_Y, speed);
+	}
+	else if (y < 0){
+		move_straight(BACKWARD, ticks_Y, speed);
+	}
+	
+	if (ticks_X > 0){
+		move_straight(RIGHT, ticks_X, speed);
+	}
+	else if (ticks_X < 0){
+		move_straight(LEFT, ticks_X, speed);
+	}
+
+}
+
+void rotate(Direction direction, int angle){
 	int wanted_polarity;
 	straight_X = true;
 	straight_Y = true;
