@@ -19,7 +19,7 @@ website.controller('homeController', ['$scope', function ($scope) {
 
     var canvas = document.getElementById("mapCanvas");
     var ctx = canvas.getContext("2d");
-    var socket = io('localhost:5000');
+    var socket = io('localhost:3000');
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
 
     ctx.fillStyle = "rgb(200,0,0)";
