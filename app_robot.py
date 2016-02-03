@@ -1,6 +1,6 @@
 from flask import Flask
 from flask.ext.socketio import SocketIO
-from robot import Mock_Robot
+from robot.robot import Mock_Robot
 from threading import Thread
 
 app = Flask(__name__)
@@ -25,16 +25,11 @@ def robot_move(data):
 def some_function():
     socket_io.emit('position',  {'robotPosition': robot.pos})
 
-import configuration
 
-def main(args):
-    config = configuration.Parser(args)
-    port = config.get_option('port')
-
-    start_robot()
-    start_server(port)
-
-import sys
+from configuration import configuration
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    config = configuration.getconfig()
+    port = int(config.get('robot', 'port'))
+    start_robot()
+    start_server(port)
