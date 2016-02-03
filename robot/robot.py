@@ -1,5 +1,5 @@
 from threading import Thread
-from time import sleep, clock
+from time import sleep
 from math import cos, sin
 
 class Mock_Robot:
@@ -11,23 +11,19 @@ class Mock_Robot:
     def __update(self, refresh_time):
         print("Starting Thread for time simulation")
         while(self.running):
-            time = clock()
             sleep(refresh_time/1000)
-            time = clock() - time
-            self.pos[0] += self.vel[0] * time
-            self.pos[1] += self.vel[1] * time
+            self.pos[0] += self.vel[0] * refresh_time/1000
+            self.pos[1] += self.vel[1] * refresh_time/1000
 
 
     def __del__(self):
         self.stop()
-
 
     def start(self):
         self.thread = Thread(target = self.__update, args = (self.refresh_time, ))
         self.running = True
         self.thread.setDaemon(True)
         self.thread.start()
-
 
     def stop(self):
         self.running = False
