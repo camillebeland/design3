@@ -351,31 +351,37 @@ void PID_motors(){
 				integrator_C +=(error_C * KI);
 				integrator_D +=(error_D * KI);	
 				
+				
+				int motors_done = 0;
 
 				if (tick_remaining_A >0){	
 					OCR0A = ZERO_SPEED + (integrator_A) + (error_A*KP)-(delta_motors_X*KSP);
 				}
 				else{
-					reset_motor(OUT_MOTOR_A);
+					brake_motor(OUT_MOTOR_A);
+					motors_done++;
 				}
 				if (tick_remaining_B >0){
 					OCR1B = (ZERO_SPEED + (integrator_B) + (error_B*KP));// - (delta_motors_Y*KSP) );
 				}
 				else{
-					reset_motor(OUT_MOTOR_B);
+					brake_motor(OUT_MOTOR_B);
+					motors_done++;
 				}
 				
 				if (tick_remaining_C >0){
 					OCR5C = (ZERO_SPEED + (integrator_C) + (error_C*KP)) +(delta_motors_X*KSP);
 				}
 				else{
-					reset_motor(OUT_MOTOR_C);
+					brake_motor(OUT_MOTOR_C);
+					motors_done++;
 				}
 				if (tick_remaining_D >0){
 					OCR0A = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP));
 				}
 				else{
-					reset_motor(OUT_MOTOR_D);
+					brake_motor(OUT_MOTOR_D);
+					motors_done++;
 				}		
 				
 				last_tick_remaining_A = tick_remaining_A;
@@ -383,6 +389,10 @@ void PID_motors(){
 				last_tick_remaining_C = tick_remaining_C;
 				last_tick_remaining_D = tick_remaining_D;
 				last_millis = millis();
+				
+				if (motors_done == 4){
+					reset_all_motors();
+				}
 			}		
 	}
 }
