@@ -15,7 +15,7 @@ def start_robot():
 def start_server(port):
     socket_io.run(app, port=port)
 
-@socket_io.on('move')
+@socket_io.on('set-velocity')
 def robot_move(data):
     x_velocity = data['x_velocity']
     y_velocity = data['y_velocity']
@@ -25,20 +25,16 @@ def robot_move(data):
 def some_function():
     socket_io.emit('position',  {'robotPosition': robot.pos})
 
-import sys
-from getopt import getopt
+import configuration
 
-def main(argv):
-    options, args= getopt(argv, 'p:', ['port='])
-    port = 5000
-    for key, value in options:
-        if(key in ('-p', '--port')):
-            port = int(value)
+def main(args):
+    config = configuration.Parser(args)
+    port = config.get_option('port')
 
     start_robot()
     start_server(port)
 
+import sys
+
 if __name__ == '__main__':
     main(sys.argv[1:])
-    
-    
