@@ -50,6 +50,7 @@ bool decode_byte(char byte){
 				param_count = 2;
 				current_state = PARAMETERS;
 			}
+			// cover errors
 			else{
 				byte_decoded = false;
 				current_state = IDLE;
@@ -59,11 +60,16 @@ bool decode_byte(char byte){
 		case PARAMETERS:
 			byte_decoded = true;
 			if (param_count >0){
+				if (byte == END_CHAR){
+					byte_decoded = false;
+					current_state = idle;
+				}
 				params[4-param_count] = byte;
 				param_count--;
 			}
+			//cover errors
 			else{
-				byte_decoded = false;
+				byte_decoded = true;
 				current_state = END;
 			}
 		break;
@@ -75,6 +81,7 @@ bool decode_byte(char byte){
 				current_state =  IDLE;
 				param_count = 0;
 			}
+			//cover errors
 			else{
 				byte_decoded = false;
 			}
