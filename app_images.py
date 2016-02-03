@@ -1,15 +1,9 @@
 from flask import Flask
 from flask.ext.socketio import SocketIO
-from robot.robot import Mock_Robot
 from configuration import configuration
 
 app = Flask(__name__)
 socket_io = SocketIO(app)
-robot = Mock_Robot()
-
-
-def start_robot():
-    robot.start()
 
 
 def start_server(port):
@@ -18,17 +12,14 @@ def start_server(port):
 
 @socket_io.on('set-velocity')
 def robot_move(data):
-    x_velocity = data['x_velocity']
-    y_velocity = data['y_velocity']
-    robot.move(x_velocity, y_velocity)
 
 
-@socket_io.on('fetchPosition')
+
+@socket_io.on('')
 def some_function():
-    socket_io.emit('position',  {'robotPosition': robot.pos})
+    socket_io.emit('position',  {'': })
 
 if __name__ == '__main__':
     config = configuration.getconfig()
-    port = int(config.get('robot', 'port'))
-    start_robot()
+    port = int(config.get('imagesapp', 'port'))
     start_server(port)
