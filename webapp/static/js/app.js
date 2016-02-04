@@ -33,7 +33,7 @@ website.controller('homeController', ['$scope', function ($scope) {
     setInterval(function(){ socket.emit('fetchImage') }, 2000); //Refresh data every 1 second
     socket.on('sentImage', function(msg){
         var image = new Image();
-        image.src = 'data:image/jpg;base64,' + msg.image;
+        image.src = 'data:image/jpeg;base64,' + msg.image.substring(2,  msg.image.length-1);
         document.body.appendChild(image);
     });
 
