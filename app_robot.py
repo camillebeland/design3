@@ -16,12 +16,12 @@ def start_server(port):
     socket_io.run(app, port=port)
 
 
-@socket_io.on('set-velocity')
-def robot_move(data):
-    x_velocity = data['x_velocity']
-    y_velocity = data['y_velocity']
+@socket_io.on('aaa')
+def robot_move(velocity):
+    print("moving" + x_velocity + y_velocity)
+    x_velocity = velocity['x_velocity']
+    y_velocity = velocity['y_velocity']
     robot.move(x_velocity, y_velocity)
-
 
 @socket_io.on('fetchPosition')
 def some_function():
