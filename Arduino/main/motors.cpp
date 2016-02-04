@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include "motors.h"
+#include <math.h> 
 
 void motors_init(){
 	pinMode(INT_ENCODER_A_CH1, INPUT);
@@ -292,22 +293,33 @@ void move_straight(Direction direction, int tick, int speed){
 	
 }
 
+// x = mm
+// y = mm
 void move(int x, int y, int speed){
 	int ticks_X = x*TICKS_PER_MM;
 	int ticks_Y = y*TICKS_PER_MM;
+	float angle;
+	if (x == 0 && y != 0){
+		angle = PI/2;
+	}
+	else{
+		angle = atan(abs(y)/abs(x));
+	}
+	int speed_X = cos(angle)*speed;
+	int speed_Y = sin(angle)*speed;
 	
 	if (y >0){
-		move_straight(FORWARD, ticks_Y, speed);
+		move_straight(FORWARD, ticks_Y, speed_Y);
 	}
 	else if (y < 0){
-		move_straight(BACKWARD, ticks_Y, speed);
+		move_straight(BACKWARD, ticks_Y, speed_Y);
 	}
 	
 	if (ticks_X > 0){
-		move_straight(RIGHT, ticks_X, speed);
+		move_straight(RIGHT, ticks_X, speed_X);
 	}
 	else if (ticks_X < 0){
-		move_straight(LEFT, ticks_X, speed);
+		move_straight(LEFT, ticks_X, speed_X);
 	}
 
 }
@@ -367,9 +379,13 @@ void PID_motors(){
 				}
 				
 				integrator_A +=(error_A * KI);
+				if (integrator_A > 255 - ZERO_SPEED){integrator_A = 255 - ZERO_SPEED};
 				integrator_B +=(error_B * KI);
+				if (integrator_B > 255 - ZERO_SPEED){integrator_B = 255 - ZERO_SPEED};
 				integrator_C +=(error_C * KI);
+				if (integrator_C > 255 - ZERO_SPEED){integrator_C = 255 - ZERO_SPEED};
 				integrator_D +=(error_D * KI);	
+				if (integrator_D > 255 - ZERO_SPEED){integrator_D = 255 - ZERO_SPEED};
 				
 				
 				int motors_done = 0;

@@ -26,6 +26,7 @@ bool decode_byte(char byte){
 			if(byte == START_CHAR){
 				current_state = FUNCTION;
 				byte_decoded = true;
+				param_count = 0;
 			}
 			else{
 				byte_decoded = false;
@@ -62,7 +63,7 @@ bool decode_byte(char byte){
 			if (param_count >0){
 				if (byte == END_CHAR){
 					byte_decoded = false;
-					current_state = idle;
+					current_state = IDLE;
 				}
 				params[4-param_count] = byte;
 				param_count--;
@@ -79,7 +80,6 @@ bool decode_byte(char byte){
 			if (byte == END_CHAR){
 				parse_and_call();
 				current_state =  IDLE;
-				param_count = 0;
 			}
 			//cover errors
 			else{
