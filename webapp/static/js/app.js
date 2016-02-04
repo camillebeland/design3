@@ -24,16 +24,17 @@ website.controller('homeController', ['$scope', function ($scope) {
 
     ctx.fillStyle = "rgb(200,0,0)";
 
-/*    setInterval(function(){ socket.emit('fetchPosition') }, 1000); //Refresh data every 1 second
+   setInterval(function(){ socket.emit('fetchPosition') }, 1000); //Refresh data every 1 second
     socket.on('position', function(msg){
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
-    });*/
+    });
 
-    setInterval(function(){ socket.emit('fetch-image') }, 3000); //Refresh data every 1 second
-    socket.on('image2', function(msg){
-        ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
-        ctx.fillRect(msg.image);
+    setInterval(function(){ socket.emit('fetchImage') }, 2000); //Refresh data every 1 second
+    socket.on('sentImage', function(msg){
+        var image = new Image();
+        image.src = 'data:image/jpg;base64,' + msg.image;
+        document.body.appendChild(image);
     });
 
 }]);
