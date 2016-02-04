@@ -27,6 +27,7 @@ bool decode_byte(char byte){
 				current_state = FUNCTION;
 				byte_decoded = true;
 				param_count = 0;
+        Serial.println("IDLE");
 			}
 			else{
 				byte_decoded = false;
@@ -38,6 +39,7 @@ bool decode_byte(char byte){
 			if (byte == 's'){
 				current_function = STOP;
 				current_state = END;
+        Serial.println(byte);
 			}
 			else if (byte == 'm' || byte == 'M'){
 				current_function = MOVE;
@@ -56,6 +58,7 @@ bool decode_byte(char byte){
 				byte_decoded = false;
 				current_state = IDLE;
 			}
+     Serial.println("FUNC");
 		break;
 		
 		case PARAMETERS:
@@ -69,14 +72,16 @@ bool decode_byte(char byte){
 				param_count--;
 			}
 			//cover errors
-			else{
+			if (param_count <1){
 				byte_decoded = true;
 				current_state = END;
 			}
+     Serial.println("PARAMETERS");
 		break;
 		
 		case END:
 			byte_decoded = true;
+      
 			if (byte == END_CHAR){
 				parse_and_call();
 				current_state =  IDLE;
@@ -85,6 +90,7 @@ bool decode_byte(char byte){
 			else{
 				byte_decoded = false;
 			}
+     Serial.println("END");
 		break;
 		
 		
@@ -111,6 +117,9 @@ bool parse_and_call(){
 			}
 			else if(params[2] == 'R'){
 				direction = RIGHT;
+			}
+			else{
+				return false;
 			}
 			angle= int(params[3]);
 			rotate(direction, angle);	

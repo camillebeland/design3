@@ -16,32 +16,36 @@ void motors_init(){
 	pinMode(OUT_MOTOR_A, OUTPUT);
 	pinMode(OUT_MOTOR_B, OUTPUT);
 	pinMode(OUT_MOTOR_C, OUTPUT);
-	//pinMode(OUT_MOTOR_D, OUTPUT);
+	pinMode(OUT_MOTOR_D, OUTPUT);
 	
 	pinMode(PIN_ONE_MOTOR_A, OUTPUT);
 	pinMode(PIN_ONE_MOTOR_B, OUTPUT);
 	pinMode(PIN_ONE_MOTOR_C, OUTPUT);
-	//pinMode(PIN_ONE_MOTOR_D, OUTPUT);
+	pinMode(PIN_ONE_MOTOR_D, OUTPUT);
 	
 	pinMode(PIN_TWO_MOTOR_A, OUTPUT);
 	pinMode(PIN_TWO_MOTOR_B, OUTPUT);
 	pinMode(PIN_TWO_MOTOR_C, OUTPUT);
-	//pinMode(PIN_TWO_MOTOR_D, OUTPUT);
+	pinMode(PIN_TWO_MOTOR_D, OUTPUT);
 
 	digitalWrite(PIN_ONE_MOTOR_A, LOW);
 	digitalWrite(PIN_ONE_MOTOR_B, LOW);
 	digitalWrite(PIN_ONE_MOTOR_C, LOW);
-	//digitalWrite(PIN_ONE_MOTOR_D, LOW);
+	digitalWrite(PIN_ONE_MOTOR_D, LOW);
 	
 	digitalWrite(PIN_ONE_MOTOR_A, LOW);
 	digitalWrite(PIN_TWO_MOTOR_B, LOW);
 	digitalWrite(PIN_TWO_MOTOR_C, LOW);
-	//digitalWrite(PIN_TWO_MOTOR_D, LOW);
+	digitalWrite(PIN_TWO_MOTOR_D, LOW);
+	
+	//TCCR0B = TCCR0B & B11111000 | B00000001;    // set timer 0 divisor to     1 for PWM frequency of 62500.00 Hz
+	//TCCR1B = TCCR1B & B11111000 | B00000001;    // set timer 1 divisor to     1 for PWM frequency of 31372.55 Hz
+	//TCCR5B = TCCR5B & B11111000 | B00000001;    // set timer 5 divisor to     1 for PWM frequency of 31372.55 Hz
 	
 	analogWrite(OUT_MOTOR_A, 1);
-	analogWrite(OUT_MOTOR_B, 10);	
+	analogWrite(OUT_MOTOR_B, 1);	
 	analogWrite(OUT_MOTOR_C, 1);	
-	//analogWrite(OUT_MOTOR_D, 10);	
+	analogWrite(OUT_MOTOR_D, 1);	
 	
 }
 
@@ -282,12 +286,12 @@ void move_straight(Direction direction, int tick, int speed){
 	}
 	else if (direction == FORWARD){
 		set_motor(OUT_MOTOR_B, tick, false, speed);
-		//set_motor(OUT_MOTOR_D, tick, true, speed);
+		set_motor(OUT_MOTOR_D, tick, true, speed);
 		straight_Y = true;
 	}
 	else	if (direction == BACKWARD){
 		set_motor(OUT_MOTOR_B, tick, true, speed);
-		//set_motor(OUT_MOTOR_D, tick, false, speed);
+		set_motor(OUT_MOTOR_D, tick, false, speed);
 		straight_Y = true;
 	}
 	
@@ -339,7 +343,7 @@ void rotate(Direction direction, int angle){
 	set_motor(OUT_MOTOR_A, ticks, wanted_polarity, DEFAULT_SPEED);
 	set_motor(OUT_MOTOR_B, ticks, wanted_polarity, DEFAULT_SPEED);
 	set_motor(OUT_MOTOR_C, ticks, wanted_polarity, DEFAULT_SPEED);
-	//set_motor(OUT_MOTOR_D, ticks, wanted_polarity, DEFAULT_SPEED);
+	set_motor(OUT_MOTOR_D, ticks, wanted_polarity, DEFAULT_SPEED);
 	
 }
 
@@ -379,13 +383,13 @@ void PID_motors(){
 				}
 				
 				integrator_A +=(error_A * KI);
-				if (integrator_A > 255 - ZERO_SPEED){integrator_A = 255 - ZERO_SPEED};
+				if (integrator_A > 255 - ZERO_SPEED){integrator_A = 255 - ZERO_SPEED;}
 				integrator_B +=(error_B * KI);
-				if (integrator_B > 255 - ZERO_SPEED){integrator_B = 255 - ZERO_SPEED};
+				if (integrator_B > 255 - ZERO_SPEED){integrator_B = 255 - ZERO_SPEED;}
 				integrator_C +=(error_C * KI);
-				if (integrator_C > 255 - ZERO_SPEED){integrator_C = 255 - ZERO_SPEED};
+				if (integrator_C > 255 - ZERO_SPEED){integrator_C = 255 - ZERO_SPEED;}
 				integrator_D +=(error_D * KI);	
-				if (integrator_D > 255 - ZERO_SPEED){integrator_D = 255 - ZERO_SPEED};
+				if (integrator_D > 255 - ZERO_SPEED){integrator_D = 255 - ZERO_SPEED;}
 				
 				
 				int motors_done = 0;
@@ -413,7 +417,7 @@ void PID_motors(){
 					motors_done++;
 				}
 				if (tick_remaining_D >0){
-					OCR0A = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP));
+					OCR5A = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP));
 				}
 				else{
 					brake_motor(OUT_MOTOR_D);

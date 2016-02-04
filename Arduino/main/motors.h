@@ -43,7 +43,7 @@ Arduino Pin	Register
 #define OUT_MOTOR_A 13 // OCR0A
 #define OUT_MOTOR_B 12 // OCR1B
 #define OUT_MOTOR_C 44 // OCR5C
-#define OUT_MOTOR_D 46 // OCR0A
+#define OUT_MOTOR_D 46 // OCR5A
 
 #define PIN_ONE_MOTOR_A 53
 #define PIN_ONE_MOTOR_B 49
@@ -55,11 +55,11 @@ Arduino Pin	Register
 #define PIN_TWO_MOTOR_C 43
 #define PIN_TWO_MOTOR_D 39
 
-#define ZERO_SPEED 30
+#define ZERO_SPEED 37
 
-#define DT 100 // sec
-#define DEFAULT_SPEED 500 // TICKS PER DT
-#define SLOW_SPEED 250
+#define DT 100 // ms
+#define DEFAULT_SPEED 1000 // TICKS PER DT
+#define SLOW_SPEED 500
 #define ROTATE_DIAMETER 10000//in TICKS
 
 #define KSI 0 // for delta motors
