@@ -36,10 +36,10 @@ website.controller('homeController', ['$scope', '$http', function ($scope) {
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
-    setInterval(function(){ base_station_socket.emit('fetchImage') }, 2000); //Refresh data every 2 second
+    setInterval(function(){ base_station_socket.emit('fetchImage') }, 5000); //Refresh data every 2 second
     base_station_socket.on('sentImage', function(msg){
         var image = new Image();
-        image.src = 'data:image/jpeg;base64,' + msg.image.substring(2,  msg.image.length-1);
+        image.src = 'data:image/png;base64,' + msg.image.substring(2,  msg.image.length-1);
 
         canvas.width = image.width;
         canvas.height = image.height;

@@ -12,9 +12,9 @@ class CameraService:
 
     def take_picture_base64(self):
         camera_capture = self.take_picture()
-        file = "image.jpg"
+        file = "base_station/image.png"
         cv2.imwrite(file, camera_capture)
-        with open("image.jpg", "rb") as image_file:
+        with open("base_station/image.png", "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read())
         return encoded_string
 
