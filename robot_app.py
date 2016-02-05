@@ -1,34 +1,11 @@
-from flask import Flask
-from flask.ext.socketio import SocketIO
-from robot.mock_robot import MockRobot
+from robot import robot_web_controller 
 from configuration import configuration
-
-app = Flask(__name__)
-socket_io = SocketIO(app)
-robot = MockRobot()
-
-
-def start_robot():
-    robot.start()
-
-
-def start_server(port):
-    socket_io.run(app, port=port)
-
-
-@socket_io.on('set-velocity')
-def robot_move(data):
-    x_velocity = data['x_velocity']
-    y_velocity = data['y_velocity']
-    robot.move(x_velocity, y_velocity)
-
-
-@socket_io.on('fetchPosition')
-def some_function():
-    socket_io.emit('position',  {'robotPosition': robot.pos})
+from robot.mock_robot import MockRobot
 
 if __name__ == '__main__':
     config = configuration.getconfig()
+    robot = MockRobot()
+    robot.start()
     port = int(config.get('robot', 'port'))
-    start_robot()
-    start_server(port)
+    robot_web_controller.inject(robot)
+    robot_web_controller.run(port)
