@@ -9,13 +9,14 @@ app = Flask(__name__)
 socket_io = SocketIO(app)
 
 
-def start_server(port):
-    socket_io.run(app, port=port)
-
-
 @socket_io.on('fetchImage')
 def some_function():
     socket_io.emit('sentImage',  {'image': str(encoded_string)})
+
+
+def start_server(port):
+    socket_io.run(app, port=port)
+
 
 if __name__ == '__main__':
     config = configuration.getconfig()

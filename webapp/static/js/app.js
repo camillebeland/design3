@@ -14,12 +14,12 @@ website.config(function ($stateProvider, $urlRouterProvider) {
 });
 
 
-
 website.controller('homeController', ['$scope', function ($scope) {
 
+this.drawCanvas = function(){
     var canvas = document.getElementById("mapCanvas");
     var ctx = canvas.getContext("2d");
-    var image_socket = io('localhost:5000');
+    var base_station_socket = io('localhost:5000');
     var robot_socket = io('localhost:3000');
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
 
@@ -31,11 +31,20 @@ website.controller('homeController', ['$scope', function ($scope) {
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
-    setInterval(function(){ image_socket.emit('fetchImage') }, 2000); //Refresh data every 1 second
-    image_socket.on('sentImage', function(msg){
+    setInterval(function(){ base_station_socket.emit('fetchImage') }, 2000); //Refresh data every 2 second
+    base_station_socket.on('sentImage', function(msg){
         var image = new Image();
         image.src = 'data:image/jpeg;base64,' + msg.image.substring(2,  msg.image.length-1);
-        document.body.appendChild(image);
+
+        canvas.width = image.width;
+        canvas.height = image.height;
+        ctx.drawImage(image, 0, 0);
     });
+};
+
+this.drawCanvas();
 
 }]);
+
+
+
