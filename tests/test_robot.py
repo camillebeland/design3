@@ -1,10 +1,10 @@
 from nose.tools import *
 from nose import with_setup
-from robot.robot import *
+from robot.mock_robot import *
 from time import sleep
 
 
-robot = Mock_Robot()
+robot = MockRobot()
 
 def setup():
     print("Setting things up")

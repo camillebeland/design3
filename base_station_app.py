@@ -19,5 +19,5 @@ def some_function():
 
 if __name__ == '__main__':
     config = configuration.getconfig()
-    port = int(config.get('imageapp', 'port'))
+    port = int(config.get('baseapp', 'port'))
     start_server(port)

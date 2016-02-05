@@ -19,8 +19,8 @@ Le projet Pirates des Caraïbes fait appel au concept de la téléopération d'u
 		```.\venv\Scripts\activate```
 5.	Installer sur l'environnement virtuel les dépendances du projet :
 		```pip install -r requirements.txt```
-6.  Installer numpy disponible sur http://www.lfd.uci.edu/~gohlke/pythonlibs/
-7.  Installer OpenCV 3 disponible au même endroit.
+6.  Installer numpy 1.10.4 disponible sur <http://www.lfd.uci.edu/~gohlke/pythonlibs/>
+7.  Installer OpenCV 3.1.0 disponible au même endroit.
 8.	Pour terminer désactiver l'environnement virtuel :
 		```deactivate```
 

@@ -1,11 +1,11 @@
 from flask import Flask
 from flask.ext.socketio import SocketIO
-from robot.robot import Mock_Robot
+from robot.mock_robot import MockRobot
 from configuration import configuration
 
 app = Flask(__name__)
 socket_io = SocketIO(app)
-robot = Mock_Robot()
+robot = MockRobot()
 
 
 def start_robot():
