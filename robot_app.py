@@ -1,19 +1,20 @@
 from flask import Flask
 from flask.ext.socketio import SocketIO
-from robot.robot import Mock_Robot
-from threading import Thread
+from robot.mock_robot import MockRobot
+from configuration import configuration
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
 socket_io = SocketIO(app)
-robot = Mock_Robot()
+robot = MockRobot()
 
 
 def start_robot():
     robot.start()
 
+
 def start_server(port):
     socket_io.run(app, port=port)
+
 
 @socket_io.on('set-velocity')
 def robot_move(data):
@@ -21,12 +22,10 @@ def robot_move(data):
     y_velocity = data['y_velocity']
     robot.move(x_velocity, y_velocity)
 
+
 @socket_io.on('fetchPosition')
 def some_function():
     socket_io.emit('position',  {'robotPosition': robot.pos})
-
-
-from configuration import configuration
 
 if __name__ == '__main__':
     config = configuration.getconfig()
