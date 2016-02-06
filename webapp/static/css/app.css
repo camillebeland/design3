@@ -6,3 +6,17 @@ body {
     background-color: white;
     border: 1px solid black;
 }
+
+#controlButtons{
+  //width:500px;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.tab-pane{
+  background-color: white;
+}
+
+.nav-tabs a{
+  color: black;
+}
