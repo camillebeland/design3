@@ -14,18 +14,16 @@ website.config(function ($stateProvider, $urlRouterProvider) {
 });
 
 
-website.controller('homeController', ['$scope', '$http', function ($scope) {
+website.controller('homeController', ['$scope', '$http', function ($scope, $http) {
 
-    window.BASE_STATION_HOST = "localhost:5000";
+    window.BASE_STATION_HOST = "http://localhost:5000";
     window.ROBOT_HOST = "localhost:3000";
 
-    var base_station_socket = io(BASE_STATION_HOST);
     var robot_socket = io(ROBOT_HOST);
 
     this.drawCanvas = function() {
         window.canvas = document.getElementById("mapCanvas");
         window.ctx = canvas.getContext("2d");
-        var base_station_socket = io('localhost:5000');
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
         ctx.fillStyle = "rgb(200,0,0)";
     };
@@ -36,15 +34,22 @@ website.controller('homeController', ['$scope', '$http', function ($scope) {
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
-    setInterval(function(){ base_station_socket.emit('fetchImage') }, 5000); //Refresh data every 2 second
-    base_station_socket.on('sentImage', function(msg){
-        var image = new Image();
-        image.src = 'data:image/png;base64,' + msg.image.substring(2,  msg.image.length-1);
 
-        canvas.width = image.width;
-        canvas.height = image.height;
-        ctx.drawImage(image, 0, 0);
-    });
+    var get_image = function(){
+        $http({
+            method: 'GET',
+            url: BASE_STATION_HOST
+        }).then(function successCallback(response) {
+            var image = new Image();
+            image.src = 'data:image/png;base64,' + response.data.image.substring(2,  response.data.image.length-1);
+            image.onload = setTimeout(get_image());
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
+        });
+    };
+    get_image()
+
     this.drawCanvas();
 }]);
 
