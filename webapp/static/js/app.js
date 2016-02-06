@@ -30,7 +30,7 @@ website.controller('homeController', ['$scope', '$http', function ($scope) {
         ctx.fillStyle = "rgb(200,0,0)";
     };
 
-    setInterval(function(){ robot_socket.emit('fetchPosition') }, 1000); //Refresh data every 1 second
+    setInterval(function(){ robot_socket.emit('fetchPosition') }, 100); //Refresh data every 1 second
     robot_socket.on('position', function(msg){
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
@@ -46,7 +46,14 @@ website.controller('homeController', ['$scope', '$http', function ($scope) {
         ctx.drawImage(image, 0, 0);
     });
     this.drawCanvas();
+
+    $scope.send = function(velocity) {
+        robot_socket.emit('setVelocity', velocity);
+    };
+
+
 }]);
+
 
 
 
