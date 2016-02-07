@@ -1,39 +1,23 @@
-from flask import Flask
-from flask.ext.socketio import SocketIO
-from robot.mock_robot import MockRobot
+from robot import robot_web_controller
 from configuration import configuration
-from flask_cors import *
-from flask import request
+from robot.mock_robot import MockWheels
+from robot.robot import Robot
 
-app = Flask(__name__)
-
-socket_io = SocketIO(app)
-CORS(app)
-robot = MockRobot()
-
-
-def start_robot():
-    robot.start()
-
-
-def start_server(port):
-    socket_io.run(app, port=port)
-
-
-@app.route('/robot/move', methods=['POST'])
-def robot_move():
-    velocity_x = request.json['x']
-    velocity_y = request.json['y']
-    robot.move(velocity_x, velocity_y)
-    return "OK"
-
-
-@socket_io.on('fetchPosition')
-def some_function():
-    socket_io.emit('position',  {'robotPosition': robot.pos})
 
 if __name__ == '__main__':
     config = configuration.getconfig()
-    port = int(config.get('robot', 'port'))
-    start_robot()
-    start_server(port)
+    port = config.getint('robot', 'port')
+    wheelsconfig = config.get('robot', 'wheels')
+    if(wheelsconfig == "mock"):
+        try:
+            refreshtime = config.getint('robot', 'wheels-refresh-time')
+        except :
+            print("Warning : wheels-refresh-time not specified, setting 10")
+            refreshtime = 10
+
+        wheels = MockWheels(refreshtime)
+
+    robot = Robot(wheels)
+    robot.start()
+    robot_web_controller.inject(robot)
+    robot_web_controller.run(port)

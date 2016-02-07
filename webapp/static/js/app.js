@@ -20,39 +20,38 @@ TabEnum = Object.freeze({
 
 website.controller('homeController', ['$scope', '$http', function($scope, $http) {
 
-  window.BASE_STATION_HOST = "localhost:5000";
+  window.BASE_STATION_HOST = "http://localhost:5000";
+  window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.ROBOT_HOST = "localhost:3000";
+  window.POSITION_REFRESH_TIME_IN_MS = 100
+  window.IMAGE_REFRESH_TIME_IN_MS = 5000
 
-  var base_station_socket = io(BASE_STATION_HOST);
+
   var robot_socket = io(ROBOT_HOST);
 
+  this.initVideoStream = function() {
+    document.getElementById("web-cam-stream").src = VIDEO_STREAM
+  };
+
   this.drawCanvas = function() {
-    var canvas = document.getElementById("mapCanvas");
-    var ctx = canvas.getContext("2d");
-    var base_station_socket = io('localhost:5000');
+    window.canvas = document.getElementById("mapCanvas");
+    window.ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
     ctx.fillStyle = "rgb(200,0,0)";
+  };
 
-    setInterval(function() {
-      robot_socket.emit('fetchPosition')
-    }, 1000); //Refresh data every 1 second
-    robot_socket.on('position', function(msg) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
-      ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
-    });
+  setInterval(function() {
+    robot_socket.emit('fetchPosition')
+  }, POSITION_REFRESH_TIME_IN_MS);
+  robot_socket.on('position', function(msg) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
+    ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
+  });
 
-    setInterval(function() {
-      base_station_socket.emit('fetchImage')
-    }, 2000); //Refresh data every 2 second
-    base_station_socket.on('sentImage', function(msg) {
-      var image = new Image();
-      image.src = 'data:image/jpeg;base64,' + msg.image.substring(2, msg.image.length - 1);
+  $scope.send = function(velocity) {
+    robot_socket.emit('setVelocity', velocity);
+  };
 
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
-    });
-  }
 
   $scope.robotUp = function() {
     var velocity = {
@@ -64,11 +63,7 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
       method: 'POST',
       url: 'http://' + ROBOT_HOST + '/robot/move',
       data: velocity
-    }).then(function successCallback(response) {
-
-    }, function errorCallback(response) {
-
-    });
+    }).then(function successCallback(response) {}, function errorCallback(response) {});
   };
 
   $scope.robotDown = function() {
@@ -88,11 +83,13 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
     });
   };
 
+
   $scope.robotLeft = function() {
     var velocity = {
       x: -1,
       y: 0
     }
+
 
     $http({
       method: 'POST',
@@ -125,6 +122,7 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
   this.init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
     this.drawCanvas();
+    this.initVideoStream();
   };
 
   this.init();
