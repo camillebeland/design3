@@ -17,9 +17,14 @@ website.config(function ($stateProvider, $urlRouterProvider) {
 website.controller('homeController', ['$scope', '$http', function ($scope, $http) {
 
     window.BASE_STATION_HOST = "http://localhost:5000";
+    window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
     window.ROBOT_HOST = "localhost:3000";
 
     var robot_socket = io(ROBOT_HOST);
+
+    this.initVideoStream = function(){
+      document.getElementById("web-cam-stream").src = VIDEO_STREAM
+    };
 
     this.drawCanvas = function() {
         window.canvas = document.getElementById("mapCanvas");
@@ -35,6 +40,7 @@ website.controller('homeController', ['$scope', '$http', function ($scope, $http
     });
 
     this.drawCanvas();
+    this.initVideoStream();
 }]);
 
 
