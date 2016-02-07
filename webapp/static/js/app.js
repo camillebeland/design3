@@ -44,7 +44,9 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
   }, POSITION_REFRESH_TIME_IN_MS);
   robot_socket.on('position', function(msg) {
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
-    ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
+    var width = 20;
+    var height = 20;
+    ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], width, height);
   });
 
   $scope.send = function(velocity) {
