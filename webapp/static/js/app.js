@@ -34,22 +34,6 @@ website.controller('homeController', ['$scope', '$http', function ($scope, $http
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
-
-    var get_image = function(){
-        $http({
-            method: 'GET',
-            url: BASE_STATION_HOST
-        }).then(function successCallback(response) {
-            var image = new Image();
-            image.src = 'data:image/png;base64,' + response.data.image.substring(2,  response.data.image.length-1);
-            image.onload = setTimeout(get_image());
-            canvas.width = image.width;
-            canvas.height = image.height;
-            ctx.drawImage(image, 0, 0);
-        });
-    };
-    get_image()
-
     this.drawCanvas();
 }]);
 

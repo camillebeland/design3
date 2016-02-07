@@ -1,23 +1,21 @@
-from flask import Flask, jsonify
-from flask.ext.cors import CORS
-from flask.ext.socketio import SocketIO
+from flask import Flask, Response
+from flask_cors import CORS
+from base_station.camera_service import VideoCamera
 from configuration import configuration
-from base_station.camera_service import CameraService
-
 
 app = Flask(__name__)
 CORS(app)
-camera_service = CameraService()
-
-@app.route('/', methods=['GET'])
-def some_function():
-    encoded_string = camera_service.take_picture_base64()
-    image = {
-        'image': str(encoded_string)
-    }
-    return jsonify(image), 201
 
 
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     config = configuration.getconfig()
