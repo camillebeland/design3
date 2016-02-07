@@ -19,6 +19,9 @@ website.controller('homeController', ['$scope', '$http', function ($scope, $http
     window.BASE_STATION_HOST = "http://localhost:5000";
     window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
     window.ROBOT_HOST = "localhost:3000";
+    window.POSITION_REFRESH_TIME_IN_MS = 100
+    window.IMAGE_REFRESH_TIME_IN_MS = 5000
+
 
     var robot_socket = io(ROBOT_HOST);
 
@@ -33,15 +36,21 @@ website.controller('homeController', ['$scope', '$http', function ($scope, $http
         ctx.fillStyle = "rgb(200,0,0)";
     };
 
-    setInterval(function(){ robot_socket.emit('fetchPosition') }, 1000); //Refresh data every 1 second
+    setInterval(function(){ robot_socket.emit('fetchPosition') }, POSITION_REFRESH_TIME_IN_MS); 
     robot_socket.on('position', function(msg){
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
+    $scope.send = function(velocity) {
+        robot_socket.emit('setVelocity', velocity);
+    };
+
+
     this.drawCanvas();
     this.initVideoStream();
 }]);
+
 
 
 
