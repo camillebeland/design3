@@ -18,6 +18,9 @@ website.controller('homeController', ['$scope', '$http', function ($scope) {
 
     window.BASE_STATION_HOST = "localhost:5000";
     window.ROBOT_HOST = "localhost:3000";
+    window.POSITION_REFRESH_TIME_IN_MS = 100
+    window.IMAGE_REFRESH_TIME_IN_MS = 5000
+
 
     var base_station_socket = io(BASE_STATION_HOST);
     var robot_socket = io(ROBOT_HOST);
@@ -25,18 +28,18 @@ website.controller('homeController', ['$scope', '$http', function ($scope) {
     this.drawCanvas = function() {
         window.canvas = document.getElementById("mapCanvas");
         window.ctx = canvas.getContext("2d");
-        var base_station_socket = io('localhost:5000');
+        var base_station_socket = io(BASE_STATION_HOST);
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
         ctx.fillStyle = "rgb(200,0,0)";
     };
 
-    setInterval(function(){ robot_socket.emit('fetchPosition') }, 100); //Refresh data every 1 second
+    setInterval(function(){ robot_socket.emit('fetchPosition') }, POSITION_REFRESH_TIME_IN_MS); 
     robot_socket.on('position', function(msg){
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
-    setInterval(function(){ base_station_socket.emit('fetchImage') }, 5000); //Refresh data every 2 second
+    setInterval(function(){ base_station_socket.emit('fetchImage') }, IMAGE_REFRESH_TIME_IN_MS); 
     base_station_socket.on('sentImage', function(msg){
         var image = new Image();
         image.src = 'data:image/png;base64,' + msg.image.substring(2,  msg.image.length-1);
