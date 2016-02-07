@@ -54,6 +54,74 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
     });
   }
 
+  $scope.robotUp = function() {
+    var velocity = {
+      x: 0,
+      y: 1
+    }
+
+    $http({
+      method: 'POST',
+      url: 'http://' + ROBOT_HOST + '/robot/move',
+      data: velocity
+    }).then(function successCallback(response) {
+
+    }, function errorCallback(response) {
+
+    });
+  };
+
+  $scope.robotDown = function() {
+    var velocity = {
+      x: 0,
+      y: -1
+    }
+
+    $http({
+      method: 'POST',
+      url: 'http://' + ROBOT_HOST + '/robot/move',
+      data: velocity
+    }).then(function successCallback(response) {
+
+    }, function errorCallback(response) {
+
+    });
+  };
+
+  $scope.robotLeft = function() {
+    var velocity = {
+      x: -1,
+      y: 0
+    }
+
+    $http({
+      method: 'POST',
+      url: 'http://' + ROBOT_HOST + '/robot/move',
+      data: velocity
+    }).then(function successCallback(response) {
+
+    }, function errorCallback(response) {
+
+    });
+  };
+
+  $scope.robotRight = function() {
+    var velocity = {
+      x: 1,
+      y: 0
+    }
+
+    $http({
+      method: 'POST',
+      url: 'http://' + ROBOT_HOST + '/robot/move',
+      data: velocity
+    }).then(function successCallback(response) {
+
+    }, function errorCallback(response) {
+
+    });
+  };
+
   this.init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
     this.drawCanvas();
