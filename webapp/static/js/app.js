@@ -55,7 +55,7 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
   $scope.robotUp = function() {
     var velocity = {
       x: 0,
-      y: 1
+      y: -1
     }
 
     $http({
@@ -68,7 +68,7 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
   $scope.robotDown = function() {
     var velocity = {
       x: 0,
-      y: -1
+      y: 1
     }
 
     $http({
