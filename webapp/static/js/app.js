@@ -26,7 +26,6 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
   window.POSITION_REFRESH_TIME_IN_MS = 100
   window.IMAGE_REFRESH_TIME_IN_MS = 5000
 
-
   var robot_socket = io(ROBOT_HOST);
 
   this.initVideoStream = function() {
@@ -95,9 +94,7 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
       method: 'POST',
       url: 'http://' + ROBOT_HOST + '/robot/move',
       data: velocity
-    }).then(function successCallback(response) {
-
-    }, function errorCallback(response) {
+    }).then(function successCallback(response) {}, function errorCallback(response) {
 
     });
   };

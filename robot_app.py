@@ -6,6 +6,7 @@ from robot.robot import Robot
 
 if __name__ == '__main__':
     config = configuration.getconfig()
+
     port = config.getint('robot', 'port')
     wheelsconfig = config.get('robot', 'wheels')
     if(wheelsconfig == "mock"):
@@ -16,7 +17,6 @@ if __name__ == '__main__':
             refreshtime = 10
 
         wheels = MockWheels(refreshtime)
-
     robot = Robot(wheels)
     robot.start()
     robot_web_controller.inject(robot)

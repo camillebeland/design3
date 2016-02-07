@@ -8,12 +8,15 @@ app = Flask(__name__)
 CORS(app)
 socket_io = SocketIO(app)
 
+
 def inject(a_robot):
     global robot
     robot = a_robot
 
+
 def run(port):
     socket_io.run(app, port=port)
+
 
 @app.route('/robot/move', methods=['POST'])
 #@socket_io.on('setVelocity')
