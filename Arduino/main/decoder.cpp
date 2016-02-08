@@ -28,6 +28,8 @@ bool decode_byte(char byte){
 	
 	bool byte_decoded = false;
 	
+	if(byte == START_CHAR){reset_decoder;};
+	
 	switch(current_state){
 		
 		case IDLE:
@@ -69,7 +71,6 @@ bool decode_byte(char byte){
 				byte_decoded = false;
 				current_state = IDLE;
 			}
-     Serial.println("FUNC");
 		break;
 		
 		case PARAMETERS:
@@ -96,14 +97,13 @@ bool decode_byte(char byte){
 			if (byte == END_CHAR){
 				parse_and_call();
 				current_state =  IDLE;
+				Serial.println("End CHAR detected");
 			}
 			//cover errors
 			else{
 				byte_decoded = false;
 			}
-		Serial.println("End CHAR detected");
-		Timer4.stop();
-		Timer4.restart();
+		reset_decoder();
 		break;
 		
 		

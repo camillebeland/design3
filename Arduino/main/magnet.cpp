@@ -11,6 +11,7 @@ void toggle_magnet(bool state){
 	digitalWrite(OUT_MAGNET, HIGH);
 }
 
-unsigned long get_capacitor_voltage(){
-	return (analogRead(IN_CAPACITOR_VOLTAGE)/1024) * FULL_CAPACITOR_VOLTAGE;
+float get_capacitor_voltage(){
+	float charge_fraction = analogRead(IN_CAPACITOR_VOLTAGE) / ADC_N_VALUES;
+	return charge_fraction * FULL_CAPACITOR_VOLTAGE;
 }

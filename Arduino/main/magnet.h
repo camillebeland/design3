@@ -4,6 +4,7 @@
 #define OUT_MAGNET 30
 #define IN_CAPACITOR_VOLTAGE 31 // MUST BE ADC
 #define FULL_CAPACITOR_VOLTAGE 10
+#define ADC_N_VALUES 1024
 
 // -------------SETUP ----------------
 void magnet_init();
@@ -11,7 +12,7 @@ void magnet_init();
 
 //-------------------------------------
 
-unsigned long get_capacitor_voltage();
+float get_capacitor_voltage();
 void toggle_magnet(bool state);
 
 // ----------------ISR ----------------
