@@ -3,7 +3,10 @@
 #include "motors.h"
 
 void decoder_init(){
-
+		//setup timer3 for interrupt every DT (in microseconds);
+	Timer4.initialize(TIMEOUT);
+	Timer4.attachInterrupt(TIMEOUT_ISR());
+	Timer4.stop();
 }
 
 
@@ -13,8 +16,13 @@ int speed_param = DEFAULT_SPEED;
 int param_count = 0;
 char params[4] = {0};
 
+// NO CIRCULAR BUFFER YET, RT PROCESSING
 
-// STILL MISSING A TIMEOUT FEATURE
+void reset_decoder(){
+	Timer4.stop();
+	current_state = IDLE;
+	timeout = 0;
+}
 
 bool decode_byte(char byte){
 	
@@ -27,7 +35,9 @@ bool decode_byte(char byte){
 				current_state = FUNCTION;
 				byte_decoded = true;
 				param_count = 0;
-        Serial.println("IDLE");
+				Serial.println("IDLE");
+				Timer4.restart();
+				Timer4.start();
 			}
 			else{
 				byte_decoded = false;
@@ -39,7 +49,7 @@ bool decode_byte(char byte){
 			if (byte == 's'){
 				current_function = STOP;
 				current_state = END;
-        Serial.println(byte);
+				Serial.println(byte);
 			}
 			else if (byte == 'm' || byte == 'M'){
 				current_function = MOVE;
@@ -76,7 +86,7 @@ bool decode_byte(char byte){
 				byte_decoded = true;
 				current_state = END;
 			}
-     Serial.println("PARAMETERS");
+			Serial.println("PARAMETERS");
 		break;
 		
 		case END:
@@ -90,7 +100,9 @@ bool decode_byte(char byte){
 			else{
 				byte_decoded = false;
 			}
-     Serial.println("END");
+		Serial.println("END");
+		Timer4.stop();
+		Timer4.restart();
 		break;
 		
 		
@@ -112,10 +124,10 @@ bool parse_and_call(){
 		
 		case ROTATE:
 			Direction direction;
-			if (params[2] =='L'){
+			if (params[2] =='l'){
 				direction = LEFT;
 			}
-			else if(params[2] == 'R'){
+			else if(params[2] == 'r'){
 				direction = RIGHT;
 			}
 			else{
@@ -136,4 +148,8 @@ bool parse_and_call(){
 		break;
 		}
 	return true;
+}
+
+void TIMEOUT_ISR(){
+	reset_decoder();
 }

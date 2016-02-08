@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include "serial.h"
+#include "decoder.h"
 
 int incomming_byte = -1;
 
