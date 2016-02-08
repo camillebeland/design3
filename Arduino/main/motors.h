@@ -57,7 +57,7 @@ Arduino Pin	Register
 
 #define ZERO_SPEED 37
 
-#define DT 100 // ms
+#define DT 100000 //  microsecs
 #define DEFAULT_SPEED 1000 // TICKS PER DT
 #define SLOW_SPEED 500
 #define ROTATE_DIAMETER 10000//in TICKS
@@ -89,7 +89,7 @@ void rotate(Direction direction, int angle);
 void PID_motors();
 
 // ----------------ISR ----------------
-
+void PID_motors_ISR();
 void count_tick_A();
 void count_tick_B();
 void count_tick_C();

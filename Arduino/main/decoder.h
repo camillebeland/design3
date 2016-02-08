@@ -30,7 +30,7 @@
 #define MOVE_CHAR 'M'
 #define MOVE_SLOW_CHAR 'm'
 
-#define TIMEOUT 2000 //microsecs
+#define TIMEOUT 5000 //microsecs
 
 enum State {IDLE, FUNCTION, PARAMETERS, END};
 enum Function {MOVE, ROTATE, STOP};
@@ -44,4 +44,8 @@ void reset_decoder();
 void decoder_tmeout();
 bool decode_byte(char byte);
 bool parse_and_call();
+
+//-------------------------------------
+
+void TIMEOUT_ISR();
 #endif // decoder.h

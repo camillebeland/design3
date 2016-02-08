@@ -1,11 +1,11 @@
 #include "Arduino.h"
 #include "decoder.h"
 #include "motors.h"
+#include "TimerFour.h"
 
 void decoder_init(){
-		//setup timer3 for interrupt every DT (in microseconds);
 	Timer4.initialize(TIMEOUT);
-	Timer4.attachInterrupt(TIMEOUT_ISR());
+	Timer4.attachInterrupt(TIMEOUT_ISR);
 	Timer4.stop();
 }
 
@@ -20,8 +20,8 @@ char params[4] = {0};
 
 void reset_decoder(){
 	Timer4.stop();
+	Timer4.restart();
 	current_state = IDLE;
-	timeout = 0;
 }
 
 bool decode_byte(char byte){
@@ -35,8 +35,7 @@ bool decode_byte(char byte){
 				current_state = FUNCTION;
 				byte_decoded = true;
 				param_count = 0;
-				Serial.println("IDLE");
-				Timer4.restart();
+				Serial.println("Start CHAR detected");
 				Timer4.start();
 			}
 			else{
@@ -49,17 +48,19 @@ bool decode_byte(char byte){
 			if (byte == 's'){
 				current_function = STOP;
 				current_state = END;
-				Serial.println(byte);
+				Serial.println("Function stop detected");
 			}
 			else if (byte == 'm' || byte == 'M'){
 				current_function = MOVE;
 				param_count = 4;
+				Serial.println("Function move detected");
 				if (byte == 'm'){speed_param = SLOW_SPEED;}
 				else{ speed_param = DEFAULT_SPEED;}
 				current_state = PARAMETERS;
 			}
 			else if (byte == 'r'){
 				current_function = ROTATE;
+				Serial.println("Function rotate detected");
 				param_count = 2;
 				current_state = PARAMETERS;
 			}
@@ -86,7 +87,7 @@ bool decode_byte(char byte){
 				byte_decoded = true;
 				current_state = END;
 			}
-			Serial.println("PARAMETERS");
+			Serial.println("Parameter detected");
 		break;
 		
 		case END:
@@ -100,7 +101,7 @@ bool decode_byte(char byte){
 			else{
 				byte_decoded = false;
 			}
-		Serial.println("END");
+		Serial.println("End CHAR detected");
 		Timer4.stop();
 		Timer4.restart();
 		break;
