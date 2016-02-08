@@ -42,8 +42,8 @@ website.controller('homeController', ['$scope', '$http', function ($scope, $http
         ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
     });
 
-    $scope.send = function(velocity) {
-        robot_socket.emit('setVelocity', velocity);
+    $scope.send = function(delta) {
+        robot_socket.emit('move', delta);
     };
 
 
