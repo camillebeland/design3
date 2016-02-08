@@ -50,9 +50,12 @@ class MockWheels:
 
         length = sqrt(pow(self.target[0], 2) + pow(self.target[1], 2))
 
-
-        self.direction[0] = self.target[0] / length
-        self.direction[1] = self.target[1] / length
+        if(length < PRECISION):
+            self.direction[0] = 0
+            self.direction[1] = 0
+        else:
+            self.direction[0] = self.target[0] / length
+            self.direction[1] = self.target[1] / length
 
 
 
