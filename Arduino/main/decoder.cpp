@@ -14,7 +14,7 @@ State current_state = IDLE;
 Function current_function;
 int speed_param = DEFAULT_SPEED;
 int param_count = 0;
-char params[4] = {0};
+unsigned char params[4] = {0};
 
 // NO CIRCULAR BUFFER YET, RT PROCESSING
 
@@ -25,7 +25,7 @@ void reset_decoder(){
 	current_state = IDLE;
 }
 
-bool decode_byte(char byte){
+bool decode_byte(unsigned char byte){
 	
 	bool byte_decoded = false;
 	
