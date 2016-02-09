@@ -19,13 +19,12 @@ def run(port):
 
 
 @app.route('/robot/move', methods=['POST'])
-#@socket_io.on('setVelocity')
-def robot_setvelocity():
-    x_velocity = request.json['x']
-    y_velocity = request.json['y']
-    robot.set_velocity(x_velocity, y_velocity)
+#@socket_io.on('move')
+def robot_move():
+    delta_x = request.json['delta_x']
+    delta_y = request.json['delta_y']
+    robot.move(delta_x, delta_y)
     return "OK"
-
 
 @socket_io.on('fetchPosition')
 def robot_fetchposition():
