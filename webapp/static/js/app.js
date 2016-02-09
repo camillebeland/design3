@@ -52,23 +52,6 @@ website.controller('homeController', ['$scope', '$http', 'Robot', function($scop
     robot_socket.emit('setVelocity', velocity);
   };
 
-
-  $scope.robotUp = function() {
-    Robot.up();
-  };
-
-  $scope.robotDown = function() {
-    Robot.down();
-  };
-
-  $scope.robotLeft = function() {
-    Robot.left();
-  };
-
-  $scope.robotRight = function() {
-    Robot.right();
-  };
-
   this.init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
     this.drawCanvas();
