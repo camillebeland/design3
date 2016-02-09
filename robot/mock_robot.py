@@ -58,6 +58,6 @@ class MockWheels:
             self.direction[1] = self.target[1] / length
 
 
-
     def rotate(self, angle):
         self.worldmap.rotate_robot(angle)
+

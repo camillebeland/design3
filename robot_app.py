@@ -1,4 +1,4 @@
-from robot import robot_web_controller 
+from robot import robot_web_controller
 from configuration import configuration
 from robot.mock_robot import MockWheels
 from robot.robot import Robot
@@ -10,7 +10,7 @@ if __name__ == '__main__':
     port = config.getint('robot', 'port')
     wheelsconfig = config.get('robot', 'wheels')
 
-    worldmap = Map(100,100)
+    worldmap = Map(400,400)
     if(wheelsconfig == "mock"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
@@ -27,6 +27,7 @@ if __name__ == '__main__':
         wheels = MockWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
 
     robot = Robot(wheels, worldmap)
+
     robot.start()
     robot_web_controller.inject(robot)
     robot_web_controller.run(port)
