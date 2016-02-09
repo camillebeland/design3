@@ -1,6 +1,3 @@
-
-import binascii
-
 def stop():
     return "(s)"
 
@@ -13,5 +10,5 @@ def rotate_right(angle):
 def move_slow(x_pos, y_pos):
     return "(m{0}{1}{2}{3})".format(chr(x_pos//256), chr(x_pos % 256), chr(y_pos//256), chr(y_pos%256))
 
-def move_default(x_pos, y_pos):
+def move(x_pos, y_pos):
     return "(M{0}{1}{2}{3})".format(chr(x_pos//256), chr(x_pos % 256), chr(y_pos//256), chr(y_pos%256))
