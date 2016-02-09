@@ -49,34 +49,29 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
     ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], width, height);
   });
 
-  $scope.send = function(velocity) {
-    robot_socket.emit('setVelocity', velocity);
-  };
-
-
   $scope.robotUp = function() {
-    var velocity = {
-      x: 0,
-      y: -1
+    var delta = {
+      delta_x: 0,
+      delta_y: -25
     }
 
     $http({
       method: 'POST',
       url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
+      data: delta
     }).then(function successCallback(response) {}, function errorCallback(response) {});
   };
 
   $scope.robotDown = function() {
-    var velocity = {
-      x: 0,
-      y: 1
+    var delta = {
+      delta_x: 0,
+      delta_y: 25 
     }
 
     $http({
       method: 'POST',
       url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
+      data: delta
     }).then(function successCallback(response) {
 
     }, function errorCallback(response) {
@@ -86,31 +81,31 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
 
 
   $scope.robotLeft = function() {
-    var velocity = {
-      x: -1,
-      y: 0
+    var delta = {
+      delta_x: -25,
+      delta_y: 0
     }
 
 
     $http({
       method: 'POST',
       url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
+      data: delta
     }).then(function successCallback(response) {}, function errorCallback(response) {
 
     });
   };
 
   $scope.robotRight = function() {
-    var velocity = {
-      x: 1,
-      y: 0
+    var delta = {
+      delta_x: 25,
+      delta_y: 0
     }
 
     $http({
       method: 'POST',
       url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
+      data: delta 
     }).then(function successCallback(response) {
 
     }, function errorCallback(response) {
