@@ -18,4 +18,12 @@ website.controller('robotControlsController', ['$scope', '$http', 'Robot', funct
   $scope.robotRight = function() {
     Robot.right();
   };
+
+  $scope.robotTurnLeft = function(){
+    Robot.turnLeft();
+  };
+
+  $scope.robotTurnRight = function(){
+    Robot.turnRight();
+  }
 }])

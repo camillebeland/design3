@@ -19,11 +19,15 @@ def run(port):
 
 
 @app.route('/robot/move', methods=['POST'])
-#@socket_io.on('move')
 def robot_move():
     delta_x = request.json['delta_x']
     delta_y = request.json['delta_y']
     robot.move(delta_x, delta_y)
+    return "OK"
+
+@app.route('/robot/rotate', methods=['POST'])
+def robot_rotate():
+    raise NotImplementedError("Method unimplemented yet..");
     return "OK"
 
 @socket_io.on('fetchPosition')

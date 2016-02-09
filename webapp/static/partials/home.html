@@ -9,8 +9,8 @@
   </ul>
 
   <div class="tab-content">
-    <div id="robotControls" class="tab-pane fade in active">
-      <div class="container" id="controlButtons" ng-controller="robotControlsController">
+    <div id="robotControls" class="tab-pane fade in active" ng-controller="robotControlsController">
+      <div class="container" id="controlButtons">
         <button>
           <span class="glyphicon glyphicon-chevron-up" ng-click="robotUp()"></span>
         </button>
@@ -25,6 +25,15 @@
 
         <button>
           <span class="glyphicon glyphicon-chevron-down" ng-click="robotDown()"></span>
+        </button>
+      </div>
+      <div class="container">
+        <button>
+          <span class="glyphicon glyphicon-menu-left" ng-click="robotTurnLeft()"></span>
+        </button>
+
+        <button>
+          <span class="glyphicon glyphicon-menu-right" ng-click="robotTurnRight()"></span>
         </button>
       </div>
     </div>

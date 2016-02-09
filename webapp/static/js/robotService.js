@@ -63,4 +63,24 @@ var RobotService = angular.module('RobotService', [])
       });
     };
 
+    this.turnLeft = function() {
+      var angle = -30;
+
+      $http({
+        method: 'POST',
+        url: 'http://' + ROBOT_HOST + '/robot/rotate',
+        data: angle
+      });
+    };
+
+    this.turnRight = function() {
+      var angle = 30;
+
+      $http({
+        method: 'POST',
+        url: 'http://' + ROBOT_HOST + '/robot/rotate',
+        data: angle
+      });
+    };
+
   }]);
