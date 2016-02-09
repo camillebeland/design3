@@ -28,7 +28,7 @@ Arduino Pin	Register
 
 */
 
-#define INT_ENCODER_A_CH1 18 
+#define INT_ENCODER_A_CH1 18
 #define INT_ENCODER_A_CH2 0
 
 #define INT_ENCODER_B_CH1 19
@@ -58,17 +58,17 @@ Arduino Pin	Register
 #define ZERO_SPEED 37
 
 #define DT 100000 //  microsecs
-#define DEFAULT_SPEED 1000 // TICKS PER DT
-#define SLOW_SPEED 500
-#define ROTATE_DIAMETER 10000//in TICKS
+#define DEFAULT_SPEED 500 // TICKS PER DT
+#define SLOW_SPEED 200
+#define ROTATE_DIAMETER 1770//in TICKS
 
-#define KSI 0 // for delta motors
+#define KSI 0.02 // for delta motors
 #define KSP 0.1 // for delta motors
 #define KI 0.02 // for speed PID
 #define KP 0.1 //for speed PID
 
 #define CRITICAL_TICK 256 // critical distance after what speed is reduced
-#define TICKS_PER_MM 5
+#define TICKS_PER_MM 7.5
 
 enum Direction {LEFT, RIGHT, FORWARD, BACKWARD};
 

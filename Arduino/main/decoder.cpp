@@ -20,7 +20,8 @@ char params[4] = {0};
 
 void reset_decoder(){
 	Timer4.stop();
-	Timer4.restart();
+	//Serial.print("RESET DECODER");
+	Serial.print(current_state);
 	current_state = IDLE;
 }
 
@@ -37,7 +38,7 @@ bool decode_byte(char byte){
 				current_state = FUNCTION;
 				byte_decoded = true;
 				param_count = 0;
-				Serial.println("Start CHAR detected");
+		//		Serial.println("Start CHAR detected");
 				Timer4.start();
 			}
 			else{
@@ -50,19 +51,19 @@ bool decode_byte(char byte){
 			if (byte == 's'){
 				current_function = STOP;
 				current_state = END;
-				Serial.println("Function stop detected");
+			//	Serial.println("Function stop detected");
 			}
 			else if (byte == 'm' || byte == 'M'){
 				current_function = MOVE;
 				param_count = 4;
-				Serial.println("Function move detected");
+				//Serial.println("Function move detected");
 				if (byte == 'm'){speed_param = SLOW_SPEED;}
 				else{ speed_param = DEFAULT_SPEED;}
 				current_state = PARAMETERS;
 			}
 			else if (byte == 'r'){
 				current_function = ROTATE;
-				Serial.println("Function rotate detected");
+				//Serial.println("Function rotate detected");
 				param_count = 2;
 				current_state = PARAMETERS;
 			}
@@ -88,7 +89,7 @@ bool decode_byte(char byte){
 				byte_decoded = true;
 				current_state = END;
 			}
-			Serial.println("Parameter detected");
+			//Serial.println("Parameter detected");
 		break;
 		
 		case END:
@@ -97,7 +98,7 @@ bool decode_byte(char byte){
 			if (byte == END_CHAR){
 				parse_and_call();
 				current_state =  IDLE;
-				Serial.println("End CHAR detected");
+				//Serial.println("End CHAR detected");
 			}
 			//cover errors
 			else{
@@ -152,5 +153,6 @@ bool parse_and_call(){
 }
 
 void TIMEOUT_ISR(){
+
 	reset_decoder();
 }

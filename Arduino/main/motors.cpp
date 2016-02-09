@@ -55,14 +55,14 @@ void motors_init(){
 
 //-------------------------------------------------------------------------------
 // GLOBAL VARIABLES
-int tick_remaining_A = 0;
-int tick_remaining_B = 0;
-int tick_remaining_C = 0;
-int tick_remaining_D = 0;
-int last_tick_remaining_A = 0;
-int last_tick_remaining_B = 0;
-int last_tick_remaining_C = 0;
-int last_tick_remaining_D = 0;
+long tick_remaining_A = 0;
+long tick_remaining_B = 0;
+long tick_remaining_C = 0;
+long tick_remaining_D = 0;
+long last_tick_remaining_A = 0;
+long last_tick_remaining_B = 0;
+long last_tick_remaining_C = 0;
+long last_tick_remaining_D = 0;
 
 bool polarity_A;
 bool polarity_B;
@@ -316,7 +316,9 @@ void move_straight(Direction direction, int tick, int speed){
 
 // x = mm
 // y = mm
+// MSB = negative
 void move(int x, int y, int speed){
+	
 	int ticks_X = x*TICKS_PER_MM;
 	int ticks_Y = y*TICKS_PER_MM;
 	float angle;
@@ -329,17 +331,17 @@ void move(int x, int y, int speed){
 	int speed_X = cos(angle)*speed;
 	int speed_Y = sin(angle)*speed;
 	
-	if (y >0){
+	if (y <32768){
 		move_straight(FORWARD, ticks_Y, speed_Y);
 	}
-	else if (y < 0){
+	else if (y >= 32768){
 		move_straight(BACKWARD, ticks_Y, speed_Y);
 	}
 	
-	if (ticks_X > 0){
+	if (ticks_X < 32768){
 		move_straight(RIGHT, ticks_X, speed_X);
 	}
-	else if (ticks_X < 0){
+	else if (ticks_X >= 32768){
 		move_straight(LEFT, ticks_X, speed_X);
 	}
 
@@ -347,8 +349,7 @@ void move(int x, int y, int speed){
 
 void rotate(Direction direction, int angle){
 	int wanted_polarity;
-	straight_X = true;
-	straight_Y = true;
+
 	if (direction == LEFT){
 		wanted_polarity = true;
 	}
@@ -361,6 +362,8 @@ void rotate(Direction direction, int angle){
 	set_motor(OUT_MOTOR_B, ticks, wanted_polarity, SLOW_SPEED);
 	set_motor(OUT_MOTOR_C, ticks, wanted_polarity, SLOW_SPEED);
 	set_motor(OUT_MOTOR_D, ticks, wanted_polarity, SLOW_SPEED);
+	straight_X = true;
+	straight_Y = true;
 	
 }
 
@@ -372,32 +375,46 @@ void rotate(Direction direction, int angle){
 void PID_motors(){
 	if (last_PID_ISR_count != PID_ISR_count){
 		int dt = millis() - last_millis;
-		//speed is tick/dt
-		actual_speed_A = 1000*(last_tick_remaining_A - tick_remaining_A)/(dt);
-		actual_speed_B = 1000*(last_tick_remaining_B - tick_remaining_B)/(dt);
-		actual_speed_C = 1000*(last_tick_remaining_C - tick_remaining_C)/(dt);
-		actual_speed_D = 1000*(last_tick_remaining_D - tick_remaining_D)/(dt);
+		//speed is tick/dt		last_millis = millis();
+/*		Serial.print(actual_speed_A);
+		Serial.print("\t");
+		Serial.print(actual_speed_B);
+		Serial.print("\t");
+		Serial.print(actual_speed_C);
+		Serial.print("\t");
+		Serial.print(actual_speed_D);
+		Serial.print("\n");*/
 		
-		last_millis = millis();
+		//Serial.println(tick_remaining_A);
+		actual_speed_A = 1000000*(last_tick_remaining_A - tick_remaining_A)/(DT);
+		actual_speed_B = 1000000*(last_tick_remaining_B - tick_remaining_B)/(DT);
+		actual_speed_C = 1000000*(last_tick_remaining_C - tick_remaining_C)/(DT);
+		actual_speed_D = 1000000*(last_tick_remaining_D - tick_remaining_D)/(DT);
+		last_tick_remaining_A = tick_remaining_A;
+		last_tick_remaining_B = tick_remaining_B;
+		last_tick_remaining_C = tick_remaining_C;
+		last_tick_remaining_D = tick_remaining_D;
+		
 		
 		// Error = difference to wanted speed
-		int error_A = wanted_speed_A - actual_speed_A;
-		int error_B = wanted_speed_B - actual_speed_B;
-		int error_C = wanted_speed_C - actual_speed_C;
-		int error_D = wanted_speed_D - actual_speed_D;				
+		long error_A = wanted_speed_A - actual_speed_A;
+		long error_B = wanted_speed_B - actual_speed_B;
+		long error_C = wanted_speed_C - actual_speed_C;
+		long error_D = wanted_speed_D - actual_speed_D;				
 		
-		int delta_motors_X = 0;
+		long delta_motors_X = 0;
 		if (straight_X){
 			delta_motors_X =  actual_speed_A  - actual_speed_C ;
 		}
-		int delta_motors_Y = 0;
+		long delta_motors_Y = 0;
 		if (straight_Y){
+			
 			delta_motors_Y =actual_speed_B - actual_speed_D;
 		}
 		
-		integrator_A +=(error_A * KI);
+		integrator_A +=(error_A * KI)- (delta_motors_X*KSI);
 		if (integrator_A > 255 - ZERO_SPEED){integrator_A = 255 - ZERO_SPEED;}
-		integrator_B +=(error_B * KI);
+		integrator_B +=(error_B * KI)- (delta_motors_Y*KSI) ;
 		if (integrator_B > 255 - ZERO_SPEED){integrator_B = 255 - ZERO_SPEED;}
 		integrator_C +=(error_C * KI);
 		if (integrator_C > 255 - ZERO_SPEED){integrator_C = 255 - ZERO_SPEED;}
@@ -406,35 +423,30 @@ void PID_motors(){
 		
 
 		if (tick_remaining_A >0){	
-			OCR0A = ZERO_SPEED + (integrator_A) + (error_A*KP)-(delta_motors_X*KSP);
+			OCR0A = (ZERO_SPEED + (integrator_A) + (error_A*KP))- (delta_motors_X*KSP) ;
 		}
 		else if (running_A){
 			brake_motor(OUT_MOTOR_A);
 		}
 		if (tick_remaining_B >0){
-			OCR1B = (ZERO_SPEED + (integrator_B) + (error_B*KP));// - (delta_motors_Y*KSP) );
+			OCR1B = (ZERO_SPEED + (integrator_B) + (error_B*KP)) - (delta_motors_Y*KSP);
 		}
 		else if (running_B){
 			brake_motor(OUT_MOTOR_B);
 		}
 		
 		if (tick_remaining_C >0){
-			OCR5C = (ZERO_SPEED + (integrator_C) + (error_C*KP)) +(delta_motors_X*KSP);
+			OCR5C = (ZERO_SPEED + (integrator_C) + (error_C*KP)) ;//+ (delta_motors_X*KSP) ;
 		}
 		else if (running_C){
 			brake_motor(OUT_MOTOR_C);
 		}
 		if (tick_remaining_D >0){
-			OCR5A = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP));
+			OCR5A = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP);
 		}
 		else if (running_D){
 			brake_motor(OUT_MOTOR_D);
 		}		
-		
-		last_tick_remaining_A = tick_remaining_A;
-		last_tick_remaining_B = tick_remaining_B;
-		last_tick_remaining_C = tick_remaining_C;
-		last_tick_remaining_D = tick_remaining_D;
 		
 		if (!running_A && !running_B && !running_C && !running_D){
 			reset_all_motors();

@@ -27,6 +27,7 @@ void TimerFour::initialize(long microseconds)
   TCCR4A = 0;                 // clear control register A 
   TCCR4B = _BV(WGM43);        // set mode as phase and frequency correct pwm, stop the timer
   setPeriod(microseconds);
+
 }
 
 void TimerFour::setPeriod(long microseconds)
@@ -99,5 +100,6 @@ void TimerFour::stop()
 
 void TimerFour::restart()
 {
+	
   TCNT4 = 0;
 }
