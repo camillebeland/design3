@@ -1,5 +1,4 @@
-var website = angular.module('app', ['ui.router']);
-
+var website = angular.module('app', ['ui.router', 'RobotService']);
 
 website.config(function($stateProvider, $urlRouterProvider) {
 
@@ -18,7 +17,7 @@ TabEnum = Object.freeze({
   OTHER: "OTHER"
 });
 
-website.controller('homeController', ['$scope', '$http', function($scope, $http) {
+website.controller('homeController', ['$scope', '$http', 'Robot', function($scope, $http, Robot) {
 
   window.BASE_STATION_HOST = "http://localhost:5000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
@@ -55,67 +54,19 @@ website.controller('homeController', ['$scope', '$http', function($scope, $http)
 
 
   $scope.robotUp = function() {
-    var velocity = {
-      x: 0,
-      y: -1
-    }
-
-    $http({
-      method: 'POST',
-      url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
-    }).then(function successCallback(response) {}, function errorCallback(response) {});
+    Robot.up();
   };
 
   $scope.robotDown = function() {
-    var velocity = {
-      x: 0,
-      y: 1
-    }
-
-    $http({
-      method: 'POST',
-      url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
-    }).then(function successCallback(response) {
-
-    }, function errorCallback(response) {
-
-    });
+    Robot.down();
   };
 
-
   $scope.robotLeft = function() {
-    var velocity = {
-      x: -1,
-      y: 0
-    }
-
-
-    $http({
-      method: 'POST',
-      url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
-    }).then(function successCallback(response) {}, function errorCallback(response) {
-
-    });
+    Robot.left();
   };
 
   $scope.robotRight = function() {
-    var velocity = {
-      x: 1,
-      y: 0
-    }
-
-    $http({
-      method: 'POST',
-      url: 'http://' + ROBOT_HOST + '/robot/move',
-      data: velocity
-    }).then(function successCallback(response) {
-
-    }, function errorCallback(response) {
-
-    });
+    Robot.right();
   };
 
   this.init = function() {
