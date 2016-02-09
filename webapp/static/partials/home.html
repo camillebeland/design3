@@ -1,6 +1,39 @@
 <div class="container">
 
-    <h2>Map of the sea arrh'</h2>
-    <canvas id="mapCanvas" width="500" height="400"></canvas>
-    <img id="web-cam-stream" src="">
+  <h2>Map of the sea arrh'</h2>
+  <canvas id="mapCanvas" width="500" height="400"></canvas>
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#controls">Controls</a></li>
+    <li><a data-toggle="tab" href="#other">Other</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="controls" class="tab-pane fade in active">
+      <div class="container" id="controlButtons">
+        <button>
+          <span class="glyphicon glyphicon-chevron-up" ng-click="robotUp()"></span>
+        </button>
+
+        <button>
+          <span class="glyphicon glyphicon-chevron-left" ng-click="robotLeft()"></span>
+        </button>
+
+        <button>
+          <span class="glyphicon glyphicon-chevron-right" ng-click="robotRight()"></span>
+        </button>
+
+        <button>
+          <span class="glyphicon glyphicon-chevron-down" ng-click="robotDown()"></span>
+        </button>
+      </div>
+    </div>
+
+    <div id="other" class="tab-pane fade">
+      <p>Awesome features coming soon</p>
+    </div>
+  </div>
+
+  <img id="web-cam-stream" src="">
+
 </div>
