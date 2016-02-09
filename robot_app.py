@@ -1,4 +1,4 @@
-from robot import robot_web_controller 
+from robot import robot_web_controller
 from configuration import configuration
 from robot.mock_robot import MockWheels
 from robot.robot import Robot
@@ -17,7 +17,6 @@ if __name__ == '__main__':
             refreshtime = 10
 
         wheels = MockWheels(refreshtime)
-
     robot = Robot(wheels)
     robot.start()
     robot_web_controller.inject(robot)
