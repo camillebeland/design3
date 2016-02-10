@@ -1,6 +1,11 @@
 from robot import robot_web_controller
 from configuration import configuration
 from robot.simulation_robot import SimulationWheels
+
+from wheels_usb_controller import WheelsUsbController
+import serial
+from wheels_usb_commands import WheelsUsbCommands
+
 from robot.robot import Robot
 from robot.map import Map
 
@@ -25,6 +30,11 @@ if __name__ == '__main__':
             wheelsvelocity = 5
 
         wheels = SimulationWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
+
+    elif(wheelsconfig == "usb-arduino"):
+        wheels_usb_port = config.get('robot', 'wheels-serial-port')
+        serialport = serial.Serial(port=wheels_usb_port)
+        wheels = WheelsUsbController(serialport,WheelsUsbCommands)
 
     robot = Robot(wheels, worldmap)
     robot_web_controller.inject(robot)

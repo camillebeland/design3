@@ -1,6 +1,8 @@
 from nose.tools import *
 from nose import with_setup
-from robot import wheels_usb_commands as cmd
+from robot.wheels_usb_commands import WheelsUsbCommands
+
+cmd = WheelsUsbCommands()
 
 def test_stop():
     assert_equal("(s)", cmd.stop())
