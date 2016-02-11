@@ -21,6 +21,7 @@ website.controller('canvasController', ['$scope', '$http', 'Robot', function($sc
     var width = 20;
     var height = 20;
     canvasContext.fillRect(msg.robotPosition[0], msg.robotPosition[1], width, height);
+    console.log("Robot angle: " + msg.robotAngle);
   });
 
   function canvasController() {

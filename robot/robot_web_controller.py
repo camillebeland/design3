@@ -33,4 +33,5 @@ def robot_rotate():
 
 @socket_io.on('fetchPosition')
 def robot_fetchposition():
-    socket_io.emit('position',  {'robotPosition': robot.getpos()})
+    socket_io.emit('position',  {'robotPosition': robot.getpos(),
+                                 'robotAngle': robot.get_angle()})

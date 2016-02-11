@@ -15,6 +15,8 @@ class Robot():
     def getpos(self):
         return self.__worldmap.get_robot_position()
 
+    def get_angle(self):
+        return self.__worldmap.get_robot_angle()
+
     def rotate(self, angle):
-        print("BOB")
         self.__wheels.rotate(angle)
