@@ -7,7 +7,7 @@ CORS(app)
 
 
 def inject(a_camera, a_refresh_time):
-    global camera, refresh_time, buffer
+    global camera, refresh_time
     camera = a_camera
     refresh_time = a_refresh_time
 
