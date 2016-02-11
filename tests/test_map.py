@@ -1,6 +1,6 @@
 from nose.tools import *
 from nose import with_setup
-from map import Map
+from robot.map import Map
 
 WIDTH = 300.0
 HEIGHT = 100.0

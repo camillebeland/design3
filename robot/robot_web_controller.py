@@ -28,7 +28,6 @@ def robot_move():
 @app.route('/robot/rotate', methods=['POST'])
 def robot_rotate():
     angle = request.json['angle']
-    print(angle)
     robot.rotate(angle)
     return "OK"
 
