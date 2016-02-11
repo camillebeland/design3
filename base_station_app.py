@@ -1,7 +1,8 @@
 from configuration import configuration
-from base_station.camera_service import VideoCamera
+from base_station.camera_service import CameraService
 from base_station.mock_camera_service import MockVideoCamera
 from base_station import base_station_web_controller
+from base_station.double_sided_buffer import DoubleSidedBuffer
 import cv2
 
 if __name__ == '__main__':
@@ -13,7 +14,8 @@ if __name__ == '__main__':
     refresh_time = config.getint('baseapp', 'refresh_time')
     if camera_config == "webcam":
         open_cv_camera = cv2.VideoCapture(camera_id)
-        camera = VideoCamera(open_cv_camera, cv2)
+        buffer = DoubleSidedBuffer()
+        camera = CameraService(open_cv_camera, cv2, buffer)
     if camera_config == "mock":
         camera = MockVideoCamera()
 
