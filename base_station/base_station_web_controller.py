@@ -15,7 +15,7 @@ def inject(a_camera, a_refresh_time):
 def gen(camera, refresh_time):
     while True:
         time.sleep(refresh_time)
-        frame = camera.get_frame()
+        frame = camera.get_frame().tobytes()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
