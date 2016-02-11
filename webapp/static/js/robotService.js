@@ -64,7 +64,9 @@ var RobotService = angular.module('RobotService', [])
     };
 
     this.turnLeft = function() {
-      var angle = -30;
+      var angle = {
+        angle: -30
+      }
 
       $http({
         method: 'POST',
@@ -74,7 +76,9 @@ var RobotService = angular.module('RobotService', [])
     };
 
     this.turnRight = function() {
-      var angle = 30;
+      var angle = {
+        angle: 30
+      }
 
       $http({
         method: 'POST',
