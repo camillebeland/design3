@@ -10,6 +10,7 @@ class CameraService(object):
         self.__start()
 
     def __del__(self):
+        self.stop()
         self.camera.release()
 
     def get_frame(self):

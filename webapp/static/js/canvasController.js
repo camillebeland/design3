@@ -9,12 +9,13 @@ website.controller('canvasController', ['$scope', '$http', 'Robot', function ($s
 
     var updateRobot = function (robotData) {
         completeRobotRepresentation.x = robotData.robotPosition[0];
-        completeRobotRepresentation.y = robotData.robotPosition[1];
+    completeRobotRepresentation.y = canvas.height - robotData.robotPosition[1]; //Because of y axis direction in computer graphics convention
         completeRobotRepresentation.rotation = robotData.robotAngle;
     };
 
     var initVideoStream = function(){
         var image = new Image();
+    document.getElementById("web-cam-stream").src = VIDEO_STREAM
         image.src = VIDEO_STREAM;
         var bitmap = new createjs.Bitmap(image);
         stage.addChild(bitmap);
@@ -37,6 +38,7 @@ website.controller('canvasController', ['$scope', '$http', 'Robot', function ($s
 
         completeRobotRepresentation = new createjs.Container();
         var robotSquareMiddle = robotSquareWidth / 2;
+    var robotSquareMiddle = robotSquareLength / 2;
         completeRobotRepresentation.addChild(robotSquare, circle);
 
         stage.addChild(completeRobotRepresentation);
@@ -56,6 +58,7 @@ website.controller('canvasController', ['$scope', '$http', 'Robot', function ($s
     function canvasController() {
         canvas = document.getElementById("mapCanvas");
         canvasContext = canvas.getContext("2d");
+
         initVideoStream();
         initRobot();
     }
