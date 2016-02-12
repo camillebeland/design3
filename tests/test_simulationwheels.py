@@ -1,6 +1,6 @@
 from nose.tools import *
 from nose import with_setup
-from simulation_robot import SimulationWheels
+from robot.simulation_robot import SimulationWheels
 from time import sleep
 
 class MockedMap:
