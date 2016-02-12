@@ -4,7 +4,7 @@ var RobotService = angular.module('RobotService', [])
     this.up = function() {
       var delta = {
         delta_x: 0,
-        delta_y: -25
+        delta_y: 25
       }
 
       $http({
@@ -17,7 +17,7 @@ var RobotService = angular.module('RobotService', [])
     this.down = function() {
       var delta = {
         delta_x: 0,
-        delta_y: 25
+        delta_y: -25
       }
 
       $http({
