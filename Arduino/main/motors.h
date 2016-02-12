@@ -8,7 +8,7 @@
 	black = motor power -
 	*/
 	
-/*
+/*  PWM DUTY CYCLE
 Arduino Pin	Register
 2					OCR3B
 3					OCR3C
@@ -60,6 +60,7 @@ Arduino Pin	Register
 #define DT 100000 //  microsecs
 #define DEFAULT_SPEED 500 // TICKS PER DT
 #define SLOW_SPEED 200
+#define ROTATE_SPEED 350
 #define ROTATE_DIAMETER 1770//in TICKS
 
 #define KSI 0.02 // for delta motors
@@ -67,8 +68,9 @@ Arduino Pin	Register
 #define KI 0.02 // for speed PID
 #define KP 0.1 //for speed PID
 
-#define CRITICAL_TICK 256 // critical distance after what speed is reduced
-#define TICKS_PER_MM 7.5
+#define CRITICAL_TICK 256 // critical distance after which speed is reduced
+#define TICKS_PER_MM 7.29 // 
+#define WHEEL_DIAMETERS 69.85 //mm
 
 enum Direction {LEFT, RIGHT, FORWARD, BACKWARD};
 
@@ -80,11 +82,11 @@ void start_motor(int motor);
 void brake_motor(int motor);
 void start();
 void stop();
-void set_motor(int motor, int tick, bool polarity, int motor_speed);
+void set_motor(int motor, int tick, bool polarity, double motor_speed);
 void reset_motor(int motor);
 void reset_all_motors();
-void move_straight(Direction direction, int tick, int speed);
-void move(int x, int y, int speed);
+void move_straight(Direction direction, int tick, double speed);
+void move(int x, int y, double speed);
 void rotate(Direction direction, int angle);
 void PID_motors();
 

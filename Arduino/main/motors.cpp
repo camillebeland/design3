@@ -208,7 +208,7 @@ void stop(){
 }
 
 //set parameters for a specific wheel/motor
-void set_motor(int motor, int tick, bool polarity, int motor_speed){
+void set_motor(int motor, int tick, bool polarity, double motor_speed){
 	
 	if (motor == OUT_MOTOR_A){
 		tick_remaining_A =tick;
@@ -288,7 +288,7 @@ void reset_all_motors(){
 }
 
 // move forward, backward, left or right
-void move_straight(Direction direction, int tick, int speed){
+void move_straight(Direction direction, int tick, double speed){
 	
 	//set movement parameters, choose the appropriate motors to use
 	if (direction == LEFT){
@@ -317,7 +317,7 @@ void move_straight(Direction direction, int tick, int speed){
 // x = mm
 // y = mm
 // MSB = negative
-void move(int x, int y, int speed){
+void move(int x, int y, double speed){
 	
 	int ticks_X = x*TICKS_PER_MM;
 	int ticks_Y = y*TICKS_PER_MM;
@@ -328,8 +328,8 @@ void move(int x, int y, int speed){
 	else{
 		angle = atan(abs(y)/abs(x));
 	}
-	int speed_X = cos(angle)*speed;
-	int speed_Y = sin(angle)*speed;
+	double speed_X = cos(angle)*speed;
+	double speed_Y = sin(angle)*speed;
 	
 	if (y <32768){
 		move_straight(FORWARD, ticks_Y, speed_Y);
@@ -358,10 +358,10 @@ void rotate(Direction direction, int angle){
 	}
 	int ticks = ROTATE_DIAMETER*PI*angle/360;
 	
-	set_motor(OUT_MOTOR_A, ticks, wanted_polarity, SLOW_SPEED);
-	set_motor(OUT_MOTOR_B, ticks, wanted_polarity, SLOW_SPEED);
-	set_motor(OUT_MOTOR_C, ticks, wanted_polarity, SLOW_SPEED);
-	set_motor(OUT_MOTOR_D, ticks, wanted_polarity, SLOW_SPEED);
+	set_motor(OUT_MOTOR_A, ticks, wanted_polarity, ROTATE_SPEED);
+	set_motor(OUT_MOTOR_B, ticks, wanted_polarity, ROTATE_SPEED);
+	set_motor(OUT_MOTOR_C, ticks, wanted_polarity, ROTATE_SPEED);
+	set_motor(OUT_MOTOR_D, ticks, wanted_polarity, ROTATE_SPEED);
 	straight_X = true;
 	straight_Y = true;
 	
@@ -397,16 +397,16 @@ void PID_motors(){
 		
 		
 		// Error = difference to wanted speed
-		long error_A = wanted_speed_A - actual_speed_A;
-		long error_B = wanted_speed_B - actual_speed_B;
-		long error_C = wanted_speed_C - actual_speed_C;
-		long error_D = wanted_speed_D - actual_speed_D;				
+		double error_A = wanted_speed_A - actual_speed_A;
+		double error_B = wanted_speed_B - actual_speed_B;
+		double error_C = wanted_speed_C - actual_speed_C;
+		double error_D = wanted_speed_D - actual_speed_D;				
 		
-		long delta_motors_X = 0;
+		double delta_motors_X = 0;
 		if (straight_X){
 			delta_motors_X =  actual_speed_A  - actual_speed_C ;
 		}
-		long delta_motors_Y = 0;
+		double delta_motors_Y = 0;
 		if (straight_Y){
 			
 			delta_motors_Y =actual_speed_B - actual_speed_D;
@@ -423,26 +423,26 @@ void PID_motors(){
 		
 
 		if (tick_remaining_A >0){	
-			OCR0A = (ZERO_SPEED + (integrator_A) + (error_A*KP))- (delta_motors_X*KSP) ;
+			OCR0A = int((ZERO_SPEED + (integrator_A) + (error_A*KP))- (delta_motors_X*KSP)) ;
 		}
 		else if (running_A){
 			brake_motor(OUT_MOTOR_A);
 		}
 		if (tick_remaining_B >0){
-			OCR1B = (ZERO_SPEED + (integrator_B) + (error_B*KP)) - (delta_motors_Y*KSP);
+			OCR1B = int((ZERO_SPEED + (integrator_B) + (error_B*KP)) - (delta_motors_Y*KSP));
 		}
 		else if (running_B){
 			brake_motor(OUT_MOTOR_B);
 		}
 		
 		if (tick_remaining_C >0){
-			OCR5C = (ZERO_SPEED + (integrator_C) + (error_C*KP)) ;//+ (delta_motors_X*KSP) ;
+			OCR5C = int(ZERO_SPEED + (integrator_C) + (error_C*KP));//+ (delta_motors_X*KSP) ;
 		}
 		else if (running_C){
 			brake_motor(OUT_MOTOR_C);
 		}
 		if (tick_remaining_D >0){
-			OCR5A = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP);
+			OCR5A = int(ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP);
 		}
 		else if (running_D){
 			brake_motor(OUT_MOTOR_D);
