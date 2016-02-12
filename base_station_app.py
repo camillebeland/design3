@@ -1,6 +1,6 @@
 from configuration import configuration
 from base_station.camera_service import CameraService
-from base_station.mock_camera_service import MockVideoCamera
+from base_station.mock_camera_service import MockCameraService
 from base_station import base_station_web_controller
 from base_station.double_sided_buffer import DoubleSidedBuffer
 import cv2
@@ -13,7 +13,7 @@ if __name__ == '__main__':
             buffer = DoubleSidedBuffer()
             camera = CameraService(open_cv_camera, cv2, buffer)
         if camera_config == "mock":
-            camera = MockVideoCamera()
+            camera = MockCameraService()
         return camera
 
     config = configuration.getconfig()
