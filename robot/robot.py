@@ -3,12 +3,6 @@ class Robot():
         self.__wheels = wheels
         self.__worldmap = worldmap
 
-    def start(self):
-        self.__wheels.start()
-
-    def stop(self):
-        self.__wheels.stop()
-
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
 
