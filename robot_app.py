@@ -4,6 +4,7 @@ from robot.simulation_robot import SimulationWheels
 
 from wheels_usb_controller import WheelsUsbController
 import serial
+import serial.tools.list_ports as lp
 from wheels_usb_commands import WheelsUsbCommands
 
 from robot.robot import Robot
@@ -32,8 +33,12 @@ if __name__ == '__main__':
         wheels = SimulationWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
 
     elif(wheelsconfig == "usb-arduino"):
-        wheels_usb_port = config.get('robot', 'wheels-serial-port')
-        serialport = serial.Serial(port=wheels_usb_port)
+        arduino_pid = config.get('robot', 'arduino-pid')
+        arduino_vid = config.get('robot', 'arduino-pid')
+        ports = lp.comports()
+        arduinoport = filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports)
+        assert(len(arduinoport) == 0)
+        serialport = serial.Serial(port=arduinoport[0].device)
         wheels = WheelsUsbController(serialport,WheelsUsbCommands)
 
     robot = Robot(wheels, worldmap)
