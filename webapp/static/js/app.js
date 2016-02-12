@@ -22,8 +22,8 @@ website.controller('homeController', ['$scope', '$http', 'Robot', function($scop
   window.BASE_STATION_HOST = "http://localhost:5000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.ROBOT_HOST = "localhost:3000";
-  window.POSITION_REFRESH_TIME_IN_MS = 100
-  window.IMAGE_REFRESH_TIME_IN_MS = 5000
+  window.POSITION_REFRESH_TIME_IN_MS = 100;
+  window.CANVAS_REFRESH_TIME_IN_MS = 100;
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
