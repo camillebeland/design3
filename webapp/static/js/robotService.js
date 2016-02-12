@@ -5,7 +5,7 @@ var RobotService = angular.module('RobotService', [])
       var delta = {
         delta_x: 0,
         delta_y: 25
-      }
+      };
 
       $http({
         method: 'POST',
@@ -50,7 +50,7 @@ var RobotService = angular.module('RobotService', [])
       var delta = {
         delta_x: 25,
         delta_y: 0
-      }
+      };
 
       $http({
         method: 'POST',
@@ -66,7 +66,7 @@ var RobotService = angular.module('RobotService', [])
     this.turnLeft = function() {
       var angle = {
         angle: -30
-      }
+      };
 
       $http({
         method: 'POST',
@@ -78,7 +78,7 @@ var RobotService = angular.module('RobotService', [])
     this.turnRight = function() {
       var angle = {
         angle: 30
-      }
+      };
 
       $http({
         method: 'POST',

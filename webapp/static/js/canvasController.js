@@ -15,7 +15,7 @@ website.controller('canvasController', ['$scope', '$http', 'Robot', function($sc
   };
 
   var initVideoStream = function() {
-    document.getElementById("web-cam-stream").src = VIDEO_STREAM
+    document.getElementById("web-cam-stream").src = VIDEO_STREAM;
   };
 
   var initRobot = function() {
