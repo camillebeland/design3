@@ -67,5 +67,3 @@ def test_given_started_wheels_when_rotate_wheels_of_angle_then_robot_has_rotate_
 def assert_equal_with_error(expected, actual, error):
     actual_error = expected - actual
     assert_true( actual_error < error, msg="Error {1} larger than {0}".format(error, actual_error))
-
-

@@ -19,13 +19,19 @@ def run(port):
 
 
 @app.route('/robot/move', methods=['POST'])
-#@socket_io.on('move')
 def robot_move():
     delta_x = request.json['delta_x']
     delta_y = request.json['delta_y']
     robot.move(delta_x, delta_y)
     return "OK"
 
+@app.route('/robot/rotate', methods=['POST'])
+def robot_rotate():
+    angle = request.json['angle']
+    robot.rotate(angle)
+    return "OK"
+
 @socket_io.on('fetchPosition')
 def robot_fetchposition():
-    socket_io.emit('position',  {'robotPosition': robot.getpos()})
+    socket_io.emit('position',  {'robotPosition': robot.getpos(),
+                                 'robotAngle': robot.get_angle()})
