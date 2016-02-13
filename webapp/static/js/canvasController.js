@@ -56,6 +56,8 @@ website.controller('canvasController', ['$scope', '$http', 'Robot', function ($s
     function canvasController() {
         canvas = document.getElementById("mapCanvas");
         canvasContext = canvas.getContext("2d");
+        canvas.height = CANVAS_HEIGHT;
+        canvas.width = CANVAS_WIDTH;
         initVideoStream();
         initRobot();
     }
