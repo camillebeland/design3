@@ -2,10 +2,10 @@ from robot import robot_web_controller
 from configuration import configuration
 from robot.simulation_robot import SimulationWheels
 
-from wheels_usb_controller import WheelsUsbController
+from robot.wheels_usb_controller import WheelsUsbController
 import serial
 import serial.tools.list_ports as lp
-from wheels_usb_commands import WheelsUsbCommands
+from robot.wheels_usb_commands import WheelsUsbCommands
 
 from robot.robot import Robot
 from robot.map import Map

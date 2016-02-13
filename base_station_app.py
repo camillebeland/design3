@@ -10,6 +10,8 @@ if __name__ == '__main__':
     def camera_builder(camera_config, camera_id):
         if camera_config == "webcam":
             open_cv_camera = cv2.VideoCapture(camera_id)
+            open_cv_camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_width)
+            open_cv_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_height)
             buffer = DoubleSidedBuffer()
             camera = CameraService(open_cv_camera, cv2, buffer)
         if camera_config == "mock":
@@ -21,6 +23,8 @@ if __name__ == '__main__':
     camera_config = config.get('baseapp', 'camera')
     camera_id = config.getint('baseapp', 'camera_id')
     refresh_time = config.getint('baseapp', 'refresh_time')
+    camera_width = config.getint('baseapp', 'camera_width')
+    camera_height = config.getint('baseapp', 'camera_height')
 
     camera = camera_builder(camera_config, camera_id)
 
