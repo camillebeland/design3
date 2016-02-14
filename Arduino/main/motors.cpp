@@ -421,28 +421,33 @@ void PID_motors(){
 		integrator_D +=(error_D * KI);	
 		if (integrator_D > 255 - ZERO_SPEED){integrator_D = 255 - ZERO_SPEED;}
 		
-
+		int command = 0;
 		if (tick_remaining_A >0){	
-			OCR0A = int((ZERO_SPEED + (integrator_A) + (error_A*KP))- (delta_motors_X*KSP)) ;
+			command = ((ZERO_SPEED + (integrator_A) + (error_A*KP))- (delta_motors_X*KSP)) ;
+			
+			OCR0A = limit_command(command);;
 		}
 		else if (running_A){
 			brake_motor(OUT_MOTOR_A);
 		}
 		if (tick_remaining_B >0){
-			OCR1B = int((ZERO_SPEED + (integrator_B) + (error_B*KP)) - (delta_motors_Y*KSP));
+			 command = ((ZERO_SPEED + (integrator_B) + (error_B*KP)) - (delta_motors_Y*KSP));
+			 OCR1B = limit_command(command);
 		}
 		else if (running_B){
 			brake_motor(OUT_MOTOR_B);
 		}
 		
 		if (tick_remaining_C >0){
-			OCR5C = int(ZERO_SPEED + (integrator_C) + (error_C*KP));//+ (delta_motors_X*KSP) ;
+			command = (ZERO_SPEED + (integrator_C) + (error_C*KP));//+ (delta_motors_X*KSP) ;
+			OCR5C = limit_command(command);
 		}
 		else if (running_C){
 			brake_motor(OUT_MOTOR_C);
 		}
 		if (tick_remaining_D >0){
-			OCR5A = int(ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP);
+			command = (ZERO_SPEED + (integrator_D) + (error_D*KP));// + (delta_motors_Y*KSP);
+			OCR5A = limit_command(command);
 		}
 		else if (running_D){
 			brake_motor(OUT_MOTOR_D);
@@ -454,6 +459,12 @@ void PID_motors(){
 		
 		last_PID_ISR_count = PID_ISR_count;
 	}		
+}
+
+int limit_command(double command){
+	if (command >= 255){return 255;}
+	else if(command <= 0){return 0;}
+	else{return command;}
 }
 
 // ISR for calling PID_motors with Timer3 every DT

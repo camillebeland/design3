@@ -89,6 +89,7 @@ void move_straight(Direction direction, int tick, double speed);
 void move(int x, int y, double speed);
 void rotate(Direction direction, int angle);
 void PID_motors();
+int limit_command(double command);
 
 // ----------------ISR ----------------
 void PID_motors_ISR();

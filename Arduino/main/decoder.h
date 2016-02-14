@@ -30,7 +30,7 @@
 #define MOVE_CHAR 'M'
 #define MOVE_SLOW_CHAR 'm'
 
-#define TIMEOUT 1000000 //microsecs
+#define TIMEOUT 10000 //microsecs
 
 enum State {IDLE, FUNCTION, PARAMETERS, END};
 enum Function {MOVE, ROTATE, STOP};
