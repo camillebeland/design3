@@ -35,6 +35,9 @@ class Map:
     def get_robot_angle(self):
         return self._robotangle
 
+    def get_robot_angle(self):
+        return self._robotangle
+
     def move_robot(self, delta_x, delta_y):
         delta = rotate_vector(- self._robotangle, np.array([delta_x, delta_y]))
         self.set_robot_position(self._robotposition[0]+delta[0], self._robotposition[1] + delta[1])

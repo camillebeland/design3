@@ -4,7 +4,7 @@ from math import cos, sin, pow, sqrt
 
 PRECISION = 0.00001
 
-class MockWheels:
+class SimulationWheels:
     def __init__ (self, worldmap, wheels_velocity=5, refresh_time = 10):
         print("Initiating MockWheels")
         self.refresh_time = refresh_time
@@ -13,6 +13,12 @@ class MockWheels:
         self.wheels_velocity= wheels_velocity
         self.target = [0,0]
         self.direction = [0,0]
+
+        self.thread = Thread(target = self.__update, args = (self.refresh_time, ))
+        self.running = True
+        self.thread.setDaemon(True)
+        self.thread.start()
+
 
     def __update(self, refresh_time):
         print("Starting Thread for time simulation on MockWheels")
@@ -33,15 +39,6 @@ class MockWheels:
 
 
     def __del__(self):
-        self.stop()
-
-    def start(self):
-        self.thread = Thread(target = self.__update, args = (self.refresh_time, ))
-        self.running = True
-        self.thread.setDaemon(True)
-        self.thread.start()
-
-    def stop(self):
         self.running = False
 
     def move(self, x_pos, y_pos):
