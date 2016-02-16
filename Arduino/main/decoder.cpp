@@ -21,7 +21,7 @@ unsigned char params[4] = {0};
 void reset_decoder(){
 	Timer4.stop();
 	//Serial.print("RESET DECODER");
-	Serial.print(current_state);
+	//Serial.print(current_state);
 	current_state = IDLE;
 }
 

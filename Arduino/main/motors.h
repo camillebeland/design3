@@ -41,35 +41,34 @@ Arduino Pin	Register
 #define INT_ENCODER_D_CH2 0
 
 #define OUT_MOTOR_A 13 // OCR0A
-#define OUT_MOTOR_B 12 // OCR1B
-#define OUT_MOTOR_C 44 // OCR5C
-#define OUT_MOTOR_D 46 // OCR5A
+#define OUT_MOTOR_B 45 // OCR5B
+#define OUT_MOTOR_C 46 // OCR5C
+#define OUT_MOTOR_D 44 // OCR5A
 
 #define PIN_ONE_MOTOR_A 53
 #define PIN_ONE_MOTOR_B 49
-#define PIN_ONE_MOTOR_C 45
-#define PIN_ONE_MOTOR_D 41
+#define PIN_ONE_MOTOR_C 43
+#define PIN_ONE_MOTOR_D 39
 
 #define PIN_TWO_MOTOR_A 51
 #define PIN_TWO_MOTOR_B 47
-#define PIN_TWO_MOTOR_C 43
-#define PIN_TWO_MOTOR_D 39
+#define PIN_TWO_MOTOR_C 41
+#define PIN_TWO_MOTOR_D 37
 
 #define ZERO_SPEED 37
 
 #define DT 100000 //  microsecs
 #define DEFAULT_SPEED 500 // TICKS PER DT
 #define SLOW_SPEED 200
-#define ROTATE_SPEED 350
-#define ROTATE_DIAMETER 1770//in TICKS
+#define ROTATE_SPEED 275
+#define ROTATE_DIAMETER 1450//in TICKS
 
-#define KSI 0.02 // for delta motors
-#define KSP 0.1 // for delta motors
+#define KSI 0.01 // for delta motors
+#define KSP 0.05 // for delta motors
 #define KI 0.02 // for speed PID
 #define KP 0.1 //for speed PID
 
-#define CRITICAL_TICK 256 // critical distance after which speed is reduced
-#define TICKS_PER_MM 7.29 // 
+#define TICKS_PER_MM 7.67 // 
 #define WHEEL_DIAMETERS 69.85 //mm
 
 enum Direction {LEFT, RIGHT, FORWARD, BACKWARD};

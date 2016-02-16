@@ -10,7 +10,8 @@ void setup() {
 	decoder_init();
 	motors_init();
 	//magnet_init();
- 
+  stop();
+  
 }
 
 void loop() {
