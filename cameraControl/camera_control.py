@@ -1,7 +1,4 @@
-#!/urs/bin/env python
-# -*- coding: utf-8 -*-
 import maestro
-import serial
 
 #classe permettant de controller la camera sur deux axes de rotation.
 #le servomoteur du haut (self.VERTical) doit etre branche sur le 
@@ -9,7 +6,7 @@ import serial
 #branche sur le 4e port 
 class CameraControl:
 	
-    def __init__(self, usb = serial.Serial('/dev/ttyACM0')):
+    def __init__(self, usb):
         self.MIDDLE = 6000
         VERT_MAX = 6000
         VERT_MIN = 2500
