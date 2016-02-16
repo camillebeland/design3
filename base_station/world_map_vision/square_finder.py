@@ -12,10 +12,11 @@ def find_squares(img):
     squares = []
     pentagons = []
     triangles = []
-    hsv_image = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    median_blurred_image = cv2.medianBlur(img, 3)
+    hsv_image = cv2.cvtColor(median_blurred_image, cv2.COLOR_BGR2HSV)
 
     color_filter = ColorFilter(hsv_image)
-    filtered_image = color_filter.red_range()
+    filtered_image = color_filter.yellow_range()
     cv2.imshow("lol",filtered_image)
 
     gaussian_image = cv2.GaussianBlur(filtered_image, (5, 5), 0)

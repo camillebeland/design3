@@ -12,7 +12,7 @@ class CircleFinder(object):
         hsv_image = cv2.cvtColor(median_blurred_image, cv2.COLOR_BGR2HSV)
 
         color_filter = ColorFilter(hsv_image)
-        filtered_image = color_filter.yellow_range()
+        filtered_image = color_filter.all_colors()
 
         gaussian_image = cv2.GaussianBlur(filtered_image, (9, 9), 2, 2)
         circles = cv2.HoughCircles(gaussian_image, cv2.HOUGH_GRADIENT, 1, len(gaussian_image) / 8,

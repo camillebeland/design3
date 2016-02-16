@@ -21,3 +21,12 @@ class ColorFilter:
     def yellow_range(self):
         yellow_hue_image = cv2.inRange(self.image, (20, 100, 100), (30, 255, 255))
         return yellow_hue_image
+
+    def all_colors(self):
+        red_img = self.red_range()
+        green_img = self.green_range()
+        blue_img = self.blue_range()
+        yellow_img = self.yellow_range()
+        green_red_img = cv2.addWeighted(red_img, 1.0, green_img, 1.0, 0.0)
+        green_red_blue_img = cv2.addWeighted(green_red_img, 1.0, blue_img, 1.0, 0.0)
+        return cv2.addWeighted(green_red_blue_img, 1.0, yellow_img, 1.0, 0.0)
