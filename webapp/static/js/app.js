@@ -1,4 +1,4 @@
-var website = angular.module('app', ['ui.router', 'RobotService']);
+var website = angular.module('app', ['ui.router', 'Robot', 'MapModule']);
 
 website.config(function($stateProvider, $urlRouterProvider) {
 
@@ -17,7 +17,7 @@ TabEnum = Object.freeze({
   OTHER: "OTHER"
 });
 
-website.controller('homeController', ['$scope', '$http', 'Robot', function($scope, $http, Robot) {
+website.controller('homeController', ['$scope', '$http', 'RobotService', 'MapService', function($scope, $http, RobotService, MapService) {
   /*Webapp constants*/
   window.BASE_STATION_HOST = "http://localhost:5000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";

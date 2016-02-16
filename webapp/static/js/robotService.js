@@ -1,5 +1,5 @@
-var RobotService = angular.module('RobotService', [])
-  .service('Robot', ['$http', function($http) {
+var Robot = angular.module('Robot', [])
+  .service('RobotService', ['$http', function($http) {
 
     this.up = function() {
       var delta = {
