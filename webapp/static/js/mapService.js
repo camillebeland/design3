@@ -5,7 +5,7 @@ var MapModule = angular.module('MapModule', [])
       
       $http({
         method: 'GET',
-        url: 'http://' + BASE_STATION_HOST + '/mesh',
+        url: 'http://' + BASE_STATION_HOST + '/mesh'
       }).then(function successCallback(response) {
         callbackFunction(response.data);
       }, function errorCallback(response) {

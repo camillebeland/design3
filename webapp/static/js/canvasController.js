@@ -6,7 +6,6 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   var stage = new createjs.Stage("mapCanvas");
   var completeRobotRepresentation;
 
-
   var updateRobot = function(robotData) {
     completeRobotRepresentation.x = robotData.robotPosition[0];
     completeRobotRepresentation.y = canvas.height - robotData.robotPosition[1]; //Because of y axis direction in computer graphics convention
@@ -15,9 +14,9 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
 
   var initVideoStream = function() {
     var image = new Image();
-    image.src = VIDEO_STREAM;
+    image.src = "http://"+VIDEO_STREAM;
     var bitmap = new createjs.Bitmap(image);
-    stage.addChild(bitmap);
+    stage.addChildAt(bitmap);
   };
 
   var initRobot = function() {
@@ -41,19 +40,17 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   };
 
   var initMesh = function() {
-    MapService.getMesh(function(cells){
-      for (cell of cells) {
+    MapService.getMesh(function(mesh){
+      for (cell of mesh.cells) {
         var square = new createjs.Shape();
         square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
-        stage.addChild(square);
+        stage.addChildAt(square);
       }
-
     });
-
   };
 
   setInterval(function() {
-    robot_socket.emit('fetchPosition')
+     robot_socket.emit('fetchPosition');
   }, POSITION_REFRESH_TIME_IN_MS);
 
   robot_socket.on('position', function(msg) {
@@ -70,8 +67,8 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
     canvas.height = CANVAS_HEIGHT;
     canvas.width = CANVAS_WIDTH;
     initVideoStream();
-    initRobot();
     initMesh();
+    initRobot();
   }
   canvasController();
 }]);
