@@ -2,20 +2,6 @@ from functools import reduce
 import turtle
 
 
-def partitionCells(cell, obstacles, area_treshold):
-    if(cell.area() < area_treshold):
-        return []
-
-    elif(cell.contains_any(obstacles)):
-        childCells = cell.split()
-        return reduce(lambda x, y: x+y,
-            map(lambda x : partitionCells(x, obstacles, area_treshold),
-                childCells
-            )
-        )
-    else:
-        return [cell]
-
 class Cell:
     def __init__(self, width, height, x, y):
         self.width = width
@@ -48,10 +34,10 @@ class Cell:
 
     def contains_point(self, point):
         x, y = point
-        return (x > (self.x - self.width/2.0) and
-                x < (self.x + self.width/2.0) and
-                y > (self.y - self.height/2.0) and
-                y < (self.y + self.height/2.0))
+        return (x >= (self.x - self.width/2.0) and
+                x <= (self.x + self.width/2.0) and
+                y >= (self.y - self.height/2.0) and
+                y <= (self.y + self.height/2.0))
 
     def is_adjacent_to(self, other_cell):
         return (((abs(self.x - other_cell.x) - (self.width + other_cell.width)/2.0) < 1e-6 and
@@ -59,7 +45,22 @@ class Cell:
                 ((abs(self.y - other_cell.y) - (self.height + other_cell.height)/2.0) < 1e-6 and
                 abs(self.x - other_cell.x) < (self.width + other_cell.width)/2.0))
 
+    def partitionCells(self, obstacles, area_treshold):
+        if(self.area() < area_treshold):
+            return []
+        elif(self.contains_any(obstacles)):
+            childCells = self.split()
+            return reduce(lambda x, y: x+y,
+                          map(lambda cell: cell.partitionCells(obstacles, area_treshold), childCells))
+        else:
+            return [self]
 
+class Mesh:
+    def __init__(self, cells):
+        self.__cells = cells
+
+    def get_cells(self):
+        return self.__cells
 
 class polygon:
     def __init__(self, x, y, size):
@@ -116,3 +117,7 @@ class drawer:
         turtle.pendown()
         for point in path:
             turtle.goto(point)
+
+    def draw_mesh(self, mesh):
+        for cell in mesh:
+            self.draw_cell(cell)
