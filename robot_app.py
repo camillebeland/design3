@@ -13,6 +13,7 @@ from robot.map import Map
 if __name__ == '__main__':
     config = configuration.getconfig()
 
+    host = config.get('robot', 'host')
     port = config.getint('robot', 'port')
     wheelsconfig = config.get('robot', 'wheels')
 
@@ -43,4 +44,4 @@ if __name__ == '__main__':
 
     robot = Robot(wheels, worldmap)
     robot_web_controller.inject(robot)
-    robot_web_controller.run(port)
+    robot_web_controller.run(host, port)
