@@ -5,6 +5,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   var robot_socket = io(ROBOT_HOST);
   var stage = new createjs.Stage("mapCanvas");
   var completeRobotRepresentation;
+  var robotFinished = false;
 
   var updateRobot = function(robotData) {
     completeRobotRepresentation.x = robotData.robotPosition[0];
@@ -16,7 +17,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
     var image = new Image();
     image.src = "http://"+VIDEO_STREAM;
     var bitmap = new createjs.Bitmap(image);
-    stage.addChildAt(bitmap);
+    stage.addChild(bitmap);
   };
 
   var initRobot = function() {
@@ -37,6 +38,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
     completeRobotRepresentation.addChild(robotSquare, circle);
 
     stage.addChild(completeRobotRepresentation);
+    robotFinished = true;
   };
 
   var initMesh = function() {
@@ -44,8 +46,9 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
       for (cell of mesh.cells) {
         var square = new createjs.Shape();
         square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
-        stage.addChildAt(square);
+        stage.addChild(square);
       }
+      initRobot();
     });
   };
 
@@ -54,7 +57,9 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   }, POSITION_REFRESH_TIME_IN_MS);
 
   robot_socket.on('position', function(msg) {
-    updateRobot(msg);
+    if (robotFinished){
+          updateRobot(msg);
+    }
   });
 
   setInterval(function() {
@@ -68,7 +73,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
     canvas.width = CANVAS_WIDTH;
     initVideoStream();
     initMesh();
-    initRobot();
   }
+  
   canvasController();
 }]);
