@@ -1,5 +1,4 @@
-import cv2
-
+from base_station.world_map_vision.color_filter import *
 
 class MockCameraService(object):
     def __init__(self):

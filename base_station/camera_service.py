@@ -1,6 +1,5 @@
 from threading import Thread
 
-
 class CameraService(object):
     def __init__(self, camera, opencv, buffer):
         self.opencv = opencv
@@ -14,7 +13,8 @@ class CameraService(object):
         self.camera.release()
 
     def get_frame(self):
-        ret, jpeg = self.opencv.imencode('.jpg', self.buffer.read())
+        img = self.buffer.read()
+        ret, jpeg = self.opencv.imencode('.jpg', img)
         return jpeg
 
     def __start(self):
