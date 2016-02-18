@@ -22,6 +22,7 @@ def run(host, port):
 def robot_move():
     delta_x = request.json['delta_x']
     delta_y = request.json['delta_y']
+    print("{0},{1}".format(delta_x,delta_y))
     robot.move(delta_x, delta_y)
     return "OK"
 

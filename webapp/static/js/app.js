@@ -21,7 +21,7 @@ website.controller('homeController', ['$scope', '$http', 'Robot', function($scop
   /*Webapp constants*/
   window.BASE_STATION_HOST = "http://localhost:5000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
-  window.ROBOT_HOST = "localhost:3000";
+  window.ROBOT_HOST = "10.248.68.192:3000";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
   window.CANVAS_HEIGHT = 400;
