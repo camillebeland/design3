@@ -19,6 +19,7 @@ if __name__ == '__main__':
         return camera
 
     config = configuration.getconfig()
+    host = config.get('baseapp', 'host')
     port = config.getint('baseapp', 'port')
     camera_config = config.get('baseapp', 'camera')
     camera_id = config.getint('baseapp', 'camera_id')
@@ -29,5 +30,5 @@ if __name__ == '__main__':
     camera = camera_builder(camera_config, camera_id)
 
     base_station_web_controller.inject(camera, refresh_time)
-    base_station_web_controller.run(port)
+    base_station_web_controller.run(host, port)
 

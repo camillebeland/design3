@@ -24,5 +24,5 @@ def video_feed():
     return Response(generate_frame(camera, refresh_time), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-def run(port):
-    app.run(port=port)
+def run(host, port):
+    app.run(host=host, port=port)
