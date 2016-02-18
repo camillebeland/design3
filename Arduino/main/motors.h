@@ -55,20 +55,20 @@ Arduino Pin	Register
 #define PIN_TWO_MOTOR_C 41
 #define PIN_TWO_MOTOR_D 37
 
-#define ZERO_SPEED 37
+#define ZERO_SPEED 50
 
 #define DT 100000 //  microsecs
 #define DEFAULT_SPEED 500 // TICKS PER DT
 #define SLOW_SPEED 200
 #define ROTATE_SPEED 275
-#define ROTATE_DIAMETER 1450//in TICKS
+#define ROTATE_DIAMETER 1450//in TICKS, including slip
 
 #define KSI 0.01 // for delta motors
-#define KSP 0.05 // for delta motors
-#define KI 0.02 // for speed PID
-#define KP 0.1 //for speed PID
+#define KSP 0.02// for delta motors
+#define KI 0.03 // for speed PID
+#define KP 0.07 //for speed PID
 
-#define TICKS_PER_MM 7.67 // 
+#define TICKS_PER_MM 7.67 //  including slip 
 #define WHEEL_DIAMETERS 69.85 //mm
 
 enum Direction {LEFT, RIGHT, FORWARD, BACKWARD};
@@ -85,7 +85,7 @@ void set_motor(int motor, int tick, bool polarity, double motor_speed);
 void reset_motor(int motor);
 void reset_all_motors();
 void move_straight(Direction direction, int tick, double speed);
-void move(int x, int y, double speed);
+void move(long x, long y, double speed);
 void rotate(Direction direction, int angle);
 void PID_motors();
 int limit_command(double command);

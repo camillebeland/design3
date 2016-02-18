@@ -33,7 +33,7 @@
 #define TIMEOUT 100000 //microsecs
 
 enum State {IDLE, FUNCTION, PARAMETERS, END};
-enum Function {MOVE, ROTATE, STOP};
+enum Function {MOVE, ROTATE, STOP, MAGNET};
 
 // -------------SETUP ----------------
 void decoder_init();

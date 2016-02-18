@@ -9,8 +9,8 @@ void setup() {
 	serial_init();
 	decoder_init();
 	motors_init();
-	//magnet_init();
-  stop();
+	magnet_init();
+  //stop();
   
 }
 

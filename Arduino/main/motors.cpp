@@ -157,9 +157,11 @@ void start_motor(int motor){
 
 // stops a single motor
 void brake_motor(int motor){
+
 	if (motor == OUT_MOTOR_A){
 		digitalWrite(PIN_ONE_MOTOR_A, LOW);
 		digitalWrite(PIN_TWO_MOTOR_A, LOW);
+		OCR0A = 0;
 		straight_X = false;
 		integrator_A = 0;
 		running_A = false;
@@ -168,6 +170,7 @@ void brake_motor(int motor){
 	else if (motor == OUT_MOTOR_B){
 		digitalWrite(PIN_ONE_MOTOR_B, LOW);
 		digitalWrite(PIN_TWO_MOTOR_B, LOW);
+		OCR5B = 0;
 		straight_Y = false;
 		integrator_B = 0;
 		running_B = false;
@@ -175,6 +178,7 @@ void brake_motor(int motor){
 	else if (motor == OUT_MOTOR_C){
 		digitalWrite(PIN_ONE_MOTOR_C, LOW);
 		digitalWrite(PIN_TWO_MOTOR_C, LOW);
+		OCR5A = 0;
 		straight_X = false;
 		integrator_C = 0;
 		running_C = false;
@@ -182,6 +186,7 @@ void brake_motor(int motor){
 	else if(motor == OUT_MOTOR_D){
 		digitalWrite(PIN_ONE_MOTOR_D, LOW);
 		digitalWrite(PIN_TWO_MOTOR_D, LOW);
+		OCR5C = 0;
 		straight_Y = false;
 		integrator_D = 0;
 		running_D = false;
@@ -246,6 +251,7 @@ void set_motor(int motor, int tick, bool polarity, double motor_speed){
 
 //reset parameters and stop a single motor
 void reset_motor(int motor){
+	
 	if (motor == OUT_MOTOR_A){
 		tick_remaining_A = 0;
 		last_tick_remaining_A = 0;
@@ -283,7 +289,6 @@ void reset_all_motors(){
 	reset_motor(OUT_MOTOR_B);
 	reset_motor(OUT_MOTOR_C);
 	reset_motor(OUT_MOTOR_D);
-	//Disable PID
 	Timer3.stop();
 }
 
@@ -317,7 +322,7 @@ void move_straight(Direction direction, int tick, double speed){
 // x = mm
 // y = mm
 // MSB = negative
-void move(int x, int y, double speed){
+void move(long x, long y, double speed){
 	
 
 	float angle;
@@ -329,30 +334,34 @@ void move(int x, int y, double speed){
 		y = y -32768;
 		y = -y;
 	}
-	
+
 	if (x == 0 && y != 0){
 		angle = PI/2;
 	}
 	else{
 		angle = atan(abs(y)/abs(x));
 	}
-	int ticks_X = int(float(x)*TICKS_PER_MM);
-	int ticks_Y = int(float(y)*TICKS_PER_MM);
+	long ticks_X = (long)(float(x)*TICKS_PER_MM);
+	long ticks_Y = (long)(float(y)*TICKS_PER_MM);
 	double speed_X = cos(angle)*speed;
 	double speed_Y = sin(angle)*speed;
+
 	
 	if (ticks_Y >0){
-		move_straight(FORWARD, ticks_Y, speed_Y);
+		move_straight(FORWARD, (int)ticks_Y, speed_Y);
 	}
 	else if (ticks_Y < 0){
-		move_straight(BACKWARD, ticks_Y, speed_Y);
+		ticks_Y = abs(ticks_Y);
+		move_straight(BACKWARD, (int)ticks_Y, speed_Y);
 	}
 	
-	if (ticks_X < 0){
-		move_straight(RIGHT, ticks_X, speed_X);
+	if (ticks_X > 0){
+		ticks_X = (ticks_X);
+		move_straight(LEFT, (int)ticks_X, speed_X);
 	}
-	else if (ticks_X >0){
-		move_straight(LEFT, ticks_X, speed_X);
+	else if (ticks_X <0){
+		ticks_X = abs(ticks_X);
+		move_straight(RIGHT, (int)ticks_X, speed_X);
 	}
 
 }
@@ -368,7 +377,6 @@ void rotate(Direction direction, int angle){
 	}
 	
 	int ticks = ROTATE_DIAMETER*PI*(float(angle)/360.0);
-	Serial.println(ticks);
 	set_motor(OUT_MOTOR_A, ticks, wanted_polarity, ROTATE_SPEED);
 	set_motor(OUT_MOTOR_B, ticks, wanted_polarity, ROTATE_SPEED);
 	set_motor(OUT_MOTOR_C, ticks, wanted_polarity, ROTATE_SPEED);
@@ -407,12 +415,12 @@ void PID_motors(){
 		//Error between wheels for straight line operation
 		double delta_motors_X = 0;
 		if (straight_X){
-			delta_motors_X =  actual_speed_A  - actual_speed_C ;
+			delta_motors_X = last_tick_remaining_C- last_tick_remaining_A;
 		}
 		double delta_motors_Y = 0;
 		if (straight_Y){
 			
-			delta_motors_Y =actual_speed_B - actual_speed_D;
+			delta_motors_Y =last_tick_remaining_D -last_tick_remaining_B;
 		}
 		
 		// integrators for PID of each wheel
@@ -430,15 +438,16 @@ void PID_motors(){
 		
 		//Command section
 		int command = 0;
-		if (tick_remaining_A >0){	
+		if (tick_remaining_A >0 && running_A){	
 			command = (ZERO_SPEED) + (integrator_A) + (error_A*KP) - (delta_motors_X*KSP) ;
 			
 			OCR0A = limit_command(command);
+			//Serial.println(limit_command(command));
 		}
 		else if (running_A){
 			brake_motor(OUT_MOTOR_A);
 		}
-		if (tick_remaining_B >0){
+		if (tick_remaining_B >0 && running_B){
 			 command = (ZERO_SPEED) + (integrator_B) + (error_B*KP) - (delta_motors_Y*KSP);
 			 OCR5B = limit_command(command);
 		}
@@ -446,7 +455,7 @@ void PID_motors(){
 			brake_motor(OUT_MOTOR_B);
 		}
 		
-		if (tick_remaining_C >0){
+		if (tick_remaining_C >0 && running_C){
 			command = (ZERO_SPEED )+ (integrator_C) + (error_C*KP) + (delta_motors_X*KSP) ;
 			OCR5A = limit_command(command);
 			
@@ -454,7 +463,7 @@ void PID_motors(){
 		else if (running_C){
 			brake_motor(OUT_MOTOR_C);
 		}
-		if (tick_remaining_D >0){
+		if (tick_remaining_D >0 && running_D){
 			command = (ZERO_SPEED) + (integrator_D) + (error_D*KP) + (delta_motors_Y*KSP);
 			OCR5C = limit_command(command);
 		}

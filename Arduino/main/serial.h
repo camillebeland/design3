@@ -4,7 +4,7 @@
 #define RX 0
 #define TX 0
 
-#define BAUD_RATE 9600
+#define BAUD_RATE 115200
 
 // -------------SETUP ----------------
 void serial_init();
