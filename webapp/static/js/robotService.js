@@ -87,4 +87,17 @@ var Robot = angular.module('Robot', [])
       });
     };
 
-  }]);
+  }])
+  .service('Mesh', ['$http', function($http) {
+
+    this.get= function(callbackFunction) {
+        $http({
+            method: 'GET',
+            url: 'http://' + ROBOT_HOST + '/mesh'
+        }).then(function successCallback(response) {
+            callbackFunction(response.data);
+        }, function errorCallback(response) {
+            console.log("error getting mesh from base station");
+        });
+    };
+}]);

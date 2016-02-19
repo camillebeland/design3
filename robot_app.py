@@ -9,6 +9,7 @@ from robot.wheels_usb_commands import WheelsUsbCommands
 
 from robot.robot import Robot
 from robot.map import Map
+from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
 
 if __name__ == '__main__':
     config = configuration.getconfig()
@@ -41,6 +42,10 @@ if __name__ == '__main__':
         serialport = serial.Serial(port=arduinoport[0].device)
         wheels = WheelsUsbController(serialport,WheelsUsbCommands)
 
-    robot = Robot(wheels, worldmap)
-    robot_web_controller.inject(robot)
+    #mesh hardcode
+    cell = Cell(700,400,350,200)
+    mesh = Mesh(cell.partitionCells([polygon(200,200,10), polygon(400,200,5),polygon(50, 300, 5)],10))
+    pathfinder = PathFinder(mesh)
+    robot = Robot(wheels, worldmap,pathfinder)
+    robot_web_controller.inject(robot, mesh)
     robot_web_controller.run(port)

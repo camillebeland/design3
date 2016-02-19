@@ -1,4 +1,4 @@
-website.controller('canvasController', ['$scope', 'MapService', function($scope, MapService) {
+website.controller('canvasController', ['$scope', 'Mesh', function($scope, Mesh) {
 
   var canvas;
   var canvasContext;
@@ -40,7 +40,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   };
 
   var initMesh = function() {
-    MapService.getMesh(function(mesh){
+    Mesh.get(function(mesh){
       for (cell of mesh.cells) {
         var square = new createjs.Shape();
         square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);

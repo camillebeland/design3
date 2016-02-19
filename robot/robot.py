@@ -16,12 +16,18 @@ class Robot():
     def getpos(self):
         return self.__worldmap.get_robot_position()
 
+    def get_angle(self):
+        return self.__worldmap.get_robot_angle()
+
     def move_to(self, final_destination):
         while(distance(self.getpos(), final_destination) > 1):
             path = self.__pathfinder.find_path(self.getpos(), final_destination)
             target = self.find_relative_target(path)
             self.__wheels.move(target[0], target[1])
             sleep(0.1)
+
+    def rotate(self, angle):
+        self.__wheels.rotate(angle)
 
     def find_relative_target(self, path):
         if(len(path) == 1):
