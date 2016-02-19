@@ -36,12 +36,11 @@ if __name__ == '__main__':
     elif(wheelsconfig == "usb-arduino"):
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
+        arduino_baudrate = arduino_baudrate('robot', 'baudrate')
         ports = lp.comports()
-        print("{0} , {1}".format(arduino_pid, arduino_vid))	
         arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduinoport)) != 0)
-        print(arduinoport[0].device)
-        serialport = serial.Serial(port=arduinoport[0].device, baudrate=115200)
+        serialport = serial.Serial(port=arduinoport[0].device,baudrate=arduino_baudrate)
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     robot = Robot(wheels, worldmap)

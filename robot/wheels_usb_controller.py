@@ -4,7 +4,6 @@ class WheelsUsbController:
         self.wheelsusbcommands = wheelsusbcommands
 
     def move(self, x_pos, y_pos):
-        print("je suis dans les roues, {0}, {1}".format(x_pos, y_pos))
         self.serialport.write(self.wheelsusbcommands.move(x_pos, y_pos))
 
     def rotate(self, angle):
