@@ -31,6 +31,14 @@ def robot_rotate():
     robot.rotate(angle)
     return "OK"
 
+@app.route('/robot/move_to', methods=['POST'])
+def robot_move_to():
+    destination = []
+    destination.append(request.json['x'])
+    destination.append(request.json['y'])
+    robot.move_to(destination)
+    return "OK"
+
 @socket_io.on('fetchPosition')
 def robot_fetchposition():
     socket_io.emit('position',  {'robotPosition': robot.getpos(),

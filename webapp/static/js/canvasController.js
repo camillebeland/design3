@@ -1,4 +1,4 @@
-website.controller('canvasController', ['$scope', 'Mesh', function($scope, Mesh) {
+website.controller('canvasController', ['$scope', 'Mesh', 'RobotService', function($scope, Mesh, RobotService) {
 
   var canvas;
   var canvasContext;
@@ -73,6 +73,21 @@ website.controller('canvasController', ['$scope', 'Mesh', function($scope, Mesh)
     canvas.width = CANVAS_WIDTH;
     initVideoStream();
     initMesh();
+      function getMousePos(canvas, evt) {
+          var rect = canvas.getBoundingClientRect();
+          return {
+              x: evt.clientX - rect.left,
+              y: CANVAS_HEIGHT - (evt.clientY - rect.top)
+          };
+      }
+
+      canvas.addEventListener('mousedown', function(evt) {
+          var mousePos = getMousePos(canvas, evt);
+          RobotService.move_to(mousePos);
+      }, false);
+
+
+
   }
   
   canvasController();

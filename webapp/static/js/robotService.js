@@ -86,7 +86,14 @@ var Robot = angular.module('Robot', [])
         data: angle
       });
     };
-
+      this.move_to = function(destination){
+          console.log(destination);
+          $http({
+              method: 'POST',
+              url: 'http://' + ROBOT_HOST + '/robot/move_to',
+              data: destination
+          });
+      };
   }])
   .service('Mesh', ['$http', function($http) {
 

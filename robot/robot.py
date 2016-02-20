@@ -1,4 +1,5 @@
 from time import sleep
+from threading import Thread
 import math
 
 class Robot():
@@ -20,11 +21,16 @@ class Robot():
         return self.__worldmap.get_robot_angle()
 
     def move_to(self, final_destination):
+        thread = Thread(target = self.move_to_thread, args= (final_destination,))
+        thread.start()
+
+    def move_to_thread(self, final_destination):
         while(distance(self.getpos(), final_destination) > 1):
             path = self.__pathfinder.find_path(self.getpos(), final_destination)
             target = self.find_relative_target(path)
             self.__wheels.move(target[0], target[1])
             sleep(0.1)
+
 
     def rotate(self, angle):
         self.__wheels.rotate(angle)

@@ -17,7 +17,7 @@ if __name__ == '__main__':
     port = config.getint('robot', 'port')
     wheelsconfig = config.get('robot', 'wheels')
 
-    worldmap = Map(400,400)
+    worldmap = Map(700,400)
     if(wheelsconfig == "simulation"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
