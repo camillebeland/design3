@@ -34,13 +34,14 @@ if __name__ == '__main__':
         wheels = SimulationWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
 
     elif(wheelsconfig == "usb-arduino"):
-        arduino_pid = config.get('robot', 'arduino-pid')
-        arduino_vid = config.get('robot', 'arduino-pid')
+        arduino_pid = config.getint('robot', 'arduino-pid')
+        arduino_vid = config.getint('robot', 'arduino-vid')
+        arduino_baudrate = arduino_baudrate('robot', 'baudrate')
         ports = lp.comports()
-        arduinoport = filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports)
-        assert(len(arduinoport) == 0)
-        serialport = serial.Serial(port=arduinoport[0].device)
-        wheels = WheelsUsbController(serialport,WheelsUsbCommands)
+        arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
+        assert(len(list(arduinoport)) != 0)
+        serialport = serial.Serial(port=arduinoport[0].device,baudrate=arduino_baudrate)
+        wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     robot = Robot(wheels, worldmap)
     robot_web_controller.inject(robot)
