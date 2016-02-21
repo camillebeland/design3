@@ -5,7 +5,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   var robot_socket = io(ROBOT_HOST);
   var stage = new createjs.Stage("mapCanvas");
   var completeRobotRepresentation;
-  var robotFinished = false;
+  //var mesh;
 
   var updateRobot = function(robotData) {
     completeRobotRepresentation.x = robotData.robotPosition[0];
@@ -15,7 +15,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
 
   var initVideoStream = function() {
     var image = new Image();
-    image.src = "http://"+VIDEO_STREAM;
+    image.src = "http://" + VIDEO_STREAM;
     var bitmap = new createjs.Bitmap(image);
     stage.addChild(bitmap);
   };
@@ -38,28 +38,37 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
     completeRobotRepresentation.addChild(robotSquare, circle);
 
     stage.addChild(completeRobotRepresentation);
-    robotFinished = true;
   };
 
   var initMesh = function() {
-    MapService.getMesh(function(mesh){
-      for (cell of mesh.cells) {
+    var promise = MapService.getMesh();
+    promise.then(function(response) {
+      console.log("Get mesh promise's executing");
+      mesh = new createjs.Container();
+      for (cell of response.cells) {
         var square = new createjs.Shape();
         square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
-        stage.addChild(square);
+        mesh.addChild(square);
       }
-      initRobot();
+      stage.addChild(mesh);
     });
   };
 
+
+  $scope.$on('meshToggleOn', function(event) {
+    initMesh();
+  });
+
+  $scope.$on('meshToggleOff', function(event) {
+    stage.removeChild(mesh);
+  });
+
   setInterval(function() {
-     robot_socket.emit('fetchPosition');
+    robot_socket.emit('fetchPosition');
   }, POSITION_REFRESH_TIME_IN_MS);
 
   robot_socket.on('position', function(msg) {
-    if (robotFinished){
-          updateRobot(msg);
-    }
+    updateRobot(msg);
   });
 
   setInterval(function() {
@@ -72,8 +81,8 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
     canvas.height = CANVAS_HEIGHT;
     canvas.width = CANVAS_WIDTH;
     initVideoStream();
-    initMesh();
+    initRobot();
   }
-  
+
   canvasController();
 }]);
