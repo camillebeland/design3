@@ -1,11 +1,13 @@
 
+def encode(string):
+    return string.encode(encoding='utf8')
 
 class WheelsUsbCommands:
     def __init__(self):
         pass
 
     def stop(self):
-        return "(s)"
+        return encode("(s)")
 
     def rotate_left(self, angle):
         return self.__rotate('l', angle)
@@ -15,7 +17,7 @@ class WheelsUsbCommands:
 
     def __rotate(self, direction, angle):
         assert(abs(angle)<180)
-        return "(r"+direction+"{0})".format(chr(angle))
+        return encode("(r"+direction)+bytes([angle])+encode(")")
 
 
     def move_slow(self, x_pos, y_pos):
@@ -27,7 +29,7 @@ class WheelsUsbCommands:
     def __move(self, speed, x_pos, y_pos):
         x_pos = self.__apply_limits(x_pos)
         y_pos = self.__apply_limits(y_pos)
-        return "("+speed+"{0}{1}{2}{3})".format(chr(x_pos//256), chr(x_pos % 256), chr(y_pos//256), chr(y_pos%256))
+        return encode("("+speed)+bytes([x_pos//256])+bytes([x_pos % 256]) + bytes([y_pos//256])+ bytes([y_pos%256])+encode(")")
 
     def __apply_limits(self, number):
         number = min(number, 32767)

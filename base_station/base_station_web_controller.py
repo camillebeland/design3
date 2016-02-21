@@ -28,11 +28,13 @@ def mesh():
     print("get mesh called")
     return jsonify(mesh_to_json(mesh))
 
-def run(port):
-    app.run(port=port, threaded=True)
+
+def run(host, port):
+    app.run(host=host, port=port, threaded=True)
 
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
 
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+

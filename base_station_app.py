@@ -20,6 +20,7 @@ if __name__ == '__main__':
         return camera
 
     config = configuration.getconfig()
+    host = config.get('baseapp', 'host')
     port = config.getint('baseapp', 'port')
     camera_config = config.get('baseapp', 'camera')
     camera_id = config.getint('baseapp', 'camera_id')
@@ -32,9 +33,7 @@ if __name__ == '__main__':
     #mesh hardcode
     cell = Cell(700,400,350,200)
     mesh = Mesh(cell.partitionCells([polygon(200,200,10), polygon(400,200,5),polygon(50, 300, 5)],10))
+    
 
-
-
-    base_station_web_controller.inject(camera, refresh_time,mesh)
-    base_station_web_controller.run(port)
-
+    base_station_web_controller.inject(camera, refresh_time, mesh)
+    base_station_web_controller.run(host, port)
