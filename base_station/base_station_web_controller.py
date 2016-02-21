@@ -29,7 +29,7 @@ def mesh():
     return jsonify(mesh_to_json(mesh))
 
 def run(port):
-    app.run(port=port)
+    app.run(port=port, threaded=True)
 
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
