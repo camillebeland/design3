@@ -5,7 +5,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   var robot_socket = io(ROBOT_HOST);
   var stage = new createjs.Stage("mapCanvas");
   var completeRobotRepresentation;
-  //var mesh;
+  var completeMesh;
 
   var updateRobot = function(robotData) {
     completeRobotRepresentation.x = robotData.robotPosition[0];
@@ -41,16 +41,16 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   };
 
   var initMesh = function() {
-    var promise = MapService.getMesh();
-    promise.then(function(response) {
-      console.log("Get mesh promise's executing");
-      mesh = new createjs.Container();
+    var whenGetIsComplete = MapService.getMesh();
+
+    whenGetIsComplete.then(function(response) {
+      completeMesh = new createjs.Container();
       for (cell of response.cells) {
         var square = new createjs.Shape();
         square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
         mesh.addChild(square);
       }
-      stage.addChild(mesh);
+      stage.addChild(completeMesh);
     });
   };
 
@@ -60,7 +60,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
   });
 
   $scope.$on('meshToggleOff', function(event) {
-    stage.removeChild(mesh);
+    stage.removeChild(completeMesh);
   });
 
   setInterval(function() {
