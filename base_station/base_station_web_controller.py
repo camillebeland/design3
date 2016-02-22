@@ -25,7 +25,6 @@ def video_feed():
 
 @app.route('/mesh')
 def mesh():
-    print("get mesh called")
     return jsonify(mesh_to_json(mesh))
 
 
