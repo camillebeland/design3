@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     #mesh hardcode
     cell = Cell(700,400,350,200)
-    mesh = Mesh(cell.partitionCells([polygon(200,200,10), polygon(400,200,5),polygon(50, 300, 5)],10))
+    mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
     pathfinder = PathFinder(mesh)
     robot = Robot(wheels, worldmap,pathfinder)
     robot_web_controller.inject(robot, mesh)

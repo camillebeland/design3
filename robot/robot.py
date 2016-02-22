@@ -23,12 +23,6 @@ class Robot():
     def rotate(self, angle):
         self.__wheels.rotate(angle)
 
-def distance(pos1, pos2):
-    x1,y1 = pos1
-    x2,y2 = pos2
-    return math.sqrt((x2-x1)**2 + (y2-y1)**2)
-
-
 class Movement:
     def __init__(self, compute, sense, control):
         self.__compute = compute
@@ -63,4 +57,9 @@ class Movement:
         else:
             return self.__sense.relative_position(path[1])
 
+
+def distance(pos1, pos2):
+    x1,y1 = pos1
+    x2,y2 = pos2
+    return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 
