@@ -1,65 +1,88 @@
-website.controller('canvasController', ['$scope', '$http', 'Robot', function ($scope, $http, Robot) {
+website.controller('canvasController', ['$scope', 'MapService', function($scope, MapService) {
 
-    var canvas;
-    var canvasContext;
-    var robot_socket = io(ROBOT_HOST);
-    var stage = new createjs.Stage("mapCanvas");
-    var completeRobotRepresentation;
+  var canvas;
+  var canvasContext;
+  var robot_socket = io(ROBOT_HOST);
+  var stage = new createjs.Stage("mapCanvas");
+  var completeRobotRepresentation;
+  var completeMesh;
 
+  var updateRobot = function(robotData) {
+    completeRobotRepresentation.x = robotData.robotPosition[0];
+    completeRobotRepresentation.y = canvas.height - robotData.robotPosition[1]; //Because of y axis direction in computer graphics convention
+    completeRobotRepresentation.rotation = robotData.robotAngle;
+  };
 
-    var updateRobot = function (robotData) {
-        completeRobotRepresentation.x = robotData.robotPosition[0];
-        completeRobotRepresentation.y = canvas.height - robotData.robotPosition[1]; //Because of y axis direction in computer graphics convention
-        completeRobotRepresentation.rotation = robotData.robotAngle;
-    };
+  var initVideoStream = function() {
+    var image = new Image();
+    image.src = "http://" + VIDEO_STREAM;
+    var bitmap = new createjs.Bitmap(image);
+    stage.addChild(bitmap);
+  };
 
-    var initVideoStream = function(){
-        var image = new Image();
-        image.src = VIDEO_STREAM;
-        var bitmap = new createjs.Bitmap(image);
-        stage.addChild(bitmap);
-    };
+  var initRobot = function() {
+    var robotSquareWidth = 30;
+    var robotSquareHeight = 30;
+    var robotSquare = new createjs.Shape();
+    robotSquare.graphics.beginFill("red").drawRect(0, 0, robotSquareWidth, robotSquareHeight);
+    robotSquare.regX = robotSquareWidth / 2;
+    robotSquare.regY = robotSquareHeight / 2;
 
-    var initRobot = function () {
+    var circle = new createjs.Shape();
+    var circleInitialPositionX = 0;
+    var circleInitialPositionY = -robotSquareWidth / 2;
+    var circleRadius = 5;
+    circle.graphics.beginFill("black").drawCircle(circleInitialPositionX, circleInitialPositionY, circleRadius);
 
-        var robotSquareWidth = 30;
-        var robotSquareHeight = 30;
-        var robotSquare = new createjs.Shape();
-        robotSquare.graphics.beginFill("red").drawRect(0, 0, robotSquareWidth, robotSquareHeight);
-        robotSquare.regX = robotSquareWidth / 2;
-        robotSquare.regY = robotSquareHeight / 2;
+    completeRobotRepresentation = new createjs.Container();
+    completeRobotRepresentation.addChild(robotSquare, circle);
 
-        var circle = new createjs.Shape();
-        var circleInitialPositionX = 0;
-        var circleInitialPositionY = -robotSquareWidth / 2;
-        var circleRadius = 5;
-        circle.graphics.beginFill("black").drawCircle(circleInitialPositionX, circleInitialPositionY, circleRadius);
+    stage.addChild(completeRobotRepresentation);
+  };
 
-        completeRobotRepresentation = new createjs.Container();
-        completeRobotRepresentation.addChild(robotSquare, circle);
+  var initMesh = function() {
+    var whenGetIsComplete = MapService.getMesh();
 
-        stage.addChild(completeRobotRepresentation);
-    };
-
-    setInterval(function () {
-        robot_socket.emit('fetchPosition')
-    }, POSITION_REFRESH_TIME_IN_MS);
-
-    robot_socket.on('position', function (msg) {
-        updateRobot(msg);
+    whenGetIsComplete.then(function(response) {
+      completeMesh = new createjs.Container();
+      for (cell of response.cells) {
+        var square = new createjs.Shape();
+        square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
+        completeMesh.addChild(square);
+      }
+      stage.addChild(completeMesh);
     });
+  };
 
-    setInterval(function () {
-        stage.update();
-    }, CANVAS_REFRESH_TIME_IN_MS);
 
-    function canvasController() {
-        canvas = document.getElementById("mapCanvas");
-        canvasContext = canvas.getContext("2d");
-        canvas.height = CANVAS_HEIGHT;
-        canvas.width = CANVAS_WIDTH;
-        initVideoStream();
-        initRobot();
-    }
-    canvasController();
+  $scope.$on('meshToggleOn', function(event) {
+    initMesh();
+  });
+
+  $scope.$on('meshToggleOff', function(event) {
+    stage.removeChild(completeMesh);
+  });
+
+  setInterval(function() {
+    robot_socket.emit('fetchPosition');
+  }, POSITION_REFRESH_TIME_IN_MS);
+
+  robot_socket.on('position', function(msg) {
+    updateRobot(msg);
+  });
+
+  setInterval(function() {
+    stage.update();
+  }, CANVAS_REFRESH_TIME_IN_MS);
+
+  function canvasController() {
+    canvas = document.getElementById("mapCanvas");
+    canvasContext = canvas.getContext("2d");
+    canvas.height = CANVAS_HEIGHT;
+    canvas.width = CANVAS_WIDTH;
+    initVideoStream();
+    initRobot();
+  }
+
+  canvasController();
 }]);
