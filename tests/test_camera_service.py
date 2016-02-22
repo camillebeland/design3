@@ -1,6 +1,5 @@
 from nose.tools import *
 from base_station.camera_service import CameraService
-from base_station.double_sided_buffer import DoubleSidedBuffer
 
 
 class MockCameraCapture:
@@ -20,7 +19,7 @@ cv2 = MockOpenCV()
 
 class TestCameraService:
     def setup(self):
-        self.camera = CameraService(mock_camera, cv2, DoubleSidedBuffer())
+        self.camera = CameraService(mock_camera, cv2)
 
     def test_given_a_camera_when_get_frame_then_returns_image_in_bytes(self):
         image = self.camera.get_frame()

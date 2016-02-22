@@ -26,9 +26,14 @@ class Robot():
 
     def move_to_thread(self, final_destination):
         while(distance(self.getpos(), final_destination) > 1):
-            path = self.__pathfinder.find_path(self.getpos(), final_destination)
+            #sense
+            position = self.getpos()
+            #compute
+            path = self.__pathfinder.find_path(position, final_destination)
             target = self.find_relative_target(path)
+            #control
             self.__wheels.move(target[0], target[1])
+
             sleep(0.1)
 
 
