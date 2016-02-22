@@ -1,4 +1,4 @@
-var website = angular.module('app', ['ui.router', 'Robot']);
+var website = angular.module('app', ['ui.router', 'Robot', 'MapModule']);
 
 website.config(function($stateProvider, $urlRouterProvider) {
 

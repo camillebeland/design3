@@ -14,6 +14,7 @@ from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
 if __name__ == '__main__':
     config = configuration.getconfig()
 
+    host = config.get('robot', 'host')
     port = config.getint('robot', 'port')
     wheelsconfig = config.get('robot', 'wheels')
 
@@ -34,13 +35,14 @@ if __name__ == '__main__':
         wheels = SimulationWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
 
     elif(wheelsconfig == "usb-arduino"):
-        arduino_pid = config.get('robot', 'arduino-pid')
-        arduino_vid = config.get('robot', 'arduino-pid')
+        arduino_pid = config.getint('robot', 'arduino-pid')
+        arduino_vid = config.getint('robot', 'arduino-vid')
+        arduino_baudrate = arduino_baudrate('robot', 'baudrate')
         ports = lp.comports()
-        arduinoport = filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports)
-        assert(len(arduinoport) == 0)
-        serialport = serial.Serial(port=arduinoport[0].device)
-        wheels = WheelsUsbController(serialport,WheelsUsbCommands)
+        arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
+        assert(len(list(arduinoport)) != 0)
+        serialport = serial.Serial(port=arduinoport[0].device,baudrate=arduino_baudrate)
+        wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     #mesh hardcode
     cell = Cell(700,400,350,200)
@@ -48,4 +50,4 @@ if __name__ == '__main__':
     pathfinder = PathFinder(mesh)
     robot = Robot(wheels, worldmap,pathfinder)
     robot_web_controller.inject(robot, mesh)
-    robot_web_controller.run(port)
+    robot_web_controller.run(host, port)

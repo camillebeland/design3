@@ -1,11 +1,11 @@
-website.controller('canvasController', ['$scope', 'Mesh', 'RobotService', function($scope, Mesh, RobotService) {
+website.controller('canvasController', ['$scope', 'RobotService', 'MapService', function($scope, RobotService, MapService) {
 
   var canvas;
   var canvasContext;
   var robot_socket = io(ROBOT_HOST);
   var stage = new createjs.Stage("mapCanvas");
   var completeRobotRepresentation;
-  var robotFinished = false;
+  var completeMesh;
 
   var updateRobot = function(robotData) {
     completeRobotRepresentation.x = robotData.robotPosition[0];
@@ -15,7 +15,7 @@ website.controller('canvasController', ['$scope', 'Mesh', 'RobotService', functi
 
   var initVideoStream = function() {
     var image = new Image();
-    image.src = "http://"+VIDEO_STREAM;
+    image.src = "http://" + VIDEO_STREAM;
     var bitmap = new createjs.Bitmap(image);
     stage.addChild(bitmap);
   };
@@ -38,28 +38,37 @@ website.controller('canvasController', ['$scope', 'Mesh', 'RobotService', functi
     completeRobotRepresentation.addChild(robotSquare, circle);
 
     stage.addChild(completeRobotRepresentation);
-    robotFinished = true;
   };
 
   var initMesh = function() {
-    Mesh.get(function(mesh){
-      for (cell of mesh.cells) {
+    var whenGetIsComplete = MapService.getMesh();
+
+    whenGetIsComplete.then(function(response) {
+      completeMesh = new createjs.Container();
+      for (cell of response.cells) {
         var square = new createjs.Shape();
         square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
-        stage.addChild(square);
+        completeMesh.addChild(square);
       }
-      initRobot();
+      stage.addChild(completeMesh);
     });
   };
 
+
+  $scope.$on('meshToggleOn', function(event) {
+    initMesh();
+  });
+
+  $scope.$on('meshToggleOff', function(event) {
+    stage.removeChild(completeMesh);
+  });
+
   setInterval(function() {
-     robot_socket.emit('fetchPosition');
+    robot_socket.emit('fetchPosition');
   }, POSITION_REFRESH_TIME_IN_MS);
 
   robot_socket.on('position', function(msg) {
-    if (robotFinished){
-          updateRobot(msg);
-    }
+    updateRobot(msg);
   });
 
   setInterval(function() {
@@ -72,7 +81,7 @@ website.controller('canvasController', ['$scope', 'Mesh', 'RobotService', functi
     canvas.height = CANVAS_HEIGHT;
     canvas.width = CANVAS_WIDTH;
     initVideoStream();
-    initMesh();
+    initRobot();
       function getMousePos(canvas, evt) {
           var rect = canvas.getBoundingClientRect();
           return {
@@ -86,9 +95,6 @@ website.controller('canvasController', ['$scope', 'Mesh', 'RobotService', functi
           RobotService.move_to(mousePos);
       }, false);
 
-
-
   }
-  
-  canvasController();
+    canvasController();
 }]);
