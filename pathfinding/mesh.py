@@ -1,6 +1,4 @@
 from functools import reduce
-import turtle
-
 
 class Cell:
     def __init__(self, width, height, x, y):
@@ -71,53 +69,3 @@ class polygon:
     def distance(self, target):
         return (self.x - target.x)**2 + (self.y - target.y)**2
 
-class drawer:
-    def __init__(self):
-        turtle.shape('blank')
-        turtle.speed(0)
-        turtle.delay(0)
-
-    def draw_cell(self, cell):
-        turtle.color('black')
-        turtle.pensize(1)
-        turtle.penup()
-        turtle.goto(cell.x - cell.width/2.0, cell.y - cell.height/2.0)
-        turtle.pendown()
-        turtle.setheading(0)
-        turtle.forward(cell.width)
-        turtle.left(90)
-        turtle.forward(cell.height)
-        turtle.left(90)
-        turtle.forward(cell.width)
-        turtle.left(90)
-        turtle.forward(cell.height)
-
-    def draw_graph(self, graph):
-        for node in graph.getnodes():
-            turtle.penup()
-            turtle.pensize(1)
-            turtle.color('red')
-            turtle.goto(node.x, node.y)
-            turtle.pendown()
-            turtle.circle(1)
-        for edge in graph.getedges():
-            turtle.penup()
-            turtle.color('blue')
-            turtle.goto(edge[0].x, edge[0].y)
-            turtle.pendown()
-            turtle.goto(edge[1].x, edge[1].y)
-
-
-    def draw_path(self, path):
-        turtle.penup()
-        turtle.color('green')
-        turtle.pensize(4)
-        first_point = path[0]
-        turtle.goto(first_point)
-        turtle.pendown()
-        for point in path:
-            turtle.goto(point)
-
-    def draw_mesh(self, mesh):
-        for cell in mesh:
-            self.draw_cell(cell)

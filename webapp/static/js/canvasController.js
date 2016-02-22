@@ -48,7 +48,7 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
       for (cell of response.cells) {
         var square = new createjs.Shape();
         square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
-        mesh.addChild(square);
+        completeMesh.addChild(square);
       }
       stage.addChild(completeMesh);
     });
