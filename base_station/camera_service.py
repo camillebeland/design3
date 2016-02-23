@@ -1,4 +1,6 @@
 from threading import Thread
+from base_station.world_map_vision.color_filter import *
+from base_station.world_map_vision.islands_finder import IslandsFinder
 
 class CameraService(object):
     def __init__(self, camera, opencv, buffer):
@@ -14,6 +16,9 @@ class CameraService(object):
 
     def get_frame(self):
         img = self.buffer.read()
+        island_finder = IslandsFinder(img, BlueFilter())
+        circles, triangles, squares, pentagons = island_finder.find_islands()
+        island_finder.draw_contours(circles, triangles, squares, pentagons, img)
         ret, jpeg = self.opencv.imencode('.jpg', img)
         return jpeg
 
