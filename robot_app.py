@@ -1,6 +1,6 @@
 from robot import robot_web_controller
 from configuration import configuration
-from robot.simulation_robot import SimulationWheels
+from robot.error_simulation import NoisyWheels
 
 from robot.wheels_usb_controller import WheelsUsbController
 import serial
@@ -32,7 +32,7 @@ if __name__ == '__main__':
             print("Warning : wheels-velocity not specified, setting 5")
             wheelsvelocity = 5
 
-        wheels = SimulationWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
+        wheels = NoisyWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
 
     elif(wheelsconfig == "usb-arduino"):
         arduino_pid = config.getint('robot', 'arduino-pid')

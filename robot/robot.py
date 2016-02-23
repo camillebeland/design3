@@ -29,8 +29,8 @@ class Movement:
         self.__sense = sense
         self.__control = control
         self.__moving = False
-        self.__loop_time = 0.1
-        self.__distance = 1
+        self.__loop_time = 1
+        self.__distance = 20
 
     def move_to(self, final_destination):
         self.__moving = False
