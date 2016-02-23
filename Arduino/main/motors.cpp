@@ -49,7 +49,6 @@ void motors_init(){
 	Timer3.initialize(DT);
 	Timer3.attachInterrupt(PID_motors_ISR);
 	Timer3.stop();
-	Timer3.restart();
 	
 }
 
@@ -205,7 +204,6 @@ void start(){
 //brake all motors, keeps the parameters, stops PID
 void stop(){
 	Timer3.stop();
-	Timer3.restart();
 	brake_motor(OUT_MOTOR_A);
 	brake_motor(OUT_MOTOR_B);
 	brake_motor(OUT_MOTOR_C);
