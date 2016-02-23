@@ -20,7 +20,7 @@ class PathFinder:
             if(cell.contains_point(to_point)):
                 to_cell = cell
 
-                cell_path = nx.astar_path(self.__graph, from_cell, to_cell)
+        cell_path = nx.astar_path(self.__graph, from_cell, to_cell)
         path = list(map(lambda cell : (cell.x, cell.y), cell_path))
         if(len(path) ==1):
             path.pop()
