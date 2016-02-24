@@ -48,7 +48,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
       for (cell of response.cells) {
         var square = new createjs.Shape();
         var rectTopLeftX = cell.x - cell.width / 2;
-        var rectTopLeftY = cell.y - cell.height / 2;
+        var rectTopLeftY = cell.y + cell.height / 2;
         square.graphics.beginStroke("black").drawRect(rectTopLeftX, canvas.height - rectTopLeftY, cell.width, cell.height);
         completeMesh.addChild(square);
       }

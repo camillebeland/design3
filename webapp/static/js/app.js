@@ -25,7 +25,7 @@ website.controller('homeController', ['$scope', function($scope) {
   window.POSITION_REFRESH_TIME_IN_MS = 100;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
   window.CANVAS_HEIGHT = 400;
-  window.CANVAS_WIDTH = 700;
+  window.CANVAS_WIDTH = 600;
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
