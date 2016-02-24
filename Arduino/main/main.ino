@@ -18,8 +18,9 @@ void loop() {
   // put your main code here, to run repeatedly:
 	
 	//--- SERIAL READ ---
-	if (Serial.available() >0){
-		char incomming_byte = serial_read();
+	if (Serial.available() >0){ 
+		unsigned char incomming_byte = serial_read();
+    
 		if (incomming_byte != -1){
 			decode_byte(incomming_byte);
 		}

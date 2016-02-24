@@ -15,7 +15,7 @@ State current_state = IDLE;
 Function current_function;
 int speed_param = DEFAULT_SPEED;
 int param_count = 0;
-unsigned char params[4] = {0};
+int params[4] = {0};
 
 // NO CIRCULAR BUFFER YET, RT PROCESSING
 
@@ -95,6 +95,7 @@ bool decode_byte(unsigned char byte) {
         }
         params[4 - param_count] = byte;
         param_count--;
+		
       }
       //cover errors
       if (param_count < 1) {
@@ -130,6 +131,7 @@ bool decode_byte(unsigned char byte) {
 }
 
 bool parse_and_call() {
+
   long angle, x, y;
   char ONOFF;
   long buffa, buffb, buffc, buffd;
@@ -154,13 +156,12 @@ bool parse_and_call() {
       break;
 
     case MOVE:
-		buffa = params[0];
-		buffb = params[1];
-		buffc = params[2];
-		buffd = params[3];
-		x = (buffa*256)+ buffb;
-		y = (buffc*256)+ buffd;
-      
+		buffa = (long)params[0];
+		buffb = (long)params[1];
+		buffc = (long)params[2];
+		buffd = (long)params[3];
+		x = (buffa << 8)+ buffb;
+		y = (buffc << 8)+ buffd;
       move(x, y, speed_param);
       break;
 

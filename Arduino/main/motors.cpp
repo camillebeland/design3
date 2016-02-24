@@ -10,10 +10,10 @@ void motors_init(){
 	pinMode(INT_ENCODER_C_CH1, INPUT);
 	pinMode(INT_ENCODER_D_CH1, INPUT);
 
-	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_A_CH1), count_tick_A, RISING);
-	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_B_CH1), count_tick_B, RISING);
-	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_C_CH1), count_tick_C, RISING);
-	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_D_CH1), count_tick_D, RISING);	
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_A_CH1), count_tick_A, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_B_CH1), count_tick_B, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_C_CH1), count_tick_C, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(INT_ENCODER_D_CH1), count_tick_D, CHANGE);	
 	
 	pinMode(OUT_MOTOR_A, OUTPUT);
 	pinMode(OUT_MOTOR_B, OUTPUT);
@@ -46,7 +46,7 @@ void motors_init(){
 	analogWrite(OUT_MOTOR_D, 1);	
 	
 	//setup timer3 for interrupt every DT (in microseconds);
-	Timer3.initialize(DT);
+	Timer3.initialize(DT/2);
 	Timer3.attachInterrupt(PID_motors_ISR);
 	Timer3.stop();
 	
@@ -211,7 +211,7 @@ void stop(){
 }
 
 //set parameters for a specific wheel/motor
-void set_motor(int motor, int tick, bool polarity, double motor_speed){
+void set_motor(int motor, long tick, bool polarity, double motor_speed){
 	
 	if (motor == OUT_MOTOR_A){
 		tick_remaining_A =tick;
@@ -291,7 +291,7 @@ void reset_all_motors(){
 }
 
 // move forward, backward, left or right
-void move_straight(Direction direction, int tick, double speed){
+void move_straight(Direction direction, long tick, double speed){
 	
 	//set movement parameters, choose the appropriate motors to use
 	if (direction == LEFT){
@@ -323,7 +323,7 @@ void move_straight(Direction direction, int tick, double speed){
 void move(long x, long y, double speed){
 	
 
-	float angle;
+	double angle;
 	if (x>= 32768){
 		x = x- 32768;
 		x = -x;
@@ -346,20 +346,20 @@ void move(long x, long y, double speed){
 
 	
 	if (ticks_Y >0){
-		move_straight(FORWARD, (int)ticks_Y, speed_Y);
+		move_straight(FORWARD, ticks_Y, speed_Y);
 	}
 	else if (ticks_Y < 0){
 		ticks_Y = abs(ticks_Y);
-		move_straight(BACKWARD, (int)ticks_Y, speed_Y);
+		move_straight(BACKWARD, ticks_Y, speed_Y);
 	}
 	
 	if (ticks_X > 0){
 		ticks_X = (ticks_X);
-		move_straight(LEFT, (int)ticks_X, speed_X);
+		move_straight(LEFT, ticks_X, speed_X);
 	}
 	else if (ticks_X <0){
 		ticks_X = abs(ticks_X);
-		move_straight(RIGHT, (int)ticks_X, speed_X);
+		move_straight(RIGHT, ticks_X, speed_X);
 	}
 
 }

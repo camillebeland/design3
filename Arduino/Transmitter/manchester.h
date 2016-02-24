@@ -12,7 +12,6 @@ void manchester_init();
 
 //-------------------------------------
 
-void manchester_get();
 void manchester_read(int * ptr);
 
 //-------------------------------------
