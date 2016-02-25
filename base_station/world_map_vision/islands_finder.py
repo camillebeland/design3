@@ -61,6 +61,38 @@ class IslandsFinder(object):
         cv2.drawContours(origin_image, pentagons, -1, (0, 0, 255), 3) #red
 
 if __name__ == '__main__':
+    img = cv2.imread("photo2.jpg")
+    island_finder = IslandsFinder(img, GreenFilter())
+    circles, triangles, squares, pentagons = island_finder.find_islands()
+    island_finder.draw_contours(circles, triangles, squares, pentagons, img)
+    cv2.imshow('islands', img)
+    ch = 0xFF & cv2.waitKey()
+    cv2.destroyAllWindows()
+
+    img = cv2.imread("photo3.jpg")
+    island_finder = IslandsFinder(img, BlueFilter())
+    circles, triangles, squares, pentagons = island_finder.find_islands()
+    island_finder.draw_contours(circles, triangles, squares, pentagons, img)
+    cv2.imshow('islands', img)
+    ch = 0xFF & cv2.waitKey()
+    cv2.destroyAllWindows()
+
+    img = cv2.imread("photo4.jpg")
+    island_finder = IslandsFinder(img, AllColorFilter())
+    circles, triangles, squares, pentagons = island_finder.find_islands()
+    island_finder.draw_contours(circles, triangles, squares, pentagons, img)
+    cv2.imshow('islands', img)
+    ch = 0xFF & cv2.waitKey()
+    cv2.destroyAllWindows()
+
+    img = cv2.imread("photo5.jpg")
+    island_finder = IslandsFinder(img, AllColorFilter())
+    circles, triangles, squares, pentagons = island_finder.find_islands()
+    island_finder.draw_contours(circles, triangles, squares, pentagons, img)
+    cv2.imshow('islands', img)
+    ch = 0xFF & cv2.waitKey()
+    cv2.destroyAllWindows()
+
     img = cv2.imread("photo6.jpg")
     island_finder = IslandsFinder(img, AllColorFilter())
     circles, triangles, squares, pentagons = island_finder.find_islands()
@@ -68,3 +100,4 @@ if __name__ == '__main__':
     cv2.imshow('islands', img)
     ch = 0xFF & cv2.waitKey()
     cv2.destroyAllWindows()
+
