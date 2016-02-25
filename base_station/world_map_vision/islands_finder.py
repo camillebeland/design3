@@ -22,8 +22,8 @@ class IslandsFinder(object):
             for threshold in range(0, 255, 26):
                 if threshold == 0:
                     contour_image = vision_wrapper.canny(gray)
-                    contour_image = vision_wrapper.erode(contour_image)
                     contour_image = vision_wrapper.dilate(contour_image)
+                    contour_image = vision_wrapper.erode(contour_image)
                 else:
                     contour_image = vision_wrapper.threshold(gray, threshold)
 
@@ -38,6 +38,7 @@ class IslandsFinder(object):
                         max_cos = numpy.max([vision_wrapper.angle_cos(contour[i], contour[(i + 1) % 4], contour[(i + 2) % 4]) for i in range(4)])
                         if max_cos < 0.1:
                             squares.append(contour)
+                            print("square")
                     elif vision_wrapper.is_pentagon(contour):
                         pentagons.append(contour)
 
@@ -60,7 +61,7 @@ class IslandsFinder(object):
         cv2.drawContours(origin_image, pentagons, -1, (0, 0, 255), 3) #red
 
 if __name__ == '__main__':
-    img = cv2.imread("photo2.jpg")
+    img = cv2.imread("photo6.jpg")
     island_finder = IslandsFinder(img, AllColorFilter())
     circles, triangles, squares, pentagons = island_finder.find_islands()
     island_finder.draw_contours(circles, triangles, squares, pentagons, img)

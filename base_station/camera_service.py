@@ -16,7 +16,7 @@ class CameraService(object):
 
     def get_frame(self):
         img = self.buffer.read()
-        island_finder = IslandsFinder(img, BlueFilter())
+        island_finder = IslandsFinder(img, AllColorFilter())
         circles, triangles, squares, pentagons = island_finder.find_islands()
         island_finder.draw_contours(circles, triangles, squares, pentagons, img)
         ret, jpeg = self.opencv.imencode('.jpg', img)

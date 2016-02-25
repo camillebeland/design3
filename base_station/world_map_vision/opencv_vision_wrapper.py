@@ -34,13 +34,14 @@ def split(image):
 def canny(image):
     return cv2.Canny(image, 0, 50, apertureSize=5)
 
-patate = numpy.ones((17,17),numpy.uint8)
 
 def dilate(image):
-    return cv2.dilate(image, kernel=patate, iterations=10)
+    return cv2.dilate(image, kernel=numpy.ones((5,5),numpy.uint8), iterations=10)
+
 
 def erode(image):
-    return cv2.erode(image, kernel=patate, iterations=10)
+    return cv2.erode(image, kernel=numpy.ones((99,99),numpy.uint8), iterations=10)
+
 
 def threshold(image, threshold):
     retval, image = cv2.threshold(image, threshold, 255, cv2.THRESH_BINARY)
@@ -48,7 +49,7 @@ def threshold(image, threshold):
 
 
 def find_contours(image):
-    bin, contours, hierarchy = cv2.findContours(image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    bin, contours, hierarchy = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
 
@@ -65,7 +66,7 @@ def approx_polygon_curve(contour, contour_length):
 
 
 def is_triangle(contour):
-    return len(contour) == 3 and cv2.contourArea(contour) < 1100 and cv2.contourArea(contour) > 1000 and cv2.isContourConvex(contour)
+    return len(contour) == 3 and cv2.contourArea(contour) < 1500 and cv2.isContourConvex(contour)
 
 
 def is_pentagon(contour):
