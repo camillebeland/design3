@@ -1,4 +1,4 @@
-website.controller('canvasController', ['$scope', 'MapService', function($scope, MapService) {
+website.controller('canvasController', ['$scope', 'RobotService', 'MapService', function($scope, RobotService, MapService) {
 
   var canvas;
   var canvasContext;
@@ -47,7 +47,9 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
       completeMesh = new createjs.Container();
       for (cell of response.cells) {
         var square = new createjs.Shape();
-        square.graphics.beginStroke("black").drawRect(cell.x - cell.width / 2, cell.y - cell.height / 2, cell.width, cell.height);
+        var rectTopLeftX = cell.x - cell.width / 2;
+        var rectTopLeftY = cell.y + cell.height / 2;
+        square.graphics.beginStroke("black").drawRect(rectTopLeftX, canvas.height - rectTopLeftY, cell.width, cell.height);
         completeMesh.addChild(square);
       }
       stage.addChild(completeMesh);
@@ -82,7 +84,19 @@ website.controller('canvasController', ['$scope', 'MapService', function($scope,
     canvas.width = CANVAS_WIDTH;
     initVideoStream();
     initRobot();
-  }
+      function getMousePos(canvas, evt) {
+          var rect = canvas.getBoundingClientRect();
+          return {
+              x: evt.clientX - rect.left,
+              y: CANVAS_HEIGHT - (evt.clientY - rect.top)
+          };
+      }
 
-  canvasController();
+      canvas.addEventListener('mousedown', function(evt) {
+          var mousePos = getMousePos(canvas, evt);
+          RobotService.move_to(mousePos);
+      }, false);
+
+  }
+    canvasController();
 }]);

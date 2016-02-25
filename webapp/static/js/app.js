@@ -17,7 +17,7 @@ TabEnum = Object.freeze({
   OTHER: "OTHER"
 });
 
-website.controller('homeController', ['$scope', '$http', 'RobotService', 'MapService', function($scope, $http, RobotService, MapService) {
+website.controller('homeController', ['$scope', function($scope) {
   /*Webapp constants*/
   window.BASE_STATION_HOST = "localhost:5000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
