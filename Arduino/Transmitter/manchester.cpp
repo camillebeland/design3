@@ -18,7 +18,6 @@ void manchester_read(int *ptr){
 
 
 void MANCHESTER_ISR(){
-	//clock_count++;
 	buffer.write(digitalRead(MANCHESTER_IN));
 	Timer1.stop();
 }

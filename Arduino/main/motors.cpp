@@ -322,7 +322,7 @@ void move_straight(Direction direction, long tick, double speed){
 // MSB = negative
 void move(long x, long y, double speed){
 	
-
+	reset_all_motors();
 	double angle;
 	if (x>= 32768){
 		x = x- 32768;
@@ -365,6 +365,7 @@ void move(long x, long y, double speed){
 }
 
 void rotate(Direction direction, int angle){
+	reset_all_motors();
 	int wanted_polarity;
 
 	if (direction == LEFT){

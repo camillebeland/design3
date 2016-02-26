@@ -58,8 +58,8 @@ Arduino Pin	Register
 #define ZERO_SPEED 50
 
 #define DT 100000 //  microsecs
-#define DEFAULT_SPEED 500 // TICKS PER DT
-#define SLOW_SPEED 200
+#define DEFAULT_SPEED 1000 // TICKS PER DT
+#define SLOW_SPEED 500
 #define ROTATE_SPEED 350
 #define ROTATE_DIAMETER 1500//in TICKS, including slip
 

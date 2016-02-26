@@ -41,7 +41,6 @@ void decoder_init();
 
 //-------------------------------------
 void reset_decoder();
-void decoder_tmeout();
 bool decode_byte(unsigned char byte);
 bool parse_and_call();
 

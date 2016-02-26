@@ -13,7 +13,5 @@ int serial_read(){
 	if (incomming_byte != -1){
 		return incomming_byte;
 	}
-	else{
-		return -1;
-	}
+	return -1;
 }
