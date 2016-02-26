@@ -4,7 +4,7 @@ var MapModule = angular.module('MapModule', [])
     this.getMesh = function() {
       return $http({
         method: 'GET',
-        url: 'http://' + BASE_STATION_HOST + '/mesh'
+        url: 'http://' + ROBOT_HOST + '/mesh'
       }).then(function successCallback(response) {
         return response.data;
       }, function errorCallback(response) {
