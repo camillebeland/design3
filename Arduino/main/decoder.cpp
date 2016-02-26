@@ -2,6 +2,8 @@
 #include "decoder.h"
 #include "motors.h"
 #include "TimerFour.h"
+#include "serial_manchester.h"
+#include "serial.h"
 #include "magnet.h"
 
 void decoder_init() {
@@ -79,6 +81,12 @@ bool decode_byte(unsigned char byte) {
         param_count = 1;
         current_state = PARAMETERS;
       }
+	  else if(byte == 'c'){
+		current_function = MANCHESTER;
+		param_count = 0;
+		current_state = END;
+		
+	  }
       // cover errors
       else {
         byte_decoded = false;
@@ -173,7 +181,10 @@ bool parse_and_call() {
       else if (ONOFF == 'f') {
         toggle_magnet_OFF();
       }
-      break;
+	  break;
+	case MANCHESTER:
+		serial_print(get_ASCII());
+		break;
 
     default:
       return false;

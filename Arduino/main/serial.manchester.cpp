@@ -1,15 +1,29 @@
 #include "Arduino.h"
-#include "decoder_manchester.h"
+#include "serial_manchester.h"
+#include "decoder.h"
 #include "CircularBuffer.h"
-#include <math.h>  
 
-void decoder_manchester_init() {
- 
-}
 
 char ASCII = 0;
+CircularBuffer buff(32);
 
-char get_ASCII(CircularBuffer buff) {
+void serial_manchester_init(){
+	Serial1.begin(BAUD_RATE_MANCHESTER);
+}
+
+bool serial_manchester_read(){
+	int incomming_byte = -1;
+	if (Serial1.available() > 0){
+		incomming_byte = Serial1.read();
+		if (incomming_byte != -1){
+			buff.write(incomming_byte);
+			return true;
+		}
+		return false;
+	}
+}
+
+char get_ASCII() {
 	int max_count = 40;
 	int start_sequence[18] = {0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0};
 	int sequence_count = 0;
@@ -34,5 +48,3 @@ char get_ASCII(CircularBuffer buff) {
 	}
 	return ASCII;
 }
-
-

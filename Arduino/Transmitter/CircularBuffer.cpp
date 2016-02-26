@@ -10,6 +10,15 @@ CircularBuffer::CircularBuffer(int size){
 	bufferSize = size;
 }
 
+CircularBuffer::CircularBuffer(CircularBuffer copy){
+	buffer = new int[copy.size];
+	copy.read(buffer);
+	readIndex = 0;
+	writeIndex = 0;
+	bufferSize = copy.size;
+	
+}
+
 void CircularBuffer::write(int data){
 	buffer[writeIndex] = data;
 	writeIndex = (writeIndex+1)%bufferSize;
@@ -19,3 +28,8 @@ void CircularBuffer::read(int* ptr){
 	memcpy(ptr, buffer, bufferSize*sizeof(int));
 }
 
+int CircularBuffer::read(){
+	int toReturn = buffer[readIndex];
+	readIndex = (readIndex+1)%bufferSize;
+	return toReturn;
+}

@@ -1,9 +1,6 @@
 #ifndef serial_h
 #define serial_h
 
-#define RX 0
-#define TX 0
-
 #define BAUD_RATE 115200
 
 // -------------SETUP ----------------
@@ -13,7 +10,8 @@ void serial_init();
 //-------------------------------------
 
 
-int serial_read();
+void serial_read();
+void serial_print(char toPrint);
 
 // ----------------ISR ----------------
 

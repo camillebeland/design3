@@ -2,16 +2,18 @@
 #include "serial.h"
 #include "decoder.h"
 
-int incomming_byte = -1;
-
 void serial_init(){
 	Serial.begin(BAUD_RATE);
 }
 
-int serial_read(){
-	incomming_byte = Serial.read();
-	if (incomming_byte != -1){
-		return incomming_byte;
+void serial_read(){
+	int incomming_byte = -1;
+	if (Serial.available() >0){
+		incomming_byte = Serial.read();
+		decode_byte(incomming_byte);
 	}
-	return -1;
+}
+
+void serial_print(char toPrint){
+	Serial.print(toPrint);
 }
