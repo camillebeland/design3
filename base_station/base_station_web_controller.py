@@ -12,6 +12,7 @@ def inject(a_camera, a_refresh_time, a_mesh):
     refresh_time = a_refresh_time
     mesh = a_mesh
 
+
 def generate_frame(camera, refresh_time):
     while True:
         time.sleep(refresh_time)
@@ -23,6 +24,7 @@ def generate_frame(camera, refresh_time):
 def video_feed():
     return Response(generate_frame(camera, refresh_time), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 @app.route('/mesh')
 def mesh():
     return jsonify(mesh_to_json(mesh))
@@ -31,9 +33,10 @@ def mesh():
 def run(host, port):
     app.run(host=host, port=port, threaded=True)
 
+
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
 
+
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
-
