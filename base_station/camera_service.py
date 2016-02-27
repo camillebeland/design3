@@ -1,7 +1,7 @@
 from threading import Thread
 from base_station.world_map_vision.color_filter import *
-from base_station.world_map_vision.islands_finder import IslandsFinder
 from base_station.double_sided_buffer import DoubleSidedBuffer
+from base_station.world_map_vision.islands_finder import IslandsFinder
 
 class CameraService(object):
     def __init__(self, camera, opencv):
