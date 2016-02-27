@@ -1,12 +1,12 @@
 from threading import Thread
-
+from base_station.double_sided_buffer import DoubleSidedBuffer
 
 class CameraService(object):
-    def __init__(self, camera, opencv, buffer):
+    def __init__(self, camera, opencv):
         self.opencv = opencv
         self.camera = camera
         self.running = True
-        self.buffer = buffer
+        self.buffer = DoubleSidedBuffer()
         self.__start()
 
     def __del__(self):

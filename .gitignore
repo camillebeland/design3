@@ -99,6 +99,7 @@ Rapport/Rapport.out
 
 #emacs things
 **/auto/
+**/.tern-port
 #idea things
 .idea/*
 
