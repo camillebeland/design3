@@ -15,13 +15,15 @@ class CameraService(object):
         self.stop()
         self.camera.release()
 
-    def get_frame(self):
+    def get_frame(self, format='bgr'):
+        while(self.buffer.read() == None):
+            pass
         img = self.buffer.read()
-        island_finder = IslandsFinder(img, BlueFilter())
-        circles, triangles, squares, pentagons = island_finder.find_islands()
-        island_finder.draw_contours(circles, triangles, squares, pentagons, img)
-        ret, jpeg = self.opencv.imencode('.jpg', img)
-        return jpeg
+        if(format == 'bgr'):
+            return img
+        elif(format == 'jpeg'):
+            ret, jpeg = self.opencv.imencode('.jpg', img)
+            return jpeg
 
     def __start(self):
         print("starting")

@@ -8,8 +8,18 @@ var MapModule = angular.module('MapModule', [])
       }).then(function successCallback(response) {
         return response.data;
       }, function errorCallback(response) {
-        console.log("error getting mesh from base station");
+        console.log("error getting mesh from robot");
       });
     };
 
+      this.getMap = function() {
+          return $http({
+              method: 'GET',
+              url: 'http://' + BASE_STATION_HOST + '/worldmap'
+          }).then(function successCallback(response) {
+              return response.data;
+          }, function erroCallback(response) {
+              console.log("error getting map from base station");
+          });
+      };
   }]);
