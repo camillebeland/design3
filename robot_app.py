@@ -11,8 +11,6 @@ from robot.robot import Robot
 from robot.map import Map
 from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
 
-from pathfinding.pathfinding import PathFinder, Cell, Mesh, polygon
-
 if __name__ == '__main__':
     config = configuration.getconfig()
 
