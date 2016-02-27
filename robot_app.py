@@ -11,6 +11,8 @@ from robot.robot import Robot
 from robot.map import Map
 from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
 
+from pathfinding.pathfinding import PathFinder, Cell, Mesh, polygon
+
 if __name__ == '__main__':
     config = configuration.getconfig()
 
@@ -45,7 +47,7 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     #mesh hardcode
-    cell = Cell(600,400,350,200)
+    cell = Cell(600,400,300,200)
     mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
     pathfinder = PathFinder(mesh)
     robot = Robot(wheels, worldmap,pathfinder)

@@ -48,6 +48,6 @@ class Map:
 
     def __is_inside_boundaries(self,x, y):
         return x > 0 and x < self._width and y > 0 and y < self._height
+
     def relative_position(self, position):
         return rotate_vector(self._robotangle, np.array(position) - np.array(self._robotposition))
-

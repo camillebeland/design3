@@ -40,6 +40,22 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     stage.addChild(completeRobotRepresentation);
   };
 
+    var initMap = function() {
+        MapService.getMap().then(function(response) {
+            for (island of response.islands) {
+                if(island.shape === 'circle') {
+                    var circle = new createjs.Shape();
+                    var x = island.x;
+                    var y = island.y;
+                    var radius = island.radius;
+                    var color = island.color;
+                    circle.graphics.beginFill(color).drawCircle(x,y,radius);
+                    stage.addChild(circle);
+                }
+            }
+        });
+    };
+
   var initMesh = function() {
     var whenGetIsComplete = MapService.getMesh();
 
@@ -83,7 +99,8 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     canvas.height = CANVAS_HEIGHT;
     canvas.width = CANVAS_WIDTH;
     initVideoStream();
-    initRobot();
+      initRobot();
+      initMap();
       function getMousePos(canvas, evt) {
           var rect = canvas.getBoundingClientRect();
           return {

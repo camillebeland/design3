@@ -4,6 +4,9 @@ from base_station.mock_camera_service import MockCameraService
 from base_station import base_station_web_controller
 import cv2
 
+from base_station.vision_service import VisionService
+from base_station.vision import ShapeDetector
+
 if __name__ == '__main__':
 
     def camera_builder(camera_config, camera_id):
@@ -26,6 +29,8 @@ if __name__ == '__main__':
     camera_height = config.getint('baseapp', 'camera_height')
 
     camera = camera_builder(camera_config, camera_id)
+    vision = VisionService(camera, ShapeDetector())
+    worldmap = vision.build_map()
 
-    base_station_web_controller.inject(camera, refresh_time)
+    base_station_web_controller.inject(camera, refresh_time, worldmap)
     base_station_web_controller.run(host, port)

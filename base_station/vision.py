@@ -61,16 +61,13 @@ class Image:
     def draw_circles(self, circles):
         img = np.copy(self.__image)
         for circle in circles:
-            center = (circle['x'], circle['y'])
-            radius = circle['radius']
+            center = (int(circle['x']), int(circle['y']))
+            radius = int(circle['radius'])
             cv2.circle(img, center, radius, (0,255,255),3)
         return Image(img)
 
-class Vision:
-    def __init__(self, image):
-        self.__image = image
-
-    def find_circle_color(self, color, parameters):
+class ShapeDetector:
+    def find_circle_color(self, image, color, parameters):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
         gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
         gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
@@ -80,7 +77,7 @@ class Vision:
         hough_circle_min_radius = parameters['hough_circle_min_radius']
         hough_circle_max_radius = parameters['hough_circle_max_radius']
 
-        circles = (self.__image
+        circles = (image
                    .filter_median_blur(median_blur_kernel_size)
                    .filter_by_color(hsv_range[color])
                    .filter_gaussian_blur((gaussian_blur_kernel_size, gaussian_blur_kernel_size), gaussian_blur_sigma_x)
@@ -90,12 +87,12 @@ class Vision:
                                        hough_circle_min_radius,
                                        hough_circle_max_radius))
         if(circles is not None):
-            return list(map(lambda circle: {'x' : circle[0], 'y' : circle[1], 'radius' : circle[2]}, circles[0,:]))
+            return list(map(lambda circle: {'x' : float(circle[0]), 'y' : float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
         else:
             return []
 
 
-    def find_polygon_color(self, polygon, color, parameters):
+    def find_polygon_color(self, image, polygon, color, parameters):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
         gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
         gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
@@ -111,7 +108,8 @@ class Vision:
         def approxPolygon(contour):
             return cv2.approxPolyDP(contour, polygonal_approximation_error , True)
 
-        contours = (image.filter_median_blur(median_blur_kernel_size)
+        contours = (image
+                    .filter_median_blur(median_blur_kernel_size)
                     .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
                     .filter_by_color(hsv_range[color])
                     .canny(canny_threshold1,canny_threshold2,canny_aperture_size)
@@ -166,15 +164,4 @@ default_camille_polygon_params = {
     'erode_kernel_size' : 51,
     'erode_iterations' : 1,
     'polygonal_approximation_error' : 4
-}
-
-default_camille_circle_params = {
-    'median_blur_kernel_size' : 5,
-    'gaussian_blur_kernel_size' : 9,
-    'gaussian_blur_sigma_x' : 2,
-    'hough_circle_min_distance' : 50,
-    'hough_circle_param1' : 50,
-    'hough_circle_param2' : 30,
-    'hough_circle_min_radius' : 0,
-    'hough_circle_max_radius' : 0
 }
