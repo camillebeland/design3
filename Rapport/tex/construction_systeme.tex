@@ -1,2 +1,21 @@
 \chapter{Avancement de la construction système}
 
+\section{Tests}
+La partie logicielle comporte bien sûr des tests unitaires qui assurent la maintenabilité et la clareté du code.
+Les tests fonctionnels peuvent être effectués à l'aide d'un simulateur qui remplace le robot physique.
+On peut paramétrer ce simulateur afin qu'il induise du bruit dans le système et soit donc ainsi plus difficile à contrôler.
+Ce simulateur est contrôlé par la vraie interface utilisateur du système.
+Il suffit de changer le robot dans un fichier de configuration.
+Ce fichier de configuration nous permet d'injecter différentes composantes selon le contexte d'exécution.
+
+\section{Interface}
+Afin d'obtenir une interface modulaire et la plus polyvalente possible nous avons opté pour une interface web.
+Une composante de notre système s'occupe donc de servir les fichiers nécessaires à l'application web.
+Celle-ci communique par HTTP REST ou par socket aux autres composantes du système.
+La communication par socket est utilisée lorque nous avons besoin d'une boucle de rétroaction rapide,
+comme dans le cas de l'information de position du robot.
+La section représentant le monde de jeu de l'interface peut afficher beaucoup d'informations.
+Afin de ne pas la surcharger, nous avons opté pour que chacun des affichages soit optionnel et puisse donc
+être ajouté ou enlevé indépendamment, formant ainsi différentes couches.
+Du point de vue des technologies, nous avons utilisé Bootstrap et AngularJS de manière à construire rapidement.
+Pour dessiner les différents éléments de la carte, nous utilisons EaselJS qui nous permet d'utiliser dess fonctions avancées de dessin.
