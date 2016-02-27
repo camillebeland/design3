@@ -1,4 +1,37 @@
+import networkx as nx
 from functools import reduce
+
+class PathFinder:
+    def __init__(self, mesh):
+        self.__graph = nx.Graph()
+        for cell in mesh.get_cells():
+            self.__graph.add_node(cell)
+            for other_cell in mesh.get_cells():
+                if(cell.is_adjacent_to(other_cell)):
+                    self.__graph.add_edge(cell, other_cell)
+
+
+    def find_path(self, from_point, to_point):
+        from_cell = None
+        to_cell = None
+        for cell in self.__graph.nodes():
+            if(cell.contains_point(from_point)):
+                from_cell = cell
+            if(cell.contains_point(to_point)):
+                to_cell = cell
+
+        cell_path = nx.astar_path(self.__graph, from_cell, to_cell)
+        path = list(map(lambda cell : (cell.x, cell.y), cell_path))
+        if(len(path) ==1):
+            path.pop()
+            path.append(to_point)
+        else:
+            path.pop(0)
+            path.pop()
+            path.insert(0,from_point)
+            path.append(to_point)
+        return path
+
 
 class Cell:
     def __init__(self, width, height, x, y):
@@ -28,7 +61,7 @@ class Cell:
         return "({0},{1},{2},{3})".format(self.x, self.y, self.width, self.height)
 
     def contains(self, obstacle):
-        return obstacle.distance(self) < (self.width/2.0 + self.height/2.0 + obstacle.size)**2
+        return obstacle.contains(self)
 
     def contains_point(self, point):
         x, y = point
@@ -68,4 +101,9 @@ class polygon:
 
     def distance(self, target):
         return (self.x - target.x)**2 + (self.y - target.y)**2
+
+    def contains(self, cell):
+        return (abs(self.x - cell.x) <= (cell.width + self.size)/2.0 and
+                abs(self.y - cell.y) <= (cell.height + self.size)/2.0)
+
 
