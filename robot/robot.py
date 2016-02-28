@@ -1,4 +1,3 @@
-from time import sleep
 from robot.movement import Movement
 
 class Robot():
