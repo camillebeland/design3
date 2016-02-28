@@ -54,6 +54,32 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
                 }
             }
         });
+        var square = new createjs.Shape();
+        var square_x = 100;
+        var square_y = 300;
+        var square_side_length = 30;
+        var square_color = 'blue';
+        var square_angle = -90;
+        square.graphics.beginFill(square_color).drawPolyStar(square_x, square_y, square_side_length,4, 0, square_angle);
+        stage.addChild(square);
+
+        var pentagon = new createjs.Shape();
+        var pentagon_x = 100;
+        var pentagon_y = 50;
+        var pentagon_side_length = 30;
+        var pentagon_color = 'yellow';
+        var pentagon_angle = -90;
+        square.graphics.beginFill(pentagon_color).drawPolyStar(pentagon_x, pentagon_y, pentagon_side_length, 5, 0, pentagon_angle);
+        stage.addChild(square);
+
+        var triangle = new createjs.Shape();
+        var triangle_x = 120;
+        var triangle_y = 200;
+        var triangle_side_length = 30;
+        var triangle_color = 'red';
+        var triangle_angle = 78;
+        square.graphics.beginFill(triangle_color).drawPolyStar(triangle_x, triangle_y, triangle_side_length, 3, 0, triangle_angle);
+        stage.addChild(square);
     };
 
   var initMesh = function() {
