@@ -19,3 +19,44 @@ Afin de ne pas la surcharger, nous avons opté pour que chacun des affichages so
 être ajouté ou enlevé indépendamment, formant ainsi différentes couches.
 Du point de vue des technologies, nous avons utilisé Bootstrap et AngularJS de manière à construire rapidement.
 Pour dessiner les différents éléments de la carte, nous utilisons EaselJS qui nous permet d'utiliser dess fonctions avancées de dessin.
+
+
+\section{Microcontroleur}
+
+Comme interface entre le logiciel et les composantes physique, nous avons choisi d’utiliser un Arduino Mega 2560. Celui-ci possède une puce différente des autres Arduino, la Atmel2560, qui permet entre autres d’utiliser plus de de compteur et plus de canaux d’intérruption, fonctionalités qui seront toutes utilisées dans le cadre du projet. Les avantages d’utiliser un Arduino par rapport à un autre type de microcontroleur sont nombreux. Comme ils sont largement utilisés et qu’ils font partie d’une communauté ouverte, de nombreuses librairies et exemples de toutes sortes sont disponibles en ligne, permettant de prototyper rapidement différents types de projet. De plus, de nombreuses fonctions de bases comme la communication série, les sorties PWM et les entrées ADC sont prises en charge par la librairie Arduino par défaut. 
+
+\section{Communication série}
+
+La communication entre l’ordinateur embarqué et le Mega se fait par communication série. La librairie PySerial sur Linux et la librairie Serial sur Arduino assure une communication de base simple et efficace. Les communications sont toute commandé par l’ordinateur embarqué. Le Mega attend constamment une nouvelle commande à exécuter. Il envoit seulement de l’information sur demande, par exemple le voltage du condensateur de l’électroaimant ou le code manchester. Pour l’instant, le Arduino peut faire les fonctions suivantes:
+
+\begin{enumerate}
+
+\item move() - permet d’aller dans n’importe direction à la distance et vitesse désirée
+\item rotate() -  permet de de tourner avec la direction et l’angle désiré
+\item manchester() - retourne par interface série la lettre décodée du code manchester
+\item stop() - cesse tout mouvement en cours
+\item magnet() - active ou désactive l’alimentation de l’électroaimant
+\item lift() - active le préhenseur pour soulever l’aimant
+\item capacitor() - retourne par interface série le voltage du condensateur de l’électroaimant
+\end{enumerate}
+
+Les fonctions et leurs arguments sont traduits par un décodeur série. Celui-ci interprète les différents octets selon un code préétabli.
+
+\section{Moteurs}
+
+\subsection{Interface moteur}
+
+Chaque moteur est commandé par un canal via le pont H. Le Arduino se charge d’envoyer les bits de contrôles appropriés à chaque canal selon la commande désirée. Cela permet de contrôler la puissance fournie aux moteurs ainsi que la direction de rotation. Chaque moteur possède les fonctions suivantes:
+
+\begin{enumerate}
+\item set() - Détermine la vitesse désirée, la distance et la direction
+\item reset() - Remet tous les paramètres d’un moteur à zéro
+\item start() - Démarre le régulateur PID pour un moteur avec les paramètre établis avec le dernier set()
+\item brake() - Arrête la roue mais conserve la dernière commande
+\end{enumerate}
+
+Également, chaque pair de moteur qui ont la même orientation sont associée par la fonction $move_straight()$. Celle-ci indique au régulateur que ces deux moteurs doivent avoir la même vitesse en tout temps. Le régulateur va alors constamment regarder la différence de vitesse et de position entre les deux afin de les synchroniser.
+
+\subsection{Régulation des moteurs}
+
+Chaque moteur est réguler principalement en vitesse. Un timer active le PID à toutes les 50 ms afin de calculer la vitesse de chaque moteur et l’erreur par rapport à la commande. La sortie est un canal PWM pour chaque moteur qui est envoyé au pont H. Également, lorsqu’une commande $move_straight()$ est appelée, un autre PID cette fois en position est activée afin de synchroniser les moteurs qui ont la même orientation. Le régulateur stop automatiquement les moteurs lorsque la distance à parcourir est terminée. L'acquisition de la position des moteurs avec les encodeurs se fait directement à l’aide de canaux d’interruption qui incrémentent chacun un compteur. La résolution utilisé des encodeurs est de 1600 ticks par révolution de roue, soit le front montant d’un seul canal par encodeur.
