@@ -92,3 +92,7 @@ La tension des condensateurs est également lue par une entrée ADC du microcont
 \subsection{Contrôle de la caméra}
 
 La caméra embarquée peut tourner sur deux axes à l’aide de servomoteurs HS-422. Ces moteurs sont contrôlés par un Pololu Maestro. Ce microcontrôleur est alimenté par une source de tension 5V, qui permet également d’alimenter les deux moteurs. Le Pololu est commandé par des commandes séries provenant de l’ordinateur de base, par un câble USB. Afin de faciliter le contrôle des caméras, une librairie python utilisant PySerial a été conçue. Premièrement, elle reconnait automatiquement sur quel port USB se trouve le Pololu, puis permet de bouger les caméras avec des commandes simples permettant de bouger la caméra verticalement et horizontalement. La caméra peut être bouger de 180° sur l’axe horizontal et de 90° sur l’angle vertical : il est inutile de regarder vers le haut. Les commandes ont une précision de 1000 unités par quart de tours, donc de 0.09°. La librairie python permet également de définir une vitesse de mouvement horizontale et verticale, s’il est nécessaire de faire un mouvement de balayage lent. 
+
+\input{tex/electroaimant_avancement.tex}
+\input{tex/alimentation.tex}
+\input{tex/circuit_induction.tex}
