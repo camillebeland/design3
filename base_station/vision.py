@@ -2,43 +2,47 @@ import cv2
 import numpy as np
 
 class Image:
-    def __init__(self, image_src, image_format='bgr'):
+    def __init__(self, image_src, image_format='bgr',  open_cv=cv2):
+        self.__open_cv = open_cv
         self.__image = image_src
         self.__image_format = image_format
 
+    def read_image(self):
+        return self.__image
+
     def filter_median_blur(self, kernel_size=5):
-        filtered_image = cv2.medianBlur(self.__image, kernel_size)
+        filtered_image = self.__open_cv.medianBlur(self.__image, kernel_size)
         return Image(filtered_image)
 
     def filter_gaussian_blur(self, kernel_size, sigmaX):
-        filtered_image = cv2.GaussianBlur(self.__image, kernel_size, sigmaX=sigmaX)
+        filtered_image = self.__open_cv.GaussianBlur(self.__image, kernel_size, sigmaX=sigmaX)
         return Image(filtered_image)
 
     def filter_by_color(self, hsv_range):
         image = self.__in_hsv()
-        masked_image = cv2.inRange(image.__image, hsv_range[0], hsv_range[1])
+        masked_image = self.__open_cv.inRange(image.__image, hsv_range[0], hsv_range[1])
         return Image(masked_image, 'gray')
 
     def canny(self, threshold1, threshold2, apertureSize):
-        canny_image = cv2.Canny(self.__image, threshold1, threshold2, apertureSize)
+        canny_image = self.__open_cv.Canny(self.__image, threshold1, threshold2, apertureSize)
         return Image(canny_image, 'gray')
 
     def dilate(self, kernel_size, iterations):
         kernel = np.ones((kernel_size, kernel_size), np.uint8)
-        dilated_image = cv2.dilate(self.__image, kernel, iterations = iterations)
+        dilated_image = self.__open_cv.dilate(self.__image, kernel, iterations = iterations)
         return Image(dilated_image, 'gray')
 
     def erode(self, kernel_size, iterations):
         kernel = np.ones((kernel_size, kernel_size), np.uint8)
-        eroded_image = cv2.erode(self.__image, kernel, iterations=iterations)
+        eroded_image = self.__open_cv.erode(self.__image, kernel, iterations=iterations)
         return Image(eroded_image, 'gray')
 
     def find_contours(self):
-        img, contours, hierarchy = cv2.findContours(self.__image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        img, contours, hierarchy = self.__open_cv.findContours(self.__image, self.__open_cv.RETR_LIST, self.__open_cv.CHAIN_APPROX_SIMPLE)
         return contours
 
     def find_hough_circles(self, min_distance, param1, param2, min_radius, max_radius):
-        return cv2.HoughCircles(self.__image, cv2.HOUGH_GRADIENT, 1, min_distance, param1=param1, param2=param2, minRadius=min_radius, maxRadius=max_radius)
+        return self.__open_cv.HoughCircles(self.__image, self.__open_cv.HOUGH_GRADIENT, 1, min_distance, param1=param1, param2=param2, minRadius=min_radius, maxRadius=max_radius)
 
     def __in_hsv(self):
             converted_image = convert[self.__image_format]['hsv'](self.__image)
@@ -50,12 +54,12 @@ class Image:
 
     def show(self):
         image = self.__in_bgr()
-        cv2.imshow('Image',image.__image)
-        cv2.waitKey(0)
+        self.__open_cv.imshow('Image',image.__image)
+        self.__open_cv.waitKey(0)
 
     def draw_contours(self, contours):
         img = np.copy(self.__image)
-        cv2.drawContours(img, contours, -1, (255,0,0), 3)
+        self.__open_cv.drawContours(img, contours, -1, (255,0,0), 3)
         return Image(img)
 
     def draw_circles(self, circles):
@@ -63,7 +67,7 @@ class Image:
         for circle in circles:
             center = (int(circle['x']), int(circle['y']))
             radius = int(circle['radius'])
-            cv2.circle(img, center, radius, (0,255,255),3)
+            self.__open_cv.circle(img, center, radius, (0,255,255),3)
         return Image(img)
 
 class ShapeDetector:
