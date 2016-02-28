@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from functools import reduce
 class Image:
     def __init__(self, image_src, image_format='bgr',  open_cv=cv2):
         self.__open_cv = open_cv
@@ -59,7 +59,10 @@ class Image:
 
     def draw_contours(self, contours):
         img = np.copy(self.__image)
-        self.__open_cv.drawContours(img, contours, -1, (255,0,0), 3)
+        for contour in contours:
+            center = (int(contour['x']), int(contour['y']))
+            radius = 10
+            self.__open_cv.circle(img, center, radius, (255,0,255),3)
         return Image(img)
 
     def draw_circles(self, circles):
@@ -122,7 +125,23 @@ class ShapeDetector:
                     .find_contours())
 
 
-        return (list(filter(lambda x: len(x) == edges[polygon], map(approxPolygon, contours))))
+        return (
+            list(
+                map(
+                    lambda x : {
+                        'x' : (reduce(np.add, x)/edges[polygon])[0],
+                        'y' : (reduce(np.add, x)/edges[polygon])[1]
+                    },
+                    map(
+                        lambda x : x[:,0],
+                        filter(
+                            lambda x: len(x) == edges[polygon],
+                            map(approxPolygon, contours)
+                        )
+                    )
+                )
+            )
+        )
 
 convert = {
     'bgr' : {
