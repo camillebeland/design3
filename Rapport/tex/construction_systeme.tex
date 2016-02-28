@@ -1,2 +1,14 @@
 \chapter{Avancement de la construction système}
 
+\section{Système de vision}
+
+Le framework Open CV est utilisé pour appliquer des filtres et des traitements permettant de détecter le contenu de la carte soit 
+les îles, les trésors, la station de recharge et la position du robot. La création de fonctions utilitaires de type pipe and filter 
+permet de tester plus facilement quels filtres sont efficaces et à quel moment, car l'image initiale n'est pas modifiée dans le 
+traitement. Il est donc possible de voir l'effet de chaque filtre à tout moment. De plus, nous avons créé une configuration 
+pour les paramètres qui permet de les modifier et de facilement détecter lesquels sont les plus efficaces. Éventuellement, des
+tests automatisés seront réalisés avec un grand échantillon d'images afin d'ajouter de la robustesse à nos algorithmes de détection.
+Une fois la position des objets détectée, elle est envoyée au robot qui crée la grille utilisée dans la recherche de chemin.
+
+
+La caméra monde est utilisée au début pour détecter les objets de la carte et construire la grille pour la recherche de chemin. Elle envoie aussi à intervalle régulier la position du robot au robot. La caméra embarquée, quant à elle, est utilisée pour avoir des précisions sur le positionnement précis du robot près de la station de recharge, avant de ramasser le trésor et avant de déposer le trésor.
