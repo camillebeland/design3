@@ -96,7 +96,7 @@ class ShapeDetector:
             return []
 
 
-    def find_polygon_color(self, image, polygon, color, parameters):
+    def find_polygon_color(self, image, polygon, color, parameters, opencv=cv2):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
         gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
         gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
@@ -110,7 +110,7 @@ class ShapeDetector:
         polygonal_approximation_error = parameters['polygonal_approximation_error']
 
         def approxPolygon(contour):
-            return cv2.approxPolyDP(contour, polygonal_approximation_error , True)
+            return opencv.approxPolyDP(contour, polygonal_approximation_error , True)
 
         contours = (image
                     .filter_median_blur(median_blur_kernel_size)
