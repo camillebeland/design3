@@ -1,5 +1,19 @@
 \chapter{Description des propriétés fonctionnelles}
-La Description des propriétés fonctionnelles (DPF), représenté par la figure \ref{fig:dpf}, permet de visualiser les exigences du client ainsi que de les associer aux fonctionnalités du produit.
+La Description des propriétés fonctionnelles (DPF), représenté par la figure \ref{fig:dpf}, permet de visualiser les exigences du client ainsi que de les associer aux fonctionnalités du produit. Les relations entre les exigences et les fonctionnalités sont représentées par des chiffres de 1 (faible) à 5 (élevé).
+
+
+
+\begin{landscape}
+  %\begin{center}
+    \begin{figure}[h]
+      \caption{Description des propriétés fonctionnelles}
+      \label{fig:dpf}
+      %\centering
+      \includegraphics[scale=0.82]{resources/dpf.pdf}
+    \end{figure}
+  %\end{center}
+\end{landscape}
+
 
 \section{Détails des exigences}
 
@@ -9,6 +23,9 @@ Plusieurs cycles de jeu peuvent être effectués durant les 10 minutes prescrits
 
 \paragraph{Recharge de l'électro-aimant par induction:}
 Le condensateur qui va contenir la charge que l'électro-aimant va utiliser doit être rechargé par induction à la station de recharge.
+
+\paragraph{Autonomie énergétique:}
+Le robot doit être entièrement autonome du point de vue énergétique, donc alimenté seulement par la batterie.
 
 \paragraph{Alimenter l'électro-aimant avec un condensateur:}
 L'électro-aimant doit absolument être alimenté par un condensateur et non par un autre type d'alimentation.
@@ -42,14 +59,14 @@ Après l'aquisition du code Manchester, une seule requête serveur peut être fa
 \paragraph{Le trésor doit être déposé sur la bonne île:}
 Le trésor doit être déposé sur l'île identifiée à l'aide du code Manchester et de la requête serveur.
 
-\paragraph{Le robot doit être alimenté par batterie:}
-Tous les systèmes montés sur le robot doivent être alimentés par un système de batterie embarqué sur le robot.
-
 \paragraph{Toutes les alimentations doivent être protégées par fusible et/ou interrupteur:}
 Afin de protéger tout l'équipement du robot, toutes les alimentation se doivent d'être protégées au minimum par un fusible ou un interrupteur.
 
-\paragraph{Autonomie complète du robot:}
+\paragraph{Autonomie dans le choix des actions:}
 Durant tout le cycle de jeu, le robot doit être entièrement autonome dans ses déplacements et actions. Des touchettes sont autorisées avec pénalités.
+
+\paragraph{Aucune configuration requise après mise sous tension:}
+Après le démarrage, le robot doit commencer le jeu de manière autonome.
 
 \paragraph{Rafraichissement minimal de l'interface utilisateur de 0.2 Hz:}
 L'interface utilisateur affichant par exemple la position du robot, les trajets planifiés ainsi que le voltage du condensateur doit être rafraichit au minimum toutes les 5 secondes.
@@ -148,14 +165,3 @@ Aucun breadboard n'est utilisé, tous les circuits sont fait sur PCB.
 \subsection{Respecter le budget}
 Toutes les composantes du robot respecte le budget total de 300\$.
 
-
-\begin{landscape}
-  \begin{center}
-    \begin{figure}[h]
-      \caption{Description des propriétés fonctionnelles}
-      \label{fig:dpf}
-      \centering
-      \includegraphics[scale=0.85]{resources/dpf.pdf}
-    \end{figure}
-  \end{center}
-\end{landscape}
