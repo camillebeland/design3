@@ -24,7 +24,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     var robotSquareWidth = 30;
     var robotSquareHeight = 30;
     var robotSquare = new createjs.Shape();
-    robotSquare.graphics.beginFill("red").drawRect(0, 0, robotSquareWidth, robotSquareHeight);
+    robotSquare.graphics.beginFill("blue").drawRect(0, 0, robotSquareWidth, robotSquareHeight);
     robotSquare.regX = robotSquareWidth / 2;
     robotSquare.regY = robotSquareHeight / 2;
 
