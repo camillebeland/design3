@@ -174,17 +174,3 @@ edges = {
     'square' : 4,
     'pentagon' : 5,
 }
-
-default_camille_polygon_params = {
-    'median_blur_kernel_size' : 5,
-    'gaussian_blur_kernel_size' : 5,
-    'gaussian_blur_sigma_x' : 0,
-    'canny_threshold1' : 0,
-    'canny_threshold2' : 50,
-    'canny_aperture_size' : 5,
-    'dilate_kernel_size' : 51,
-    'dilate_ierations' : 1,
-    'erode_kernel_size' : 51,
-    'erode_iterations' : 1,
-    'polygonal_approximation_error' : 4
-}

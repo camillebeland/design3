@@ -18,7 +18,7 @@ if __name__ == '__main__':
     port = config.getint('robot', 'port')
     wheelsconfig = config.get('robot', 'wheels')
 
-    worldmap = Map(600,400)
+    worldmap = Map(960,550)
     if(wheelsconfig == "simulation"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     #mesh hardcode
-    cell = Cell(600,400,300,200)
+    cell = Cell(960,550,300,200)
     mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
     pathfinder = PathFinder(mesh)
     robot = Robot(wheels, worldmap,pathfinder)

@@ -39,4 +39,5 @@ def cell_to_json(cell):
 
 @app.route('/worldmap')
 def worldmap():
-    return jsonify({'islands' : worldmap['islands']})
+    return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
+                    'squares': worldmap['squares'], 'pentagons': worldmap['pentagons']})
