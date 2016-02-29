@@ -48,6 +48,6 @@ if __name__ == '__main__':
     cell = Cell(960,500,300,200)
     mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
     pathfinder = PathFinder(mesh)
-    robot = Robot(wheels, worldmap,pathfinder)
+    robot = Robot(wheels, worldmap, pathfinder)
     robot_web_controller.inject(robot, mesh)
     robot_web_controller.run(host, port)
