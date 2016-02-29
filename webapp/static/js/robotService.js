@@ -87,7 +87,6 @@ var Robot = angular.module('Robot', [])
       });
     };
       this.move_to = function(destination){
-          console.log(destination);
           $http({
               method: 'POST',
               url: 'http://' + ROBOT_HOST + '/robot/move_to',
