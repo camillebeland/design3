@@ -24,8 +24,8 @@ website.controller('homeController', ['$scope', function($scope) {
   window.ROBOT_HOST = "localhost:3000";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
-  window.CANVAS_HEIGHT = 400;
-  window.CANVAS_WIDTH = 600;
+  window.CANVAS_HEIGHT = 500;
+  window.CANVAS_WIDTH = 900;
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;

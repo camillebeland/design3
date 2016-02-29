@@ -13,9 +13,15 @@ class CameraService(object):
         self.stop()
         self.camera.release()
 
-    def get_frame(self):
-        ret, jpeg = self.opencv.imencode('.jpg', self.buffer.read())
-        return jpeg
+    def get_frame(self, format='bgr'):
+        while(self.buffer.read() == None):
+            pass
+        img = self.buffer.read()
+        if(format == 'bgr'):
+            return img
+        elif(format == 'jpeg'):
+            ret, jpeg = self.opencv.imencode('.jpg', img)
+            return jpeg
 
     def __start(self):
         print("starting")
