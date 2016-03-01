@@ -33,3 +33,7 @@ int CircularBuffer::read(){
 	readIndex = (readIndex+1)%bufferSize;
 	return toReturn;
 }
+
+CircularBuffer::~CircularBuffer(){
+	delete[] buffer;
+}

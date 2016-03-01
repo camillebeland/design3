@@ -10,12 +10,12 @@ CircularBuffer::CircularBuffer(int size){
 	bufferSize = size;
 }
 
-CircularBuffer::CircularBuffer(CircularBuffer copy){
-	buffer = new int[copy.size];
+CircularBuffer::CircularBuffer(CircularBuffer& copy){
+	buffer = new int[copy.bufferSize];
 	copy.read(buffer);
 	readIndex = 0;
 	writeIndex = 0;
-	bufferSize = copy.size;
+	bufferSize = copy.bufferSize;
 	
 }
 

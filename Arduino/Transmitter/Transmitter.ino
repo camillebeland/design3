@@ -10,10 +10,10 @@ void setup() {
 int readbuff[32];
 void loop() {
     manchester_read(readbuff);
-    /*or(int i =0 ; i<32; i++){
+    for(int i =0 ; i<32; i++){
       Serial.print(readbuff[i]);
     }
-    Serial.println(" - ");*/
+    Serial.println(" - ");
     serial_send_manchester(readbuff);
 }
     

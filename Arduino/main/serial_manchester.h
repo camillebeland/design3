@@ -12,9 +12,9 @@ void serial_manchester_init();
 //-------------------------------------
 
 
-bool serial_manchester_read();
-CircularBuffer get_manchester(int* ptr);
+void serial_manchester_read();
 char get_ASCII();
+int exp(int base, int power);
 // ----------------ISR ----------------
 
 

@@ -14,6 +14,6 @@ void serial_read(){
 	}
 }
 
-void serial_print(char toPrint){
-	Serial.print(toPrint);
+void serial_write(int toWrite){
+	Serial.write(toWrite);
 }

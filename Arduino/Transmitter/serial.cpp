@@ -6,6 +6,9 @@ void serial_init(){
 }
 
 int serial_send_manchester(int * ptr){
-	char * charptr = (char*)ptr;
-	Serial1.write(charptr, 32);
+	int * local = ptr;
+	for (int i = 0; i<32;i++){
+		Serial1.write(*local);
+		local++;
+	}
 }

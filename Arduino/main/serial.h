@@ -11,7 +11,7 @@ void serial_init();
 
 
 void serial_read();
-void serial_print(char toPrint);
+void serial_write(int toWrite);
 
 // ----------------ISR ----------------
 

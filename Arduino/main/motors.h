@@ -63,10 +63,11 @@ Arduino Pin	Register
 #define ROTATE_SPEED 350
 #define ROTATE_DIAMETER 1500//in TICKS, including slip
 
-#define KSI 0.005 // for delta motors
-#define KSP 0.01// for delta motors
-#define KI 0.02 // for speed PID
-#define KP 0.05 //for speed PID
+#define KSI 0.0075 // for delta motors
+#define KSP 0.015// for delta motors
+#define KI 0.03 // for speed PID
+#define KP 0.05
+ //for speed PID
 
 #define TICKS_PER_MM 15.34	 //  including slip 
 #define WHEEL_DIAMETERS 69.85 //mm

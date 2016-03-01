@@ -11,6 +11,7 @@ public:
 	void write(int data);
 	void read(int * ptr);
 	int read();
+	~CircularBuffer(); 
 private:
 	int *buffer;
 	int readIndex;

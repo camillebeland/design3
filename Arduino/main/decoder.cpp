@@ -25,7 +25,7 @@ void reset_decoder() {
   Timer4.stop();
   //Serial.print("RESET DECODER");
   //Serial.print(current_state);
-  current_state = IDLE;
+  //current_state = IDLE;
 }
 
 bool decode_byte(unsigned char byte) {
@@ -43,7 +43,7 @@ bool decode_byte(unsigned char byte) {
         current_state = FUNCTION;
         byte_decoded = true;
         param_count = 0;
-        //		Serial.println("Start CHAR detected");
+        Serial.println("Start CHAR detected");
         Timer4.start();
       }
       else {
@@ -56,7 +56,7 @@ bool decode_byte(unsigned char byte) {
       if (byte == 's') {
         current_function = STOP;
         current_state = END;
-        //	Serial.println("Function stop detected");
+        Serial.println("Function stop detected");
       }
       else if (byte == 'm' || byte == 'M') {
         current_function = MOVE;
@@ -119,7 +119,7 @@ bool decode_byte(unsigned char byte) {
       if (byte == END_CHAR) {
         parse_and_call();
         current_state =  IDLE;
-        //Serial.println("End CHAR detected");
+        Serial.println("End CHAR detected");
       }
       //cover errors
       else {
@@ -183,7 +183,7 @@ bool parse_and_call() {
       }
 	  break;
 	case MANCHESTER:
-		serial_print(get_ASCII());
+		serial_write((int)get_ASCII());
 		break;
 
     default:
