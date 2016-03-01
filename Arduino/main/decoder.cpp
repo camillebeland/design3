@@ -1,17 +1,15 @@
 #include "Arduino.h"
 #include "decoder.h"
 #include "motors.h"
-#include "TimerFour.h"
+#include "TimerOne.h"
 #include "serial_manchester.h"
 #include "serial.h"
 #include "magnet.h"
 
 void decoder_init() {
-  Timer4.initialize(TIMEOUT);
-  Timer4.attachInterrupt(TIMEOUT_ISR);
-  Timer4.stop();
+  Timer1.init(TIMEOUT_FREQ,TIMEOUT_ISR);
+  Timer1.stop();
 }
-
 
 State current_state = IDLE;
 Function current_function;
@@ -19,13 +17,9 @@ int speed_param = DEFAULT_SPEED;
 int param_count = 0;
 int params[4] = {0};
 
-// NO CIRCULAR BUFFER YET, RT PROCESSING
-
 void reset_decoder() {
-  Timer4.stop();
-  //Serial.print("RESET DECODER");
-  //Serial.print(current_state);
-  //current_state = IDLE;
+  Timer1.stop();
+  current_state = IDLE;
 }
 
 bool decode_byte(unsigned char byte) {
@@ -44,7 +38,7 @@ bool decode_byte(unsigned char byte) {
         byte_decoded = true;
         param_count = 0;
         Serial.println("Start CHAR detected");
-        Timer4.start();
+        Timer1.start();
       }
       else {
         byte_decoded = false;
@@ -127,7 +121,6 @@ bool decode_byte(unsigned char byte) {
       }
       reset_decoder();
       break;
-
 
     default:
       current_state = IDLE;
