@@ -1,5 +1,5 @@
-var RobotService = angular.module('RobotService', [])
-  .service('Robot', ['$http', function($http) {
+var Robot = angular.module('Robot', [])
+  .service('RobotService', ['$http', function($http) {
 
     this.up = function() {
       var delta = {
@@ -86,5 +86,24 @@ var RobotService = angular.module('RobotService', [])
         data: angle
       });
     };
+      this.move_to = function(destination){
+          $http({
+              method: 'POST',
+              url: 'http://' + ROBOT_HOST + '/robot/move_to',
+              data: destination
+          });
+      };
+  }])
+  .service('Mesh', ['$http', function($http) {
 
-  }]);
+    this.get= function(callbackFunction) {
+        $http({
+            method: 'GET',
+            url: 'http://' + ROBOT_HOST + '/mesh'
+        }).then(function successCallback(response) {
+            callbackFunction(response.data);
+        }, function errorCallback(response) {
+            console.log("error getting mesh from base station");
+        });
+    };
+}]);

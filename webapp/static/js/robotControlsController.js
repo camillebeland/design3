@@ -1,29 +1,29 @@
-website.controller('robotControlsController', ['$scope', '$http', 'Robot', function ($scope, $http, Robot) {
+website.controller('robotControlsController', ['$scope', '$http', 'RobotService', function ($scope, $http, RobotService) {
 
   function robotControlsController() {
   }
 
   $scope.robotUp = function() {
-    Robot.up();
+    RobotService.up();
   };
 
   $scope.robotDown = function() {
-    Robot.down();
+    RobotService.down();
   };
 
   $scope.robotLeft = function() {
-    Robot.left();
+    RobotService.left();
   };
 
   $scope.robotRight = function() {
-    Robot.right();
+    RobotService.right();
   };
 
   $scope.robotTurnLeft = function(){
-    Robot.turnLeft();
+    RobotService.turnLeft();
   };
 
   $scope.robotTurnRight = function(){
-    Robot.turnRight();
+    RobotService.turnRight();
   }
 }])

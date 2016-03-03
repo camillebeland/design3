@@ -1,4 +1,4 @@
-var website = angular.module('app', ['ui.router', 'RobotService']);
+var website = angular.module('app', ['ui.router', 'Robot', 'MapModule']);
 
 website.config(function($stateProvider, $urlRouterProvider) {
 
@@ -17,15 +17,15 @@ TabEnum = Object.freeze({
   OTHER: "OTHER"
 });
 
-website.controller('homeController', ['$scope', '$http', 'Robot', function($scope, $http, Robot) {
+website.controller('homeController', ['$scope', function($scope) {
   /*Webapp constants*/
-  window.BASE_STATION_HOST = "http://localhost:5000";
+  window.BASE_STATION_HOST = "localhost:5000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.ROBOT_HOST = "localhost:3000";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
-  window.CANVAS_HEIGHT = 400;
-  window.CANVAS_WIDTH = 600;
+  window.CANVAS_HEIGHT = 500;
+  window.CANVAS_WIDTH = 900;
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;

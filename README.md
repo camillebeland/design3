@@ -32,6 +32,14 @@ Dans un terminal:
 2.	Executer : ```pip install -r requirements.txt --upgrade``` pour mettre a jour les dépendances
 3.	Pour terminer, executer deactivate
 
+Étapes pour exécuter l'application
+1.	Executer : ```.\venv\Scripts\activate ``` pour activer l'environnement virtuel
+2.	Executer : ```pip install -r requirements.txt --upgrade``` pour mettre a jour les dépendances
+3.  Executer les fichier robo_app.py (serveur pour le robot), web_app.py (serveur des fichiers web)
+    et base_station_app.py (serveur de la base station). L'interface web est disponible par défaut à localhost:8080
+
+***Pour installer les dépendances pour la webapp voir le fichier webapp/README.md***
+
 Pour mettre à jour la liste de dépendances il faut écrire en UTF-8 les dépendances dans le fichier requirements.txt dans le format suivant :
 
 ```

@@ -1,13 +1,18 @@
 import cv2
 
-
 class MockCameraService(object):
     def __init__(self):
         image = cv2.imread("base_station/mock_image.jpg")
-        ret, jpeg = cv2.imencode('.jpg', image)
-        self.image_bytes = jpeg
+        self.image = image
 
 
-    def get_frame(self):
-        return self.image_bytes
+    def get_frame(self, format='bgr'):
+        img  = self.image
+        if(format == 'bgr'):
+            return img
+        elif(format == 'jpeg'):
+            ret, jpeg = cv2.imencode('.jpg', img)
+            return jpeg
+
+
 

@@ -16,6 +16,6 @@ body {
 .nav-tabs a {
   color: black;
 }
-#controlButtons{
+.optionPanelControls{
   padding: 10px;
 }
