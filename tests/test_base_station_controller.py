@@ -2,6 +2,7 @@ from nose.tools import *
 import base_station.base_station_web_controller as base_station
 from unittest.mock import *
 from base_station.base_station_web_controller import run
+from base_station.base_station_web_controller import mesh
 
 
 class TestBaseStationWebController():
@@ -33,4 +34,3 @@ class TestBaseStationWebController():
 
         #Then
         mock_logger.info.assert_any_call("Starting the base station app at "+str(a_port))
-

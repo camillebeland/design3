@@ -1,6 +1,7 @@
 from flask import Flask, Response, jsonify
 from flask_cors import CORS
 import time
+import base_station.logger as logger
 from base_station.logger import Logger
 
 app = Flask(__name__)
@@ -42,6 +43,7 @@ def mesh():
 
 
 def mesh_to_json(mesh):
+    print(jsonify)
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
 
 
