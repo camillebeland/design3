@@ -1,7 +1,7 @@
 from flask import Flask, Response, jsonify
 from flask_cors import CORS
 import time
-import base_station.logger as logger
+from base_station.logger import Logger
 
 app = Flask(__name__)
 CORS(app)
@@ -12,10 +12,11 @@ def inject_mock_map(mock_app):
     app = mock_app
 
 def inject(a_camera, a_refresh_time, the_worldmap):
-    global camera, refresh_time, worldmap
+    global camera, refresh_time, worldmap, logger
     camera = a_camera
     refresh_time = a_refresh_time
     worldmap = the_worldmap
+    logger = Logger()
 
 
 def generate_frame(camera, refresh_time):
