@@ -1,11 +1,12 @@
 import logging
 
-logging.basicConfig(filename='system.log',level=logging.DEBUG)
 
+class Logger:
+    def __init__(self):
+        logging.basicConfig(filename='system.log',level=logging.DEBUG)
 
-def warning(message):
-    logging.warning(message)
+    def warning(self, message):
+        logging.warning(message)
 
-
-def info(message):
-    logging.info(message)
+    def info(self, message):
+        logging.info(message)
