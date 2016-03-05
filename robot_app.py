@@ -10,6 +10,7 @@ from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.robot import Robot
 from robot.map import Map
 from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
+import urllib
 
 if __name__ == '__main__':
     config = configuration.getconfig()
@@ -37,7 +38,7 @@ if __name__ == '__main__':
     elif(wheelsconfig == "usb-arduino"):
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
-        arduino_baudrate = arduino_baudrate('robot', 'baudrate')
+        arduino_baudrate = config.getint('robot', 'baudrate')
         ports = lp.comports()
         arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduinoport)) != 0)
@@ -45,6 +46,16 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     #mesh hardcode
+    content = urllib.request.urlopen('http://localhost:5000/worldmap').read()
+    print(content)
+
+    def robot_fetch_islands(islands):
+        circles = islands.circles
+        pentagons = islands.pentagons
+        squares = islands.squares
+        triangles = islands.triangles
+        return circles, pentagons, squares, triangles
+    
     cell = Cell(960,500,300,200)
     mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
     pathfinder = PathFinder(mesh)
