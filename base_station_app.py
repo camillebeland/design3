@@ -2,6 +2,7 @@ from configuration import configuration
 from base_station.camera_service import CameraService
 from base_station.mock_camera_service import MockCameraService
 from base_station import base_station_web_controller
+from base_station import base_station_robot_controller
 import cv2
 
 from base_station.vision_service import VisionService
@@ -33,4 +34,5 @@ if __name__ == '__main__':
     worldmap = vision.build_map()
 
     base_station_web_controller.inject(camera, refresh_time, worldmap)
-    base_station_web_controller.run(host, port)
+    #base_station_web_controller.run(host, port)
+    base_station_robot_controller.inject(worldmap)

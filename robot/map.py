@@ -18,7 +18,7 @@ class Map:
         self._width = width
         self._height = height
         self._robotposition = np.array([width/2, height/2])
-        self._robotangle = 0;
+        self._robotangle = 0
 
     def set_robot_position(self, x, y):
         if(not self.__is_inside_boundaries(x,y)):
