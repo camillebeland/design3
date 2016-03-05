@@ -1,10 +1,9 @@
 /*
- *  Interrupt and PWM utilities for 16 bit Timer3 and on ATmega168/328/2560
+ *  Interrupt and PWM utilities for 16 bit Timer5 on ATmega640/1280/2560
  *  Original code by Jesse Tane for http://labs.ideo.com August 2008
  *  Modified March 2009 by Jérôme Despatis and Jesse Tane for ATmega328 support
  *  Modified June 2009 by Michael Polli and Jesse Tane to fix a bug in setPeriod() which caused the timer to stop
- *  Modified Oct 2009 by Dan Clemens to work with timer3 of the ATMega1280 or Arduino Mega
- *  Modified Feb 2014 by Davide "Deid" Ferrero to port the code from Timer3 to Timer4 on ATMega2560
+ *  Modified Aug 2011 by RobotFreak to work with timer5 of the ATMega640/1280/2560 or Arduino Mega/ADK
  *
  *  This is free software. You can redistribute it and/or modify it under
  *  the terms of Creative Commons Attribution 3.0 United States License. 
@@ -16,9 +15,9 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define RESOLUTION 65536    // Timer4 is 16 bit
+#define RESOLUTION 65536    // Timer5 is 16 bit
 
-class TimerFour
+class TimerFive
 {
   public:
   
@@ -40,4 +39,4 @@ class TimerFour
     void (*isrCallback)();
 };
 
-extern TimerFour Timer4;
+extern TimerFive Timer5;

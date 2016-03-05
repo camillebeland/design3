@@ -5,15 +5,15 @@ void setup() {
   manchester_init();
   serial_init();
   Serial.begin(115200);
-  delay(1000);
+  //delay(1000);
 }
 int readbuff[32];
 void loop() {
     manchester_read(readbuff);
-    for(int i =0 ; i<32; i++){
+    /*for(int i =0 ; i<32; i++){
       Serial.print(readbuff[i]);
     }
     Serial.println(" - ");
-    serial_send_manchester(readbuff);
+*/    serial_send_manchester(readbuff);
 }
     

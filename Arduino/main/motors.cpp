@@ -46,8 +46,7 @@ void motors_init(){
 	analogWrite(OUT_MOTOR_D, 1);	
 	
 	//setup timer3 for interrupt every DT (in microseconds);
-	Timer3.initialize(DT/2);
-	Timer3.attachInterrupt(PID_motors_ISR);
+	Timer3.init(FREQ, PID_motors_ISR);
 	Timer3.stop();
 	
 }
@@ -92,7 +91,7 @@ bool straight_Y = false;
 
 int PID_ISR_count = 0;
 int last_PID_ISR_count = PID_ISR_count;
-int last_millis = millis();
+
 //-------------------------------------------------------------------------------
 
 //Configure the motor to start with the parameters previously set, starts PID
@@ -375,7 +374,7 @@ void rotate(Direction direction, int angle){
 		wanted_polarity = false;
 	}
 	
-	int ticks = ROTATE_DIAMETER*PI*(float(angle)/360.0);
+	int ticks = TICKS_PER_MM*ROTATE_DIAMETER*PI*(float(angle)/360.0);
 	set_motor(OUT_MOTOR_A, ticks, wanted_polarity, ROTATE_SPEED);
 	set_motor(OUT_MOTOR_B, ticks, wanted_polarity, ROTATE_SPEED);
 	set_motor(OUT_MOTOR_C, ticks, wanted_polarity, ROTATE_SPEED);
@@ -394,12 +393,13 @@ void PID_motors(){
 	if (last_PID_ISR_count != PID_ISR_count){
 		
 		last_PID_ISR_count = PID_ISR_count;
-		//get speed of each wheel
-		int dt = (millis() - last_millis)*1000;		last_millis = millis();
-		actual_speed_A = 1000000*(last_tick_remaining_A - tick_remaining_A)/(DT);
-		actual_speed_B = 1000000*(last_tick_remaining_B - tick_remaining_B)/(DT);
-		actual_speed_C = 1000000*(last_tick_remaining_C - tick_remaining_C)/(DT);
-		actual_speed_D = 1000000*(last_tick_remaining_D - tick_remaining_D)/(DT);
+		//last_millis = millis();
+		
+		//get speed of each wheel (ticks/sec)
+		actual_speed_A = FREQ*(last_tick_remaining_A - tick_remaining_A);
+		actual_speed_B = FREQ*(last_tick_remaining_B - tick_remaining_B);
+		actual_speed_C = FREQ*(last_tick_remaining_C - tick_remaining_C);
+		actual_speed_D = FREQ*(last_tick_remaining_D - tick_remaining_D);
 		
 		last_tick_remaining_A = tick_remaining_A;
 		last_tick_remaining_B = tick_remaining_B;

@@ -37,7 +37,7 @@ bool decode_byte(unsigned char byte) {
         current_state = FUNCTION;
         byte_decoded = true;
         param_count = 0;
-        Serial.println("Start CHAR detected");
+        //Serial.println("Start CHAR detected");
         Timer1.start();
       }
       else {
@@ -50,7 +50,7 @@ bool decode_byte(unsigned char byte) {
       if (byte == 's') {
         current_function = STOP;
         current_state = END;
-        Serial.println("Function stop detected");
+        //Serial.println("Function stop detected");
       }
       else if (byte == 'm' || byte == 'M') {
         current_function = MOVE;
@@ -113,7 +113,7 @@ bool decode_byte(unsigned char byte) {
       if (byte == END_CHAR) {
         parse_and_call();
         current_state =  IDLE;
-        Serial.println("End CHAR detected");
+        //Serial.println("End CHAR detected");
       }
       //cover errors
       else {

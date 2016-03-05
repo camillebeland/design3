@@ -3,7 +3,7 @@
 
 #include "CircularBuffer.h"
 
-#define BAUD_RATE_MANCHESTER 1200
+#define BAUD_RATE_MANCHESTER 600
 
 // -------------SETUP ----------------
 void serial_manchester_init();

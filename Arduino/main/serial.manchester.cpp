@@ -12,12 +12,17 @@ void serial_manchester_init(){
 }
 
 void serial_manchester_read(){
-	int incomming_byte = -1;
-	if (Serial3.available() > 0){
+	char incomming_byte = -1;
+	if(Serial3.available() > 4){
+		for (int y = 0; y < 4; y++){
 		incomming_byte = Serial3.read();
-		//Serial.println(incomming_byte);
-		if (incomming_byte != -1){
-			buff.write(incomming_byte);
+		if (incomming_byte != -1)
+		{
+			for (int i= 0; i< 8; i++)
+			{
+				buff.write((incomming_byte & (1<<i)) >> i);
+			}
+		}
 		}
 	}
 }
@@ -28,7 +33,11 @@ char get_ASCII() {
 	int sequence_count = 0;
 	int temp[32];
 	buff.read(temp);
-	char ASCII = 0;
+	Serial.println(" ");
+	for (int i = 0; i< 32;i++){
+		Serial.print(temp[i]);
+	}
+	
 	int read = 0;
 	int toShift = 0;
 	for (int i = 0; i < max_count; i++){
@@ -36,16 +45,13 @@ char get_ASCII() {
 		read++;
 		if (start_sequence[sequence_count] == lol){
 			sequence_count++;
-			
 		}
 		else{
-
 			sequence_count = 0;
 			read = toShift++; 
 		}
 		if (sequence_count == 18){
-			
-			
+			ASCII = 0;
 			for (int y = 0; y <=6;y++){
 				int bitA = temp[read%32]; read++;
 				int bitB = temp[read%32];

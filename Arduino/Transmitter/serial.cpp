@@ -7,8 +7,11 @@ void serial_init(){
 
 int serial_send_manchester(int * ptr){
 	int * local = ptr;
+	char chars[4] = {0,0,0,0};
 	for (int i = 0; i<32;i++){
-		Serial1.write(*local);
+		chars[i/8] |= *local << (i%8);
 		local++;
 	}
+	Serial1.write(chars, 4);
+	
 }

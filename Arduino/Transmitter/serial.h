@@ -2,7 +2,7 @@
 #define serial_h
 
 
-#define BAUD_RATE 1200
+#define BAUD_RATE 600
 
 // -------------SETUP ----------------
 void serial_init();
