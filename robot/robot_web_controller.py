@@ -1,5 +1,6 @@
 from flask import Flask
 from flask.ext.socketio import SocketIO
+from configuration import configuration
 from flask_cors import CORS
 from flask import request, jsonify
 
