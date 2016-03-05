@@ -5,9 +5,9 @@ def inject(the_worldmap):
     global worldmap
     worldmap = the_worldmap
 
+def run(port):
     socket_client = socket.socket()         # Create a socket object
     host = socket.gethostname()             # Get local machine name
-    port = 2000                             # Reserve a port for your service.
     socket_client.bind((host, port))        # Bind to the port
 
     socket_client.listen(5)                 # Now wait for client connection.
