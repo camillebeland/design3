@@ -1,18 +1,29 @@
 from tkinter import *
+from tkinter import filedialog
 from PIL import Image, ImageTk
 from tkinter.scrolledtext import ScrolledText
-
+from configparser import ConfigParser
+import cv2
+from base_station.camera_service import CameraService
 
 if __name__ == '__main__':
 
+    config = ConfigParser()
     root = Tk()
     main_panel = PanedWindow()
     main_panel.pack()
+    open_cv_camera = cv2.VideoCapture(0)
+    open_cv_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 900)
+    open_cv_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+    camera = CameraService(open_cv_camera,cv2)
+    assert(open_cv_camera.isOpened())
 
     img = Image.open('/home/adam/Projects/design3/base_station/mock_image.jpg')
     width, height = img.size
-    canvas = Canvas(main_panel, width=width, height=height)
-    main_panel.add(canvas)
+    left_panel = PanedWindow(main_panel, orient=VERTICAL)
+    main_panel.add(left_panel)
+    canvas = Canvas(left_panel, width=width, height=height)
+    left_panel.add(canvas)
     canvas.image = ImageTk.PhotoImage(img)
     canvas.create_image(0,0,image=canvas.image, anchor='nw')
 
@@ -23,187 +34,107 @@ if __name__ == '__main__':
     info.config(state=DISABLED)
     right_panel.add(info)
 
+    def picture_callback():
+        global img
+        img = camera.get_frame('jpeg')
+        canvas.image = ImageTk.PhotoImage(img)
+        canvas.create_image(0,0,image=canvas.image, anchor='nw')
+
+
+
+    picture_button = Button(left_panel, text='Take a photo!', command=picture_callback)
+    left_panel.add(picture_button)
+
+    class FilePanel:
+        def __init__(self, panel):
+            self.panel = panel
+
+        def write(self, string):
+            self.panel.config(state=NORMAL)
+            self.panel.insert(END, string)
+            self.panel.config(state=DISABLED)
+
+        def reset(self):
+            self.panel.config(state=NORMAL)
+            self.panel.delete(1.0, END)
+            self.panel.config(state=DISABLED)
+
+    filepanel = FilePanel(info)
+    config['map'] = {}
+    kindclicked = None
+
+    def kind_click(event):
+        x,y = event.x, event.y
+        global kindclicked
+        register(x,y, kindclicked)
+        canvas.unbind('<Button-1>')
+
+    def button_clicked(kind):
+        global kindclicked
+        kindclicked = kind
+        canvas.bind('<Button-1>', kind_click)
+
+    def show_map():
+        filepanel.reset()
+        config.write(filepanel)
 
     def register(x, y, kind):
-        info.config(state=NORMAL)
-        info.insert(END, kind +' : ({0},{1})\n'.format(x,y))
-        info.config(state=DISABLED)
-
-
-    def top_left_click(event):
-        x,y = event.x, event.y
-        register(x,y,'top left')
-        canvas.unbind('<Button-1>')
-
-    def bottom_right_click(event):
-        x,y = event.x, event.y
-        register(x,y,'bottom right')
-        canvas.unbind('<Button-1>')
+        config['map'][kind] = '({0},{1})'.format(x,y)
+        show_map()
 
     def top_left_scale_button_callback():
-        canvas.bind('<Button-1>', top_left_click)
+        button_clicked('top left')
 
     def bottom_right_scale_button_callback():
-        canvas.bind('<Button-1>', bottom_right_click)
-
-
-
-    def triangle_green_click(event):
-        x,y = event.x, event.y
-        register(x,y,'green triangle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('bottom right')
 
     def triangle_green_button_callback():
-        canvas.bind('<Button-1>', triangle_green_click)
-
-    def square_green_click(event):
-        x,y = event.x, event.y
-        register(x,y,'green square')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('green triangle')
 
     def square_green_button_callback():
-        canvas.bind('<Button-1>', square_green_click)
-
-
-    def pentagon_green_click(event):
-        x,y = event.x, event.y
-        register(x,y,'green pentagon')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('green square')
 
     def pentagon_green_button_callback():
-        canvas.bind('<Button-1>', pentagon_green_click)
-
-
-    def circle_green_click(event):
-        x,y = event.x, event.y
-        register(x,y,'green circle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('green pentagon')
 
     def circle_green_button_callback():
-        canvas.bind('<Button-1>', circle_green_click)
-
-
-    def triangle_blue_click(event):
-        x,y = event.x, event.y
-        register(x,y,'blue triangle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('green circle')
 
     def triangle_blue_button_callback():
-        canvas.bind('<Button-1>', triangle_blue_click)
-
-    def square_blue_click(event):
-        x,y = event.x, event.y
-        register(x,y,'blue square')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('blue triangle')
 
     def square_blue_button_callback():
-        canvas.bind('<Button-1>', square_blue_click)
-
-
-    def pentagon_blue_click(event):
-        x,y = event.x, event.y
-        register(x,y,'blue pentagon')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('blue square')
 
     def pentagon_blue_button_callback():
-        canvas.bind('<Button-1>', pentagon_blue_click)
-
-
-    def circle_blue_click(event):
-        x,y = event.x, event.y
-        register(x,y,'blue circle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('blue pentagon')
 
     def circle_blue_button_callback():
-        canvas.bind('<Button-1>', circle_blue_click)
-
-
-    def triangle_yellow_click(event):
-        x,y = event.x, event.y
-        register(x,y,'yellow triangle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('blue circle')
 
     def triangle_yellow_button_callback():
-        canvas.bind('<Button-1>', triangle_yellow_click)
-
-    def square_yellow_click(event):
-        x,y = event.x, event.y
-        register(x,y,'yellow square')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('yellow triangle')
 
     def square_yellow_button_callback():
-        canvas.bind('<Button-1>', square_yellow_click)
-
-
-    def pentagon_yellow_click(event):
-        x,y = event.x, event.y
-        register(x,y,'yellow pentagon')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('yellow square')
 
     def pentagon_yellow_button_callback():
-        canvas.bind('<Button-1>', pentagon_yellow_click)
-
-
-    def circle_yellow_click(event):
-        x,y = event.x, event.y
-        register(x,y,'yellow circle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('yellow pentagon')
 
     def circle_yellow_button_callback():
-        canvas.bind('<Button-1>', circle_yellow_click)
-
-
-    def triangle_red_click(event):
-        x,y = event.x, event.y
-        register(x,y,'red triangle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('yellow circle')
 
     def triangle_red_button_callback():
-        canvas.bind('<Button-1>', triangle_red_click)
-
-    def square_red_click(event):
-        x,y = event.x, event.y
-        register(x,y,'red square')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('red triangle')
 
     def square_red_button_callback():
-        canvas.bind('<Button-1>', square_red_click)
-
-
-    def pentagon_red_click(event):
-        x,y = event.x, event.y
-        register(x,y,'red pentagon')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('red square')
 
     def pentagon_red_button_callback():
-        canvas.bind('<Button-1>', pentagon_red_click)
-
-
-    def circle_red_click(event):
-        x,y = event.x, event.y
-        register(x,y,'red circle')
-        canvas.unbind('<Button-1>')
-
+        button_clicked('red pentagon')
 
     def circle_red_button_callback():
-        canvas.bind('<Button-1>', circle_red_click)
-
-
+        button_clicked('red circle')
 
     button_panel = PanedWindow(right_panel, orient=VERTICAL)
     right_panel.add(button_panel)
@@ -282,9 +213,21 @@ if __name__ == '__main__':
     yellow_islands_panel_button.add(circle_yellow_island_button)
 
     def save_callback():
-        print(info.get(1.0, END))
+        file = filedialog.asksaveasfile(defaultextension=".txt")
+        config.write(file)
+        file.close()
 
+    def remove_callback():
+        global kindclicked
+        if(kindclicked is not None):
+            config.remove_option('map', kindclicked)
+        show_map()
+
+    remove_button = Button(right_panel, text='Remove', command=remove_callback)
+    right_panel.add(remove_button)
     save_button = Button(right_panel, text='Save', command=save_callback)
+
     right_panel.add(save_button)
+    show_map()
     root.mainloop()
 
