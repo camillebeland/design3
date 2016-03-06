@@ -11,7 +11,7 @@ class Movement:
         self.__moving = False
         self.__loop_time = 1
         self.__distance = 20
-        self.__http_service = http_service
+        self.__logger_service = http_service
 
     def move_to(self, final_destination):
         self.__moving = False
@@ -21,7 +21,7 @@ class Movement:
         self.__thread.start()
 
     def move_to_thread(self, final_destination):
-        self.__http_service.log_info("robot asked to move to "+str(final_destination))
+        self.__logger_service.log_info("robot asked to move to " + final_destination)
         while self.__moving and distance(self.__sense.get_robot_position(), final_destination) > self.__distance:
             # sense
             position = self.__sense.get_robot_position()
