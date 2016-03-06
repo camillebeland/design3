@@ -4,7 +4,7 @@ import logging
 class Logger:
     def __init__(self):
         self.logging = logging
-        self.logging.basicConfig(filename='system.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
+        self.logging.basicConfig(filename='system.log', filemode='w', level=logging.DEBUG, format='%(asctime)s %(message)s')
 
     def warning(self, message):
         self.logging.warning(message)
