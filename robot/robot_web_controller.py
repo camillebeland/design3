@@ -15,8 +15,6 @@ def inject(a_robot, a_mesh):
 
 def run(host, port):
     socket_io.run(app, host=host, port=port)
-    socket_io.emit('fetch_islands')
-
 
 @app.route('/robot/move', methods=['POST'])
 def robot_move():

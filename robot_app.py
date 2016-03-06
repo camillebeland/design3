@@ -9,8 +9,8 @@ from robot.wheels_usb_commands import WheelsUsbCommands
 
 from robot.robot import Robot
 from robot.map import Map
-from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
-import urllib
+from pathfinding.pathfinding import PathFinder
+from robot.islands import Islands
 
 if __name__ == '__main__':
     config = configuration.getconfig()
@@ -45,19 +45,8 @@ if __name__ == '__main__':
         serialport = serial.Serial(port=arduinoport[0].device,baudrate=arduino_baudrate)
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
-    #mesh hardcode
-    content = urllib.request.urlopen('http://localhost:5000/worldmap').read()
-    print(content)
-
-    def robot_fetch_islands(islands):
-        circles = islands.circles
-        pentagons = islands.pentagons
-        squares = islands.squares
-        triangles = islands.triangles
-        return circles, pentagons, squares, triangles
-    
-    cell = Cell(960,500,300,200)
-    mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
+    islands = Islands()
+    mesh = islands.create_mesh_with_islands()
     pathfinder = PathFinder(mesh)
     robot = Robot(wheels, worldmap, pathfinder)
     robot_web_controller.inject(robot, mesh)
