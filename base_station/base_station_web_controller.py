@@ -1,8 +1,9 @@
-from flask import Flask, Response, jsonify
+from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 import time
 import base_station.logger as logger
 from base_station.logger import Logger
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -11,6 +12,7 @@ CORS(app)
 def inject_mock_map(mock_app):
     global app
     app = mock_app
+
 
 def inject(a_camera, a_refresh_time, the_worldmap):
     global camera, refresh_time, worldmap, logger
@@ -37,20 +39,17 @@ def video_feed():
     return Response(generate_frame(camera, refresh_time), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-@app.route('/mesh')
-def mesh():
-    return jsonify(mesh_to_json(mesh))
-
-
-def mesh_to_json(mesh):
-    print(jsonify)
-    return {'cells': list(map(cell_to_json, mesh.get_cells()))}
-
-
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+
 
 @app.route('/worldmap')
 def worldmap():
     return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons']})
+
+
+@app.route('/logger/info', methods=['POST'])
+def log_info():
+    logger.info(request.json['message'])
+    return "OK"

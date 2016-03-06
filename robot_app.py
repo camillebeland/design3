@@ -10,6 +10,7 @@ from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.robot import Robot
 from robot.map import Map
 from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
+from robot.robot_service import RobotService
 
 if __name__ == '__main__':
     config = configuration.getconfig()
@@ -17,6 +18,9 @@ if __name__ == '__main__':
     host = config.get('robot', 'host')
     port = config.getint('robot', 'port')
     wheelsconfig = config.get('robot', 'wheels')
+    base_station_host = config.get('baseapp', 'host')
+    base_station_port = config.get('baseapp', 'port')
+    base_station_address = "http://" + base_station_host + ":" + base_station_port
 
     worldmap = Map(900,500)
     if(wheelsconfig == "simulation"):
@@ -48,6 +52,7 @@ if __name__ == '__main__':
     cell = Cell(960,500,300,200)
     mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
     pathfinder = PathFinder(mesh)
-    robot = Robot(wheels, worldmap, pathfinder)
+    robot_service = RobotService(base_station_address)
+    robot = Robot(wheels, worldmap, pathfinder, robot_service)
     robot_web_controller.inject(robot, mesh)
     robot_web_controller.run(host, port)
