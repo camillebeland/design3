@@ -1,10 +1,14 @@
-import urllib, json
-from pathfinding.pathfinding import Cell, Mesh, polygon
+import requests
+from pathfinding.pathfinding import polygon
 
 class IslandsService:
     def __init__(self):
-        islands_string = urllib.request.urlopen('http://localhost:5000/worldmap').read()
-        self.islands = json.loads(islands_string.decode('utf-8'))
+        self.islands = []
+        try:
+            request = requests.get('http://localhost:5000/worldmap')
+            self.islands = request.json()
+        except requests.exceptions.RequestException as e:
+            print(e)
         self.polygons = []
         self.__robot_fetch_islands__()
         self.__create_polygon_list__()
