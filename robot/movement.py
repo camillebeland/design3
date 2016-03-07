@@ -21,7 +21,7 @@ class Movement:
         self.__thread.start()
 
     def move_to_thread(self, final_destination):
-        self.__logger_service.log_info("robot asked to move to " + final_destination)
+        self.__logger_service.log_info("robot asked to move to " + str(final_destination))
         while self.__moving and distance(self.__sense.get_robot_position(), final_destination) > self.__distance:
             # sense
             position = self.__sense.get_robot_position()
