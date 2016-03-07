@@ -49,7 +49,7 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     #mesh hardcode
-    cell = Cell(960,500,300,200)
+    cell = Cell(900,500,450,250)
     mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
     pathfinder = PathFinder(mesh)
     robot_service = RobotService(base_station_address)
