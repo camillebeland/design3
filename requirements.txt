@@ -1,9 +1,9 @@
 coverage==4.0.3
 decorator==4.0.9
-eventlet==0.18.0
 Flask==0.10.1
 Flask-Cors==2.1.2
 Flask-SocketIO==2.0
+eventlet==0.18.3
 greenlet==0.4.9
 itsdangerous==0.24
 Jinja2==2.8
