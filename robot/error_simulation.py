@@ -2,7 +2,11 @@ from robot.simulation_robot import SimulationWheels
 import random
 
 class NoisyWheels(SimulationWheels):
+    def __init__(self, worldmap, refresh_time, wheels_velocity, noise):
+        super().__init__(worldmap, refresh_time = refresh_time, wheels_velocity = wheels_velocity)
+        self.__noise = noise
+
     def move(self, x_pos, y_pos):
-        noisy_x = x_pos + random.randint(-20,20)
-        noisy_y = y_pos + random.randint(-20,20)
+        noisy_x = x_pos + random.randint(-self.__noise,self.__noise)
+        noisy_y = y_pos + random.randint(-self.__noise,self.__noise)
         super().move(noisy_x, noisy_y)

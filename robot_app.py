@@ -23,7 +23,7 @@ if __name__ == '__main__':
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
 
-    worldmap = Map(900,500)
+    worldmap = Map(900,544)
     if(wheelsconfig == "simulation"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
@@ -37,7 +37,14 @@ if __name__ == '__main__':
             print("Warning : wheels-velocity not specified, setting 5")
             wheelsvelocity = 5
 
-        wheels = NoisyWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
+        try:
+            noise = config.getint('robot', 'simulation-noise')
+        except :
+            print("Warning : noise not specified, setting 0")
+            noise = 0
+
+
+        wheels = NoisyWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity, noise=noise)
 
     elif(wheelsconfig == "usb-arduino"):
         arduino_pid = config.getint('robot', 'arduino-pid')
@@ -50,7 +57,7 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     islands = IslandsService()
-    cell = Cell(900,500,450,250)
+    cell = Cell(900,544,450,272)
     polygons = islands.get_polygons()
     mesh = Mesh(cell.partitionCells(polygons, 10))
     pathfinder = PathFinder(mesh)
