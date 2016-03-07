@@ -1,7 +1,6 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask.ext.socketio import SocketIO
 from flask_cors import CORS
-from flask import request, jsonify
 
 app = Flask(__name__)
 CORS(app)
@@ -13,6 +12,7 @@ def inject(a_robot, a_mesh):
     robot = a_robot
     mesh = a_mesh
 
+
 def run(host, port):
     socket_io.run(app, host=host, port=port)
 
@@ -23,11 +23,13 @@ def robot_move():
     robot.move(delta_x, delta_y)
     return "OK"
 
+
 @app.route('/robot/rotate', methods=['POST'])
 def robot_rotate():
     angle = request.json['angle']
     robot.rotate(angle)
     return "OK"
+
 
 @app.route('/robot/move_to', methods=['POST'])
 def robot_move_to():
@@ -37,10 +39,12 @@ def robot_move_to():
     robot.move_to(destination)
     return "OK"
 
+
 @socket_io.on('fetchPosition')
 def robot_fetchposition():
     socket_io.emit('position',  {'robotPosition': robot.get_position(),
                                  'robotAngle': robot.get_angle()})
+
 
 @app.route('/mesh')
 def mesh():
