@@ -4,10 +4,10 @@ class WheelsUsbController:
         self.wheelsusbcommands = wheelsusbcommands
 
     def move(self, x_pos, y_pos):
-        self.serialport.write(self.wheelsusbcommands.move(x_pos, y_pos))
+        self.serialport.write(self.wheelsusbcommands.move(int(x_pos),int( y_pos)))
 
     def rotate(self, angle):
-        angle = angle%360
+        angle = int(angle)%360
         if(angle > 180):
             angle -= 360
 

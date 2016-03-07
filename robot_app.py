@@ -42,7 +42,7 @@ if __name__ == '__main__':
     elif(wheelsconfig == "usb-arduino"):
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
-        arduino_baudrate = config.getint('robot', 'baudrate')
+        arduino_baudrate = config.getint('robot', 'arduino-baudrate')
         ports = lp.comports()
         arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduinoport)) != 0)
@@ -50,8 +50,8 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     islands = IslandsService()
+    cell = Cell(900,500,450,250)
     polygons = islands.get_polygons()
-    cell = Cell(960,500,300,200)
     mesh = Mesh(cell.partitionCells(polygons, 10))
     pathfinder = PathFinder(mesh)
     robot_service = RobotService(base_station_address)

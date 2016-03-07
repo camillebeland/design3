@@ -19,7 +19,7 @@ class IslandsService:
         self.triangles = self.islands['triangles']
 
     def __create_polygon_list__(self):
-        self.polygons.extend([polygon(circle['x'], circle['y'], circle['radius'] + 20) for circle in self.circles])
-        self.polygons.extend([polygon(pentagon['x'], pentagon['y'], 50) for pentagon in self.pentagons])
-        self.polygons.extend([polygon(square['x'], square['y'], 50) for square in self.squares])
-        self.polygons.extend([polygon(triangle['x'], triangle['y'], 50) for triangle in self.triangles])
+        self.polygons.extend([polygon(circle['x'], circle['y'], circle['radius'] + 40) for circle in self.circles])
+        self.polygons.extend([polygon(pentagon['x'], pentagon['y'], 70) for pentagon in self.pentagons])
+        self.polygons.extend([polygon(square['x'], square['y'], 70) for square in self.squares])
+        self.polygons.extend([polygon(triangle['x'], triangle['y'], 70) for triangle in self.triangles])
