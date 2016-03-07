@@ -1,7 +1,7 @@
 import urllib, json
 from pathfinding.pathfinding import Cell, Mesh, polygon
 
-class Islands:
+class IslandsService:
     def __init__(self):
         islands_string = urllib.request.urlopen('http://localhost:5000/worldmap').read()
         self.islands = json.loads(islands_string.decode('utf-8'))
@@ -9,16 +9,14 @@ class Islands:
         self.__robot_fetch_islands__()
         self.__create_polygon_list__()
 
+    def get_polygons(self):
+        return self.polygons
+
     def __robot_fetch_islands__(self):
         self.circles = self.islands['circles']
         self.pentagons = self.islands['pentagons']
         self.squares = self.islands['squares']
         self.triangles = self.islands['triangles']
-
-    def create_mesh_with_islands(self):
-        cell = Cell(960,500,300,200)
-        mesh = Mesh(cell.partitionCells(self.polygons,10))
-        return mesh
 
     def __create_polygon_list__(self):
         self.polygons.extend([polygon(circle['x'], circle['y'], circle['radius'] + 20) for circle in self.circles])
