@@ -7,29 +7,41 @@ class VisionService:
 
     def build_map(self):
         image = Image(self.__camera.get_frame())
-        circles = self.__shape_detector.find_circle_color(image, 'red', default_camille_circle_params)
-        triangles = self.__shape_detector.find_polygon_color(image, 'triangle', 'red', default_camille_polygon_params)
-        pentagons = self.__shape_detector.find_polygon_color(image, 'pentagon', 'red', default_camille_polygon_params)
-        squares = self.__shape_detector.find_polygon_color(image, 'square', 'red', default_camille_polygon_params)
-        for circle in circles:
-            circle['shape'] = 'circle'
-            circle['color'] = 'red'
-        for triangle in triangles:
-            triangle['shape'] = 'triangle'
-            triangle['color'] = 'red'
-        for square in squares:
-            square['shape'] = 'square'
-            square['color'] = 'red'
-        for pentagon in pentagons:
-            pentagon['shape'] = 'pentagon'
-            pentagon['color'] = 'red'
+        circles, pentagons, squares, triangles = [], [], [], []
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'yellow'))
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'red'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'green'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'blue'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'yellow'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'red'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'green'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'blue'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'yellow'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'red'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'green'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'blue'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'yellow'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'red'))
+
         worldmap = {
             'circles': circles,
             'triangles': triangles,
-            'pentagons' : pentagons,
-            'squares' : squares
+            'pentagons': pentagons,
+            'squares': squares
         }
         return worldmap
+
+    def __find_polygon_color__(self, image, shape, color):
+        if shape == 'circle':
+            shapes = self.__shape_detector.find_circle_color(image, color, default_camille_circle_params)
+        else:
+            shapes = self.__shape_detector.find_polygon_color(image, shape, color, default_camille_polygon_params)
+        for polygon in shapes:
+            polygon['shape'] = shape
+            polygon['color'] = color
+        return shapes
 
 default_camille_circle_params = {
     'median_blur_kernel_size' : 5,

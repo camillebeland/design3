@@ -57,7 +57,7 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
     islands = IslandsService(base_station_host, base_station_port)
-    cell = Cell(900,544,450,272)
+    cell = Cell(800,600,400,300)
     polygons = islands.get_polygons()
     mesh = Mesh(cell.partitionCells(polygons, 10))
     pathfinder = PathFinder(mesh)

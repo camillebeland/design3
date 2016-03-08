@@ -55,7 +55,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
                 var island = new createjs.Shape();
                 var triangle_x = triangle.x;
                 var triangle_y = canvas.height - triangle.y;
-                var triangle_side_length = 30;
+                var triangle_side_length = 20;
                 var triangle_color = triangle.color;
                 var triangle_angle = -90;
                 island.graphics.beginFill(triangle_color).drawPolyStar(triangle_x, triangle_y, triangle_side_length, 3, 0, triangle_angle);
@@ -65,7 +65,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
                 var island = new createjs.Shape();
                 var pentagon_x = pentagon.x;
                 var pentagon_y = canvas.height - pentagon.y;
-                var pentagon_side_length = 30;
+                var pentagon_side_length = 20;
                 var pentagon_color = pentagon.color;
                 var pentagon_angle = -90;
                 island.graphics.beginFill(pentagon_color).drawPolyStar(pentagon_x, pentagon_y, pentagon_side_length, 5, 0, pentagon_angle);
@@ -75,7 +75,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
                 var island = new createjs.Shape();
                 var square_x = square.x;
                 var square_y = canvas.height - square.y;
-                var square_side_length = 30;
+                var square_side_length = 20;
                 var square_color = square.color;
                 var square_angle = -90;
                 island.graphics.beginFill(square_color).drawPolyStar(square_x, square_y, square_side_length, 4, 0, square_angle);
