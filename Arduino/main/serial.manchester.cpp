@@ -58,23 +58,21 @@ char get_ASCII() {
 			read = toShift++; 
 		}
 		if (sequence_count == 18){
-			ASCII = 0;
-			for (int y = 0; y <7;y++){
+
+			int new_ASCII = 0;
+			for (int y = 0; y <=6;y++){
+
 				int bitA = temp[read%32]; read++;
 				int bitB = temp[read%32];
 				read++;
 				if (bitA == 0 && bitB == 1){
-					ASCII+= exp(2,y);
+					new_ASCII+= exp(2,y);
 				}
 			}
-			
-			//Serial.println("-");
-
-			return ASCII;
+			ASCII = new_ASCII;
 		}
 	}
 	
-	//Serial.println("-");
 	return ASCII;
 }
 
