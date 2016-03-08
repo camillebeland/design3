@@ -19,7 +19,7 @@ if __name__ == '__main__':
             camera = MockCameraService()
         return camera
 
-    config = configuration.getconfig()
+    config = configuration.get_config()
     host = config.get('baseapp', 'host')
     port = config.getint('baseapp', 'port')
     camera_config = config.get('baseapp', 'camera')

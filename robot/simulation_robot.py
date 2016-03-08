@@ -6,7 +6,6 @@ PRECISION = 0.00001
 
 class SimulationWheels:
     def __init__ (self, worldmap, wheels_velocity=5, refresh_time = 10):
-        print("Initiating MockWheels")
         self.refresh_time = refresh_time
         self.running = False
         self.worldmap = worldmap
@@ -21,7 +20,6 @@ class SimulationWheels:
 
 
     def __update(self, refresh_time):
-        print("Starting Thread for time simulation on MockWheels")
         while self.running:
             sleep(refresh_time/1000)
             delta_x = self.wheels_velocity * self.direction[0] * refresh_time/1000
