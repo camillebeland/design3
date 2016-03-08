@@ -45,6 +45,9 @@ class ImageMockCirclesFound:
         FOUND_CIRCLES = np.array([[[80.5, 168.5, 14.57738018]]])
         return FOUND_CIRCLES
 
+    def get_height(self):
+        return 600
+
 class ImageMockNoShapeFound:
     def filter_median_blur(self, kernel_size=5):
         return ImageMockNoShapeFound()
@@ -79,7 +82,7 @@ class TestShapeDetector:
 
     def test_find_blue_circle_with_blue_circles_should_return_circles(self):
         circles = self.shape_detector.find_circle_color(self.image_mock_circle_found, 'blue', test_polygon_params)
-        PARSED_FOUND_CIRCLES = [{'radius': 14.57738018, 'y': 168.5, 'x': 80.5}]
+        PARSED_FOUND_CIRCLES = [{'radius': 14.57738018, 'y': 431.5, 'x': 80.5}]
         assert_equal(PARSED_FOUND_CIRCLES, circles)
 
     def test_find_blue_circle_without_circles_should_return_no_circles(self):

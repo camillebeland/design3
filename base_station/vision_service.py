@@ -38,9 +38,9 @@ class VisionService:
             shapes = self.__shape_detector.find_circle_color(image, color, default_camille_circle_params)
         else:
             shapes = self.__shape_detector.find_polygon_color(image, shape, color, default_camille_polygon_params)
-        for polygon in shapes:
-            polygon['shape'] = shape
-            polygon['color'] = color
+        for poly in shapes:
+            poly['shape'] = shape
+            poly['color'] = color
         return shapes
 
 default_camille_circle_params = {
