@@ -51,7 +51,7 @@ char get_ASCII() {
 			read = toShift++; 
 		}
 		if (sequence_count == 18){
-			ASCII = 0;
+			int new_ASCII = 0;
 			for (int y = 0; y <=6;y++){
 				int bitA = temp[read%32]; read++;
 				int bitB = temp[read%32];
@@ -60,10 +60,16 @@ char get_ASCII() {
 					int hey = exp(2,y);
 					//Serial.print(hey);
 					//Serial.print(" ");
-					ASCII+= hey;
+					new_ASCII+= hey;
+				}
+				else if(bitA == 1 && bitB == 0){
+				}
+				else{
+					//manschester invalide
+					return ASCII;
 				}
 			}
-			
+			ASCII = new_ASCII;
 			//Serial.println("-");
 			return ASCII;
 		}
