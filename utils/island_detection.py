@@ -8,7 +8,6 @@ from base_station.camera_service import CameraService
 
 if __name__ == '__main__':
 
-    config = ConfigParser()
     root = Tk()
     main_panel = PanedWindow()
     main_panel.pack()
@@ -35,12 +34,15 @@ if __name__ == '__main__':
     right_panel.add(info)
 
     def picture_callback():
-        global img
-        img = camera.get_frame('jpeg')
-        canvas.image = ImageTk.PhotoImage(img)
+        global img, config
+        img = camera.get_frame()
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        image = Image.fromarray(img_rgb)
+        canvas.image = ImageTk.PhotoImage(image)
         canvas.create_image(0,0,image=canvas.image, anchor='nw')
-
-
+        config = ConfigParser()
+        config['map'] = {}
+        show_map()
 
     picture_button = Button(left_panel, text='Take a photo!', command=picture_callback)
     left_panel.add(picture_button)
@@ -60,6 +62,7 @@ if __name__ == '__main__':
             self.panel.config(state=DISABLED)
 
     filepanel = FilePanel(info)
+    config = ConfigParser()
     config['map'] = {}
     kindclicked = None
 
@@ -213,9 +216,10 @@ if __name__ == '__main__':
     yellow_islands_panel_button.add(circle_yellow_island_button)
 
     def save_callback():
-        file = filedialog.asksaveasfile(defaultextension=".txt")
-        config.write(file)
-        file.close()
+        filename = filedialog.asksaveasfilename()
+        with open(filename + '.txt', 'w') as file_config:
+            config.write(file_config) 
+        cv2.imwrite(filename+'.jpg', img)
 
     def remove_callback():
         global kindclicked
