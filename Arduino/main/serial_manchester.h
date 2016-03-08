@@ -14,6 +14,7 @@ void serial_manchester_init();
 
 void serial_manchester_read();
 char get_ASCII();
+bool checksum(int *ptr);
 int exp(int base, int power);
 // ----------------ISR ----------------
 

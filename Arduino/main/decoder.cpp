@@ -1,14 +1,14 @@
 #include "Arduino.h"
 #include "decoder.h"
 #include "motors.h"
-#include "TimerOne.h"
+#include "TimerFour.h"
 #include "serial_manchester.h"
 #include "serial.h"
 #include "magnet.h"
 
 void decoder_init() {
-  Timer1.init(TIMEOUT_FREQ,TIMEOUT_ISR);
-  Timer1.stop();
+  Timer4.init(TIMEOUT_FREQ,TIMEOUT_ISR);
+  Timer4.stop();
 }
 
 State current_state = IDLE;
@@ -18,7 +18,7 @@ int param_count = 0;
 int params[4] = {0};
 
 void reset_decoder() {
-  Timer1.stop();
+  Timer4.stop();
   current_state = IDLE;
 }
 
@@ -38,7 +38,7 @@ bool decode_byte(unsigned char byte) {
         byte_decoded = true;
         param_count = 0;
         //Serial.println("Start CHAR detected");
-        Timer1.start();
+        Timer4.start();
       }
       else {
         byte_decoded = false;
@@ -79,8 +79,24 @@ bool decode_byte(unsigned char byte) {
 		current_function = MANCHESTER;
 		param_count = 0;
 		current_state = END;
-		
 	  }
+    
+	  else if(byte == 't'){
+		current_function = TEST;
+		param_count = 0;
+		current_state = END;
+	  }
+	  else if(byte == 'b'){
+		current_function = BATTERY;
+		param_count = 0;
+		current_state = END;
+	  }
+	  else if (byte == 'v'){
+		current_function = MAGNET_VOLTAGE;
+		param_count = 0;
+		current_state = END;
+	  }
+	  
       // cover errors
       else {
         byte_decoded = false;
@@ -176,15 +192,23 @@ bool parse_and_call() {
       }
 	  break;
 	case MANCHESTER:
-		serial_write((int)get_ASCII());
+		serial_write(get_ASCII());
 		break;
-
+	case MAGNET_VOLTAGE:
+		serial_write(get_capacitor_percent());
+	case BATTERY:
+		serial_write(get_battery_percent());
+	case TEST:
+		test();
+		break;
     default:
       return false;
       break;
   }
   return true;
 }
+
+
 
 void TIMEOUT_ISR() {
 

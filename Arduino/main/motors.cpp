@@ -482,6 +482,23 @@ int limit_command(double command){
 	else{return command;}
 }
 
+//Will be used to find the deadpoint for each motor
+int deadpoint_test = 0;
+void test(){
+	set_motor(OUT_MOTOR_A, 10000, true, 0);
+	set_motor(OUT_MOTOR_B, 10000, true, 0);
+	set_motor(OUT_MOTOR_C, 10000, true, 0);
+	set_motor(OUT_MOTOR_D, 10000, true, 0);
+
+	OCR0A =  limit_command(deadpoint_test++);
+	//OCR5B =  limit_command(deadpoint_test++);
+	//OCR5A =  limit_command(deadpoint_test++);
+	//OCR5C =  limit_command(deadpoint_test++);
+	Serial.println(deadpoint_test);
+
+}
+
+
 // ISR for calling PID_motors with Timer3 every DT
 void PID_motors_ISR(){
 	PID_ISR_count++;

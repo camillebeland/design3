@@ -90,6 +90,8 @@ void rotate(Direction direction, int angle);
 void PID_motors();
 int limit_command(double command);
 
+void test();
+
 // ----------------ISR ----------------
 void PID_motors_ISR();
 void count_tick_A();

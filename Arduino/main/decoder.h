@@ -33,7 +33,7 @@
 #define TIMEOUT_FREQ 100 //Hz
 
 enum State {IDLE, FUNCTION, PARAMETERS, END};
-enum Function {MOVE, ROTATE, STOP, MAGNET, MANCHESTER};
+enum Function {MOVE, ROTATE, STOP, MAGNET, MANCHESTER, TEST, BATTERY, MAGNET_VOLTAGE};
 
 // -------------SETUP ----------------
 void decoder_init();

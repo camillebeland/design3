@@ -15,7 +15,14 @@ void toggle_magnet_OFF(){
 }
 
 
-float get_capacitor_voltage(){
+uint8_t get_capacitor_percent(){
 	float charge_fraction = analogRead(IN_CAPACITOR_VOLTAGE) / ADC_N_VALUES;
-	return charge_fraction * FULL_CAPACITOR_VOLTAGE;
+	return (uint8_t)charge_fraction *100;
+}
+uint8_t get_battery_percent(){
+	
+	float min = BATTERY_MIN; // to change
+	float max = BATTERY_MAX;
+	float current = analogRead(IN_BATTERY_VOLTAGE) /ADC_N_VALUES;
+	return (uint8_t)((current - min) / (max-min));
 }
