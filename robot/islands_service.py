@@ -2,10 +2,10 @@ import requests
 from pathfinding.pathfinding import polygon
 
 class IslandsService:
-    def __init__(self):
+    def __init__(self, host, port):
         self.islands = []
         try:
-            request = requests.get('http://localhost:5000/worldmap')
+            request = requests.get('http://'+ host + ':' + port + '/worldmap')
             self.islands = request.json()
         except requests.exceptions.RequestException as e:
             print(e)

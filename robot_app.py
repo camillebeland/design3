@@ -56,7 +56,7 @@ if __name__ == '__main__':
         serialport = serial.Serial(port=arduinoport[0].device,baudrate=arduino_baudrate)
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
-    islands = IslandsService()
+    islands = IslandsService(base_station_host, base_station_port)
     cell = Cell(900,544,450,272)
     polygons = islands.get_polygons()
     mesh = Mesh(cell.partitionCells(polygons, 10))
