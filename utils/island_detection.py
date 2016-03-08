@@ -12,40 +12,18 @@ if __name__ == '__main__':
     main_panel = PanedWindow()
     main_panel.pack()
     open_cv_camera = cv2.VideoCapture(0)
-    open_cv_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 900)
-    open_cv_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+    width, height = 900, 600
+    open_cv_camera.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    open_cv_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
     camera = CameraService(open_cv_camera,cv2)
     assert(open_cv_camera.isOpened())
 
-    img = Image.open('/home/adam/Projects/design3/base_station/mock_image.jpg')
-    width, height = img.size
+
+    img = None
     left_panel = PanedWindow(main_panel, orient=VERTICAL)
     main_panel.add(left_panel)
     canvas = Canvas(left_panel, width=width, height=height)
     left_panel.add(canvas)
-    canvas.image = ImageTk.PhotoImage(img)
-    canvas.create_image(0,0,image=canvas.image, anchor='nw')
-
-    right_panel = PanedWindow(main_panel, orient=VERTICAL)
-    main_panel.add(right_panel)
-
-    info = ScrolledText(right_panel)
-    info.config(state=DISABLED)
-    right_panel.add(info)
-
-    def picture_callback():
-        global img, config
-        img = camera.get_frame()
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        image = Image.fromarray(img_rgb)
-        canvas.image = ImageTk.PhotoImage(image)
-        canvas.create_image(0,0,image=canvas.image, anchor='nw')
-        config = ConfigParser()
-        config['map'] = {}
-        show_map()
-
-    picture_button = Button(left_panel, text='Take a photo!', command=picture_callback)
-    left_panel.add(picture_button)
 
     class FilePanel:
         def __init__(self, panel):
@@ -61,7 +39,42 @@ if __name__ == '__main__':
             self.panel.delete(1.0, END)
             self.panel.config(state=DISABLED)
 
+    right_panel = PanedWindow(main_panel, orient=VERTICAL)
+    main_panel.add(right_panel)
+
+    info = ScrolledText(right_panel)
+    info.config(state=DISABLED)
+    right_panel.add(info)
+
     filepanel = FilePanel(info)
+
+
+    def show_map():
+        filepanel.reset()
+        config.write(filepanel)
+
+    def picture_callback():
+        global img, config
+        img = camera.get_frame()
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        image = Image.fromarray(img_rgb)
+        canvas.image = ImageTk.PhotoImage(image)
+        canvas.create_image(0,0,image=canvas.image, anchor='nw')
+        config = ConfigParser()
+        config['map'] = {}
+        show_map()
+
+    picture_callback()
+
+
+
+
+
+
+    picture_button = Button(left_panel, text='Take a photo!', command=picture_callback)
+    left_panel.add(picture_button)
+
+
     config = ConfigParser()
     config['map'] = {}
     kindclicked = None
@@ -77,9 +90,7 @@ if __name__ == '__main__':
         kindclicked = kind
         canvas.bind('<Button-1>', kind_click)
 
-    def show_map():
-        filepanel.reset()
-        config.write(filepanel)
+
 
     def register(x, y, kind):
         config['map'][kind] = '({0},{1})'.format(x,y)
