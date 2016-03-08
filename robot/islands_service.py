@@ -5,8 +5,8 @@ class IslandsService:
     def __init__(self, host, port):
         self.islands = []
         try:
-            request = requests.get('http://'+ host + ':' + port + '/worldmap')
-            self.islands = request.json()
+            self.islands = requests.get('http://'+ host + ':' + port + '/worldmap').json()
+            print(self.islands)
         except requests.exceptions.RequestException as e:
             print(e)
         self.polygons = []
