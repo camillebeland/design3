@@ -2,22 +2,34 @@ from nose.tools import *
 from unittest.mock import *
 import base_station.logger as logger
 from base_station.logger import Logger
-import web_app
-
-import logging
+import base_station_app
 
 
-class TestLogging:
+def setup_function():
+    base_station_app.run()
+    print("bob")
 
-    def test_can_log_something_happening_on_robot(self):
-        # Given
-        web_app.run()
-
-        # When
+def teardown_function():
+    "tear down test fixtures"
 
 
-        # Then
-        assert(True)
+@with_setup(setup_function, teardown_function)
+def test_can_log_something_happening_on_robot():
+    # Given
+
+
+    # When
+
+
+    # Then
+    assert(True)
+
+
+
+
+
+
+
 
 
 
