@@ -29,8 +29,6 @@ void serial_manchester_read(){
 }
 
 char get_ASCII() {
-
-	int max_count = 32*32;
 	// Manchester sequence before the data
 	int start_sequence[18] = {0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0};
 	int sequence_count = 0;
@@ -70,6 +68,7 @@ char get_ASCII() {
 				}
 			}
 			ASCII = new_ASCII;
+			break;
 		}
 	}
 	
