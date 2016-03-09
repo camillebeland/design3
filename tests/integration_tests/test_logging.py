@@ -3,11 +3,12 @@ from unittest.mock import *
 import base_station.logger as logger
 from base_station.logger import Logger
 import base_station_app
+from base_station.base_station_web_controller import app
 
 
 def setup_function():
     base_station_app.run()
-    print("bob")
+    #print("bob")
 
 def teardown_function():
     "tear down test fixtures"
