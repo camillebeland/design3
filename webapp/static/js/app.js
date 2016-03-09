@@ -1,33 +1,36 @@
-var website = angular.module('app', ['ui.router']);
+var website = angular.module('app', ['ui.router', 'Robot', 'MapModule']);
 
+website.config(function($stateProvider, $urlRouterProvider) {
 
-website.config(function ($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/');
 
-    $urlRouterProvider.otherwise('/');
-
-    $stateProvider.state('home', {
-        url: "/",
-        templateUrl: "static/partials/home.html",
-        controller: "homeController"
-    })
+  $stateProvider.state('home', {
+    url: "/",
+    templateUrl: "static/partials/home.html",
+    controller: "homeController"
+  })
 
 });
 
+TabEnum = Object.freeze({
+  CONTROLS: "CONTROLS",
+  OTHER: "OTHER"
+});
 
+website.controller('homeController', ['$scope', function($scope) {
+  /*Webapp constants*/
+  window.BASE_STATION_HOST = "localhost:5000";
+  window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
+  window.ROBOT_HOST = "localhost:3000";
+  window.POSITION_REFRESH_TIME_IN_MS = 100;
+  window.CANVAS_REFRESH_TIME_IN_MS = 100;
+  window.CANVAS_HEIGHT = 500;
+  window.CANVAS_WIDTH = 900;
 
-website.controller('homeController', ['$scope', function ($scope) {
+  var init = function() {
+    $scope.activeTab = TabEnum.CONTROLS;
+  };
 
-    var canvas = document.getElementById("mapCanvas");
-    var ctx = canvas.getContext("2d");
-    var socket = io('localhost:3000');
-    ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
-
-    ctx.fillStyle = "rgb(200,0,0)";
-
-    setInterval(function(){ socket.emit('fetchPosition') }, 1000); //Refresh data every 1 second
-    socket.on('position', function(msg){
-        ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
-        ctx.fillRect(msg.robotPosition[0], msg.robotPosition[1], msg.robotPosition[0] + 20, msg.robotPosition[1] + 20);
-    });
+  init();
 
 }]);

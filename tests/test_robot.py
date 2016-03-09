@@ -1,55 +1,61 @@
 from nose.tools import *
-from nose import with_setup
-from robot.robot import *
-from time import sleep
+from robot.robot import Robot
+from unittest.mock import *
+
+DELTA_X = 10.0
+DELTA_Y = 20.0
+
+AN_ANGLE = 30.3
+
+FINAL_DESTINATION = [1, 2]
 
 
-robot = Mock_Robot()
+class MockWheels():
+    def move(self, delta_x, delta_y):
+        if(delta_x == DELTA_X and delta_y == DELTA_Y):
+            self.moveCalledWithGoodArguments = True
 
-def setup():
-    print("Setting things up")
-    robot.__init__()
+    def rotate(self, angle):
+        if(angle == AN_ANGLE):
+            self.rotateCalled = True
 
-def teardown():
+
+class MockMap:
+    def __init__(self):
+        self.getRobotPositionCalled = False
+
+    def get_robot_position(self):
+        self.getRobotPositionCalled = True
+        return FINAL_DESTINATION
+
+
+class MockPathFinder():
     pass
 
-@with_setup(setup, teardown)
-def test_pos():
-    assert_equal([0,0], robot.pos)
+wheels = MockWheels()
+world_map = MockMap()
+pathfinder = MockPathFinder()
+
+robot = Robot(wheels, world_map, pathfinder, Mock())
 
 
-@with_setup(setup, teardown)
-def test_speed():
-    robot.start()
-    sleep(0.1)
-    robot.set_vel(2,1)
-    sleep(0.5)
+def test_when_robot_move_then_wheels_move():
+    robot.move(DELTA_X, DELTA_Y)
+    assert_true(wheels.moveCalledWithGoodArguments)
 
-    x_actual = robot.pos[0]
-    y_actual = robot.pos[1]
-    x_expected = 1.0
-    y_expected = 0.5
 
-    assert_equal_with_error(x_expected, x_actual, 0.05)
-    assert_equal_with_error(y_expected, y_actual, 0.05)
+def test_when_robot_move_to_then_move_to_on_movement_is_called():
+    # Given
+    mock_movement = Mock()
+    robot.set_mock_movement(mock_movement)
 
-@with_setup(setup, teardown)
-def test_move():
-    robot.move(3.14159, 2.3)
+    # When
+    robot.move_to(FINAL_DESTINATION)
 
-    x_vel_actual = robot.vel[0]
-    y_vel_actual = robot.vel[1]
-    x_vel_expected = -2.3
-    y_vel_expected = 0.0
+    # Then
+    mock_movement.move_to.assert_called_once_with(FINAL_DESTINATION)
 
-    assert_equal_with_error(x_vel_expected, x_vel_actual, 0.001)
-    assert_equal_with_error(y_vel_expected, y_vel_actual, 0.001)
 
-def assert_equal_with_error(expected, actual, error_percentage):
-    if( expected == 0 ):
-        actual_error = abs(actual)
-    else:
-        actual_error = abs(1 - actual/expected)
-
-    assert_true( actual_error < error_percentage, msg="Error {1}% larger than {0}%".format(round(error_percentage*100, 2), round(actual_error*100,2)))
-
+def test_when_robot_rotate_then_wheels_rotate():
+    robot.rotate(AN_ANGLE)
+    assert_true(wheels.rotateCalled)
