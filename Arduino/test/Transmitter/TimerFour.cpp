@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-TimerThree Timer4;
+TimerFour Timer4;
 
 ISR(TIMER4_OVF_vect)          // interrupt service routine that wraps a user defined function supplied by attachInterrupt
 {
@@ -24,7 +24,7 @@ void TimerFour::init(int freq, void (*isr)()){
 
 void TimerFour::start(){
 	TCNT4 = Timer4.counter; // reload
-	TCCR3B |=  (1 << CS42);  //  256 prescaler
+	TCCR4B |=  (1 << CS42);  //  256 prescaler
 }
 
 void TimerFour::stop(){

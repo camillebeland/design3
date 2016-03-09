@@ -1,9 +1,9 @@
 #include "manchester.h"
-#include "serial.h"
+#include "manchester_transmitter.h"
 void setup() {
   // put your setup code here, to run once:
   manchester_init();
-  serial_init();
+  manchester_transmitter_init();
   Serial.begin(115200);
   //delay(1000);
 }
@@ -14,6 +14,6 @@ void loop() {
       Serial.print(readbuff[i]);
     }
     Serial.println(" - ");
-*/    serial_send_manchester(readbuff);
+*/    manchester_transmitter_send(readbuff);
 }
     

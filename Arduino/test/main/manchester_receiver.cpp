@@ -1,45 +1,54 @@
 #include "Arduino.h"
-#include "serial_manchester.h"
+#include "manchester_receiver.h"
 #include "decoder.h"
 #include "CircularBuffer.h"
-
+#include "RH_ASK.h"
+#include <SPI.h> 
 
 char ASCII = 0;
 CircularBuffer buff(32);
+RH_ASK manchester_receiver(BAUD_RATE_MANCHESTER, RX_PIN,0,0,false);
 
-
-void serial_manchester_init(){
-	Serial3.begin(BAUD_RATE_MANCHESTER);
+void manchester_receiver_init(){
+	manchester_receiver.init();
 }
 
-void serial_manchester_read(){
-	char incomming_byte = -1;
-	if(Serial3.available() >=4){
-		for (int y = 0; y<4 ;y++){
-			incomming_byte = Serial3.read();
+void manchester_receiver_read(){
+	uint8_t buf[4];
+    uint8_t buflen = sizeof(buf);
+    if (manchester_receiver.recv(buf, &buflen)) // Non-blocking
+    {
+		Serial.println("HEY");
+		int incomming_byte = 0;
+        for (int y = 0; y<4 ;y++){
+			incomming_byte = buf[y];
 			for (int i= 0; i< 8; i++)
 			{
 				buff.write((incomming_byte & (1<<i)) >> i);
 			}
 		}
-		while (Serial3.available()){
-			Serial3.read();
-		}
-	}
+    }
+	
+	
 }
 
 char get_ASCII() {
+
+	int max_count = 32*32;
 	// Manchester sequence before the data
 	int start_sequence[18] = {0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0};
 	int sequence_count = 0;
 	int temp[32];
 	buff.read(temp);
-	//Serial.println(" ");
-
 	if (!checksum(temp)){
 		return ASCII;
 	}
-	
+	/*
+	Serial.println(" ");
+	for (int i = 0; i< 32;i++){
+		Serial.print(temp[i]);
+	}
+	*/
 	int read = 0;
 	int toShift = 0;
 	while (toShift < 32){
@@ -53,25 +62,26 @@ char get_ASCII() {
 			read = toShift++; 
 		}
 		if (sequence_count == 18){
-
-			int new_ASCII = 0;
-			for (int y = 0; y <=6;y++){
-
+			ASCII = 0;
+			for (int y = 0; y <7;y++){
 				int bitA = temp[read%32]; read++;
 				int bitB = temp[read%32];
 				read++;
 				if (bitA == 0 && bitB == 1){
-					new_ASCII+= exp(2,y);
+					ASCII+= exp(2,y);
 				}
-				else if(bitA == 1 && bitB == 0){
+				else if (bitA == 1 && bitB == 0){
 				}
-				else {return ASCII;}
+				else{return ASCII;}
 			}
-			ASCII = new_ASCII;
-			break;
+			
+			//Serial.println("-");
+
+			return ASCII;
 		}
 	}
 	
+	//Serial.println("-");
 	return ASCII;
 }
 

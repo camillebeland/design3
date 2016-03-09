@@ -1,8 +1,8 @@
 #ifndef manchester_h
 #define manchester_h
 
-#define CLOCK_IN 2
-#define MANCHESTER_IN 5
+#define CLOCK_IN 3
+#define MANCHESTER_IN 6
 
 #define FREQUENCY  4900// Hz
 

@@ -34,7 +34,7 @@ char get_ASCII() {
 	int sequence_count = 0;
 	int temp[32];
 	buff.read(temp);
-	//Serial.println(" ");
+	Serial.println(" ");
 
 	if (!checksum(temp)){
 		return ASCII;
