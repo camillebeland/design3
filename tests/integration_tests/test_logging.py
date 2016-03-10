@@ -1,52 +1,49 @@
 from nose.tools import *
 from unittest.mock import *
-import base_station_app
 from robot.robot_service import RobotService
-from base_station.base_station_web_controller import app
-import web_app
-import time
-import requests
 import os
-import signal
+from configuration import configuration
+
+
+def find_in_log_file(message):
+    base_directory = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    log_file_path = os.path.join(base_directory, 'system.log')
+
+    with open(log_file_path) as open_file:
+        lines = open_file.readlines()
+
+    for line in lines:
+        if message in line:
+            return True
+
+    return False;
 
 
 def setup_function():
-    #base_station_app.run()
-    #app.test_client()
-    print("bob")
-    base_station_app.run()
-    time.sleep(100)
-    #base_station_app.run()
+    print("setup")
 
 
 def teardown_function():
-    print("bob2")
-    "tear down test fixtures"
+    print("teardown")
 
 
 @with_setup(setup_function, teardown_function)
 def test_can_log_something_happening_on_robot():
     # Given
-    #robot_service = RobotService("http://localhost:5000")
-    #app.config['TESTING'] = True
+    config = configuration.get_config()
+    base_station_host = config.get('baseapp', 'host')
+    base_station_port = config.get('baseapp', 'port')
+    base_station_address = "http://" + base_station_host + ":" + base_station_port
+    robot_service = RobotService(base_station_address)
 
-
-    #bob = app.test_client()
-    #time.sleep(100)
+    message = "test_can_log_something_happening_on_robot!"
 
     # When
-    #robot_service.log_info("Allo!")
-    # try:
-    response = requests.post("http://localhost:5000/logger/info", json={'message': 'allo!'})
-    #print("status code:")
-    #print(response.status_code)
-    # except requests.exceptions.ConnectionError:
-    #     print("connection refused")
-
-
+    robot_service.log_info(message)
 
     # Then
-    assert(True)
+    message_is_in_log_file = find_in_log_file(message)
+    assert(message_is_in_log_file)
 
 
 
