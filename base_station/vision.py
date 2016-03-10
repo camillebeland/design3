@@ -91,7 +91,6 @@ class ShapeDetector:
         circles = (image
                    .filter_median_blur(median_blur_kernel_size)
                    .filter_by_color(hsv_range[color])
-                    .show()
                    .filter_gaussian_blur((gaussian_blur_kernel_size, gaussian_blur_kernel_size), gaussian_blur_sigma_x)
                    .find_hough_circles(hough_circle_min_distance,
                                        hough_circle_param1,

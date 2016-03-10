@@ -47,12 +47,20 @@ class VisionService:
         image = Image(self.__camera.get_frame())
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
         orange_circle = self.__shape_detector.find_circle_color(image, 'orange', default_camille_circle_params)
-        return self.__find_angle_between__(purple_circle, orange_circle)
+        angle1 = self.__find_angle_between__(orange_circle[0])
+        angle2 = self.__find_angle_between__(purple_circle[0])
+        angle = angle2 - angle1
+        robot_position = {
+            'front-circle': orange_circle,
+            'back-circle': purple_circle,
+            'angle': angle
+        }
+        return robot_position
 
-    def __find_angle_between__(self, circle1, circle2):
+    def __find_angle_between__(self, point):
         from math import atan2, degrees, pi
-        dx = circle2.x - circle1.x
-        dy = circle2.y - circle1.y
+        dx = point['x']
+        dy = point['y']
         angle_in_rad = atan2(-dy, dx)
         angle_in_rad %= 2 * pi
         angle_in_deg = degrees(angle_in_rad)

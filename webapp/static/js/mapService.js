@@ -22,4 +22,15 @@ var MapModule = angular.module('MapModule', [])
               console.log("error getting map from base station");
           });
       };
+
+      this.getRobotPosition = function(){
+          return $http({
+              method: 'GET',
+              url: 'http://' + BASE_STATION_HOST + '/robot_position'
+          }).then(function successCallback(response) {
+              return response.data;
+          }, function erroCallback(response) {
+              console.log("error getting robot position from base station");
+          });
+      }
   }]);

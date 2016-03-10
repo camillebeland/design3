@@ -31,7 +31,6 @@ if __name__ == '__main__':
     camera = camera_builder(camera_config, camera_id)
     vision = VisionService(camera, ShapeDetector())
     worldmap = vision.build_map()
-    vision.find_robot_position()
 
     base_station_web_controller.inject(camera, refresh_time, worldmap)
     base_station_web_controller.run(host, port)
