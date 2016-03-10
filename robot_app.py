@@ -13,7 +13,7 @@ from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
 from robot.robot_service import RobotService
 
 if __name__ == '__main__':
-    config = configuration.getconfig()
+    config = configuration.get_config()
 
     host = config.get('robot', 'host')
     port = config.getint('robot', 'port')
