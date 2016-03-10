@@ -1,8 +1,5 @@
-from nose.tools import *
 from unittest.mock import *
 from robot.robot_service import RobotService
-
-import logging
 
 
 class TestRobotService:

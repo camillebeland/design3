@@ -9,7 +9,8 @@ from robot.wheels_usb_commands import WheelsUsbCommands
 
 from robot.robot import Robot
 from robot.map import Map
-from pathfinding.pathfinding import Mesh, Cell, polygon, PathFinder
+from pathfinding.pathfinding import PathFinder, Cell, Mesh
+from robot.islands_service import IslandsService
 from robot.robot_service import RobotService
 
 if __name__ == '__main__':
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
 
-    worldmap = Map(900,500)
+    worldmap = Map(900,544)
     if(wheelsconfig == "simulation"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
@@ -36,7 +37,14 @@ if __name__ == '__main__':
             print("Warning : wheels-velocity not specified, setting 5")
             wheelsvelocity = 5
 
-        wheels = NoisyWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity)
+        try:
+            noise = config.getint('robot', 'simulation-noise')
+        except :
+            print("Warning : noise not specified, setting 0")
+            noise = 0
+
+
+        wheels = NoisyWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity, noise=noise)
 
     elif(wheelsconfig == "usb-arduino"):
         arduino_pid = config.getint('robot', 'arduino-pid')
@@ -48,9 +56,10 @@ if __name__ == '__main__':
         serialport = serial.Serial(port=arduinoport[0].device,baudrate=arduino_baudrate)
         wheels = WheelsUsbController(serialport,WheelsUsbCommands())
 
-    #mesh hardcode
-    cell = Cell(900,500,450,250)
-    mesh = Mesh(cell.partitionCells([polygon(200,200,50), polygon(400,200,50), polygon(400,50,50)],10))
+    islands = IslandsService(base_station_host, base_station_port)
+    cell = Cell(800,600,400,300)
+    polygons = islands.get_polygons()
+    mesh = Mesh(cell.partitionCells(polygons, 10))
     pathfinder = PathFinder(mesh)
     robot_service = RobotService(base_station_address)
     robot = Robot(wheels, worldmap, pathfinder, robot_service)

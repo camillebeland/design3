@@ -7,6 +7,10 @@ class Image:
         self.__image = image_src
         self.__image_format = image_format
 
+
+    def get_height(self):
+        return self.__image.shape[0]
+
     def read_image(self):
         return self.__image
 
@@ -94,7 +98,7 @@ class ShapeDetector:
                                        hough_circle_min_radius,
                                        hough_circle_max_radius))
         if(circles is not None):
-            return list(map(lambda circle: {'x' : float(circle[0]), 'y' : float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
+            return list(map(lambda circle: {'x' : float(circle[0]), 'y' : image.get_height() - float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
         else:
             return []
 
@@ -130,7 +134,7 @@ class ShapeDetector:
                 map(
                     lambda x : {
                         'x' : (reduce(np.add, x)/edges[polygon])[0],
-                        'y' : (reduce(np.add, x)/edges[polygon])[1]
+                        'y' : image.get_height() - (reduce(np.add, x)/edges[polygon])[1]
                     },
                     map(
                         lambda x : x[:,0],

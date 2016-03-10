@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask.ext.socketio import SocketIO
-from configuration import configuration
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -16,7 +15,6 @@ def inject(a_robot, a_mesh):
 
 def run(host, port):
     socket_io.run(app, host=host, port=port)
-
 
 @app.route('/robot/move', methods=['POST'])
 def robot_move():

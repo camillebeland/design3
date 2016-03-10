@@ -1,6 +1,3 @@
-import urllib
-import json
-from urllib.error import HTTPError
 import requests
 
 
