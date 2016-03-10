@@ -4,7 +4,7 @@ void setup() {
   // put your setup code here, to run once:
   manchester_init();
   serial_init();
-  Serial.begin(115200);
+  Serial.begin(115200); // debug
   //delay(1000);
 }
 int readbuff[32];

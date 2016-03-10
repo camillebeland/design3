@@ -19,10 +19,7 @@ int timestamp = 0;
 void loop() {
   // put your main code here, to run repeatedly:
 	serial_read();
-  // maybe put the manchester read on a timer intterupt!!!
   serial_manchester_read();
-  //int hello = (int)get_ASCII();
-  //serial_write(hello);
 	PID_motors();
   if (millis() - timestamp > 1000){
     timestamp = millis();
