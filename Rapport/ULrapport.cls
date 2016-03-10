@@ -134,7 +134,8 @@
          \vspace*{\stretch{1}}
          par                                       \\[1ex]
          {\large \'{E}quipe \theNumeroEquipe\
-                 --- \theNomEquipe}                \\[1ex]
+%                 --- \theNomEquipe}                \\[1ex]
+                 }                \\[1ex]
       \end{center}
       \renewcommand{\arraystretch}{1.5}            % plus d'espace pour les signatures
       \begin{tabularx}{\textwidth}%
@@ -228,24 +229,24 @@
 %**************************************************************************************
 % Generation de la page d'historique des versions ("Document Change Record")
 %
-\AtBeginDocument{%
-   \thispagestyle{empty}%
-   \setcounter{page}{0}%
-   \noindent%
-   \begin{tabularx}{\textwidth}%
-      {|c|l|>{\raggedright\arraybackslash}X|}
-      \hline\hline
-      \multicolumn{3}{|c|}{\large\rule[-2.25ex]{0ex}{6ex}%
-                           \textsf{Historique des versions}}
-      \\\hline
-      \multicolumn{1}{|c|}{\emph{version}}
-      & \multicolumn{1}{c|}{\emph{date}}
-      & \multicolumn{1}{c|}{\emph{description}}
-      \\\hline
-      \theHistoriqueVersions\hline
-   \end{tabularx}\par
-   \clearpage
-}
+%\AtBeginDocument{%
+%   \thispagestyle{empty}%
+%   \setcounter{page}{0}%
+%   \noindent%
+%   \begin{tabularx}{\textwidth}%
+%      {|c|l|>{\raggedright\arraybackslash}X|}
+%      \hline\hline
+%      \multicolumn{3}{|c|}{\large\rule[-2.25ex]{0ex}{6ex}%
+%                           \textsf{Historique des versions}}
+%      \\\hline
+%      \multicolumn{1}{|c|}{\emph{version}}
+%      & \multicolumn{1}{c|}{\emph{date}}
+%      & \multicolumn{1}{c|}{\emph{description}}
+%      \\\hline
+%      \theHistoriqueVersions\hline
+%   \end{tabularx}\par
+%   \clearpage
+%}
 %**************************************************************************************
 
 %**************************************************************************************
@@ -322,4 +323,3 @@
 % - ajouter \subsubsubsection{}
 % - forcer 12pt
 % - corriger selon les dernieres modifications de babel (mars 2008)
-

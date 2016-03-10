@@ -7,19 +7,20 @@ import cv2
 from base_station.vision_service import VisionService
 from base_station.vision import ShapeDetector
 
-if __name__ == '__main__':
 
-    def camera_builder(camera_config, camera_id):
-        if camera_config == "webcam":
-            open_cv_camera = cv2.VideoCapture(camera_id)
-            open_cv_camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_width)
-            open_cv_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_height)
-            camera = CameraService(open_cv_camera, cv2)
-        if camera_config == "mock":
-            camera = MockCameraService()
-        return camera
+def camera_builder(camera_config, camera_id, camera_width, camera_height):
+    if camera_config == "webcam":
+        open_cv_camera = cv2.VideoCapture(camera_id)
+        open_cv_camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_width)
+        open_cv_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_height)
+        camera = CameraService(open_cv_camera, cv2)
+    if camera_config == "mock":
+        camera = MockCameraService()
+    return camera
 
-    config = configuration.getconfig()
+
+def run():
+    config = configuration.get_config()
     host = config.get('baseapp', 'host')
     port = config.getint('baseapp', 'port')
     camera_config = config.get('baseapp', 'camera')
@@ -28,9 +29,11 @@ if __name__ == '__main__':
     camera_width = config.getint('baseapp', 'camera_width')
     camera_height = config.getint('baseapp', 'camera_height')
 
-    camera = camera_builder(camera_config, camera_id)
+    camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
     vision = VisionService(camera, ShapeDetector())
     worldmap = vision.build_map()
 
     base_station_web_controller.inject(camera, refresh_time, worldmap)
     base_station_web_controller.run(host, port)
+if __name__ == '__main__':
+    run()
