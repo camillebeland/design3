@@ -51,5 +51,10 @@ def worldmap():
 
 @app.route('/logger/info', methods=['POST'])
 def log_info():
-    logger.info(request.json['message'])
+    try:
+        logger.info(request.json['message'])
+        print("ca passe")
+    except Exception as error:
+        print("on a une erreur")
+
     return "OK"
