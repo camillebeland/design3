@@ -1,5 +1,5 @@
 from base_station.vision import Image
-import cv2
+
 class VisionService:
     def __init__(self, camera, shape_detector):
         self.__camera = camera
@@ -42,6 +42,22 @@ class VisionService:
             poly['shape'] = shape
             poly['color'] = color
         return shapes
+
+    def find_robot_position(self):
+        image = Image(self.__camera.get_frame())
+        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
+        orange_circle = self.__shape_detector.find_circle_color(image, 'orange', default_camille_circle_params)
+        return self.__find_angle_between__(purple_circle, orange_circle)
+
+    def __find_angle_between__(self, circle1, circle2):
+        from math import atan2, degrees, pi
+        dx = circle2.x - circle1.x
+        dy = circle2.y - circle1.y
+        angle_in_rad = atan2(-dy, dx)
+        angle_in_rad %= 2 * pi
+        angle_in_deg = degrees(angle_in_rad)
+        return angle_in_deg
+
 
 default_camille_circle_params = {
     'median_blur_kernel_size' : 5,
