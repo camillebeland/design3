@@ -42,27 +42,25 @@ class VisionService:
             poly['shape'] = shape
             poly['color'] = color
         return shapes
-
+	
+	#Le devant du robot = à 45 deg anti-horaire du mauve vers le orange
     def find_robot_position(self):
         image = Image(self.__camera.get_frame())
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
         orange_circle = self.__shape_detector.find_circle_color(image, 'orange', default_camille_circle_params)
-        angle1 = self.__find_angle_between__(orange_circle[0])
-        angle2 = self.__find_angle_between__(purple_circle[0])
-        angle = angle2 - angle1
+        angle = self.__find_angle_between__(purple_circle, orange_circle)
+		angle = ((angle +180 + 45) % 360) - 180
         robot_position = {
-            'front-circle': orange_circle,
-            'back-circle': purple_circle,
+            'center': ((orange_circle[0]+purple_circle[0]) /2 , (orange_circle[1]+purple_circle[1]) /2)
             'angle': angle
         }
         return robot_position
 
-    def __find_angle_between__(self, point):
+    def __find_angle_between__(self, point1, point2):
         from math import atan2, degrees, pi
-        dx = point['x']
-        dy = point['y']
-        angle_in_rad = atan2(-dy, dx)
-        angle_in_rad %= 2 * pi
+        dx = point1[0] - point2[0]
+        dy = point1[1] - point2[1]
+        angle_in_rad = atan2(dy, dx)
         angle_in_deg = degrees(angle_in_rad)
         return angle_in_deg
 

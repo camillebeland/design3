@@ -52,7 +52,7 @@ def fetch_worldmap():
 @app.route('/robot_position')
 def fetch_position():
     robot_position = vision_service.find_robot_position()
-    return jsonify({'front' : robot_position['front-circle'], 'back': robot_position['back-circle'],
+    return jsonify({'center' : robot_position['center'],
                     'angle': robot_position['angle']})
 
 @app.route('/logger/info', methods=['POST'])
