@@ -6,8 +6,8 @@
 #define IN_BATTERY_VOLTAGE A1 // MUST BE ADC
 #define FULL_CAPACITOR_VOLTAGE 10
 #define ADC_N_VALUES 1024
-#define BATTERY_MIN 0.5  		// TO IDENTIFY
-#define BATTERY_MAX 0.55 	// TO IDENTIFY
+#define BATTERY_MIN 3.7  	
+#define BATTERY_MAX 4.2	
 
 // -------------SETUP ----------------
 void magnet_init();
