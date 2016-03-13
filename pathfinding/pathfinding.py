@@ -1,15 +1,15 @@
 import networkx as nx
 from functools import reduce
 
+
 class PathFinder:
     def __init__(self, mesh):
         self.__graph = nx.Graph()
         for cell in mesh.get_cells():
             self.__graph.add_node(cell)
             for other_cell in mesh.get_cells():
-                if(cell.is_adjacent_to(other_cell)):
+                if cell.is_adjacent_to(other_cell):
                     self.__graph.add_edge(cell, other_cell)
-
 
     def find_path(self, from_point, to_point):
         from_cell = None
@@ -86,12 +86,14 @@ class Cell:
         else:
             return [self]
 
+
 class Mesh:
     def __init__(self, cells):
         self.__cells = cells
 
     def get_cells(self):
         return self.__cells
+
 
 class polygon:
     def __init__(self, x, y, size):
