@@ -41,9 +41,14 @@ def robot_move_to():
 
 
 @socket_io.on('fetchPosition')
-def robot_fetchposition():
+def robot_fetch_position():
     socket_io.emit('position',  {'robotPosition': robot.get_position(),
                                  'robotAngle': robot.get_angle()})
+
+
+@socket_io.on('fetchAngle')
+def robot_fetch_position():
+    socket_io.emit('angle',  {'angle': robot.get_angle()})
 
 
 @app.route('/mesh')
