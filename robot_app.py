@@ -59,7 +59,7 @@ if __name__ == '__main__':
     islands = IslandsService(base_station_host, base_station_port)
     cell = Cell(800,600,400,300)
     polygons = islands.get_polygons()
-    mesh = Mesh(cell.partitionCells(polygons, 10))
+    mesh = Mesh(cell.partition_cells(polygons, 10))
     pathfinder = PathFinder(mesh)
     robot_service = RobotService(base_station_address)
     robot = Robot(wheels, worldmap, pathfinder, robot_service)

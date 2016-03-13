@@ -1,5 +1,5 @@
 import requests
-from pathfinding.pathfinding import polygon
+from pathfinding.pathfinding import Polygon
 
 class IslandsService:
     def __init__(self, host, port):
@@ -23,7 +23,7 @@ class IslandsService:
         self.triangles = self.islands['triangles']
 
     def __create_polygon_list__(self):
-        self.polygons.extend([polygon(circle['x'], circle['y'], circle['radius'] + 40) for circle in self.circles])
-        self.polygons.extend([polygon(pentagon['x'], pentagon['y'], 70) for pentagon in self.pentagons])
-        self.polygons.extend([polygon(square['x'], square['y'], 70) for square in self.squares])
-        self.polygons.extend([polygon(triangle['x'], triangle['y'], 70) for triangle in self.triangles])
+        self.polygons.extend([Polygon(circle['x'], circle['y'], circle['radius'] + 40) for circle in self.circles])
+        self.polygons.extend([Polygon(pentagon['x'], pentagon['y'], 70) for pentagon in self.pentagons])
+        self.polygons.extend([Polygon(square['x'], square['y'], 70) for square in self.squares])
+        self.polygons.extend([Polygon(triangle['x'], triangle['y'], 70) for triangle in self.triangles])

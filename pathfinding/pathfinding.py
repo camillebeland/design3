@@ -1,10 +1,10 @@
-import networkx as nx
+import networkx
 from functools import reduce
 
 
 class PathFinder:
     def __init__(self, mesh):
-        self.__graph = nx.Graph()
+        self.__graph = networkx.Graph()
         for cell in mesh.get_cells():
             self.__graph.add_node(cell)
             for other_cell in mesh.get_cells():
@@ -15,14 +15,14 @@ class PathFinder:
         from_cell = None
         to_cell = None
         for cell in self.__graph.nodes():
-            if(cell.contains_point(from_point)):
+            if cell.contains_point(from_point):
                 from_cell = cell
-            if(cell.contains_point(to_point)):
+            if cell.contains_point(to_point):
                 to_cell = cell
 
-        cell_path = nx.astar_path(self.__graph, from_cell, to_cell)
+        cell_path = networkx.astar_path(self.__graph, from_cell, to_cell)
         path = list(map(lambda cell : (cell.x, cell.y), cell_path))
-        if(len(path) ==1):
+        if len(path) == 1:
             path.pop()
             path.append(to_point)
         else:
@@ -76,13 +76,13 @@ class Cell:
                 ((abs(self.y - other_cell.y) - (self.height + other_cell.height)/2.0) < 1e-6 and
                 abs(self.x - other_cell.x) < (self.width + other_cell.width)/2.0))
 
-    def partitionCells(self, obstacles, area_treshold):
+    def partition_cells(self, obstacles, area_treshold):
         if(self.area() < area_treshold):
             return []
         elif(self.contains_any(obstacles)):
             childCells = self.split()
             return reduce(lambda x, y: x+y,
-                          map(lambda cell: cell.partitionCells(obstacles, area_treshold), childCells))
+                          map(lambda cell: cell.partition_cells(obstacles, area_treshold), childCells))
         else:
             return [self]
 
@@ -95,7 +95,7 @@ class Mesh:
         return self.__cells
 
 
-class polygon:
+class Polygon:
     def __init__(self, x, y, size):
         self.x = x
         self.y = y
