@@ -6,6 +6,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     var stage = new createjs.Stage("mapCanvas");
     var completeRobotRepresentation;
     var completeMesh;
+    var path;
 
     var updateRobot = function(robotData) {
         completeRobotRepresentation.x = robotData.robotPosition[0];
@@ -14,15 +15,15 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     };
 
     var updatePath = function(pathData) {
-        var path = new createjs.Shape();
-        stage.addChild(path);
-        path.graphics.setStrokeStyle(2).beginStroke("#33ccff")
-        path.graphics.moveTo(completeRobotRepresentation.x, completeRobotRepresentation.y);
-        for (point of pathData.robotPath) {
-            var x = point[0]
-            var y = point[1]
+        stage.removeChild(path);
+        path = new createjs.Shape();
+        path.graphics.setStrokeStyle(2).setStrokeDash([20, 10], 0).beginStroke("#000000");
+        for (pathNode of pathData.robotPath) {
+            var x = pathNode[0]
+            var y = pathNode[1]
             path.graphics.lineTo(x, canvas.height - y);
         }
+        stage.addChild(path);
         path.graphics.endStroke();
     };
 
@@ -97,6 +98,11 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         });
     };
 
+    var initPath = function(){
+        path = new createjs.Shape();
+        path.graphics.moveTo(completeRobotRepresentation.x, completeRobotRepresentation.y);
+    }
+
     var initMesh = function() {
         var whenGetIsComplete = MapService.getMesh();
 
@@ -126,8 +132,8 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         robot_socket.emit('fetchPosition');
     }, POSITION_REFRESH_TIME_IN_MS);
 
-    robot_socket.on('position', function(msg) {
-        updateRobot(msg);
+    robot_socket.on('position', function(message) {
+        updateRobot(message);
     });
 
     setInterval(function() {
@@ -135,7 +141,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     }, PATH_REFRESH_TIME_IN_MS);
 
     robot_socket.on('path', function(message) {
-        updatePath(message)
+        var whenUpdateIsComplete = updatePath(message)
     });
 
     setInterval(function() {
@@ -150,6 +156,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         initVideoStream();
         initRobot();
         initMap();
+        initPath();
 
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();

@@ -12,10 +12,10 @@ class Movement:
         self.__loop_time = 1
         self.__min_distance_to_target = 20
         self.__logger_service = http_service
-        self.__last_path_used = list()
+        self.__current_path = list()
 
     def get_last_path_used(self):
-        return self.__last_path_used
+        return self.__current_path
 
     def move_to(self, final_destination):
         self.__should_move = False
@@ -31,11 +31,12 @@ class Movement:
             position = self.__sense.get_robot_position()
             # compute
             path = self.__compute.find_path(position, final_destination)
-            self.__last_path_used = path
+            self.__current_path = path
             target = self.find_relative_target(path)
             # control
             self.__control.move(target[0], target[1])
             sleep(self.__loop_time)
+        self.__current_path = list()
 
     def __not_close_enough_to_target(self, target):
         actual_distance = distance_between(self.__sense.get_robot_position(), target)
