@@ -3,6 +3,17 @@ var Robot = angular.module('Robot', [])
 
         var robot_socket = io(ROBOT_HOST);
 
+        var RobotModel = function() {
+            this.angle = 0;
+            this.position = []
+        };
+
+        robotModel = new RobotModel();
+
+        this.getRobotModel = function() {
+            return robotModel;
+        };
+
         this.up = function() {
             var delta = {
                 delta_x: 0,
@@ -96,17 +107,6 @@ var Robot = angular.module('Robot', [])
             });
         };
 
-        var RobotModel = function() {
-            this.angle = 0;
-            this.position = []
-        };
-
-        robotModel = new RobotModel();
-
-        this.getRobotModel = function() {
-            return robotModel;
-        };
-
         setInterval(function() {
             robot_socket.emit('fetchRobotInfo');
         }, POSITION_REFRESH_TIME_IN_MS);
@@ -117,17 +117,4 @@ var Robot = angular.module('Robot', [])
             $rootScope.$broadcast('robotModelUpdated');
         });
 
-    }])
-    .service('Mesh', ['$http', function($http) {
-
-        this.get = function(callbackFunction) {
-            $http({
-                method: 'GET',
-                url: 'http://' + ROBOT_HOST + '/mesh'
-            }).then(function successCallback(response) {
-                callbackFunction(response.data);
-            }, function errorCallback(response) {
-                console.log("error getting mesh from base station");
-            });
-        };
     }]);
