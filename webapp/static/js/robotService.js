@@ -98,6 +98,7 @@ var Robot = angular.module('Robot', [])
 
         var RobotModel = function() {
             this.angle = 0;
+            this.position = []
         };
 
         robotModel = new RobotModel();
@@ -107,17 +108,14 @@ var Robot = angular.module('Robot', [])
         };
 
         setInterval(function() {
-            robot_socket.emit('fetchAngle');
+            robot_socket.emit('fetchRobotInfo');
         }, POSITION_REFRESH_TIME_IN_MS);
 
-        robot_socket.on('angle', function(message) {
-            robotModel.angle = message.angle;
+        robot_socket.on('robotUpdated', function(robotData) {
+            robotModel.position = robotData.robotPosition;
+            robotModel.angle = robotData.robotAngle;
             $rootScope.$broadcast('robotModelUpdated');
         });
-
-
-
-
 
     }])
     .service('Mesh', ['$http', function($http) {

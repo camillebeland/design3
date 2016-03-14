@@ -40,15 +40,10 @@ def robot_move_to():
     return "OK"
 
 
-@socket_io.on('fetchPosition')
-def robot_fetch_position():
-    socket_io.emit('position',  {'robotPosition': robot.get_position(),
-                                 'robotAngle': robot.get_angle()})
-
-
-@socket_io.on('fetchAngle')
-def robot_fetch_position():
-    socket_io.emit('angle',  {'angle': robot.get_angle()})
+@socket_io.on('fetchRobotInfo')
+def robot_fetch_info():
+    socket_io.emit('robotUpdated',  {'robotPosition': robot.get_position(),
+                                     'robotAngle': robot.get_angle()})
 
 
 @app.route('/mesh')
