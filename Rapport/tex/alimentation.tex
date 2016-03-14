@@ -1,0 +1,21 @@
+\section{Alimentation}
+
+L’alimentation est vitale pour l’accomplissement du robot durant un cycle de jeu. Évidemment, le branchement des régulateurs de tension ne se fait pas directement aux bornes de la batterie.
+Pour cette raison, il est nécessaire de mettre en place un dispositif qui permet la liaison entre ces deux composantes.
+
+\subsection{Batterie}
+
+La batterie fournit la puissance nécessaire aux diverses composantes du robot. Une évaluation avec précision de la puissance consommée par le robot ne sera possible que lorsque toutes les composantes
+seront intégrées. Aussi, ne connaissant pas le comportement du robot en situation de jeu, il est difficile de prévoir la demande en puissance du robot. Avec un manque important d’information à ce niveau,
+il a été convenu que la batterie doit pouvoir fournir de l’énergie le plus longtemps possible en raison des essais et des tests. De cette manière, il en résultera une meilleure préparation le jour de la
+compétition.  Ainsi, en considérant la tension nécessaire au régulateur de l’ordinateur embarqué, le choix de la batterie s’est fait selon la consommation maximale de chaque composante du robot.
+Évidemment, il est peu probable que la demande en puissance de chaque composante soit maximale au même moment, mais cette probabilité n’est pas nulle. Il n’a pas eu de tests expérimentalement en lien avec
+la limite maximale de puissance de chaque composante afin d’éviter tout bris matériel. L’évaluation s’est faite en fonction des informations présentent dans la documentation des appareils.
+Il en résulte une batterie de type Lipo de 115Wh. Un test élémentaire a été effectué pour obtenir un ordre de grandeur de la chute en tension de la batterie durant l’alimentation de l’ordinateur
+embarqué s’est avéré concluant. Cette solution assure une alimentation certaine pour la compétition et une durée prolongée pour la préparation.
+
+\subsection{Circuit imprimé}
+
+Le circuit imprimé distribue l’énergie de la batterie vers les régulateurs. Sa conception s’est basée sur sa capacité de satisfaire une demande importante en puissance de chaque composante.
+De plus, le courant délivré par la batterie peut s’avérer dangereux, un fusible s’est avéré incontournable. La largeur des traces a aussi été calculée en fonction du courant pouvant y circuler et
+l’élévation de température qui en est engendrée. Il en est de même pour les interrupteurs et la grosseur des fils. 

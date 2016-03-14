@@ -1,168 +1,167 @@
-%!TEX encoding = IsoLatin
+\chapter{Description des propriÃ©tÃ©s fonctionnelles}
+La Description des propriÃ©tÃ©s fonctionnelles (DPF), reprÃ©sentÃ© par la figure \ref{fig:dpf}, permet de visualiser les exigences du client ainsi que de les associer aux fonctionnalitÃ©s du produit.
+Les relations entre les exigences et les fonctionnalitÃ©s sont reprÃ©sentÃ©es par des chiffres de 1 (faible) Ã  5 (Ã©levÃ©).
 
-\chapter{Détails de la DPF}
 
-\section{Détails des exigences}
 
-\paragraph{10 minutes pour effectuer toutes les tâches:}
-Le temps afin d'effectuer toutes les étapes d'un cycle de jeu est de 10 minutes. Le chronomètre part au moment où le signal de départ est donné au robot. Plusieurs cycles de jeu peuvent être effectué durant le 10 minutes prescrit.
+\begin{landscape}
+  %\begin{center}
+    \begin{figure}[h]
+      \caption{Description des propriÃ©tÃ©s fonctionnelles}
+      \label{fig:dpf}
+      %\centering
+      \includegraphics[scale=0.82]{resources/dpf.pdf}
+    \end{figure}
+  %\end{center}
+\end{landscape}
 
-\paragraph{Recharge de l'électro-aimant par induction:}
-Le condensateur qui va contenir la charge que l'électro-aimant va utiliser doit être rechargé par induction à la station de recharge.
 
-\paragraph{Alimenter l'électro-aimant avec un condensateur:}
-L'électro-aimant doit absolument être alimenter par un condensateur et non par un autre type d'alimentation.
+\section{DÃ©tails des exigences}
 
-\paragraph{Soulever les trésor avec l'électro-aimant:}
-Le trésor doit être soulevé à l'aide d'un électro-aimant alimenté par un condensateur. La charge doit être suffisante afin de transporter le trésor jusqu'à l'île prescrite.
+\paragraph{10 minutes pour effectuer toutes les tÃ¢ches:}
+Le temps pour effectuer toutes les Ã©tapes d'un cycle de jeu est de 10 minutes. Le chronomÃ¨tre part au moment oÃ¹ le signal de dÃ©part est donnÃ© au robot.
+Plusieurs cycles de jeu peuvent Ãªtre effectuÃ©s durant les 10 minutes prescrits.
 
-\paragraph{Le robot ne peut toucher aux bords ou aux îles:}
-Dans tous ses déplacements, le robot ne peut toucher aux murs de la zone de jeu. Une seule offense est tolérée.
+\paragraph{Recharge de l'Ã©lectro-aimant par induction:}
+Le condensateur qui va contenir la charge que l'Ã©lectro-aimant va utiliser doit Ãªtre rechargÃ© par induction Ã  la station de recharge.
 
-\paragraph{Afficher la trajectoire planifié du robot:}
-Tous les déplacements du robot doivent être annoncés à l'avance.
+\paragraph{Autonomie Ã©nergÃ©tique:}
+Le robot doit Ãªtre entiÃ¨rement autonome du point de vue Ã©nergÃ©tique, donc alimentÃ© seulement par la batterie.
 
-\paragraph{Afficher la couleur ou la forme de l'île prescrite:} Une fois la requête serveur faite, le système doit afficher la couleur ou la forme de l'île identifié à la station de base.
+\paragraph{Alimenter l'Ã©lectro-aimant avec un condensateur:}
+L'Ã©lectro-aimant doit absolument Ãªtre alimentÃ© par un condensateur et non par un autre type d'alimentation.
+
+\paragraph{Soulever les trÃ©sor avec l'Ã©lectro-aimant:}
+Le trÃ©sor doit Ãªtre soulevÃ© Ã  l'aide d'un Ã©lectro-aimant alimentÃ© par un condensateur. La charge doit Ãªtre suffisante afin de transporter le trÃ©sor jusqu'Ã  l'Ã®le prescrite.
+
+\paragraph{Le robot ne peut toucher aux bords ou aux Ã®les:}
+Dans tous ses dÃ©placements, le robot ne peut toucher aux murs de la zone de jeu. Une seule offense est tolÃ©rÃ©e.
+
+\paragraph{Afficher la trajectoire planifiÃ© du robot:}
+Tous les dÃ©placements du robot doivent Ãªtre annoncÃ©s Ã  l'avance.
+
+\paragraph{Afficher la couleur ou la forme de l'Ã®le prescrite:} Une fois la requÃªte serveur faite, le systÃ¨me doit afficher sur la station de base la couleur et la forme de l'Ã®le identifiÃ©e.
 
 \paragraph{Afficher la position du robot:}
-La position estimée du robot doit être affichée sur l'interface utilisateur. Cette position a une incertitude de 15 cm par rapport à la position réelle.
+La position estimÃ©e du robot doit Ãªtre affichÃ©e sur l'interface utilisateur. Cette position a une incertitude de 15 cm par rapport Ã  la position rÃ©elle.
 
 \paragraph{Afficher le voltage au bornes du condensateur:}
-Le voltage du condensateur servvant à alimenter l'électro-aimant doit être affiché sur l'interface utilisateur en tout temps.
+Le voltage du condensateur servant Ã  alimenter l'Ã©lectro-aimant doit Ãªtre affichÃ© sur l'interface utilisateur en tout temps.
 
-\paragraph{Le code Manchester doit être capter sans-fil:}
-La méthode d'aquisition du code Manchester doit être sans-fil, le spectre utilisé n'est pas important.
+\paragraph{Le code Manchester doit Ãªtre capter sans-fil:}
+La mÃ©thode d'acquisition du code Manchester doit Ãªtre sans-fil, le spectre utilisÃ© n'est pas important.
 
-\paragraph{Le décodage ne doit pas être effectué dans la station de recharge:}
+\paragraph{Le dÃ©codage ne doit pas Ãªtre effectuÃ© dans la station de recharge:}
+Il faut attendre que le condensateur soit plein avant de dÃ©coder le code Manchester.
 
-Il faut attendre que le condensateur soit plein avant de décoder le code Manchester.
+\paragraph{Une seule requÃªte serveur par cycle de jeu:}
+AprÃ¨s l'aquisition du code Manchester, une seule requÃªte serveur peut Ãªtre faite par cycle de jeu.
 
-\paragraph{Une seule requête serveur par cycle de jeu:}
-Après l'aquisition du code Manchester, une seule requête serveur peut être faite par cycle de jeu.
+\paragraph{Le trÃ©sor doit Ãªtre dÃ©posÃ© sur la bonne Ã®le:}
+Le trÃ©sor doit Ãªtre dÃ©posÃ© sur l'Ã®le identifiÃ©e Ã  l'aide du code Manchester et de la requÃªte serveur.
 
-\paragraph{Le trésoir doit être déposé sur la bonne île:}
-Le trésor doit être déposée sur l'île identifier à l'aide du code Manchester et de la requête serveur.
+\paragraph{Toutes les alimentations doivent Ãªtre protÃ©gÃ©es par fusible et/ou interrupteur:}
+Afin de protÃ©ger tout l'Ã©quipement du robot, toutes les alimentation se doivent d'Ãªtre protÃ©gÃ©es au minimum par un fusible ou un interrupteur.
 
-\paragraph{Le robot doit être alimenté par batterie:}
-Tous les systèmes montés sur le robot doivent être alimentés par un système de batterie embarqué sur le robot.
+\paragraph{Autonomie dans le choix des actions:}
+Durant tout le cycle de jeu, le robot doit Ãªtre entiÃ¨rement autonome dans ses dÃ©placements et actions. Des touchettes sont autorisÃ©es avec pÃ©nalitÃ©s.
 
-\paragraph{Toutes les alimentations doivent être protégées par fusible et/ou interrupteur:}
-Afin de protéger tout l'équipement du robot, toutes les alimentation se doivent d'être protégées au minimum par un fusible ou un interrupteur.
+\paragraph{Aucune configuration requise aprÃ¨s mise sous tension:}
+AprÃ¨s le dÃ©marrage, le robot doit commencer le jeu de maniÃ¨re autonome.
 
-\paragraph{Autonomie complète du robot:}
-Durant tout le cycle de jeu, le robot doit être entièrement autonome dans ses déplacements et actions. Des touchettes sont alloués avec pénalités.
-
-\paragraph{Rafraichissement de l'IU de minimum 0.2 Hz:}
-L'interface utilisateur affichant par exemple la position du robot, les trajets planifiés ainsi que le voltage du condensateur doit être rafraichit au minimum toutes les 5 secondes.
+\paragraph{Rafraichissement minimal de l'interface utilisateur de 0.2 Hz:}
+L'interface utilisateur affichant par exemple la position du robot, les trajets planifiÃ©s ainsi que le voltage du condensateur doit Ãªtre rafraichit au minimum toutes les 5 secondes.
 
 \paragraph{Budget de 300\$ :}
-En dehors du matériel fournis, l'ensemble du matériel acheté servant au robot doit coûter au maximum 300\$.
+En dehors du matÃ©riel fourni, l'ensemble du matÃ©riel achetÃ© servant au robot doit coÃ»ter au maximum 300\$.
 
-\paragraph{Apparance professionelle:}
-L'ensemble des circuits doivents être montés sur circuits imprimés. Les breadboards ne sont pas permis. 
+\paragraph{Apparence professionnelle:}
+L'ensemble des circuits doivent Ãªtre montÃ©s sur circuits imprimÃ©s. Les breadboards ne sont pas permis.
 
-\section{Détail des fonctionalités}
+\section{DÃ©tail des fonctionnalitÃ©s}
 
-\subsection{Détecter les éléments du jeu}
+\subsection{DÃ©tecter les Ã©lÃ©ments du jeu}
 
-\paragraph{Détecter la position et l'angle du robot:}
+\paragraph{DÃ©tecter la position et l'angle du robot:}
+Le robot est en mesure de se situer dans son environnement Ã  l'aide des diffÃ©rents capteurs Ã  sa disposition.
 
-Le robot est en mesure de se situer dans son environnement à l'aide des différents capteurs à sa disposition.
+\paragraph{DÃ©tecter les Ã®les, leurs formes, tailles et couleurs:}
+Le robot dÃ©tecte les Ã®les placÃ©es de faÃ§on alÃ©atoire. Il identifie leur dimension, leur couleur et leur forme.
 
-\paragraph{Détecter les îles, leurs formes, tailles et couleurs:}
+\paragraph{DÃ©tecter les trÃ©sors:}
+Le robot est en mesure de dÃ©tecter les trÃ©sors dans l'environnement.
 
-Le robot détecte les îles placées de façon aléatoire. Il identifie leur dimension, leur couleur et leur forme.
+\paragraph{DÃ©tecter la station de recharge:}
+Le robot peut identifier la station de recharge en dÃ©but de cycle de jeu.
 
-\paragraph{Détecter les trésors:}
+\paragraph{DÃ©tecter les limites de la zone de jeu:}
+Le robot dÃ©tecte lors de ses dÃ©placement les limites de la zone de jeu afin de ne jamais entrer en contact avec elles.
 
-Le robot est en mesure de détecter les trésors dans l'environnement.
+\subsection{AcquÃ©rir et dÃ©coder un code Manchester}
 
-\paragraph{Détecter la station de recharge:}
+\paragraph{AcquÃ©rir le code Manchester sans-fil:}
+Le robot peut acquÃ©rir un code Manchester Ã  l'aide d'un protocole HF.
 
-Le robot peut identifier la station de recharge en début de cycle de jeu.
+\paragraph{DÃ©coder le code Manchester:}
+Le robot est en mesure de dÃ©coder le code Manchester afin d'obtenir le caractÃ¨re ASCII correspondant.
 
-\paragraph{Détecter les limites de la zone de jeu:}
+\paragraph{Faire une requÃªte serveur:}
+Le robot peut effectuer une requÃªte GET ayant comme paramÃ¨tre le code reÃ§u par le signal HF.
 
-Le robot détecte lors de ses déplacement les limites de la zone de jeu afin de ne jamais entrer en contact avec elles.
+\subsection{Trouver et manipuler un trÃ©sor}
 
-\subsection{Acéquérir et décoder un code Manchester}
+\paragraph{Charger l'Ã©lectro-aimant Ã  la station de recharge sans-fil:}
+Le robot a un dispositif permettant de charger un condensateur par induction afin d'offrir de la puissance Ã  l'Ã©lectro-aimant.
 
-\paragraph{Acquérir le code Manchester sans-fil:}
+\paragraph{Choisir un trÃ©sor en fonction de sa position:}
+Avec ses capteurs, le robot est en mesure de choisir un des trÃ©sor sur la zone de jeu en fonction de sa position.
 
-Le robot peut acquérir un code Manchester à l'aide d'un protocole HF.
-
-\paragraph{Décoder le code Manchester:}
-
-Le robot est en mesure de décoder le code Manchester afin d'obtenir le caractère ASCII correspondant.
-
-\paragraph{Faire une requête serveur:}
-
-Le robot peut effectuer une requête GET ayant comme paramètre le code reçu par le signal HF. 
-
-\subsection{Trouver et manipuler un trésor}
-
-\paragraph{Charger l'électro-aimant à la station de recharge sans-fil:}
-
-Le robot a un dispositif permettant de charger un condensateur par induction afin d'offrir de la puissance à l'électro-aimant.
-
-\paragraph{Choisir un trésor en fonction de sa position:}
-
-Avec ses capteurs, le robot est en mesure de choisir un des trésor sur la zone de jeu en fonction de sa position.
-
-\paragraph{Soulever et déposer un trésor à l'aide d'un électro-aimant:}
-
-Avec son électro-aimant, le robot est en mesure de soulever et de déposer un trésor.
+\paragraph{Soulever et dÃ©poser un trÃ©sor Ã  l'aide d'un Ã©lectro-aimant:}
+Avec son Ã©lectro-aimant, le robot est en mesure de soulever et de dÃ©poser un trÃ©sor.
 
 \subsection{Choisir automatiquement la prochaine action:}
 
-Durant tout le cycle de jeu, le robot est en mesure de décider de la prochaine action. Cela comprend entre autres les déplacements, les rotations, le mouvement de la caméra embarqué et la requête serveur pour le code Manchester.
+\paragraph{ÃŠtre prÃªt au jeu aprÃ¨s mise sous tension:}
+Le robot doit Ãªtre en mesure de jouer une fois que la mise sous tension est appliquÃ©.
 
-\subsection{Alimenter le système}
+\paragraph{Faire toutes les Ã©tapes du jeu sans intervention externe:}
+Le robot doit faire un cycle de jeu complet de maniÃ¨re autonome.
 
-\paragraph{Protéger les différents circuits:}
+\subsection{Alimenter le systÃ¨me}
 
-Toutes les alimentation sont protégées avec des fusibles ou des interrupteurs.
+\paragraph{ProtÃ©ger les diffÃ©rents circuits:}
+Toutes les alimentation sont protÃ©gÃ©es avec des fusibles ou des interrupteurs.
 
-\paragraph{Fournir l'alimentation appropriée à chaque composante:}
+\paragraph{Fournir l'alimentation appropriÃ©e Ã  chaque composante:}
+Chaque composante a des besoins diffÃ©rents en alimentation. Le robot possÃ¨de donc une alimentation pour les moteur, l'ordinateur embarquÃ©, la camÃ©ra embarquÃ©e, le micro-contrÃ´leur, le pololu et l'Ã©lectro-aimant.
 
-Chaque composante a des besoins différents en alimentation. Le robot possède donc une alimentation pour les moteur, l'ordinateur embarqué, la caméra embarqué, le micro-contrôleur, le pololu et l'électro-aimant.
+\subsection{DÃ©placer le robot}
 
-\subsection{Déplacer le robot}
+\paragraph{DÃ©placer le robot en ligne droite:}
+Avec ses 4 roues, le robot est en mesure de se dÃ©placer dans toutes les directions dans les axes X et Y.
 
-\paragraph{Déplacer le robot en ligne droite:}
+\paragraph{Effectuer une rotation du robot sur lui mÃªme:}
+Le robot peut tourner sur lui-mÃªme Ã  gauche ou Ã  droite.
 
-Avec ses 4 roues, le robot est en mesure de se déplacer dans toutes les directions dans les axes X et Y.
+\paragraph{Asservir les dÃ©placements en position et en vitesse:}
+Les 4 roues sont asservies en vitesse de faÃ§on Ã  garder une vitesse constante correspondant Ã  la commande.
 
-\paragraph{Effectuer une rotation du robot sur lui même:}
+\paragraph{DÃ©terminer un trajet pour se rendre d'un point A Ã  un point B:}
+Pour un objectif avec une position donnÃ©e, le robot peut dÃ©terminer une sÃ©rie de mouvement Ã  faire pour s'y rendre.
 
-Le robot peut tourner sur lui-même à gauche ou à droite.
-
-\paragraph{Asservir les déplacements en position et en vitesse:}
-
-Les 4 roues sont asservis en vitesse de façon à garder une vitesse constante correspondant à la commande.
-
-\paragraph{Déterminer un trajet pour se rendre d'un point A à un point B:}
-
-Pour un objectif en position donné, le robot peut déterminer une série de mouvement à faire pour s'y rendre.
-
-\subsection{Afficher l'état du jeu}
+\subsection{Afficher l'Ã©tat du jeu}
 
 \paragraph{Afficher le voltage du condensateur:}
+Le robot envoie Ã  la station de base le voltage du condensateur qui l'affiche en temps rÃ©el.
 
-Le robot envoit à la station de base le voltage du condensateur qui l'affiche en temps réel.
+\paragraph{Afficher la carte virtuelle du jeu avec tous ses Ã©lÃ©ments:}
+La station de base affiche une carte correspondant Ã  la zone de jeu et ses Ã©lÃ©ments, incluant la position estimÃ©e du robot.
 
-\paragraph{Afficher la carte virtuelle du jeu avec tous ses éléments:}
+\paragraph{Afficher les dÃ©placements planifiÃ©s du robot sur la carte:}
+Les dÃ©placements calculÃ© par le robot sont affichÃ©s sur la carte Ã  la station de base.
 
-La station de base affiche une carte correspondant à la zone de jeu et ses éléments, incluant la position estimée du robot.
-
-\paragraph{Afficher les déplacements planifiés du robot sur la carte:}
-
-Les déplacements calculé par le robot sont affichés sur la carte à la station de base.
-
-\subsection{Respecter apparance}
-
-Aucun breadboard n'est utilisé, tous les circuits sont fait sur PCB.
+\subsection{Respecter apparences}
+Aucun breadboard n'est utilisÃ©, tous les circuits sont fait sur PCB.
 
 \subsection{Respecter le budget}
-
 Toutes les composantes du robot respecte le budget total de 300\$.

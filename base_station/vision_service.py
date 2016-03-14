@@ -43,15 +43,15 @@ class VisionService:
             poly['color'] = color
         return shapes
 	
-	#Le devant du robot = à 45 deg anti-horaire du mauve vers le orange
+    #Le devant du robot = à 45 deg anti-horaire du mauve vers le orange
     def find_robot_position(self):
         image = Image(self.__camera.get_frame())
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
         orange_circle = self.__shape_detector.find_circle_color(image, 'orange', default_camille_circle_params)
         angle = self.__find_angle_between__(purple_circle, orange_circle)
-		angle = ((angle +180 + 45) % 360) - 180
+        angle = ((angle +180 + 45) % 360) - 180
         robot_position = {
-            'center': ((orange_circle[0]+purple_circle[0]) /2 , (orange_circle[1]+purple_circle[1]) /2)
+            'center': ((orange_circle[0]+purple_circle[0]) /2 , (orange_circle[1]+purple_circle[1]) /2),
             'angle': angle
         }
         return robot_position
