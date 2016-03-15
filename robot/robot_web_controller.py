@@ -16,6 +16,7 @@ def inject(a_robot, a_mesh):
 def run(host, port):
     socket_io.run(app, host=host, port=port)
 
+
 @app.route('/robot/move', methods=['POST'])
 def robot_move():
     delta_x = request.json['delta_x']
@@ -41,9 +42,14 @@ def robot_move_to():
 
 
 @socket_io.on('fetchPosition')
-def robot_fetchposition():
+def robot_fetch_position():
     socket_io.emit('position',  {'robotPosition': robot.get_position(),
                                  'robotAngle': robot.get_angle()})
+
+
+@socket_io.on('fetchPath')
+def robot_fetch_path():
+    socket_io.emit('path',  {'robotPath': robot.get_path()})
 
 
 @app.route('/mesh')

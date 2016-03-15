@@ -8,4 +8,12 @@ website.controller('displayControlsController', ['$scope', '$rootScope', functio
     $rootScope.$broadcast('meshToggleOff');
   };
 
+  $scope.islandToggleOn = function() {
+    $rootScope.$broadcast('islandToggleOn');
+  };
+
+  $scope.islandToggleOff = function() {
+    $rootScope.$broadcast('islandToggleOff');
+  };
+
 }]);
