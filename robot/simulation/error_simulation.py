@@ -1,5 +1,5 @@
-from robot.simulation_robot import SimulationWheels
 import random
+from robot.simulation.simulation_robot import SimulationWheels
 
 
 class NoisyWheels(SimulationWheels):

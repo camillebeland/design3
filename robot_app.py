@@ -1,19 +1,19 @@
-from robot import robot_web_controller
-from configuration import configuration
-from robot.error_simulation import NoisyWheels
-
-from robot.wheels_usb_controller import WheelsUsbController
 import serial
 import serial.tools.list_ports as lp
-from robot.wheels_usb_commands import WheelsUsbCommands
-
-from robot.robot import Robot
-from robot.map import Map
-from pathfinding.pathfinding import PathFinder, Cell, Mesh
+from configuration import configuration
+from pathfinding.pathfinding import PathFinder
+from pathfinding.mesh import Mesh
+from pathfinding.cell import Cell
+from robot import robot_web_controller
 from robot.islands_service import IslandsService
-from robot.robot_service import RobotService
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
+from robot.map import Map
+from robot.robot import Robot
+from robot.robot_service import RobotService
+from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
+from robot.wheels_usb_commands import WheelsUsbCommands
+from robot.wheels_usb_controller import WheelsUsbController
 
 if __name__ == '__main__':
     config = configuration.get_config()
