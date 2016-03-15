@@ -4,7 +4,11 @@ class VisionService:
     def __init__(self, camera, shape_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
-
+	
+	def get_pixel_per_meter(self):
+		image = Image(self.__camera.get_frame())
+		return self.__shape_detector.get_pixels_per_meter(image)
+	
     def build_map(self):
         image = Image(self.__camera.get_frame())
         circles, pentagons, squares, triangles = [], [], [], []

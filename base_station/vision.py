@@ -11,10 +11,15 @@ class Image:
         self.__image = image_src
         self.__image_format = image_format
 
-
+	
+		
+	
     def get_height(self):
         return self.__image.shape[0]
-
+	
+    def get_width(self):
+        return self.__image.shape[1]
+		
     def read_image(self):
         return self.__image
 
@@ -76,197 +81,233 @@ class Image:
 
 class ShapeDetector:
 
+	def get_pixels_per_meter(self, image):
+		blurred_image = image.filter_gaussian_blur((15,15), 0)
+		green_contours = (blurred_image
+                           .filter_by_color(hsv_range['green_square'])
+                           .erode(5,2)
+                           .dilate(5,2)
+                           .find_contours())
+		biggest_square = 0
+		biggest_square_area = 0
+		polygon_detector = PolygonDetector()
+		for contour in green_contours:
+			shape = polygon_detector.detect(contour)
+			if shape != "square":
+				continue
+			area = cv2.contourArea(contour)
+			if area >biggest_square_area:
+				biggest_square_area = area
+				biggest_square = contour
+		
+		minY = 5000
+		maxY = -1
+		minX = 5000
+		maxX = -1
+		
+		for v in biggest_square:
+			if v[0][0] < minX:
+				minX = v[0][0]
+			if v[0][1] < minY:
+				minY = v[0][1]
+			if v[0][0] > maxX:
+				maxX = v[0][0]
+			if v[0][1] > maxY:
+				maxY =v[0][1]
 
-    def find_shapes(self, image, parameters=None):
+		return int(abs(maxX - minX)/0.663)
 
-        blurred_image = image.filter_gaussian_blur((15,15), 0)
+	def find_shapes(self, image, parameters=None):
+
+		blurred_image = image.filter_gaussian_blur((15,15), 0)
 
 
-        blue_contours = (blurred_image
+		blue_contours = (blurred_image
                          .filter_by_color(hsv_range['blue'])
                          .erode(5,2)
                          .dilate(5,2)
                          .find_contours())
 
-        yellow_contours = (blurred_image
+		yellow_contours = (blurred_image
                            .filter_by_color(hsv_range['yellow'])
                            .erode(5,2)
                            .dilate(5,2)
                            .find_contours())
 
-        green_contours = (blurred_image
+		green_contours = (blurred_image
                           .filter_by_color(hsv_range['green'])
                           .erode(5,2)
                           .dilate(5,2)
                           .find_contours())
 
-        light_red_mask = (blurred_image
+		light_red_mask = (blurred_image
                           .filter_by_color(hsv_range['red']))
 
-        dark_red_mask = (blurred_image
+		dark_red_mask = (blurred_image
                          .filter_by_color(hsv_range['dark_red']))
 
-        light_red_mask.show()
+		light_red_mask.show()
 
-        red_mask = light_red_mask + dark_red_mask
+		red_mask = light_red_mask + dark_red_mask
 
-        red_contours = (red_mask
+		red_contours = (red_mask
                         .erode(5,2)
                         .dilate(5,2)
                         .find_contours())
 
 
-        shapes = []
+		shapes = []
 
-        contours = [red_contours, green_contours, blue_contours, yellow_contours]
-        colors = ['red', 'green', 'blue', 'yellow']
+		contours = [red_contours, green_contours, blue_contours, yellow_contours]
+		colors = ['red', 'green', 'blue', 'yellow']
 
 
-        polygon_detector = PolygonDetector()
-        for i in [0,1,2,3]:
-            colored_contours = contours[i]
-            current_color = colors[i]
-            for contour in colored_contours:
-                shape = polygon_detector.detect(contour)
+		polygon_detector = PolygonDetector()
+		for i in [0,1,2,3]:
+			colored_contours = contours[i]
+			current_color = colors[i]
+			for contour in colored_contours:
+				shape = polygon_detector.detect(contour)
 
-                minY = 5000
-                maxY = -1
-                minX = 5000
-                maxX = -1
+				minY = 5000
+				maxY = -1
+				minX = 5000
+				maxX = -1
 
-                epsilon = 0.015*cv2.arcLength(contour,True)
-                approx = cv2.approxPolyDP(contour,epsilon,True)
+				epsilon = 0.015*cv2.arcLength(contour,True)
+				approx = cv2.approxPolyDP(contour,epsilon,True)
 
-                if (not cv2.isContourConvex(approx)):
-                    continue
+				if (not cv2.isContourConvex(approx)):
+					continue
 
-                for vertex in contour:
-                    if vertex[0][0] < minX:
-                        minX = vertex[0][0]
-                    if vertex[0][1] < minY:
-                        minY = vertex[0][1]
-                    if vertex[0][0] > maxX:
-                        maxX = vertex[0][0]
-                    if vertex[0][1] > maxY:
-                        maxY = vertex[0][1]
+				for vertex in contour:
+					if vertex[0][0] < minX:
+						minX = vertex[0][0]
+					if vertex[0][1] < minY:
+						minY = vertex[0][1]
+					if vertex[0][0] > maxX:
+						maxX = vertex[0][0]
+					if vertex[0][1] > maxY:
+						maxY = vertex[0][1]
 
-                if abs(maxX - minX) > 120:
-                    continue
-                if abs(maxY - minY) > 120:
-                    continue
-                if abs(maxX - minX) < 40:
-                    continue
-                if abs(maxY - minY) < 40:
-                    continue
+				if abs(maxX - minX) > 120:
+					continue
+				if abs(maxY - minY) > 120:
+					continue
+				if abs(maxX - minX) < 40:
+					continue
+				if abs(maxY - minY) < 40:
+					continue
 
-                M = cv2.moments(contour)
-                cX = int((M["m10"] / M["m00"]))
-                cY = int((M["m01"] / M["m00"]))
+				M = cv2.moments(contour)
+				cX = int((M["m10"] / M["m00"]))
+				cY = int((M["m01"] / M["m00"]))
 				shapes.extend([cx,cy,current_color,shape])
 		return shapes
-                #print("{0},{1},{2},{3}".format(cX,cY,current_color, shape))
+            	#print("{0},{1},{2},{3}".format(cX,cY,current_color, shape))
 
 
 
-        
+		
 
-    def find_circle_color(self, image, color, parameters):
-        median_blur_kernel_size = parameters['median_blur_kernel_size'] 
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
-        hough_circle_min_distance = parameters['hough_circle_min_distance']
-        hough_circle_param1 = parameters['hough_circle_param1']
-        hough_circle_param2 = parameters['hough_circle_param2']
-        hough_circle_min_radius = parameters['hough_circle_min_radius']
-        hough_circle_max_radius = parameters['hough_circle_max_radius']
+	def find_circle_color(self, image, color, parameters):
+		median_blur_kernel_size = parameters['median_blur_kernel_size'] 
+		gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
+		gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
+		hough_circle_min_distance = parameters['hough_circle_min_distance']
+		hough_circle_param1 = parameters['hough_circle_param1']
+		hough_circle_param2 = parameters['hough_circle_param2']
+		hough_circle_min_radius = parameters['hough_circle_min_radius']
+		hough_circle_max_radius = parameters['hough_circle_max_radius']
 
-        circles = (image
-                   .filter_median_blur(median_blur_kernel_size)
-                   .filter_by_color(hsv_range[color])
-                   .filter_gaussian_blur((gaussian_blur_kernel_size, gaussian_blur_kernel_size), gaussian_blur_sigma_x)
-                   .find_hough_circles(hough_circle_min_distance,
-                                       hough_circle_param1,
-                                       hough_circle_param2,
-                                       hough_circle_min_radius,
-                                       hough_circle_max_radius))
-        if(circles is not None):
-            return list(map(lambda circle: {'x' : float(circle[0]), 'y' : image.get_height() - float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
-        else:
-            return []
+		circles = (image
+				   .filter_median_blur(median_blur_kernel_size)
+				   .filter_by_color(hsv_range[color])
+				   .filter_gaussian_blur((gaussian_blur_kernel_size, gaussian_blur_kernel_size), gaussian_blur_sigma_x)
+				   .find_hough_circles(hough_circle_min_distance,
+									   hough_circle_param1,
+									   hough_circle_param2,
+									   hough_circle_min_radius,
+									   hough_circle_max_radius))
+		if(circles is not None):
+			return list(map(lambda circle: {'x' : float(circle[0]), 'y' : image.get_height() - float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
+		else:
+			return []
 
-    def find_polygon_color(self, image, polygon, color, parameters, opencv=cv2):
-        median_blur_kernel_size = parameters['median_blur_kernel_size'] 
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
-        canny_threshold1 = parameters['canny_threshold1']
-        canny_threshold2 = parameters['canny_threshold2']
-        canny_aperture_size = parameters['canny_aperture_size']
-        dilate_kernel_size = parameters['dilate_kernel_size']
-        dilate_ierations = parameters['dilate_ierations']
-        erode_kernel_size = parameters['erode_kernel_size']
-        erode_iterations = parameters['erode_iterations']
-        polygonal_approximation_error = parameters['polygonal_approximation_error']
+	def find_polygon_color(self, image, polygon, color, parameters, opencv=cv2):
+		median_blur_kernel_size = parameters['median_blur_kernel_size'] 
+		gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
+		gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
+		canny_threshold1 = parameters['canny_threshold1']
+		canny_threshold2 = parameters['canny_threshold2']
+		canny_aperture_size = parameters['canny_aperture_size']
+		dilate_kernel_size = parameters['dilate_kernel_size']
+		dilate_ierations = parameters['dilate_ierations']
+		erode_kernel_size = parameters['erode_kernel_size']
+		erode_iterations = parameters['erode_iterations']
+		polygonal_approximation_error = parameters['polygonal_approximation_error']
 
-        def approxPolygon(contour):
-            return opencv.approxPolyDP(contour, polygonal_approximation_error , True)
+		def approxPolygon(contour):
+			return opencv.approxPolyDP(contour, polygonal_approximation_error , True)
 
-        contours = (image
-                    .filter_median_blur(median_blur_kernel_size)
-                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
-                    .filter_by_color(hsv_range[color])
-                    .canny(canny_threshold1,canny_threshold2,canny_aperture_size)
-                    .dilate(dilate_kernel_size,dilate_ierations)
-                    .erode(erode_kernel_size, erode_iterations)
-                    .find_contours())
+		contours = (image
+					.filter_median_blur(median_blur_kernel_size)
+					.filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
+					.filter_by_color(hsv_range[color])
+					.canny(canny_threshold1,canny_threshold2,canny_aperture_size)
+					.dilate(dilate_kernel_size,dilate_ierations)
+					.erode(erode_kernel_size, erode_iterations)
+					.find_contours())
 
 
-        return (
-            list(
-                map(
-                    lambda x : {
-                        'x' : (reduce(np.add, x)/edges[polygon])[0],
-                        'y' : image.get_height() - (reduce(np.add, x)/edges[polygon])[1]
-                    },
-                    map(
-                        lambda x : x[:,0],
-                        filter(
-                            lambda x: len(x) == edges[polygon],
-                            map(approxPolygon, contours)
-                        )
-                    )
-                )
-            )
-        )
+		return (
+			list(
+				map(
+					lambda x : {
+						'x' : (reduce(np.add, x)/edges[polygon])[0],
+						'y' : image.get_height() - (reduce(np.add, x)/edges[polygon])[1]
+					},
+					map(
+						lambda x : x[:,0],
+						filter(
+							lambda x: len(x) == edges[polygon],
+							map(approxPolygon, contours)
+						)
+					)
+				)
+			)
+		)
 
 convert = {
-    'bgr' : {
-        'hsv' : lambda image : cv2.cvtColor(image, cv2.COLOR_BGR2HSV),
-        'gray' : lambda image : cv2.cvtColor(image, cv2.COLOR_BGR2GRAY),
-        'bgr' : lambda image : image
+	'bgr' : {
+		'hsv' : lambda image : cv2.cvtColor(image, cv2.COLOR_BGR2HSV),
+		'gray' : lambda image : cv2.cvtColor(image, cv2.COLOR_BGR2GRAY),
+		'bgr' : lambda image : image
 
-    },
-    'hsv' : {
-        'bgr' : lambda image : cv2.cvtColor(image, cv2.COLOR_HSV2BGR),
-        'gray' : lambda image : cv2.cvtColor(
-            cv2.cvtColor(image, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY
-        ),
-        'hsv' : lambda image : image
-    },
-    'gray' : {
-        'bgr' : lambda image : image
-    }
+	},
+	'hsv' : {
+		'bgr' : lambda image : cv2.cvtColor(image, cv2.COLOR_HSV2BGR),
+		'gray' : lambda image : cv2.cvtColor(
+			cv2.cvtColor(image, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY
+		),
+		'hsv' : lambda image : image
+	},
+	'gray' : {
+		'bgr' : lambda image : image
+	}
 }
 
 hsv_range = {
-    'red' : ((160,180,105), (180,255,255)),
-    'dark_red' : ((0,180,100), (20,255,255)),
-    'green' : ((50,100,50), (80,255,255)),
-    'blue' : ((80,50,50), (130,255,255)),
-    'yellow' : ((17,70,90), (33,255,255))
+	'red' : ((160,180,105), (180,255,255)),
+	'dark_red' : ((0,180,100), (20,255,255)),
+	'green' : ((50,100,50), (80,255,255)),
+	'blue' : ((80,50,50), (130,255,255)),
+	'yellow' : ((17,70,90), (33,255,255)),
+	"green_square": ((40,30,50),  (80,255,255))
 }
 
 edges = {
-    'triangle' : 3,
-    'square' : 4,
-    'pentagon' : 5,
+	'triangle' : 3,
+	'square' : 4,
+	'pentagon' : 5,
 }
