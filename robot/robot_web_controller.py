@@ -7,11 +7,6 @@ CORS(app)
 socket_io = SocketIO(app)
 
 
-def inject_mocks(mock_app, mock_socket_io):
-    app = mock_app
-    socket_io = mock_socket_io
-
-
 def inject(a_robot, a_mesh):
     global robot, mesh
     robot = a_robot
@@ -61,8 +56,10 @@ def robot_fetch_path():
 def mesh():
     return jsonify(mesh_to_json(mesh))
 
+
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
+
 
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
