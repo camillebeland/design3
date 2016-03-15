@@ -1,6 +1,7 @@
 import requests
 from pathfinding.pathfinding import polygon
 
+
 class IslandsService:
     def __init__(self, host, port):
         self.islands = []

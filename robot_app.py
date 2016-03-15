@@ -22,6 +22,7 @@ if __name__ == '__main__':
     base_station_host = config.get('baseapp', 'host')
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
+    island_server = config.get('island_server', 'host')
 
     worldmap = Map(900,544)
     if(wheelsconfig == "simulation"):
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     polygons = islands.get_polygons()
     mesh = Mesh(cell.partitionCells(polygons, 10))
     pathfinder = PathFinder(mesh)
-    robot_service = RobotService(base_station_address)
+    robot_service = RobotService(base_station_address, )
     robot = Robot(wheels, worldmap, pathfinder, robot_service)
     robot_web_controller.inject(robot, mesh)
     robot_web_controller.run(host, port)

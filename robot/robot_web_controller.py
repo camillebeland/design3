@@ -50,8 +50,10 @@ def robot_fetchposition():
 def mesh():
     return jsonify(mesh_to_json(mesh))
 
+
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
+
 
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
