@@ -17,6 +17,7 @@ class CameraService(object):
         while(self.buffer.read() == None):
             pass
         img = self.buffer.read()
+		
         if(format == 'bgr'):
             return img
         elif(format == 'jpeg'):
