@@ -18,7 +18,7 @@ var MapModule = angular.module('MapModule', [])
               url: 'http://' + BASE_STATION_HOST + '/worldmap'
           }).then(function successCallback(response) {
               return response.data;
-          }, function erroCallback(response) {
+          }, function errorCallback(response) {
               console.log("error getting map from base station");
           });
       };
@@ -29,7 +29,7 @@ var MapModule = angular.module('MapModule', [])
               url: 'http://' + BASE_STATION_HOST + '/robot_position'
           }).then(function successCallback(response) {
               return response.data;
-          }, function erroCallback(response) {
+          }, function errorCallback(response) {
               console.log("error getting robot position from base station");
           });
       }
