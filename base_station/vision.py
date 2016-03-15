@@ -105,15 +105,15 @@ class ShapeDetector:
 		minX = 5000
 		maxX = -1
 		
-		for v in biggest_square:
-			if v[0][0] < minX:
-				minX = v[0][0]
-			if v[0][1] < minY:
-				minY = v[0][1]
-			if v[0][0] > maxX:
-				maxX = v[0][0]
-			if v[0][1] > maxY:
-				maxY =v[0][1]
+		for vertex in biggest_square:
+			if vertex[0][0] < minX:
+				minX = vertex[0][0]
+			if vertex[0][1] < minY:
+				minY = vertex[0][1]
+			if vertex[0][0] > maxX:
+				maxX = vertex[0][0]
+			if vertex[0][1] > maxY:
+				maxY =vertex[0][1]
 
 		return int(abs(maxX - minX)/0.663)
 
@@ -202,7 +202,7 @@ class ShapeDetector:
 				M = cv2.moments(contour)
 				cX = int((M["m10"] / M["m00"]))
 				cY = int((M["m01"] / M["m00"]))
-				shapes.extend([cx,cy,current_color,shape])
+				shapes.extend([cX,cY,current_color,shape])
 		return shapes
             	#print("{0},{1},{2},{3}".format(cX,cY,current_color, shape))
 
