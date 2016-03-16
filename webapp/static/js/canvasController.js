@@ -86,7 +86,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         MapService.getRobotPosition().then(function(response) {
             var robot_square1 = new createjs.Shape();
             var robot_square2 = new createjs.Shape();
-            robot_square1.graphics.beginFill('orange').drawPolyStar(response.front[0].x, canvas.height - response.front[0].y, 10, 4, 0, response.angle);
+            robot_square1.graphics.beginFill('purple').drawPolyStar(response.front[0].x, canvas.height - response.front[0].y, 10, 4, 0, response.angle);
             robot_square2.graphics.beginFill('purple').drawPolyStar(response.back[0].x, canvas.height - response.back[0].y, 10, 4, 0, response.angle);
             stage.addChild(robot_square1);
             stage.addChild(robot_square2);
