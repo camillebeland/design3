@@ -338,6 +338,7 @@ void move(long x, long y, double speed){
 	else{
 		angle = atan(abs(y)/abs(x));
 	}
+
 	long ticks_X = (long)(float(x)*TICKS_PER_MM);
 	long ticks_Y = (long)(float(y)*TICKS_PER_MM);
 	double speed_X = cos(angle)*speed;
