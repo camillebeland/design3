@@ -11,15 +11,15 @@ class Image:
         self.__image = image_src
         self.__image_format = image_format
 
-	
-		
-	
+    
+        
+    
     def get_height(self):
         return self.__image.shape[0]
-	
+    
     def get_width(self):
         return self.__image.shape[1]
-		
+        
     def read_image(self):
         return self.__image
 
@@ -81,124 +81,124 @@ class Image:
 
 class ShapeDetector:
 
-	def get_pixels_per_meter(self, image):
-		blurred_image = image.filter_gaussian_blur((15,15), 0)
-		green_contours = (blurred_image
+    def get_pixels_per_meter(self, image):
+        blurred_image = image.filter_gaussian_blur((15,15), 0)
+        green_contours = (blurred_image
                            .filter_by_color(hsv_range['green_calibration_square'])
                            .erode(5,2)
                            .dilate(5,2)
                            .find_contours())
-						   
-		biggest_square = 0
-		biggest_square_area = 0
-		polygon_detector = PolygonDetector()
-		for contour in green_contours:
-			shape = polygon_detector.detect(contour)
-			if shape != "square":
-				continue
-			area = cv2.contourArea(contour)
-			if area >biggest_square_area:
-				biggest_square_area = area
-				biggest_square = contour
-		
-		minY = 5000
-		maxY = -1
-		minX = 5000
-		maxX = -1
-		
-		for vertex in biggest_square:
-			if vertex[0][0] < minX:
-				minX = vertex[0][0]
-			if vertex[0][1] < minY:
-				minY = vertex[0][1]
-			if vertex[0][0] > maxX:
-				maxX = vertex[0][0]
-			if vertex[0][1] > maxY:
-				maxY =vertex[0][1]
+                           
+        biggest_square = 0
+        biggest_square_area = 0
+        polygon_detector = PolygonDetector()
+        for contour in green_contours:
+            shape = polygon_detector.detect(contour)
+            if shape != "square":
+                continue
+            area = cv2.contourArea(contour)
+            if area >biggest_square_area:
+                biggest_square_area = area
+                biggest_square = contour
+        
+        minY = 5000
+        maxY = -1
+        minX = 5000
+        maxX = -1
+        
+        for vertex in biggest_square:
+            if vertex[0][0] < minX:
+                minX = vertex[0][0]
+            if vertex[0][1] < minY:
+                minY = vertex[0][1]
+            if vertex[0][0] > maxX:
+                maxX = vertex[0][0]
+            if vertex[0][1] > maxY:
+                maxY =vertex[0][1]
 
-		return int(abs(maxX - minX)/0.663)
+        return int(abs(maxX - minX)/0.663)
 
-	def find_shapes(self, image, parameters=None):
+    def find_shapes(self, image, parameters=None):
 
-		blurred_image = image.filter_gaussian_blur((15,15), 0)
+        blurred_image = image.filter_gaussian_blur((15,15), 0)
 
 
-		blue_contours = (blurred_image
+        blue_contours = (blurred_image
                          .filter_by_color(hsv_range['blue'])
                          .erode(5,2)
                          .dilate(5,2)
                          .find_contours())
 
-		yellow_contours = (blurred_image
+        yellow_contours = (blurred_image
                            .filter_by_color(hsv_range['yellow'])
                            .erode(5,2)
                            .dilate(5,2)
                            .find_contours())
 
-		green_contours = (blurred_image
+        green_contours = (blurred_image
                           .filter_by_color(hsv_range['green'])
                           .erode(5,2)
                           .dilate(5,2)
                           .find_contours())
 
-		light_red_mask = (blurred_image
+        light_red_mask = (blurred_image
                           .filter_by_color(hsv_range['red']))
 
-		dark_red_mask = (blurred_image
+        dark_red_mask = (blurred_image
                          .filter_by_color(hsv_range['dark_red']))
 
-		light_red_mask.show()
+        light_red_mask.show()
 
-		red_mask = light_red_mask + dark_red_mask
+        red_mask = light_red_mask + dark_red_mask
 
-		red_contours = (red_mask
+        red_contours = (red_mask
                         .erode(5,2)
                         .dilate(5,2)
                         .find_contours())
 
 
-		shapes = []
+        shapes = []
 
-		contours = [red_contours, green_contours, blue_contours, yellow_contours]
-		colors = ['red', 'green', 'blue', 'yellow']
+        contours = [red_contours, green_contours, blue_contours, yellow_contours]
+        colors = ['red', 'green', 'blue', 'yellow']
 
 
-		polygon_detector = PolygonDetector()
-		for i in [0,1,2,3]:
-			colored_contours = contours[i]
-			current_color = colors[i]
-			for contour in colored_contours:
-				shape = polygon_detector.detect(contour)
+        polygon_detector = PolygonDetector()
+        for i in [0,1,2,3]:
+            colored_contours = contours[i]
+            current_color = colors[i]
+            for contour in colored_contours:
+                shape = polygon_detector.detect(contour)
 
-				minY = 5000
-				maxY = -1
-				minX = 5000
-				maxX = -1
+                minY = 5000
+                maxY = -1
+                minX = 5000
+                maxX = -1
 
-				epsilon = 0.015*cv2.arcLength(contour,True)
-				approx = cv2.approxPolyDP(contour,epsilon,True)
+                epsilon = 0.015*cv2.arcLength(contour,True)
+                approx = cv2.approxPolyDP(contour,epsilon,True)
 
-				if (not cv2.isContourConvex(approx)):
-					continue
+                if (not cv2.isContourConvex(approx)):
+                    continue
 
-				for vertex in contour:
-					if vertex[0][0] < minX:
-						minX = vertex[0][0]
-					if vertex[0][1] < minY:
-						minY = vertex[0][1]
-					if vertex[0][0] > maxX:
-						maxX = vertex[0][0]
-					if vertex[0][1] > maxY:
-						maxY = vertex[0][1]
+                for vertex in contour:
+                    if vertex[0][0] < minX:
+                        minX = vertex[0][0]
+                    if vertex[0][1] < minY:
+                        minY = vertex[0][1]
+                    if vertex[0][0] > maxX:
+                        maxX = vertex[0][0]
+                    if vertex[0][1] > maxY:
+                        maxY = vertex[0][1]
 
-				if abs(maxX - minX) > 120:
-					continue
-				if abs(maxY - minY) > 120:
-					continue
-				if abs(maxX - minX) < 40:
-					continue
-				if abs(maxY - minY) < 40:
-					continue
+                if abs(maxX - minX) > 120:
+                    continue
+                if abs(maxY - minY) > 120:
+                    continue
+                if abs(maxX - minX) < 40:
+                    continue
+                if abs(maxY - minY) < 40:
+                    continue
 
                 M = cv2.moments(contour)
                 cX = int((M["m10"] / M["m00"]))
