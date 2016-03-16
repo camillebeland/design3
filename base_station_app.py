@@ -35,5 +35,6 @@ def run():
 
     base_station_web_controller.inject(camera, refresh_time, worldmap)
     base_station_web_controller.run(host, port)
+
 if __name__ == '__main__':
     run()

@@ -1,132 +1,45 @@
-import cv2
 import numpy as np
-import imutils
-from pyimagesearch.shapedetector import ShapeDetector as PolygonDetector
-
-
+from base_station.pyimagesearch.shapedetector import ShapeDetector as PolygonDetector
 from functools import reduce
-class Image:
-    def __init__(self, image_src, image_format='bgr',  open_cv=cv2):
-        self.__open_cv = open_cv
-        self.__image = image_src
-        self.__image_format = image_format
-
-
-    def get_height(self):
-        return self.__image.shape[0]
-
-    def read_image(self):
-        return self.__image
-
-    def __add__(self, other):
-        return Image(self.__image + other.__image)
-
-    def filter_median_blur(self, kernel_size=5):
-        filtered_image = self.__open_cv.medianBlur(self.__image, kernel_size)
-        return Image(filtered_image)
-
-    def filter_gaussian_blur(self, kernel_size, sigmaX):
-        filtered_image = self.__open_cv.GaussianBlur(self.__image, kernel_size, sigmaX=sigmaX)
-        return Image(filtered_image)
-
-    def filter_by_color(self, hsv_range):
-        image = self.__in_hsv()
-        masked_image = self.__open_cv.inRange(image.__image, hsv_range[0], hsv_range[1])
-        return Image(masked_image, 'gray')
-
-    def canny(self, threshold1, threshold2, apertureSize):
-        canny_image = self.__open_cv.Canny(self.__image, threshold1, threshold2, apertureSize)
-        return Image(canny_image, 'gray')
-
-    def dilate(self, kernel_size, iterations):
-        kernel = np.ones((kernel_size, kernel_size), np.uint8)
-        dilated_image = self.__open_cv.dilate(self.__image, kernel, iterations = iterations)
-        return Image(dilated_image, 'gray')
-
-    def erode(self, kernel_size, iterations):
-        kernel = np.ones((kernel_size, kernel_size), np.uint8)
-        eroded_image = self.__open_cv.erode(self.__image, kernel, iterations=iterations)
-        return Image(eroded_image, 'gray')
-
-    def find_contours(self):
-        contours = self.__open_cv.findContours(self.__image, self.__open_cv.RETR_EXTERNAL, self.__open_cv.CHAIN_APPROX_SIMPLE)
-        return contours[0] if imutils.is_cv2() else contours[1]
-
-    def find_hough_circles(self, min_distance, param1, param2, min_radius, max_radius):
-        return self.__open_cv.HoughCircles(self.__image, self.__open_cv.HOUGH_GRADIENT, 1, min_distance, param1=param1, param2=param2, minRadius=min_radius, maxRadius=max_radius)
-
-    def __in_hsv(self):
-            converted_image = convert[self.__image_format]['hsv'](self.__image)
-            return Image(converted_image, 'hsv')
-
-    def __in_bgr(self):
-            converted_image = convert[self.__image_format]['bgr'](self.__image)
-            return Image(converted_image, 'bgr')
-
-    def show(self):
-        image = self.__in_bgr()
-        self.__open_cv.imshow('Image',image.__image)
-        self.__open_cv.waitKey(0)
-
-    def draw_contours(self, contours):
-        img = np.copy(self.__image)
-        for contour in contours:
-            self.__open_cv.drawContours(img, [contour], -1, (255,0,255),3)
-        return Image(img)
+from base_station.image_wrapper import ImageWrapper
+import sys
+import cv2
 
 class ShapeDetector:
-
-
     def find_shapes(self, image, parameters=None):
-
         blurred_image = image.filter_gaussian_blur((15,15), 0)
-
-
         blue_contours = (blurred_image
                          .filter_by_color(hsv_range['blue'])
                          .erode(5,2)
                          .dilate(5,2)
                          .find_contours())
-
         yellow_contours = (blurred_image
                            .filter_by_color(hsv_range['yellow'])
                            .erode(5,2)
                            .dilate(5,2)
                            .find_contours())
-
         green_contours = (blurred_image
                           .filter_by_color(hsv_range['green'])
                           .erode(5,2)
                           .dilate(5,2)
                           .find_contours())
-
         light_red_mask = (blurred_image
                           .filter_by_color(hsv_range['red']))
-
         dark_red_mask = (blurred_image
                          .filter_by_color(hsv_range['dark_red']))
-
-        light_red_mask.show()
-
         red_mask = light_red_mask + dark_red_mask
-
         red_contours = (red_mask
                         .erode(5,2)
                         .dilate(5,2)
                         .find_contours())
-
-
         shapes = []
-
         contours = [red_contours, green_contours, blue_contours, yellow_contours]
         colors = ['red', 'green', 'blue', 'yellow']
-
-
         polygon_detector = PolygonDetector()
-        for i in [0,1,2,3]:
+        for i in [0,1,2,3]: #pour toutes les couleurs
             colored_contours = contours[i]
             current_color = colors[i]
-            for contour in colored_contours:
+            for contour in colored_contours: #pour chaque contour trouvé
                 shape = polygon_detector.detect(contour)
 
                 minY = 5000
@@ -159,16 +72,11 @@ class ShapeDetector:
                 if abs(maxY - minY) < 40:
                     continue
 
-                M = cv2.moments(contour)
-                cX = int((M["m10"] / M["m00"]))
-                cY = int((M["m01"] / M["m00"]))
-				shapes.extend([cx,cy,current_color,shape])
-		return shapes
-                #print("{0},{1},{2},{3}".format(cX,cY,current_color, shape))
-
-
-
-        
+                moments = cv2.moments(contour)
+                cX = int((moments["m10"] / moments["m00"]))
+                cY = int((moments["m01"] / moments["m00"]))
+                shapes.extend([cX,cY,current_color,shape])
+        return shapes
 
     def find_circle_color(self, image, color, parameters):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
@@ -238,24 +146,80 @@ class ShapeDetector:
             )
         )
 
-convert = {
-    'bgr' : {
-        'hsv' : lambda image : cv2.cvtColor(image, cv2.COLOR_BGR2HSV),
-        'gray' : lambda image : cv2.cvtColor(image, cv2.COLOR_BGR2GRAY),
-        'bgr' : lambda image : image
+    def find_polygon_color_remi(self, image, polygon, color, parameters, opencv=cv2):
+        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
+        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
+        dilate_kernel_size = parameters['dilate_kernel_size']
+        dilate_ierations = parameters['dilate_ierations']
+        erode_kernel_size = parameters['erode_kernel_size']
+        erode_iterations = parameters['erode_iterations']
+        shape_min_height = parameters['shape_min_height']
+        shape_max_height = parameters['shape_max_height']
+        shape_min_width = parameters['shape_min_width']
+        shape_max_width = parameters['shape_max_width']
+        polygonal_approximation_error = parameters['polygonal_approximation_error']
 
-    },
-    'hsv' : {
-        'bgr' : lambda image : cv2.cvtColor(image, cv2.COLOR_HSV2BGR),
-        'gray' : lambda image : cv2.cvtColor(
-            cv2.cvtColor(image, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY
-        ),
-        'hsv' : lambda image : image
-    },
-    'gray' : {
-        'bgr' : lambda image : image
-    }
-}
+        def approxPolygon(contour):
+            islands = []
+            epsilon = polygonal_approximation_error * opencv.arcLength(contour,True)
+            approx = opencv.approxPolyDP(contour, epsilon, True)
+
+            if shape_is_contained_within(contour, shape_max_height, shape_max_width, shape_min_height, shape_min_width)\
+                    and opencv.isContourConvex(approx):
+                islands.extend(contour)
+
+            return islands
+
+        contours = (image
+                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
+                    .filter_by_color(hsv_range[color])
+                    .erode(erode_kernel_size, erode_iterations)
+                    .dilate(dilate_kernel_size,dilate_ierations)
+                    .find_contours())
+
+        return (
+            list(
+                map(
+                    lambda x : {
+                        'x' : (reduce(np.add, x)/edges[polygon])[0],
+                        'y' : image.get_height() - (reduce(np.add, x)/edges[polygon])[1]
+                    },
+                    map(
+                        lambda x : x[:,0],
+                        filter(
+                            lambda x: len(x) == edges[polygon],
+                            map(approxPolygon, contours)
+                        )
+                    )
+                )
+            )
+        )
+
+
+def shape_is_contained_within(shape_contour, max_height, max_width, min_height, min_width):
+        is_contained_within = True
+        lowest_vertex = sys.maxsize
+        highest_vertex = -1
+        leftest_vertex = sys.maxsize
+        rightest_vertex = -1
+
+        for vertex in shape_contour:
+            if vertex[0][0] < leftest_vertex:
+                leftest_vertex = vertex[0][0]
+            if vertex[0][1] < lowest_vertex:
+                lowest_vertex = vertex[0][1]
+            if vertex[0][0] > rightest_vertex:
+                rightest_vertex = vertex[0][0]
+            if vertex[0][1] > highest_vertex:
+                highest_vertex = vertex[0][1]
+
+        if (abs(rightest_vertex - leftest_vertex) > max_width or
+            abs(highest_vertex - lowest_vertex) > max_height or
+            abs(rightest_vertex - leftest_vertex) < min_width or
+            abs(highest_vertex - lowest_vertex) < min_height):
+            is_contained_within = False
+
+        return is_contained_within
 
 hsv_range = {
     'red' : ((160,180,105), (180,255,255)),
@@ -270,3 +234,12 @@ edges = {
     'square' : 4,
     'pentagon' : 5,
 }
+
+
+if __name__ == "__main__":
+    import cv2
+    image = cv2.imread("mock_image.jpg")
+    image = ImageWrapper(image)
+    shapes = ShapeDetector()
+    shapes = shapes.find_shapes(image)
+    print(shapes)

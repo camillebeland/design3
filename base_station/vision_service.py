@@ -1,12 +1,13 @@
-from base_station.vision import Image
-import cv2
+from base_station.image_wrapper import ImageWrapper
+
+
 class VisionService:
     def __init__(self, camera, shape_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
 
     def build_map(self):
-        image = Image(self.__camera.get_frame())
+        image = ImageWrapper(self.__camera.get_frame())
         circles, pentagons, squares, triangles = [], [], [], []
         circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
@@ -37,7 +38,7 @@ class VisionService:
         if shape == 'circle':
             shapes = self.__shape_detector.find_circle_color(image, color, default_camille_circle_params)
         else:
-            shapes = self.__shape_detector.find_polygon_color(image, shape, color, default_camille_polygon_params)
+            shapes = self.__shape_detector.find_polygon_color_remi(image, shape, color, default_remi_polygon_params)
         for poly in shapes:
             poly['shape'] = shape
             poly['color'] = color
@@ -66,4 +67,18 @@ default_camille_polygon_params = {
     'erode_kernel_size' : 51,
     'erode_iterations' : 1,
     'polygonal_approximation_error' : 4
+}
+
+default_remi_polygon_params = {
+    'gaussian_blur_kernel_size' : 15,
+    'gaussian_blur_sigma_x' : 0,
+    'dilate_kernel_size' : 5,
+    'dilate_ierations' : 1,
+    'erode_kernel_size' : 5,
+    'erode_iterations' : 1,
+    'shape_min_height': 40,
+    'shape_max_height': 40,
+    'shape_min_width': 140,
+    'shape_max_width': 140,
+    'polygonal_approximation_error' : 0.015
 }

@@ -46,7 +46,7 @@ class MockOpenCV:
     def HoughCircles(self, image, method, dp, minDist, param1, param2, minRadius, maxRadius):
         return "circles"
 
-vision = Image(np.array(1), open_cv=MockOpenCV())
+vision = ImageWrapper(np.array(1), open_cv=MockOpenCV())
 
 def test_given_an_image_when_median_blur_median_blurred_image_returned():
     image = vision.filter_median_blur(test_polygon_params['median_blur_kernel_size'])
