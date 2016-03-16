@@ -67,5 +67,5 @@ if __name__ == '__main__':
     pathfinder = PathFinder(mesh)
     robot_service = RobotService(base_station_address, island_server_address)
     robot = Robot(wheels, worldmap, pathfinder, robot_service, manchester_antenna)
-    robot_web_controller.inject(robot, mesh)
+    robot_web_controller.inject(robot, mesh, robot_service)
     robot_web_controller.run(host, port)
