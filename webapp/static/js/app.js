@@ -23,6 +23,7 @@ website.controller('homeController', ['$scope', function($scope) {
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.ROBOT_HOST = "localhost:3000";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
+  window.PATH_REFRESH_TIME_IN_MS = POSITION_REFRESH_TIME_IN_MS;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
   window.CANVAS_HEIGHT = 1200;
   window.CANVAS_WIDTH = 1600;

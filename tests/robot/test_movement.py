@@ -16,3 +16,4 @@ class TestMovement:
 
         # Then
         mock_http_service.log_info.assert_called_once_with("robot asked to move to "+str(final_destination))
+

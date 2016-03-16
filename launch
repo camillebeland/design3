@@ -5,6 +5,7 @@ case "$1" in
 		echo "Starting servers"
 		python base_station_app.py &
 		export BASE_STATION_APP_PID=$!
+		sleep 1s
 		python robot_app.py &
 		export ROBOT_APP_PID=$!
 		python web_app.py &

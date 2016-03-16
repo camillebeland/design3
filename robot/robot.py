@@ -16,6 +16,9 @@ class Robot:
     def get_angle(self):
         return self.__world_map.get_robot_angle()
 
+    def get_path(self):
+        return self.__movement.get_last_path_used()
+
     def move_to(self, final_destination):
         self.__movement.move_to(final_destination)
 
