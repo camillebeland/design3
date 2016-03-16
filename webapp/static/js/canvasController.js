@@ -95,22 +95,22 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             }
             stage.addChild(allIslands);
         });
-
-        MapService.getRobotPosition().then(function(response) {
-            var robot_square1 = new createjs.Shape();
-            var robot_square2 = new createjs.Shape();
-            robot_square1.graphics.beginFill('purple').drawPolyStar(response.front[0].x, canvas.height - response.front[0].y, 10, 4, 0, response.angle);
-            robot_square2.graphics.beginFill('purple').drawPolyStar(response.back[0].x, canvas.height - response.back[0].y, 10, 4, 0, response.angle);
-            stage.addChild(robot_square1);
-            stage.addChild(robot_square2);
-        });
-
     };
+
+    var getRobotPosition = function(){
+        MapService.getRobotPosition().then(function(response) {
+            var robot_square = new createjs.Shape();
+            robot_square.graphics.beginFill('purple').drawPolyStar(response.center[0], canvas.height - response.center[1], 100, 4, 0, response.angle);
+            stage.addChild(robot_square);
+        });
+    };
+
+    setInterval(getRobotPosition, 1000);
 
     var initPath = function(){
         path = new createjs.Shape();
         path.graphics.moveTo(completeRobotRepresentation.x, completeRobotRepresentation.y);
-    }
+    };
 
     var initMesh = function() {
         var whenGetIsComplete = MapService.getMesh();

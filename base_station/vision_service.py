@@ -8,24 +8,22 @@ class VisionService:
     def build_map(self):
         image = Image(self.__camera.get_frame())
         circles, pentagons, squares, triangles = [], [], [], []
-        # circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
-        # circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
-        # circles.extend(self.__find_polygon_color__(image, 'circle', 'yellow'))
-        # circles.extend(self.__find_polygon_color__(image, 'circle', 'red'))
-        squares.extend(self.__find_polygon_color__(image, 'square', 'purple'))
-        circles.extend(self.__find_polygon_color__(image, 'circle', 'purple'))
-        # pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'green'))
-        # pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'blue'))
-        # pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'yellow'))
-        # pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'red'))
-        # triangles.extend(self.__find_polygon_color__(image, 'triangle', 'green'))
-        # triangles.extend(self.__find_polygon_color__(image, 'triangle', 'blue'))
-        # triangles.extend(self.__find_polygon_color__(image, 'triangle', 'yellow'))
-        # triangles.extend(self.__find_polygon_color__(image, 'triangle', 'red'))
-        # squares.extend(self.__find_polygon_color__(image, 'square', 'green'))
-        # squares.extend(self.__find_polygon_color__(image, 'square', 'blue'))
-        # squares.extend(self.__find_polygon_color__(image, 'square', 'yellow'))
-        # squares.extend(self.__find_polygon_color__(image, 'square', 'red'))
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'yellow'))
+        circles.extend(self.__find_polygon_color__(image, 'circle', 'red'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'green'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'blue'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'yellow'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'red'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'green'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'blue'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'yellow'))
+        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'red'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'green'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'blue'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'yellow'))
+        squares.extend(self.__find_polygon_color__(image, 'square', 'red'))
 
         worldmap = {
             'circles': circles,
@@ -47,21 +45,20 @@ class VisionService:
 
     def find_robot_position(self):
         image = Image(self.__camera.get_frame())
-        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
-        purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
-        print(purple_square)
+        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)[0]
+        purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)[0]
         angle = self.__find_angle_between__(purple_circle, purple_square)
-        angle = ((angle +180 + 45) % 360) - 180
+        angle = ((angle + 180 + 45) % 360) - 180
         robot_position = {
-            'center': ((purple_square[0]+purple_circle[0]) /2 , (purple_square[1]+purple_circle[1]) /2),
+            'center': ((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2),
             'angle': angle
         }
         return robot_position
 
     def __find_angle_between__(self, point1, point2):
-        from math import atan2, degrees, pi
-        dx = point1[0] - point2[0]
-        dy = point1[1] - point2[1]
+        from math import atan2, degrees
+        dx = point1['x'] - point2['x']
+        dy = point1['y'] - point2['y']
         angle_in_rad = atan2(dy, dx)
         angle_in_deg = degrees(angle_in_rad)
         return angle_in_deg
