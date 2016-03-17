@@ -79,16 +79,17 @@ class Image:
             self.__open_cv.drawContours(img, [contour], -1, (255,0,255),3)
         return Image(img)
 
-class ShapeDetector:
-
-    def get_pixels_per_meter(self, image):
+		
+class TableCalibrator:
+    def get_table_calibration(self, image):
+	
         blurred_image = image.filter_gaussian_blur((15,15), 0)
         green_contours = (blurred_image
                            .filter_by_color(hsv_range['green_calibration_square'])
                            .erode(5,2)
                            .dilate(5,2)
                            .find_contours())
-                           
+                          
         biggest_square = 0
         biggest_square_area = 0
         polygon_detector = PolygonDetector()
@@ -115,8 +116,16 @@ class ShapeDetector:
                 maxX = vertex[0][0]
             if vertex[0][1] > maxY:
                 maxY =vertex[0][1]
+		
+        pixelsPerMeter = int(abs(maxX - minX)/0.663)
+        topLeftCorner = ((minX+pixelsPerMeter*1.425), (maxY+pixelsPerMeter*0.275))
+        bottomRightCorner = ((maxX+pixelsPerMeter*0.275), (minY+pixelsPerMeter*0.275))
+        
+        return {'pixelsPerMeter': pixelsPerMeter, 'topLeftCorner': topLeftCorner, 'bottomRightCorner': bottomRightCorner}
+        
+class ShapeDetector:
 
-        return int(abs(maxX - minX)/0.663)
+   
 
     def find_shapes(self, image, parameters=None):
 
