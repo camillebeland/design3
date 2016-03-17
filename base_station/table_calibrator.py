@@ -47,6 +47,6 @@ class TableCalibrator:
         return {'pixelsPerMeter': pixelsPerMeter, 'topLeftCorner': topLeftCorner, 'bottomRightCorner': bottomRightCorner}
  
 greenSquareWidth = 0.663 #meters
-greenSquareToTop = 0.275 # meters
+greenSquareToTop = 0.225 # meters
 greenSquareToLeft = 1.425 # meters
  
