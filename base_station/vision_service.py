@@ -1,5 +1,7 @@
 from base_station.vision import Image
 import cv2
+
+
 class VisionService:
     def __init__(self, camera, shape_detector):
         self.__camera = camera

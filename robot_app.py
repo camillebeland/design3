@@ -1,17 +1,21 @@
-from robot import robot_web_controller
-from configuration import configuration
-from robot.error_simulation import NoisyWheels
-
-from robot.wheels_usb_controller import WheelsUsbController
 import serial
 import serial.tools.list_ports as lp
-from robot.wheels_usb_commands import WheelsUsbCommands
-
-from robot.robot import Robot
-from robot.map import Map
-from pathfinding.pathfinding import PathFinder, Cell, Mesh
+from configuration import configuration
+from pathfinding.pathfinding import PathFinder
+from pathfinding.mesh import Mesh
+from pathfinding.cell import Cell
+from robot import robot_web_controller
 from robot.islands_service import IslandsService
+from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
+from robot.map import Map
+from robot.robot import Robot
 from robot.robot_service import RobotService
+from robot.simulation.error_simulation import NoisyWheels
+from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
+from robot.wheels_usb_commands import WheelsUsbCommands
+from robot.wheels_usb_controller import WheelsUsbController
+
+from pathfinding.pathfinding import Polygon
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -22,6 +26,7 @@ if __name__ == '__main__':
     base_station_host = config.get('baseapp', 'host')
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
+    island_server_address = config.get('island_server', 'host')
 
     worldmap = Map(900,544)
     if(wheelsconfig == "simulation"):
@@ -43,8 +48,8 @@ if __name__ == '__main__':
             print("Warning : noise not specified, setting 0")
             noise = 0
 
-
         wheels = NoisyWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity, noise=noise)
+        manchester_antenna = ManchesterAntennaSimulation()
 
     elif(wheelsconfig == "usb-arduino"):
         arduino_pid = config.getint('robot', 'arduino-pid')
@@ -54,14 +59,20 @@ if __name__ == '__main__':
         arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduinoport)) != 0)
         serialport = serial.Serial(port=arduinoport[0].device,baudrate=arduino_baudrate)
-        wheels = WheelsUsbController(serialport,WheelsUsbCommands())
+        wheels = WheelsUsbController(serialport, WheelsUsbCommands())
+        manchester_antenna = ManchesterAntennaUsbController(serialport)
 
     islands = IslandsService(base_station_host, base_station_port)
-    cell = Cell(800,600,400,300)
+    cell = Cell(800,420,400,320)
+    border = [Polygon(400,420-(400+300), 800),
+              Polygon(400,420+(400+100), 800),
+              Polygon(400-(800),420, 800),
+              Polygon(400+(800),420, 800)]
     polygons = islands.get_polygons()
-    mesh = Mesh(cell.partition_cells(polygons, 10))
+    polygons.extend(border)
+    mesh = Mesh(cell.partition_cells(polygons, 100))
     pathfinder = PathFinder(mesh)
-    robot_service = RobotService(base_station_address)
-    robot = Robot(wheels, worldmap, pathfinder, robot_service)
-    robot_web_controller.inject(robot, mesh)
+    robot_service = RobotService(base_station_address, island_server_address)
+    robot = Robot(wheels, worldmap, pathfinder, robot_service, manchester_antenna)
+    robot_web_controller.inject(robot, mesh, robot_service)
     robot_web_controller.run(host, port)
