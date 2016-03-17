@@ -4,7 +4,7 @@ import maestro
 #le servomoteur du haut (self.VERTical) doit etre branche sur le 
 #5e port du pololu, le servomoteur du bas (self.HORizontal) doit etre
 #branche sur le 4e port 
-class CameraControl:
+class CameraRotationControl:
 	
     def __init__(self, usb):
         self.MIDDLE = 6000
