@@ -41,12 +41,12 @@ class TableCalibrator:
                 maxY =vertex[0][1]
         
         pixelsPerMeter = int(abs(maxX - minX)/greenSquareWidth)
-        topLeftCorner = ((minX+pixelsPerMeter*greenSquareToLeft), (maxY+pixelsPerMeter*greenSquareToTop))
-        bottomRightCorner = ((maxX+pixelsPerMeter*greenSquareToTop), (minY+pixelsPerMeter*greenSquareToTop))
+        topLeftCorner = (int(minX-pixelsPerMeter*greenSquareToLeft), int(minY-pixelsPerMeter*greenSquareToTop))
+        bottomRightCorner = (int(maxX+pixelsPerMeter*greenSquareToTop), int(maxY+pixelsPerMeter*greenSquareToTop))
         
         return {'pixelsPerMeter': pixelsPerMeter, 'topLeftCorner': topLeftCorner, 'bottomRightCorner': bottomRightCorner}
  
 greenSquareWidth = 0.663 #meters
 greenSquareToTop = 0.225 # meters
-greenSquareToLeft = 1.425 # meters
+greenSquareToLeft = 1.42 # meters
  
