@@ -1,27 +1,20 @@
 import cv2
 import numpy as np
-import imutils
-from pyimagesearch.shapedetector import ShapeDetector as PolygonDetector
-
-
 from functools import reduce
+
+
 class Image:
     def __init__(self, image_src, image_format='bgr',  open_cv=cv2):
         self.__open_cv = open_cv
         self.__image = image_src
         self.__image_format = image_format
 
+
     def get_height(self):
         return self.__image.shape[0]
-    
-    def get_width(self):
-        return self.__image.shape[1]
-        
+
     def read_image(self):
         return self.__image
-
-    def __add__(self, other):
-        return Image(self.__image + other.__image)
 
     def filter_median_blur(self, kernel_size=5):
         filtered_image = self.__open_cv.medianBlur(self.__image, kernel_size)
@@ -51,8 +44,8 @@ class Image:
         return Image(eroded_image, 'gray')
 
     def find_contours(self):
-        contours = self.__open_cv.findContours(self.__image, self.__open_cv.RETR_EXTERNAL, self.__open_cv.CHAIN_APPROX_SIMPLE)
-        return contours[0] if imutils.is_cv2() else contours[1]
+        img, contours, hierarchy = self.__open_cv.findContours(self.__image, self.__open_cv.RETR_LIST, self.__open_cv.CHAIN_APPROX_SIMPLE)
+        return contours
 
     def find_hough_circles(self, min_distance, param1, param2, min_radius, max_radius):
         return self.__open_cv.HoughCircles(self.__image, self.__open_cv.HOUGH_GRADIENT, 1, min_distance, param1=param1, param2=param2, minRadius=min_radius, maxRadius=max_radius)
@@ -73,16 +66,20 @@ class Image:
     def draw_contours(self, contours):
         img = np.copy(self.__image)
         for contour in contours:
-            self.__open_cv.drawContours(img, [contour], -1, (255,0,255),3)
+            center = (int(contour['x']), int(contour['y']))
+            radius = 10
+            self.__open_cv.circle(img, center, radius, (255,0,255),3)
         return Image(img)
 
+    def draw_circles(self, circles):
+        img = np.copy(self.__image)
+        for circle in circles:
+            center = (int(circle['x']), int(circle['y']))
+            radius = int(circle['radius'])
+            self.__open_cv.circle(img, center, radius, (0,255,255),3)
+        return Image(img)
 
-        
 class ShapeDetector:
-
-
-        
-
     def find_circle_color(self, image, color, parameters):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
         gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
@@ -106,6 +103,7 @@ class ShapeDetector:
             return list(map(lambda circle: {'x' : float(circle[0]), 'y' : image.get_height() - float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
         else:
             return []
+
 
     def find_polygon_color(self, image, polygon, color, parameters, opencv=cv2):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
@@ -150,6 +148,7 @@ class ShapeDetector:
                 )
             )
         )
+
 
 convert = {
     'bgr' : {
