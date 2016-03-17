@@ -15,7 +15,7 @@ from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimu
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
 
-from pathfinding.pathfinding import Polygon
+from pathfinding.polygon import Polygon
 
 if __name__ == '__main__':
     config = configuration.get_config()
