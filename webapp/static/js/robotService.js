@@ -117,7 +117,7 @@ var Robot = angular.module('Robot', [])
             robotModel.position = robotData.robotPosition;
             robotModel.angle = robotData.robotAngle;
             robotModel.batteryLevel = robotData.batteryLevel;
-            robotModel.batteryVoltage = robotData.batteryVoltage;
+            robotModel.capacitorChargeLevel = robotData.capacitorCharge;
             $rootScope.$broadcast('robotModelUpdated');
         });
 

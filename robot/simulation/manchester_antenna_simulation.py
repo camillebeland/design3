@@ -6,3 +6,9 @@ class ManchesterAntennaSimulation:
 
     def get_manchester_code(self):
         return "A"
+
+    def get_battery_level(self):
+        return "42"
+
+    def get_capacitor_charge(self):
+        return "42"
