@@ -48,7 +48,6 @@ class VisionService:
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)[0]
         purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)[0]
         angle = self.__find_angle_between__(purple_circle, purple_square)
-        angle = ((angle + 180 + 45) % 360) - 180
         robot_position = {
             'center': ((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2),
             'angle': angle
