@@ -11,9 +11,6 @@ class Image:
         self.__image = image_src
         self.__image_format = image_format
 
-    
-        
-    
     def get_height(self):
         return self.__image.shape[0]
     
