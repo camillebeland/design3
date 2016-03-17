@@ -105,7 +105,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         });
     };
 
-    setInterval(getRobotPosition, POSITION_REFRESH_TIME_IN_MS);
+    setInterval(getRobotPosition, ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS);
 
     var initPath = function(){
         path = new createjs.Shape();
