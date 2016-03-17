@@ -44,15 +44,20 @@ class VisionService:
         return shapes
 
     def find_robot_position(self):
+        print("alloooo")
         image = Image(self.__camera.get_frame())
-        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)[0]
-        purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)[0]
-        angle = self.__find_angle_between__(purple_circle, purple_square)
-        robot_position = {
-            'center': ((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2),
-            'angle': angle
-        }
-        return robot_position
+        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
+        purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
+        if not purple_circle or not purple_square:
+            return {}
+        else:
+            angle = self.__find_angle_between__(purple_circle[0], purple_square[0])
+            robot_position = {
+                'center': ((purple_square['x'][0] + purple_circle['x'][0])/2, (purple_square['y'][0] + purple_circle['y'][0])/2),
+                'angle': angle
+            }
+            return {'center' : robot_position['center'],
+                    'angle': robot_position['angle']}
 
     def __find_angle_between__(self, point1, point2):
         from math import atan2, degrees
