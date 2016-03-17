@@ -44,7 +44,8 @@ class TableCalibrator:
         topLeftCorner = (int(minX-pixelsPerMeter*greenSquareToLeft), int(minY-pixelsPerMeter*greenSquareToTop))
         bottomRightCorner = (int(maxX+pixelsPerMeter*greenSquareToTop), int(maxY+pixelsPerMeter*greenSquareToTop))
         
-        return {'pixelsPerMeter': pixelsPerMeter, 'topLeftCorner': topLeftCorner, 'bottomRightCorner': bottomRightCorner}
+        return {'pixelsPerMeter': pixelsPerMeter, 'tableContour': np.array([topLeftCorner,(bottomRightCorner[0],
+		topLeftCorner[1]),bottomRightCorner,(topLeftCorner[0], bottomRightCorner[1])])}
  
 greenSquareWidth = 0.663 #meters
 greenSquareToTop = 0.225 # meters
