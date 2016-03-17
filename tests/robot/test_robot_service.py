@@ -34,7 +34,7 @@ class TestRobotService:
         response = robot_service.ask_target_island(code_letter)
 
         # Then
-        mock_requests_framework.get.assert_called_once_with("https://192.168.0.2/", params=payload)
+        mock_requests_framework.get.assert_called_once_with("https://192.168.0.2/", verify=False, params=payload)
         assert_equals(expected_response_text, response)
 
 
