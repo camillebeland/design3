@@ -6,8 +6,9 @@ body {
     border-color: #9d9d9d;
 }
 #mapCanvas {
-    background-color: white;
-    border: 1px solid black;
+  background-color: white;
+  border: 1px solid black;
+  margin: 0 10px 0 0;
 }
 .tab-pane {
     background-color: white;
@@ -22,4 +23,9 @@ body {
 }
 .optionPanelControls label {
     display: block;
+}
+.systemStatePanel{
+    min-height:300px;
+    background-color: #D3D3D3;
+    border: 1px solid black;
 }

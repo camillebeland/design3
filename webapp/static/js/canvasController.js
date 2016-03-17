@@ -1,5 +1,4 @@
-website.controller('canvasController', ['$scope', 'RobotService', 'MapService', function($scope, RobotService, MapService) {
-
+website.controller('canvasController', ['$scope', 'RobotService', 'MapService', function($scope, robotService, MapService) {
     var canvas;
     var canvasContext;
     var robot_socket = io(ROBOT_HOST);
@@ -8,12 +7,6 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     var completeMesh;
     var path;
     var allIslands;
-
-    var updateRobot = function(robotData) {
-        completeRobotRepresentation.x = robotData.robotPosition[0];
-        completeRobotRepresentation.y = canvas.height - robotData.robotPosition[1]; //Because of y axis direction in computer graphics convention
-        completeRobotRepresentation.rotation = robotData.robotAngle;
-    };
 
     var updatePath = function(pathData) {
         stage.removeChild(path);
@@ -26,6 +19,12 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         }
         stage.addChild(path);
         path.graphics.endStroke();
+    };
+
+    var updateRobotRepresentation = function(robotModel) {
+        completeRobotRepresentation.x = robotModel.position[0];
+        completeRobotRepresentation.y = canvas.height - robotModel.position[1]; //Because of y axis direction in computer graphics convention
+        completeRobotRepresentation.rotation = robotModel.angle;
     };
 
     var initVideoStream = function() {
@@ -55,7 +54,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         stage.addChild(completeRobotRepresentation);
     };
 
-    var drawCircle = function(circleData){
+    var drawCircle = function(circleData) {
         var island = new createjs.Shape();
         var circle_x = circleData.x;
         var circle_y = canvas.height - circleData.y;
@@ -65,7 +64,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         allIslands.addChild(island);
     };
 
-    var drawPolygon = function(polygonData, edges_number){
+    var drawPolygon = function(polygonData, edges_number) {
         var island = new createjs.Shape();
         var polygon_x = polygonData.x;
         var polygon_y = canvas.height - polygonData.y;
@@ -97,10 +96,10 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         });
     };
 
-    var initPath = function(){
+    var initPath = function() {
         path = new createjs.Shape();
         path.graphics.moveTo(completeRobotRepresentation.x, completeRobotRepresentation.y);
-    }
+    };
 
     var initMesh = function() {
         var whenGetIsComplete = MapService.getMesh();
@@ -118,21 +117,12 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         });
     };
 
-
     $scope.$on('meshToggleOn', function(event) {
         initMesh();
     });
 
     $scope.$on('meshToggleOff', function(event) {
         stage.removeChild(completeMesh);
-    });
-
-    setInterval(function() {
-        robot_socket.emit('fetchPosition');
-    }, POSITION_REFRESH_TIME_IN_MS);
-
-    robot_socket.on('position', function(message) {
-        updateRobot(message);
     });
 
     setInterval(function() {
@@ -151,15 +141,17 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         stage.removeChild(allIslands);
     });
 
-    setInterval(function() {
-        robot_socket.emit('fetchPosition');
-    }, POSITION_REFRESH_TIME_IN_MS);
+    $scope.$on('robotModelUpdated', function(event) {
+        var robot = robotService.getRobotModel();
+        updateRobotRepresentation(robot);
+    });
 
     setInterval(function() {
         stage.update();
     }, CANVAS_REFRESH_TIME_IN_MS);
 
-    function canvasController() {
+
+    function init() {
         canvas = document.getElementById("mapCanvas");
         canvasContext = canvas.getContext("2d");
         canvas.height = CANVAS_HEIGHT;
@@ -178,9 +170,10 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
 
         canvas.addEventListener('mousedown', function(evt) {
             var mousePos = getMousePos(canvas, evt);
-            RobotService.move_to(mousePos);
+            robotService.move_to(mousePos);
         }, false);
 
-    }
-    canvasController();
+    };
+
+    init();
 }]);
