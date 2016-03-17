@@ -41,3 +41,34 @@ class TestRobotService:
         assert len(map['triangles']) == NB_OF_POLYGONS
         assert len(map['squares']) == NB_OF_POLYGONS
 
+    def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
+        #Given
+        ROBOT_POSITION_CENTER = (97.5, 391.5)
+        camera_mock = Mock()
+        shape_detector_mock = Mock()
+        vision_service = VisionService(camera_mock, shape_detector_mock)
+        shape_detector_mock.find_circle_color.return_value = [{'x': 97.5, 'y': 391.5, 'radius': 21.2222}]
+        shape_detector_mock.find_polygon_color.return_value = [{'x': 97.5, 'y': 391.5}]
+
+        #When
+        robot_position = vision_service.find_robot_position()
+
+        #Then
+        assert robot_position['center'] == ROBOT_POSITION_CENTER
+
+    def test_vision_service_with_no_robot_when_find_robot_position_should_return_nothing(self):
+        #Given
+        camera_mock = Mock()
+        shape_detector_mock = Mock()
+        vision_service = VisionService(camera_mock, shape_detector_mock)
+        shape_detector_mock.find_circle_color.return_value = []
+        shape_detector_mock.find_polygon_color.return_value = []
+
+        #When
+        robot_position = vision_service.find_robot_position()
+
+        #Then
+        assert not robot_position
+
+
+

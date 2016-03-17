@@ -25,7 +25,7 @@ if __name__ == '__main__':
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
 
-    worldmap = Map(900,544)
+    worldmap = Map(900, 544)
     if(wheelsconfig == "simulation"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
