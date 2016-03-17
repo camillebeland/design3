@@ -1,7 +1,9 @@
-from nose.tools import *
-from nose import with_setup
-from robot.simulation_robot import SimulationWheels
 from time import sleep
+
+from nose import with_setup
+from nose.tools import *
+from robot.simulation.simulation_robot import SimulationWheels
+
 
 class MockedMap:
     def __init__(self):

@@ -36,7 +36,7 @@ wheels = MockWheels()
 world_map = MockMap()
 pathfinder = MockPathFinder()
 
-robot = Robot(wheels, world_map, pathfinder, Mock())
+robot = Robot(wheels, world_map, pathfinder, Mock(), Mock())
 
 
 def test_when_robot_move_then_wheels_move():

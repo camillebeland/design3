@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 from functools import reduce
+
+
 class Image:
     def __init__(self, image_src, image_format='bgr',  open_cv=cv2):
         self.__open_cv = open_cv

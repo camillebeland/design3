@@ -1,5 +1,6 @@
-from robot.simulation_robot import SimulationWheels
 import random
+from robot.simulation.simulation_robot import SimulationWheels
+
 
 class NoisyWheels(SimulationWheels):
     def __init__(self, worldmap, refresh_time, wheels_velocity, noise):
