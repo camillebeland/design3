@@ -1,6 +1,7 @@
-from nose.tools import *
 from nose import with_setup
-from robot.map import Map
+from nose.tools import *
+
+from robot.simulation.simulation_map import SimulationMap
 
 WIDTH = 300.0
 HEIGHT = 100.0
@@ -10,7 +11,7 @@ AN_ANGLE = 142
 A_MOVE_OUTSIDE = [A_POSITION[0] + WIDTH, 0.0]
 PRECISION = 1e-6
 
-worldmap = Map(WIDTH, HEIGHT)
+worldmap = SimulationMap(WIDTH, HEIGHT)
 
 def setup():
     worldmap.__init__(WIDTH, HEIGHT)

@@ -1,17 +1,19 @@
 import serial
 import serial.tools.list_ports as lp
+
 from configuration import configuration
-from pathfinding.pathfinding import PathFinder
-from pathfinding.mesh import Mesh
 from pathfinding.cell import Cell
+from pathfinding.mesh import Mesh
+from pathfinding.pathfinding import PathFinder
+from robot.map import Map
 from robot import robot_web_controller
 from robot.islands_service import IslandsService
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
-from robot.map import Map
 from robot.robot import Robot
 from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
+from robot.simulation.simulation_map import SimulationMap
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
 
@@ -25,8 +27,15 @@ if __name__ == '__main__':
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
+    map = config.get('robot', 'map')
 
-    worldmap = Map(1600, 1200)
+    robot_service = RobotService(base_station_address, island_server_address)
+
+    if map == "map":
+        worldmap = Map(1600, 1200, robot_service)
+    if map == "simulation-map":
+        worldmap = SimulationMap(1600, 1200)
+
     if(wheelsconfig == "simulation"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
@@ -67,7 +76,6 @@ if __name__ == '__main__':
     mesh = Mesh(cell.partition_cells(polygons, 100))
 
     pathfinder = PathFinder(mesh)
-    robot_service = RobotService(base_station_address, island_server_address)
     robot_service.start_fetching_robot_position_from_vision()
     robot = Robot(wheels, worldmap, pathfinder, robot_service, manchester_antenna)
 

@@ -1,14 +1,31 @@
+import numpy as np
 
-class Map:
-    def __init__(self, width, height, robot_service):
+
+def cos(angle):
+    return np.cos(angle/180 * np.pi)
+
+
+def sin(angle):
+    return np.sin(angle/180 * np.pi)
+
+
+def rotation_matrix(theta):
+    return np.array([[cos(theta), -1*sin(theta)], [sin(theta), cos(theta)]])
+
+
+def rotate_vector(theta, vector):
+    return np.dot(rotation_matrix(theta), vector)
+
+
+class SimulationMap:
+    def __init__(self, width, height):
         self._width = width
         self._height = height
-        self.__robot_service = robot_service
-        self._robot_position = self.__robot_service.get_robot_position()
+        self._robot_position = np.array([width / 2, height / 2])
         self._robot_angle = 0
 
-    def set_robot_position(self):
-        self._robot_position = self.__robot_service.get_robot_position()
+    def set_robot_position(self, x, y):
+        self._robot_position = np.array([x, y])
 
     def set_robot_angle(self, angle):
         self._robot_angle = angle
