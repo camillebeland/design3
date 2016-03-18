@@ -37,5 +37,19 @@ class TestRobotService:
         mock_requests_framework.get.assert_called_once_with("https://192.168.0.2/", verify=False, params=payload)
         assert_equals(expected_response_text, response)
 
+    @patch('robot.robot_service.requests')
+    def test_get_robot_position_should_fetch_position(self, mock_requests_framework):
+        # Given
+        base_station_address = "https://localhost:5000"
+        robot_service = RobotService(base_station_address, Mock())
+        robot_service.start_fetching_robot_position_from_vision()
+
+        # When
+        response = robot_service.get_robot_position()
+        robot_service.stop_fetching_robot_position_from_vision()
+
+        # Then
+        mock_requests_framework.get.assert_called_with("https://localhost:5000/robot_position")
+
 
 
