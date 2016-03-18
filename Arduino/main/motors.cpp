@@ -253,7 +253,6 @@ void reset_motor(int motor){
 		tick_remaining_A = 0;
 		last_tick_remaining_A = 0;
 		wanted_speed_A = 0;
-		integrator_A = 0;
 		brake_motor(OUT_MOTOR_A);
 	}
 	
@@ -261,21 +260,18 @@ void reset_motor(int motor){
 		tick_remaining_B = 0;
 		last_tick_remaining_B = 0;
 		wanted_speed_B = 0;
-		integrator_B = 0;
 		brake_motor(OUT_MOTOR_B);
 	}
 	else if (motor == OUT_MOTOR_C){
 		tick_remaining_C = 0;
 		last_tick_remaining_C = 0;
 		wanted_speed_C = 0;
-		integrator_C = 0;
 		brake_motor(OUT_MOTOR_C);
 	}
 	else if(motor == OUT_MOTOR_D){
 		tick_remaining_D = 0;
 		last_tick_remaining_D = 0;
 		wanted_speed_D = 0;
-		integrator_D = 0;
 		brake_motor(OUT_MOTOR_D);
 	}
 }
@@ -321,7 +317,8 @@ void move_straight(Direction direction, long tick, double speed){
 // MSB = negative
 void move(long x, long y, double speed){
 	
-	reset_all_motors();
+	//reset_all_motors();
+
 	double angle;
 	if (x>= 32768){
 		x = x- 32768;
@@ -345,7 +342,7 @@ void move(long x, long y, double speed){
 	double speed_Y = sin(angle)*speed;
 
 	
-	if (ticks_Y >0){
+	if (ticks_Y >=0){
 		move_straight(FORWARD, ticks_Y, speed_Y);
 	}
 	else if (ticks_Y < 0){
@@ -353,7 +350,7 @@ void move(long x, long y, double speed){
 		move_straight(BACKWARD, ticks_Y, speed_Y);
 	}
 	
-	if (ticks_X > 0){
+	if (ticks_X >= 0){
 		ticks_X = (ticks_X);
 		move_straight(LEFT, ticks_X, speed_X);
 	}
