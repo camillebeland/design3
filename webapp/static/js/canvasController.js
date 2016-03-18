@@ -1,4 +1,4 @@
-website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 'UnitConvertingService', function($scope, RobotService, MapService, unitConvertingService) {
+website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 'UnitConvertingService', function($scope, robotService, MapService, unitConvertingService) {
 
     var canvas;
     var canvasContext;
@@ -11,10 +11,10 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     var xScale;
     var yScale;
 
-    var updateRobot = function(robotData) {
-        completeRobotRepresentation.x = (robotData.robotPosition[0] * xScale);
-        completeRobotRepresentation.y = canvas.height - (robotData.robotPosition[1] * yScale); //Because of y axis direction in computer graphics convention
-        completeRobotRepresentation.rotation = robotData.robotAngle;
+    var updateRobotRepresentation = function(robotModel) {
+        completeRobotRepresentation.x = (robotModel.position[0] * xScale);
+        completeRobotRepresentation.y = canvas.height - (robotModel.position[1] * yScale); //Because of y axis direction in computer graphics convention
+        completeRobotRepresentation.rotation = robotModel.angle;
     };
 
     var updatePath = function(pathData) {
@@ -82,7 +82,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         allIslands.addChild(island);
     };
 
-    var initIslands = function() {
+    var showIslands = function() {
         allIslands = new createjs.Container();
         var whenGetIsComplete = MapService.getMap();
 
@@ -143,12 +143,17 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         stage.removeChild(completeMesh);
     });
 
-    setInterval(function() {
-        robot_socket.emit('fetchPosition');
-    }, POSITION_REFRESH_TIME_IN_MS);
+    $scope.$on('robotModelUpdated', function(event) {
+        var robot = robotService.getRobotModel();
+        updateRobotRepresentation(robot);
+    });
 
-    robot_socket.on('position', function(message) {
-        updateRobot(message);
+    $scope.$on('islandToggleOn', function(event) {
+        showIslands();
+    });
+
+    $scope.$on('islandToggleOff', function(event) {
+        stage.removeChild(allIslands);
     });
 
     setInterval(function() {
@@ -159,23 +164,11 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         var whenUpdateIsComplete = updatePath(message)
     });
 
-    $scope.$on('islandToggleOn', function(event) {
-        initIslands();
-    });
-
-    $scope.$on('islandToggleOff', function(event) {
-        stage.removeChild(allIslands);
-    });
-
-    setInterval(function() {
-        robot_socket.emit('fetchPosition');
-    }, POSITION_REFRESH_TIME_IN_MS);
-
     setInterval(function() {
         stage.update();
     }, CANVAS_REFRESH_TIME_IN_MS);
 
-    function canvasController() {
+    function init() {
         canvas = document.getElementById("mapCanvas");
         canvasContext = canvas.getContext("2d");
         xScale = unitConvertingService.calculateFrontEndImageWidthScale();
@@ -186,20 +179,20 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         initRobot();
         initPath();
 
-        function getMousePos(canvas, event) {
+        function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
             return {
-                x: event.clientX - rect.left,
-                y: CANVAS_HEIGHT - (event.clientY - rect.top)
+                x: evt.clientX - rect.left,
+                y: CANVAS_HEIGHT - (evt.clientY - rect.top)
             };
         }
 
-        canvas.addEventListener('mousedown', function(event) {
-            var mousePos = getMousePos(canvas, event);
-            RobotService.move_to(mousePos);
+        canvas.addEventListener('mousedown', function(evt) {
+            var mousePos = getMousePos(canvas, evt);
+            robotService.move_to(mousePos);
         }, false);
 
     }
+    init();
 
-    canvasController();
 }]);

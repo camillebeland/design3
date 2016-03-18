@@ -3,7 +3,7 @@ import os
 
 class MockCameraService(object):
     def __init__(self):
-        image = cv2.imread("base_station/mock_image.jpg")
+        image = cv2.imread("base_station/photo_robot_mauve.jpg")
         self.image = image
 
 

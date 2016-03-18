@@ -28,8 +28,8 @@ website.controller('homeController', ['$scope', function($scope) {
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
   window.BACKEND_IMAGE_HEIGHT = 1200;
   window.BACKEND_IMAGE_WIDTH = 1600;
-  window.CANVAS_HEIGHT = 756;
-  window.CANVAS_WIDTH = 1008;
+  window.CANVAS_HEIGHT = 600;
+  window.CANVAS_WIDTH = 800;
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
