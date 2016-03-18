@@ -1,13 +1,14 @@
 import requests
-from pathfinding.pathfinding import Polygon
+from pathfinding.polygon import Polygon
+
 
 class IslandsService:
     def __init__(self, host, port):
-        self.islands = []
         try:
             self.islands = requests.get('http://'+ host + ':' + port + '/worldmap').json()
         except requests.exceptions.RequestException:
             print('can\'t fetch islands http://'+ host + ':' + port + '/worldmap' + ' is not available')
+            self.islands = {'circles':[],'pentagons':[],'squares':[],'triangles':[]}
         self.polygons = []
         self.__robot_fetch_islands__()
         self.__create_polygon_list__()
