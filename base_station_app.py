@@ -11,8 +11,10 @@ from base_station.vision import ShapeDetector
 def camera_builder(camera_config, camera_id, camera_width, camera_height):
     if camera_config == "webcam":
         open_cv_camera = cv2.VideoCapture(camera_id)
-        open_cv_camera.set(3, camera_width)
-        open_cv_camera.set(4, camera_height)
+        WIDTH_PARAMETER_ID = 3
+        HEIGHT_PARAMETER_ID = 4
+        open_cv_camera.set(WIDTH_PARAMETER_ID, camera_width)
+        open_cv_camera.set(HEIGHT_PARAMETER_ID, camera_height)
         camera = CameraService(open_cv_camera, cv2)
     if camera_config == "mock":
         camera = MockCameraService()
@@ -35,5 +37,6 @@ def run():
 
     base_station_web_controller.inject(camera, refresh_time, worldmap)
     base_station_web_controller.run(host, port)
+    
 if __name__ == '__main__':
     run()
