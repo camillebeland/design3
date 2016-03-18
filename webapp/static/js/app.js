@@ -1,4 +1,4 @@
-var website = angular.module('app', ['ui.router', 'Robot', 'MapModule']);
+var website = angular.module('app', ['ui.router', 'Robot', 'MapModule', 'ToolsModule']);
 
 website.config(function($stateProvider, $urlRouterProvider) {
 
@@ -26,8 +26,10 @@ website.controller('homeController', ['$scope', function($scope) {
   window.ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS = 3000;
   window.PATH_REFRESH_TIME_IN_MS = POSITION_REFRESH_TIME_IN_MS;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
-  window.CANVAS_HEIGHT = 1200;
-  window.CANVAS_WIDTH = 1600;
+  window.BACKEND_IMAGE_HEIGHT = 1200;
+  window.BACKEND_IMAGE_WIDTH = 1600;
+  window.CANVAS_HEIGHT = 756;
+  window.CANVAS_WIDTH = 1008;
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
