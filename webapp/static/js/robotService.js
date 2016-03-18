@@ -1,5 +1,5 @@
 var Robot = angular.module('Robot', [])
-    .service('RobotService', ['$http', '$rootScope', function($http, $rootScope) {
+    .service('RobotService', ['$http', '$rootScope', 'UnitConvertingService', function($http, $rootScope, unitConvertingService) {
 
         var robot_socket = io(ROBOT_HOST);
 
@@ -101,11 +101,13 @@ var Robot = angular.module('Robot', [])
                 data: angle
             });
         };
+
         this.move_to = function(destination) {
+            destinationConverted = unitConvertingService.convertFrontEndPixelsToBackEndPixels(destination);
             $http({
                 method: 'POST',
                 url: 'http://' + ROBOT_HOST + '/robot/move_to',
-                data: destination
+                data: destinationConverted
             });
         };
 

@@ -1,4 +1,4 @@
-var website = angular.module('app', ['ui.router', 'Robot', 'MapModule']);
+var website = angular.module('app', ['ui.router', 'Robot', 'MapModule', 'ToolsModule']);
 
 website.config(function($stateProvider, $urlRouterProvider) {
 
@@ -23,8 +23,11 @@ website.controller('homeController', ['$scope', function($scope) {
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.ROBOT_HOST = "localhost:3000";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
+  window.ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS = 3000;
   window.PATH_REFRESH_TIME_IN_MS = POSITION_REFRESH_TIME_IN_MS;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
+  window.BACKEND_IMAGE_HEIGHT = 1200;
+  window.BACKEND_IMAGE_WIDTH = 1600;
   window.CANVAS_HEIGHT = 600;
   window.CANVAS_WIDTH = 800;
 
