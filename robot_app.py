@@ -58,7 +58,7 @@ if __name__ == '__main__':
         ports = lp.comports()
         arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduinoport)) != 0)
-        serialport = serial.Serial(port=arduinoport[0].device, baudrate=arduino_baudrate, timeout=0)
+        serialport = serial.Serial(port=arduinoport[0].device, baudrate=arduino_baudrate, timeout=0.01)
         wheels = WheelsUsbController(serialport, WheelsUsbCommands())
         manchester_antenna = ManchesterAntennaUsbController(serialport)
 
