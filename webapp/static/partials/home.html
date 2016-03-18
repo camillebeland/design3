@@ -4,14 +4,19 @@
         <h2 for="mapCanvas">Map of the sea arrh'</h2>
         <canvas id="mapCanvas" ng-controller="canvasController"></canvas>
     </div>
+
     <h2>System state</h2>
     <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
         <label>
             Robot's angle: <span ng-bind="robot.angle"></span>&deg;
         </label>
-
+        <label>
+            Robot's battery level: <span ng-bind="robot.batteryLevel"></span>%
+        </label>
+        <label>
+            Capacitor's charge: <span ng-bind="robot.capacitorChargeLevel"></span>%
+        </label>
     </div>
-
 
     <div class="col-md-12 container">
         <ul class="nav nav-tabs">
@@ -70,6 +75,7 @@
             <div id="other" class="tab-pane fade">
                 <p>Awesome features coming soon</p>
             </div>
+
         </div>
     </div>
 

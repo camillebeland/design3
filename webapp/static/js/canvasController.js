@@ -71,7 +71,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         allIslands.addChild(island);
     };
 
-    var drawPolygon = function(polygonData, edges_number){
+    var drawPolygon = function(polygonData, edges_number) {
         var island = new createjs.Shape();
         var polygon_x = polygonData.x * xScale;
         var polygon_y = canvas.height - polygonData.y * yScale;
@@ -133,7 +133,6 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             stage.addChild(completeMesh);
         });
     };
-
 
     $scope.$on('meshToggleOn', function(event) {
         initMesh();
