@@ -1,9 +1,9 @@
 body {
-  background-color: #90a4ae;
+    background-color: #90a4ae;
 }
 .navbar {
-  background-color: #333;
-  border-color: #9d9d9d;
+    background-color: #333;
+    border-color: #9d9d9d;
 }
 #mapCanvas {
   background-color: white;
@@ -11,14 +11,18 @@ body {
   margin: 0 10px 0 0;
 }
 .tab-pane {
-  background-color: white;
-  min;height:200px;
+    background-color: white;
+    min;
+    height: 200px;
 }
 .nav-tabs a {
-  color: black;
+    color: black;
 }
-.optionPanelControls{
-  padding: 10px;
+.optionPanelControls {
+    padding: 10px;
+}
+.optionPanelControls label {
+    display: block;
 }
 .systemStatePanel{
     min-height:300px;

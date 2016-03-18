@@ -7,14 +7,16 @@ CORS(app)
 socket_io = SocketIO(app)
 
 
-def inject(a_robot, a_mesh):
-    global robot, mesh
+def inject(a_robot, a_mesh, a_robot_service):
+    global robot, mesh, robot_service
     robot = a_robot
     mesh = a_mesh
+    robot_service = a_robot_service
 
 
 def run(host, port):
     socket_io.run(app, host=host, port=port)
+
 
 @app.route('/robot/move', methods=['POST'])
 def robot_move():
@@ -46,12 +48,25 @@ def robot_fetch_info():
                                      'robotAngle': robot.get_angle()})
 
 
+@socket_io.on('fetchPath')
+def robot_fetch_path():
+    socket_io.emit('path',  {'robotPath': robot.get_path()})
+
+
 @app.route('/mesh')
 def mesh():
     return jsonify(mesh_to_json(mesh))
 
+
+@app.route('/manchester', methods=['POST'])
+def ask_island_from_code():
+    island = robot_service.ask_target_island(request.json["letter"])
+    return island
+
+
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
+
 
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}

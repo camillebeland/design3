@@ -34,7 +34,7 @@ def test_can_log_something_happening_on_robot():
     base_station_host = config.get('baseapp', 'host')
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
-    robot_service = RobotService(base_station_address)
+    robot_service = RobotService(base_station_address, Mock())
 
     message = "test_can_log_something_happening_on_robot!"
 

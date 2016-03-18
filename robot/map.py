@@ -25,10 +25,7 @@ class Map:
         self._robot_angle = 0;
 
     def set_robot_position(self, x, y):
-        if not self.__is_inside_boundaries(x,y):
-            raise Exception("Robot out of map boundaries : {0} , {1}".format(x,y))
-        else:
-            self._robot_position = np.array([x, y])
+        self._robot_position = np.array([x, y])
 
     def set_robot_angle(self, angle):
         self._robot_angle = angle

@@ -29,21 +29,6 @@ def test_when_set_robot_position_then_position_is_set():
     assert_equal(A_POSITION, worldmap.get_robot_position())
 
 @with_setup(setup)
-def test_when_set_robot_position_outside_boudaries_then_raise_error():
-    assert_raises(Exception,
-                  worldmap.set_robot_position,
-                  A_POSITION_OUTSIDE_BOUNDARIES[0],
-                  A_POSITION_OUTSIDE_BOUNDARIES[1])
-
-
-@with_setup(setup)
-def test_when_move_robot_outside_boundaries_then_raise_error():
-    assert_raises(Exception,
-                  worldmap.move_robot,
-                  A_MOVE_OUTSIDE[0],
-                  A_MOVE_OUTSIDE[1])
-
-@with_setup(setup)
 def test_when_rotate_robot_of_angle_then_robot_has_rotated_an_angle():
     worldmap.rotate_robot(AN_ANGLE)
     assert_equal(AN_ANGLE, worldmap.get_robot_angle())
