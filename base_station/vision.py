@@ -12,7 +12,9 @@ class Image:
 
     def get_height(self):
         return self.__image.shape[0]
-
+    def get_width(self):
+        return self.__image.shape[1]
+		
     def read_image(self):
         return self.__image
 
@@ -78,6 +80,14 @@ class Image:
             radius = int(circle['radius'])
             self.__open_cv.circle(img, center, radius, (0,255,255),3)
         return Image(img)
+        
+    def mask_image(self, contour):
+        img = np.copy(self.__image)
+        blank_image = np.zeros((self.get_height(),self.get_width()), np.uint8)
+        mask = cv2.fillPoly(blank_image, pts =[contour], color=(255,255,255))
+        mask = cv2.dilate(mask , None, iterations = int(20*((self.get_height()/1200)**2)))
+        masked_image = cv2.bitwise_and(img, img, mask=mask)
+        return masked_image
 
 class ShapeDetector:
     def find_circle_color(self, image, color, parameters):
