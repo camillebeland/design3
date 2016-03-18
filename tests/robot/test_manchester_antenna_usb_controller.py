@@ -12,7 +12,7 @@ class TestManchesterAntennaUsbController:
         # Given
         mock_serial_port = Mock()
         a_valid_code = "A"
-        mock_serial_port.read.return_value = a_valid_code
+        mock_serial_port.read.return_value = a_valid_code.encode(encoding='utf8')
         usb_controller = ManchesterAntennaUsbController(mock_serial_port)
 
         # When
@@ -26,7 +26,7 @@ class TestManchesterAntennaUsbController:
         # Given
         mock_serial_port = Mock()
         an_invalid_code = ""
-        mock_serial_port.read.return_value = an_invalid_code
+        mock_serial_port.read.return_value = an_invalid_code.encode(encoding='utf8')
         usb_controller = ManchesterAntennaUsbController(mock_serial_port)
 
         # When
@@ -37,8 +37,8 @@ class TestManchesterAntennaUsbController:
     def test_get_battery_level_should_return_percentage_if_its_valid(self):
         # Given
         mock_serial_port = Mock()
-        a_valid_percentage = "99"
-        mock_serial_port.read.return_value = a_valid_percentage
+        a_valid_percentage = 99
+        mock_serial_port.read.return_value = chr(a_valid_percentage)
         usb_controller = ManchesterAntennaUsbController(mock_serial_port)
 
         # When
@@ -51,8 +51,8 @@ class TestManchesterAntennaUsbController:
     def test_get_battery_level_should_raise_error_if_percentage_not_valid(self):
         # Given
         mock_serial_port = Mock()
-        an_invalid_percentage = ""
-        mock_serial_port.read.return_value = an_invalid_percentage
+        an_invalid_percentage = 101
+        mock_serial_port.read.return_value = chr(an_invalid_percentage)
         usb_controller = ManchesterAntennaUsbController(mock_serial_port)
 
         # When
@@ -63,8 +63,8 @@ class TestManchesterAntennaUsbController:
     def test_get_capacitor_charge_should_return_percentage_if_its_valid(self):
         # Given
         mock_serial_port = Mock()
-        a_valid_percentage = "99"
-        mock_serial_port.read.return_value = a_valid_percentage
+        a_valid_percentage = 99
+        mock_serial_port.read.return_value = chr(a_valid_percentage)
         usb_controller = ManchesterAntennaUsbController(mock_serial_port)
 
         # When
@@ -77,8 +77,8 @@ class TestManchesterAntennaUsbController:
     def test_get_capacitor_charge_should_raise_error_if_percentage_not_valid(self):
         # Given
         mock_serial_port = Mock()
-        an_invalid_percentage = ""
-        mock_serial_port.read.return_value = an_invalid_percentage
+        an_invalid_percentage = 101
+        mock_serial_port.read.return_value = chr(an_invalid_percentage)
         usb_controller = ManchesterAntennaUsbController(mock_serial_port)
 
         # When

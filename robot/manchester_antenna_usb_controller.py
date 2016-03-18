@@ -34,19 +34,23 @@ class ManchesterAntennaUsbController:
 
     def get_manchester_code(self):
         self.serial_port.write(encode("(c)"))
-        code = self.serial_port.read()
+        code = self.serial_port.read().decode(encoding='utf8')
+
         self.__validate_manchester_code(code)
         return code
 
     def get_battery_level(self):
         self.serial_port.write(encode("(b)"))
-        percentage = self.serial_port.read()
+        percentage_char = self.serial_port.read()
+        percentage = ord(percentage_char)
         self.__validate_percentage(percentage)
         return percentage
 
     def get_capacitor_charge(self):
         self.serial_port.write(encode("(v)"))
-        percentage = self.serial_port.read()
+        percentage_char = self.serial_port.read()
+        percentage = ord(percentage_char)
+        print(percentage)
         self.__validate_percentage(percentage)
         return percentage
 
