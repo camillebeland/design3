@@ -28,7 +28,7 @@ if __name__ == '__main__':
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
 
-    worldmap = Map(900,544)
+    worldmap = Map(900, 544)
     if(wheelsconfig == "simulation"):
         try:
             refreshtime = config.getint('robot', 'wheels-refresh-time')
@@ -63,13 +63,9 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaUsbController(serialport)
 
     islands = IslandsService(base_station_host, base_station_port)
-    cell = Cell(800,420,400,320)
-    border = [Polygon(400,420-(400+300), 800),
-              Polygon(400,420+(400+100), 800),
-              Polygon(400-(800),420, 800),
-              Polygon(400+(800),420, 800)]
+    cell = Cell(1600,1200,800,600)
     polygons = islands.get_polygons()
-    polygons.extend(border)
+
     mesh = Mesh(cell.partition_cells(polygons, 100))
     pathfinder = PathFinder(mesh)
     robot_service = RobotService(base_station_address, island_server_address)

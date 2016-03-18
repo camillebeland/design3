@@ -103,8 +103,7 @@ class ShapeDetector:
             return list(map(lambda circle: {'x' : float(circle[0]), 'y' : image.get_height() - float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
         else:
             return []
-
-
+	
     def find_polygon_color(self, image, polygon, color, parameters, opencv=cv2):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
         gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
@@ -169,14 +168,15 @@ convert = {
 }
 
 hsv_range = {
-    'red' : ((160,100,100), (179,255,255)),
-    'green' : ((50,100,50), (80,255,255)),
-    'blue' : ((80,50,50), (130,255,255)),
-    'yellow' : ((20,100,100), (30,255,255))
+    'red': ((160,100,100), (179,255,255)),
+    'green': ((50,100,50), (80,255,255)),
+    'blue': ((80,50,50), (130,255,255)),
+    'yellow': ((20,100,100), (30,255,255)),
+    'purple': ((110, 30, 65), (165, 190, 150))
 }
 
 edges = {
-    'triangle' : 3,
-    'square' : 4,
-    'pentagon' : 5,
+    'triangle': 3,
+    'square': 4,
+    'pentagon': 5,
 }

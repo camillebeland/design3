@@ -3,7 +3,8 @@ from flask_cors import CORS
 import time
 import base_station.logger as logger
 from base_station.logger import Logger
-import json
+from base_station.vision_service import VisionService
+from base_station.vision import ShapeDetector
 
 app = Flask(__name__)
 CORS(app)
@@ -15,11 +16,12 @@ def inject_mock_map(mock_app):
 
 
 def inject(a_camera, a_refresh_time, the_worldmap):
-    global camera, refresh_time, worldmap, logger
+    global camera, refresh_time, worldmap, logger, vision_service
     camera = a_camera
     refresh_time = a_refresh_time
     worldmap = the_worldmap
     logger = Logger()
+    vision_service = VisionService(a_camera, ShapeDetector())
 
 
 def generate_frame(camera, refresh_time):
@@ -47,6 +49,10 @@ def fetch_worldmap():
     return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons']})
 
+@app.route('/robot_position')
+def fetch_position():
+    robot_position = vision_service.find_robot_position()
+    return jsonify(robot_position)
 
 @app.route('/logger/info', methods=['POST'])
 def log_info():
