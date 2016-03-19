@@ -77,25 +77,5 @@ hsv_range = {
     'yellow': ((15,80,70), (35,255,255))
 }
 
-if __name__ == '__main__':
-    from base_station.vision.image_wrapper import ImageWrapper
-    default_camille_polygon_params = {
-        'median_blur_kernel_size' : 5,
-        'gaussian_blur_kernel_size' : 5,
-        'gaussian_blur_sigma_x' : 0,
-        'canny_threshold1' : 0,
-        'canny_threshold2' : 50,
-        'canny_aperture_size' : 5,
-        'dilate_kernel_size' : 51,
-        'dilate_ierations' : 1,
-        'erode_kernel_size' : 51,
-        'erode_iterations' : 1,
-        'polygonal_approximation_error' : 4
-    }
-    image = cv2.imread("mock_image.jpg")
-    image = ImageWrapper(image)
-    treasures = TreasureDetector()
-    treasures.find_treasures(image, default_camille_polygon_params)
-
 
 
