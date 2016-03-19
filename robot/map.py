@@ -1,11 +1,12 @@
 
 class Map:
-    def __init__(self, width, height, robot_service):
+    def __init__(self, width, height, robot_service, vision_daemon):
         self._width = width
         self._height = height
         self.__robot_service = robot_service
         self._robot_position = self.__robot_service.get_robot_position()
         self._robot_angle = 0
+        self.vision_daemon = vision_daemon
 
     def set_robot_position(self):
         self._robot_position = self.__robot_service.get_robot_position()
@@ -14,7 +15,7 @@ class Map:
         self._robot_angle = angle
 
     def get_robot_position(self):
-        return self._robot_position.tolist()
+        return self.vision_daemon.get_robot_position_from_vision()
 
     def get_robot_angle(self):
         return self._robot_angle

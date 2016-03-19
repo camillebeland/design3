@@ -31,9 +31,9 @@ if __name__ == '__main__':
     robot_service = RobotService(base_station_address, island_server_address)
 
     if wheelsconfig == "simulation":
-        worldmap = Map(1600, 1200, robot_service)
-    else:
         worldmap = SimulationMap(1600, 1200)
+    else:
+        worldmap = Map(1600, 1200, robot_service)
 
     if(wheelsconfig == "simulation"):
         try:
