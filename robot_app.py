@@ -5,7 +5,7 @@ from pathfinding.pathfinding import PathFinder
 from pathfinding.mesh import Mesh
 from pathfinding.cell import Cell
 from robot import robot_web_controller
-from robot.islands_service import IslandsService
+from robot.worldmap_service import WorldmapService
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
 from robot.map import Map
 from robot.robot import Robot
@@ -60,8 +60,9 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serialport, WheelsUsbCommands())
         manchester_antenna = ManchesterAntennaUsbController(serialport)
 
-    islands = IslandsService(base_station_host, base_station_port)
+    islands = WorldmapService(base_station_host, base_station_port)
     polygons = islands.get_polygons()
+    treasures = islands.get_treasures()
 
     cell = Cell(1600,1200,800,600)
     mesh = Mesh(cell.partition_cells(polygons, 100))
