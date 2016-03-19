@@ -82,6 +82,18 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         allIslands.addChild(island);
     };
 
+    var drawTreasure = function(treasureData) {
+        var island = new createjs.Shape();
+        var polygon_x = treasureData.x * xScale;
+        var polygon_y = canvas.height - treasureData.y * yScale;
+        var polygon_side_length = 20;
+        var polygon_color = 'yellow';
+        var polygon_angle = -90;
+        var edges_number = 5;
+        island.graphics.beginFill(polygon_color).drawPolyStar(polygon_x, polygon_y, polygon_side_length, edges_number, 0.6, polygon_angle);
+        allIslands.addChild(island);
+    };
+
     var showIslands = function() {
         allIslands = new createjs.Container();
         var whenGetIsComplete = MapService.getMap();
@@ -99,15 +111,22 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             for (square of response.squares) {
                 drawPolygon(square, 4);
             }
+            for (treasure of response.treasures) {
+                drawTreasure(treasure);
+            }
             stage.addChild(allIslands);
         });
     };
 
     var getRobotPosition = function(){
         MapService.getRobotPosition().then(function(response) {
-            var robot_square = new createjs.Shape();
-            robot_square.graphics.beginFill('purple').drawPolyStar((response.center[0]*xScale), CANVAS_HEIGHT - (response.center[1]*yScale), 100, 4, 0, response.angle);
-            stage.addChild(robot_square);
+            if(response.center == undefined){
+                console.log("No robot's position was returned from the vision")
+            } else{
+                var robot_square = new createjs.Shape();
+                robot_square.graphics.beginFill('purple').drawPolyStar((response.center[0]*xScale), CANVAS_HEIGHT - (response.center[1]*yScale), 100, 4, 0, response.angle);
+                stage.addChild(robot_square);
+            }
         });
     };
 
