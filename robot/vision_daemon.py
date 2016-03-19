@@ -3,12 +3,13 @@ from threading import Thread
 
 
 class VisionDaemon:
-    def __init__(self):
-        self.start_fetching_robot_position_from_vision()
+    def __init__(self, base_station_address):
+        self.base_station_address = base_station_address
         self.last_robot_position_from_vision = []
+        self.start_fetching_robot_position_from_vision()
 
     def get_robot_position_from_vision(self):
-            return self.robot_position_from_vision
+            return self.last_robot_position_from_vision
 
     def __fetch_robot_position_from_vision__(self):
         while self.running:
