@@ -1,10 +1,12 @@
+import time
+
 from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
-import time
+
 import base_station.logger as logger
 from base_station.logger import Logger
+from base_station.vision.shape_detector import ShapeDetector
 from base_station.vision_service import VisionService
-from base_station.vision import ShapeDetector
 
 app = Flask(__name__)
 CORS(app)

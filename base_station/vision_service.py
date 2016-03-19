@@ -1,4 +1,4 @@
-from base_station.vision import Image
+from base_station.vision.image_wrapper import ImageWrapper
 
 
 class VisionService:
@@ -7,7 +7,7 @@ class VisionService:
         self.__shape_detector = shape_detector
 
     def build_map(self):
-        image = Image(self.__camera.get_frame())
+        image = ImageWrapper(self.__camera.get_frame())
         circles, pentagons, squares, triangles = [], [], [], []
         circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
@@ -45,7 +45,7 @@ class VisionService:
         return shapes
 
     def find_robot_position(self):
-        image = Image(self.__camera.get_frame())
+        image = ImageWrapper(self.__camera.get_frame())
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
         purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
         if not purple_circle or not purple_square:
