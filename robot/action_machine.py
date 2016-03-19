@@ -19,8 +19,8 @@ class ActionMachine:
     def notify_event(self, event):
         assert(event in self.__events)
         action_name = self.__events[event]
-        self.__actions[action_name].handle()
-
+        action = self.__actions[action_name]
+        action.start()
 
 class ActionInterface:
     def start(self):
