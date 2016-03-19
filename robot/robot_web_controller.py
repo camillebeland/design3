@@ -72,8 +72,14 @@ def mesh_to_json(mesh):
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
 
-@app.route('/action/<action>', methods = ['POST'])
+@app.route('/actions/<action>', methods = ['POST'])
 def send_action_to_robot(action):
-    print(action)
-    action_machine.notify_event(action)
-    return('OK')
+    try:
+        action_machine.notify_event(action)
+        return "OK"
+    except:
+        print('action : {0} did not work'.format(action))
+
+@app.route('/actions')
+def get_actions():
+    return jsonify(action_machine.get_events())
