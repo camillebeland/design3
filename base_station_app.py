@@ -4,6 +4,7 @@ from base_station import base_station_web_controller
 from base_station.camera_service import CameraService
 from base_station.mock_camera_service import MockCameraService
 from base_station.vision.shape_detector import ShapeDetector
+from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision_service import VisionService
 from configuration import configuration
 
@@ -32,7 +33,7 @@ def run():
     camera_height = config.getint('baseapp', 'camera_height')
 
     camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
-    vision = VisionService(camera, ShapeDetector())
+    vision = VisionService(camera, ShapeDetector(), TreasureDetector())
     worldmap = vision.build_map()
 
     base_station_web_controller.inject(camera, refresh_time, worldmap)

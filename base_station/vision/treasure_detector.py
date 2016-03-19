@@ -2,7 +2,7 @@ import cv2
 
 
 class TreasureDetector:
-    def find_treasure(self, image, parameters, opencv=cv2):
+    def find_treasures(self, image, parameters, opencv=cv2):
         median_blur_kernel_size = parameters['median_blur_kernel_size']
         gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
         gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
@@ -16,7 +16,7 @@ class TreasureDetector:
         polygonal_approximation_error = parameters['polygonal_approximation_error']
 
         def approxPolygon(contour):
-            return opencv.approxPolyDP(contour, polygonal_approximation_error , True)
+            return opencv.approxPolyDP(contour, polygonal_approximation_error, True)
 
         contours = (image
                     .filter_median_blur(median_blur_kernel_size)
@@ -33,18 +33,18 @@ class TreasureDetector:
             area = opencv.contourArea(contour)
 
             if self.__is_a_treasure__(detected_shape_length, detected_shape_height, area):
-                treasure = self.__find_treasure_coordinates__(contour)
+                treasure = self.__find_treasure_coordinates__(image, contour)
                 treasures.append(treasure)
         print(treasures)
         return treasures
 
-    def __find_treasure_coordinates__(self, contour):
+    def __find_treasure_coordinates__(self, image, contour):
         treasure = {}
         moment = cv2.moments(contour)
         center_x = int((moment["m10"] / moment["m00"]))
         centrer_y = int((moment["m01"] / moment["m00"]))
         treasure['x'] = center_x
-        treasure['y'] = centrer_y
+        treasure['y'] = image.get_height() - centrer_y
         return treasure
 
     def __find_shape_height_and_lenght__(self, contour):
@@ -65,6 +65,7 @@ class TreasureDetector:
         TREASURE_MIN_LENGHT = 5
         TREASURE_MAX_AREA = 400
         TREASURE_MIN_AREA = 150
+
         if TREASURE_MIN_HEIGHT < detected_shape_height < TREASURE_MAX_HEIGHT and \
            TREASURE_MIN_LENGHT < detected_shape_length < TREASURE_MAX_LENGHT and \
            TREASURE_MIN_AREA < area < TREASURE_MAX_AREA:
@@ -94,7 +95,7 @@ if __name__ == '__main__':
     image = cv2.imread("mock_image.jpg")
     image = ImageWrapper(image)
     treasures = TreasureDetector()
-    treasures.find_treasure(image, default_camille_polygon_params)
+    treasures.find_treasures(image, default_camille_polygon_params)
 
 
 

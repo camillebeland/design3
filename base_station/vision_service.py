@@ -1,14 +1,14 @@
 from base_station.vision.image_wrapper import ImageWrapper
 
-
 class VisionService:
-    def __init__(self, camera, shape_detector):
+    def __init__(self, camera, shape_detector, treasure_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
+        self.__treasure_detector = treasure_detector
 
     def build_map(self):
         image = ImageWrapper(self.__camera.get_frame())
-        circles, pentagons, squares, triangles = [], [], [], []
+        circles, pentagons, squares, triangles, treasures = [], [], [], [], []
         circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'yellow'))
@@ -25,12 +25,14 @@ class VisionService:
         squares.extend(self.__find_polygon_color__(image, 'square', 'blue'))
         squares.extend(self.__find_polygon_color__(image, 'square', 'yellow'))
         squares.extend(self.__find_polygon_color__(image, 'square', 'red'))
+        treasures.extend(self.__treasure_detector.find_treasures(image, default_camille_polygon_params))
 
         worldmap = {
             'circles': circles,
             'triangles': triangles,
             'pentagons': pentagons,
-            'squares': squares
+            'squares': squares,
+            'treasures': treasures
         }
         return worldmap
 
