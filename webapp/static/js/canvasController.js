@@ -8,8 +8,10 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     var completeMesh;
     var path;
     var allIslands;
+    var visionRobotPosition;
     var xScale;
     var yScale;
+    var updateRobotPositionFromVisionInterval;
 
     var updateRobotRepresentation = function(robotModel) {
         completeRobotRepresentation.x = (robotModel.position[0] * xScale);
@@ -103,15 +105,29 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         });
     };
 
-    var getRobotPosition = function(){
-        MapService.getRobotPosition().then(function(response) {
-            var robot_square = new createjs.Shape();
-            robot_square.graphics.beginFill('purple').drawPolyStar((response.center[0]*xScale), CANVAS_HEIGHT - (response.center[1]*yScale), 100, 4, 0, response.angle);
-            stage.addChild(robot_square);
+    var initRobotPositionFromVision = function(){
+        visionRobotPosition = new createjs.Shape();
+        visionRobotPosition.graphics.beginFill('purple').drawPolyStar(0, 0, radius=50, 4, pointSize=0.7);
+        stage.addChild(visionRobotPosition);
+    };
+
+    var updateRobotPositionFromVision = function(){
+        MapService.getRobotPositionFromVision().then(function(response) {
+            visionRobotPosition.x = (response.center[0]*xScale);
+            visionRobotPosition.y = CANVAS_HEIGHT - (response.center[1]*yScale);
+            visionRobotPosition.rotation = response.angle;
         });
     };
 
-    setInterval(getRobotPosition, ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS);
+    var showRobotPositionFromVision = function(){
+        initRobotPositionFromVision()
+        updateRobotPositionFromVisionInterval = setInterval(updateRobotPositionFromVision, ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS);
+    }
+
+    var hideRobotPositionFromVision = function(){
+        clearInterval(updateRobotPositionFromVisionInterval);
+        stage.removeChild(visionRobotPosition);
+    }
 
     var initPath = function(){
         path = new createjs.Shape();
@@ -153,6 +169,14 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
 
     $scope.$on('islandToggleOff', function(event) {
         stage.removeChild(allIslands);
+    });
+
+    $scope.$on('visionRobotToggleOn', function(event) {
+        showRobotPositionFromVision();
+    });
+
+    $scope.$on('visionRobotToggleOff', function(event) {
+        hideRobotPositionFromVision();
     });
 
     setInterval(function() {

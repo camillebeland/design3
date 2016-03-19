@@ -27,13 +27,12 @@ if __name__ == '__main__':
     base_station_port = config.get('baseapp', 'port')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
-    map = config.get('robot', 'map')
 
     robot_service = RobotService(base_station_address, island_server_address)
 
-    if map == "map":
+    if wheelsconfig == "simulation":
         worldmap = Map(1600, 1200, robot_service)
-    if map == "simulation-map":
+    else:
         worldmap = SimulationMap(1600, 1200)
 
     if(wheelsconfig == "simulation"):

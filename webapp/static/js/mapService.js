@@ -23,14 +23,14 @@ var MapModule = angular.module('MapModule', [])
             });
         };
 
-      this.getRobotPosition = function(){
+      this.getRobotPositionFromVision = function(){
           return $http({
               method: 'GET',
-              url: 'http://' + BASE_STATION_HOST + '/robot_position'
+              url: 'http://' + BASE_STATION_HOST + '/vision/robot'
           }).then(function successCallback(response) {
               return response.data;
           }, function errorCallback(response) {
-              console.log("error getting robot position from base station");
+              console.log("error getting robot position from vision on base_station");
           });
       }
     }]);

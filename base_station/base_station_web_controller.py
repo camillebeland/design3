@@ -49,7 +49,8 @@ def fetch_worldmap():
     return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons']})
 
-@app.route('/robot_position')
+
+@app.route('/vision/robot')
 def fetch_position():
     robot_position = vision_service.find_robot_position()
     return jsonify(robot_position)
