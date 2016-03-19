@@ -30,18 +30,22 @@ class TreasureDetector:
         treasures = []
         for contour in contours:
             detected_shape_length, detected_shape_height= self.__find_shape_height_and_lenght__(contour)
-            area = cv2.contourArea(contour)
+            area = opencv.contourArea(contour)
 
             if self.__is_a_treasure__(detected_shape_length, detected_shape_height, area):
-                treasure = {}
-                moment = cv2.moments(contour)
-                center_x = int((moment["m10"] / moment["m00"]))
-                centrer_y = int((moment["m01"] / moment["m00"]))
-                treasure['x'] = center_x
-                treasure['y'] = centrer_y
+                treasure = self.__find_treasure_coordinates__(contour)
                 treasures.append(treasure)
         print(treasures)
         return treasures
+
+    def __find_treasure_coordinates__(self, contour):
+        treasure = {}
+        moment = cv2.moments(contour)
+        center_x = int((moment["m10"] / moment["m00"]))
+        centrer_y = int((moment["m01"] / moment["m00"]))
+        treasure['x'] = center_x
+        treasure['y'] = centrer_y
+        return treasure
 
     def __find_shape_height_and_lenght__(self, contour):
         leftest_vertex = min([vertex[0][0] for vertex in contour])
