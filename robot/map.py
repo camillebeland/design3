@@ -17,15 +17,21 @@ class Map:
     def get_robot_angle(self):
         return self._robot_angle
 
-    def move_robot(self, delta_x, delta_y):
-        raise NotImplementedError
-
-    def rotate_robot(self, angle):
-        self._robot_angle += angle
-        self._robot_angle = self._robot_angle % 360
-
-    def __is_inside_boundaries(self,x, y):
-        return x > 0 and x < self._width and y > 0 and y < self._height
-
     def relative_position(self, position):
-        raise NotImplementedError
+        return rotate_vector(self._robot_angle, np.array(position) - np.array(self._robot_position))
+
+
+def rotate_vector(theta, vector):
+    return np.dot(rotation_matrix(theta), vector)
+
+
+def cos(angle):
+    return np.cos(angle/180 * np.pi)
+
+
+def sin(angle):
+    return np.sin(angle/180 * np.pi)
+
+
+def rotation_matrix(theta):
+    return np.array([[cos(theta), -1*sin(theta)], [sin(theta), cos(theta)]])

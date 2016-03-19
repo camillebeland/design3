@@ -17,7 +17,7 @@ class VisionDaemon:
                 response = requests.get(str(self.base_station_address)+ '/vision/robot')
                 response.raise_for_status()
                 if not response.json():
-                    self.log_info("Robot position is not found, base station returned nothing")
+                    print("Robot position is not found, base station returned nothing")
                 else:
                     self.last_robot_position_from_vision = response.json()
             except requests.exceptions.RequestException:

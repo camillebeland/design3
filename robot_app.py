@@ -75,7 +75,6 @@ if __name__ == '__main__':
     mesh = Mesh(cell.partition_cells(polygons, 100))
 
     pathfinder = PathFinder(mesh)
-    robot_service.start_fetching_robot_position_from_vision()
     robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna)
 
     robot_web_controller.inject(robot, mesh, robot_service)
