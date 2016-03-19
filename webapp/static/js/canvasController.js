@@ -120,9 +120,13 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
 
     var getRobotPosition = function(){
         MapService.getRobotPosition().then(function(response) {
-            var robot_square = new createjs.Shape();
-            robot_square.graphics.beginFill('purple').drawPolyStar((response.center[0]*xScale), CANVAS_HEIGHT - (response.center[1]*yScale), 100, 4, 0, response.angle);
-            stage.addChild(robot_square);
+            if(response.center == undefined){
+                console.log("No robot's position was returned from the vision")
+            } else{
+                var robot_square = new createjs.Shape();
+                robot_square.graphics.beginFill('purple').drawPolyStar((response.center[0]*xScale), CANVAS_HEIGHT - (response.center[1]*yScale), 100, 4, 0, response.angle);
+                stage.addChild(robot_square);
+            }
         });
     };
 
