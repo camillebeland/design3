@@ -35,7 +35,6 @@ class TreasureDetector:
             if self.__is_a_treasure__(detected_shape_length, detected_shape_height, area):
                 treasure = self.__find_treasure_coordinates__(image, contour)
                 treasures.append(treasure)
-        print(treasures)
         return treasures
 
     def __find_treasure_coordinates__(self, image, contour):
