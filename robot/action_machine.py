@@ -22,7 +22,13 @@ class ActionMachine:
         action = self.__actions[action_name]
         action.start()
 
-class ActionInterface:
+class Action:
+    def __init__(self, robot, robot_service, worldmap, embedded_camera):
+        self.__embedded_camera = embedded_camera
+        self.__robot = robot
+        self.__robot_service = robot_service
+        self.__worldmap = worldmap
+
     def start(self):
         raise NotImplementedError()
     def stop(self):

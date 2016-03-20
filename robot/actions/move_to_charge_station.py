@@ -1,9 +1,8 @@
+from robot.action_machine import Action
 
-class MoveToChargeStationAction:
-    def __init__(self, robot, worldmap, charge_station_angle=90):
-        self.__robot = robot
-        self.__worldmap = worldmap
-
+class MoveToChargeStationAction(Action):
+    def __init__(self, robot, robot_service, worldmap, charge_station_angle=90):
+        super().__init__(robot, robot_service, worldmap)
         self.__charge_station_angle = charge_station_angle
 
     def start(self):
