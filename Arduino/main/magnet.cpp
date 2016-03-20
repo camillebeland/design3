@@ -4,6 +4,7 @@
 void magnet_init(){
 	pinMode(OUT_MAGNET, OUTPUT);
 	pinMode(IN_CAPACITOR_VOLTAGE, INPUT);
+	pinMode(IN_BATTERY_VOLTAGE, INPUT);
 	digitalWrite(OUT_MAGNET, LOW);
 }
 
