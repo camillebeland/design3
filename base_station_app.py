@@ -1,4 +1,5 @@
 import cv2
+from base_station.logger import Logger
 
 from base_station import base_station_web_controller
 from base_station.camera_service import CameraService
@@ -31,12 +32,13 @@ def run():
     refresh_time = config.getint('baseapp', 'refresh_time')
     camera_width = config.getint('baseapp', 'camera_width')
     camera_height = config.getint('baseapp', 'camera_height')
+    logger = Logger()
 
     camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
     vision = VisionService(camera, ShapeDetector(), TreasureDetector())
     worldmap = vision.build_map()
 
-    base_station_web_controller.inject(camera, refresh_time, worldmap)
+    base_station_web_controller.inject(camera, refresh_time, worldmap, logger)
     base_station_web_controller.run(host, port)
     
 if __name__ == '__main__':

@@ -1,19 +1,22 @@
 import serial
 import serial.tools.list_ports as lp
+
 from configuration import configuration
-from pathfinding.pathfinding import PathFinder
-from pathfinding.mesh import Mesh
 from pathfinding.cell import Cell
+from pathfinding.mesh import Mesh
+from pathfinding.pathfinding import PathFinder
+from robot.map import Map
 from robot import robot_web_controller
 from robot.worldmap_service import WorldmapService
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
-from robot.map import Map
 from robot.robot import Robot
 from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
+from robot.simulation.simulation_map import SimulationMap
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
+from robot.vision_daemon import VisionDaemon
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -26,19 +29,21 @@ if __name__ == '__main__':
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
 
-    worldmap = Map(1600, 1200)
-    if(wheelsconfig == "simulation"):
+    robot_service = RobotService(base_station_address, island_server_address)
+
+    if wheelsconfig == "simulation":
+        world_map = SimulationMap(1600, 1200)
         try:
-            refreshtime = config.getint('robot', 'wheels-refresh-time')
-        except :
+            refresh_time = config.getint('robot', 'wheels-refresh-time')
+        except:
             print("Warning : wheels-refresh-time not specified, setting 10")
-            refreshtime = 10
+            refresh_time = 10
 
         try:
-            wheelsvelocity= config.getint('robot', 'wheels-velocity')
-        except :
+            wheels_velocity= config.getint('robot', 'wheels-velocity')
+        except:
             print("Warning : wheels-velocity not specified, setting 5")
-            wheelsvelocity = 5
+            wheels_velocity = 5
 
         try:
             noise = config.getint('robot', 'simulation-noise')
@@ -46,10 +51,13 @@ if __name__ == '__main__':
             print("Warning : noise not specified, setting 0")
             noise = 0
 
-        wheels = NoisyWheels(worldmap, refresh_time = refreshtime, wheels_velocity=wheelsvelocity, noise=noise)
+        wheels = NoisyWheels(world_map, refresh_time = refresh_time, wheels_velocity=wheels_velocity, noise=noise)
         manchester_antenna = ManchesterAntennaSimulation()
 
-    elif(wheelsconfig == "usb-arduino"):
+    elif wheelsconfig == "usb-arduino":
+        vision_daemon = VisionDaemon(base_station_address)
+        world_map = Map(1600, 1200, vision_daemon)
+
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
         arduino_baudrate = config.getint('robot', 'arduino-baudrate')
@@ -64,13 +72,11 @@ if __name__ == '__main__':
     polygons = islands.get_polygons()
     treasures = islands.get_treasures()
 
-    cell = Cell(1600,1200,800,600)
+    cell = Cell(1600, 1200, 800, 600)
     mesh = Mesh(cell.partition_cells(polygons, 100))
 
     pathfinder = PathFinder(mesh)
-    robot_service = RobotService(base_station_address, island_server_address)
-    robot_service.start_fetching_robot_position_from_vision()
-    robot = Robot(wheels, worldmap, pathfinder, robot_service, manchester_antenna)
+    robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna)
 
     robot_web_controller.inject(robot, mesh, robot_service)
     robot_web_controller.run(host, port)

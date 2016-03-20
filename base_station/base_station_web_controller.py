@@ -18,12 +18,12 @@ def inject_mock_map(mock_app):
     app = mock_app
 
 
-def inject(a_camera, a_refresh_time, the_worldmap):
+def inject(a_camera, a_refresh_time, the_worldmap, a_logger):
     global camera, refresh_time, worldmap, logger, vision_service
     camera = a_camera
     refresh_time = a_refresh_time
     worldmap = the_worldmap
-    logger = Logger()
+    logger = a_logger
     vision_service = VisionService(a_camera, ShapeDetector(), TreasureDetector())
 
 
@@ -53,7 +53,8 @@ def fetch_worldmap():
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons'],
                     'treasures':worldmap['treasures']})
 
-@app.route('/robot_position')
+
+@app.route('/vision/robot')
 def fetch_position():
     robot_position = vision_service.find_robot_position()
     return jsonify(robot_position)
