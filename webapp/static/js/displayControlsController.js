@@ -16,4 +16,12 @@ website.controller('displayControlsController', ['$scope', '$rootScope', functio
     $rootScope.$broadcast('islandToggleOff');
   };
 
+  $scope.visionRobotToggleOn = function() {
+    $rootScope.$broadcast('visionRobotToggleOn');
+  };
+
+  $scope.visionRobotToggleOff = function() {
+    $rootScope.$broadcast('visionRobotToggleOff');
+  };
+
 }]);

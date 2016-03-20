@@ -43,10 +43,12 @@ def robot_move_to():
     return "OK"
 
 
-@socket_io.on('fetchPosition')
-def robot_fetch_position():
-    socket_io.emit('position',  {'robotPosition': robot.get_position(),
-                                 'robotAngle': robot.get_angle()})
+@socket_io.on('fetchRobotInfo')
+def robot_fetch_info():
+    socket_io.emit('robotUpdated',  {'robotPosition': robot.get_position(),
+                                     'robotAngle': robot.get_angle(),
+                                     'batteryLevel': robot.get_battery_level(),
+                                     'capacitorCharge': robot.get_capacitor_charge()})
 
 
 @socket_io.on('fetchPath')

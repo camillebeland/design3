@@ -1,15 +1,14 @@
-from base_station.vision import Image
-import cv2
-
+from base_station.vision.image_wrapper import ImageWrapper
 
 class VisionService:
-    def __init__(self, camera, shape_detector):
+    def __init__(self, camera, shape_detector, treasure_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
+        self.__treasure_detector = treasure_detector
 
     def build_map(self):
-        image = Image(self.__camera.get_frame())
-        circles, pentagons, squares, triangles = [], [], [], []
+        image = ImageWrapper(self.__camera.get_frame())
+        circles, pentagons, squares, triangles, treasures = [], [], [], [], []
         circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'yellow'))
@@ -26,12 +25,14 @@ class VisionService:
         squares.extend(self.__find_polygon_color__(image, 'square', 'blue'))
         squares.extend(self.__find_polygon_color__(image, 'square', 'yellow'))
         squares.extend(self.__find_polygon_color__(image, 'square', 'red'))
+        treasures.extend(self.__treasure_detector.find_treasures(image, default_camille_polygon_params))
 
         worldmap = {
             'circles': circles,
             'triangles': triangles,
             'pentagons': pentagons,
-            'squares': squares
+            'squares': squares,
+            'treasures': treasures
         }
         return worldmap
 
@@ -45,11 +46,35 @@ class VisionService:
             poly['color'] = color
         return shapes
 
+    def find_robot_position(self):
+        image = ImageWrapper(self.__camera.get_frame())
+        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
+        purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
+        if not purple_circle or not purple_square:
+            return {}
+        else:
+            angle = self.__find_angle_between__(purple_circle[0], purple_square[0])
+            robot_position = {
+                'center': ((purple_square[0]['x'] + purple_circle[0]['x'])/2, (purple_square[0]['y'] + purple_circle[0]['y'])/2),
+                'angle': angle
+            }
+            return {'center' : robot_position['center'],
+                    'angle': robot_position['angle']}
+
+    def __find_angle_between__(self, point1, point2):
+        from math import atan2, degrees
+        dx = point1['x'] - point2['x']
+        dy = point1['y'] - point2['y']
+        angle_in_rad = atan2(dy, dx)
+        angle_in_deg = degrees(angle_in_rad)
+        return angle_in_deg
+
+
 default_camille_circle_params = {
     'median_blur_kernel_size' : 5,
     'gaussian_blur_kernel_size' : 9,
     'gaussian_blur_sigma_x' : 2,
-    'hough_circle_min_distance' : 50,
+    'hough_circle_min_distance' : 10,
     'hough_circle_param1' : 50,
     'hough_circle_param2' : 30,
     'hough_circle_min_radius' : 0,
