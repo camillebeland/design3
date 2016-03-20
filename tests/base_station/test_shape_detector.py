@@ -1,5 +1,6 @@
 from nose.tools import *
-from base_station.vision import *
+
+from base_station.vision.shape_detector import *
 
 test_polygon_params = {
     'median_blur_kernel_size' : 5,

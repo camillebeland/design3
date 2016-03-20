@@ -5,7 +5,7 @@ import os
 class MockCameraService(object):
 
     def __init__(self):
-        image = cv2.imread("base_station/photo_robot_mauve.jpg")
+        image = cv2.imread("base_station/mock_image.jpg")
         self.image = image
 
     def get_frame(self, format='bgr'):

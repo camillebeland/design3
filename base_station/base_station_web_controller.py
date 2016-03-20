@@ -1,10 +1,13 @@
+import time
+
 from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
-import time
+
 import base_station.logger as logger
 from base_station.logger import Logger
+from base_station.vision.shape_detector import ShapeDetector
+from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision_service import VisionService
-from base_station.vision import ShapeDetector
 
 app = Flask(__name__)
 CORS(app)
@@ -21,7 +24,7 @@ def inject(a_camera, a_refresh_time, the_worldmap, a_logger):
     refresh_time = a_refresh_time
     worldmap = the_worldmap
     logger = a_logger
-    vision_service = VisionService(a_camera, ShapeDetector())
+    vision_service = VisionService(a_camera, ShapeDetector(), TreasureDetector())
 
 
 def generate_frame(camera, refresh_time):
@@ -47,7 +50,8 @@ def cell_to_json(cell):
 @app.route('/worldmap')
 def fetch_worldmap():
     return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
-                    'squares': worldmap['squares'], 'pentagons': worldmap['pentagons']})
+                    'squares': worldmap['squares'], 'pentagons': worldmap['pentagons'],
+                    'treasures':worldmap['treasures']})
 
 
 @app.route('/vision/robot')

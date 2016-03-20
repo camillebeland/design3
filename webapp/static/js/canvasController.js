@@ -26,8 +26,8 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         for (pathNode of pathData.robotPath) {
             var x = pathNode[0];
             var y = pathNode[1];
-            var convertedX = x*xScale;
-            var convertedY = y*yScale;
+            var convertedX = x * xScale;
+            var convertedY = y * yScale;
             path.graphics.lineTo(convertedX, CANVAS_HEIGHT - convertedY);
         }
         stage.addChild(path);
@@ -63,7 +63,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         stage.addChild(completeRobotRepresentation);
     };
 
-    var drawCircle = function(circleData){
+    var drawCircle = function(circleData) {
         var island = new createjs.Shape();
         var circle_x = circleData.x * xScale;
         var circle_y = CANVAS_HEIGHT - circleData.y * yScale;
@@ -84,6 +84,18 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         allIslands.addChild(island);
     };
 
+    var drawTreasure = function(treasureData) {
+        var island = new createjs.Shape();
+        var polygon_x = treasureData.x * xScale;
+        var polygon_y = canvas.height - treasureData.y * yScale;
+        var polygon_side_length = 20;
+        var polygon_color = 'yellow';
+        var polygon_angle = -90;
+        var edges_number = 5;
+        island.graphics.beginFill(polygon_color).drawPolyStar(polygon_x, polygon_y, polygon_side_length, edges_number, 0.6, polygon_angle);
+        allIslands.addChild(island);
+    };
+
     var showIslands = function() {
         allIslands = new createjs.Container();
         var whenGetIsComplete = MapService.getMap();
@@ -101,35 +113,42 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             for (square of response.squares) {
                 drawPolygon(square, 4);
             }
+            for (treasure of response.treasures) {
+                drawTreasure(treasure);
+            }
             stage.addChild(allIslands);
         });
     };
 
-    var initRobotPositionFromVision = function(){
+    var initRobotPositionFromVision = function() {
         visionRobotPosition = new createjs.Shape();
-        visionRobotPosition.graphics.beginFill('purple').drawPolyStar(0, 0, radius=50, 4, pointSize=0.7);
+        visionRobotPosition.graphics.beginFill('purple').drawPolyStar(-50, -50, radius = 50, 4, pointSize = 0.7);
         stage.addChild(visionRobotPosition);
     };
 
-    var updateRobotPositionFromVision = function(){
+    var updateRobotPositionFromVision = function() {
         MapService.getRobotPositionFromVision().then(function(response) {
-            visionRobotPosition.x = (response.center[0]*xScale);
-            visionRobotPosition.y = CANVAS_HEIGHT - (response.center[1]*yScale);
-            visionRobotPosition.rotation = response.angle;
+            if (response.center == undefined) {
+                console.log("No robot's position was returned from the vision")
+            } else {
+                visionRobotPosition.x = (response.center[0] * xScale);
+                visionRobotPosition.y = CANVAS_HEIGHT - (response.center[1] * yScale);
+                visionRobotPosition.rotation = response.angle;
+            }
         });
     };
 
-    var showRobotPositionFromVision = function(){
+    var showRobotPositionFromVision = function() {
         initRobotPositionFromVision()
         updateRobotPositionFromVisionInterval = setInterval(updateRobotPositionFromVision, ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS);
     }
 
-    var hideRobotPositionFromVision = function(){
+    var hideRobotPositionFromVision = function() {
         clearInterval(updateRobotPositionFromVisionInterval);
         stage.removeChild(visionRobotPosition);
     }
 
-    var initPath = function(){
+    var initPath = function() {
         path = new createjs.Shape();
         path.graphics.moveTo(completeRobotRepresentation.x, completeRobotRepresentation.y);
     };
@@ -141,9 +160,9 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             completeMesh = new createjs.Container();
             for (cell of response.cells) {
                 var square = new createjs.Shape();
-                var rectTopLeftX = (cell.x * xScale) - (cell.width*xScale) / 2;
-                var rectTopLeftY = (cell.y * yScale) + (cell.height*yScale) / 2;
-                square.graphics.beginStroke("black").drawRect(rectTopLeftX, CANVAS_HEIGHT - rectTopLeftY, (cell.width*xScale), (cell.height*yScale));
+                var rectTopLeftX = (cell.x * xScale) - (cell.width * xScale) / 2;
+                var rectTopLeftY = (cell.y * yScale) + (cell.height * yScale) / 2;
+                square.graphics.beginStroke("black").drawRect(rectTopLeftX, CANVAS_HEIGHT - rectTopLeftY, (cell.width * xScale), (cell.height * yScale));
                 completeMesh.addChild(square);
             }
             stage.addChild(completeMesh);
