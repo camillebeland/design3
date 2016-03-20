@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     action_machine = ActionMachine()
 
-    move_to_charge_station = MoveToChargeStationAction(robot, worldmap)
+    move_to_charge_station = MoveToChargeStationAction(robot, robot_service, worldmap, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.bind('start', 'move_to_charge_station')
