@@ -4,8 +4,10 @@ from base_station.logger import Logger
 from base_station import base_station_web_controller
 from base_station.camera_service import CameraService
 from base_station.mock_camera_service import MockCameraService
+from base_station.vision.island_detector import IslandDetector
 from base_station.vision.shape_detector import ShapeDetector
 from base_station.vision.treasure_detector import TreasureDetector
+from base_station.vision.table_calibrator import TableCalibrator
 from base_station.vision_service import VisionService
 from configuration import configuration
 
@@ -35,11 +37,13 @@ def run():
     logger = Logger()
 
     camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
-    vision = VisionService(camera, ShapeDetector(), TreasureDetector())
+    shape_detector = ShapeDetector()
+    vision = VisionService(camera, IslandDetector(shape_detector), TreasureDetector(shape_detector), TableCalibrator(shape_detector))
+    vision.init_worldmap_contour()
     worldmap = vision.build_map()
 
     base_station_web_controller.inject(camera, refresh_time, worldmap, logger)
     base_station_web_controller.run(host, port)
-    
+
 if __name__ == '__main__':
     run()

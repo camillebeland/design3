@@ -8,6 +8,8 @@ from base_station.logger import Logger
 from base_station.vision.shape_detector import ShapeDetector
 from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision_service import VisionService
+from base_station.vision.island_detector import IslandDetector
+from base_station.vision.table_calibrator import TableCalibrator
 
 app = Flask(__name__)
 CORS(app)
@@ -24,7 +26,9 @@ def inject(a_camera, a_refresh_time, the_worldmap, a_logger):
     refresh_time = a_refresh_time
     worldmap = the_worldmap
     logger = a_logger
-    vision_service = VisionService(a_camera, ShapeDetector(), TreasureDetector())
+    shape_detector = ShapeDetector()
+    vision_service = VisionService(a_camera, IslandDetector(shape_detector),
+                                   TreasureDetector(shape_detector), TableCalibrator(shape_detector))
 
 
 def generate_frame(camera, refresh_time):

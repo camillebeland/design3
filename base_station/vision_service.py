@@ -1,13 +1,16 @@
 from base_station.vision.image_wrapper import ImageWrapper
 
 class VisionService:
-    def __init__(self, camera, shape_detector, treasure_detector):
+    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator):
         self.__camera = camera
         self.__shape_detector = shape_detector
         self.__treasure_detector = treasure_detector
+        self.__table_calibrator = table_calibrator
+        self.worldmap_contour = {}
 
     def build_map(self):
         image = ImageWrapper(self.__camera.get_frame())
+        image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
         circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
@@ -60,6 +63,12 @@ class VisionService:
             }
             return {'center' : robot_position['center'],
                     'angle': robot_position['angle']}
+
+    def init_worldmap_contour(self):
+        image = ImageWrapper(self.__camera.get_frame())
+        worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
+        self.worldmap_contour = worldmap_contour
+
 
     def __find_angle_between__(self, point1, point2):
         from math import atan2, degrees

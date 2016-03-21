@@ -1,35 +1,19 @@
 import cv2
+import base_station.vision.vision_utils as utils
 
 
 class TreasureDetector:
+    def __init__(self, shape_detector):
+        self.__shape_detector = shape_detector
+
     def find_treasures(self, image, parameters, opencv=cv2):
-        median_blur_kernel_size = parameters['median_blur_kernel_size']
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
-        canny_threshold1 = parameters['canny_threshold1']
-        canny_threshold2 = parameters['canny_threshold2']
-        canny_aperture_size = parameters['canny_aperture_size']
-        dilate_kernel_size = parameters['dilate_kernel_size']
-        dilate_ierations = parameters['dilate_ierations']
-        erode_kernel_size = parameters['erode_kernel_size']
-        erode_iterations = parameters['erode_iterations']
-        polygonal_approximation_error = parameters['polygonal_approximation_error']
-
-        def approxPolygon(contour):
-            return opencv.approxPolyDP(contour, polygonal_approximation_error, True)
-
-        contours = (image
-                    .filter_median_blur(median_blur_kernel_size)
-                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
-                    .filter_by_color(hsv_range['yellow'])
-                    .canny(canny_threshold1,canny_threshold2,canny_aperture_size)
-                    .dilate(dilate_kernel_size,dilate_ierations)
-                    .erode(erode_kernel_size, erode_iterations)
-                    .find_contours())
+        contours = self.__shape_detector.find_polygon_color(image, 'treasure-yellow', parameters)
 
         treasures = []
         for contour in contours:
-            detected_shape_length, detected_shape_height= self.__find_shape_height_and_lenght__(contour)
+            leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(contour)
+            detected_shape_length = abs(rightest_vertex - leftest_vertex)
+            detected_shape_height = abs(upper_vertex - lowest_vertex)
             area = opencv.contourArea(contour)
 
             if self.__is_a_treasure__(detected_shape_length, detected_shape_height, area):
@@ -46,17 +30,6 @@ class TreasureDetector:
         treasure['y'] = image.get_height() - centrer_y
         return treasure
 
-    def __find_shape_height_and_lenght__(self, contour):
-        leftest_vertex = min([vertex[0][0] for vertex in contour])
-        lowest_vertex = min([vertex[0][1] for vertex in contour])
-        rightest_vertex = max([vertex[0][0] for vertex in contour])
-        upper_vertex = max([vertex[0][1] for vertex in contour])
-
-        detected_shape_length = abs(rightest_vertex - leftest_vertex)
-        detected_shape_height = abs(upper_vertex - lowest_vertex)
-
-        return detected_shape_height, detected_shape_length
-
     def __is_a_treasure__(self, detected_shape_length, detected_shape_height, area):
         TREASURE_MAX_HEIGHT = 60
         TREASURE_MIN_HEIGHT = 5
@@ -71,10 +44,6 @@ class TreasureDetector:
             return True
         else:
             return False
-
-hsv_range = {
-    'yellow': ((15,80,70), (35,255,255))
-}
 
 
 
