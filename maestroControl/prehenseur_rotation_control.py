@@ -1,16 +1,16 @@
 import maestro
+import serial
 
 #classe permettant de controller le moteur du prehenseur
-#le servomoteur doit etre branché sur le 3e port (milieu)
+#le servomoteur doit etre branche sur le 3e port (milieu)
 class PrehenseurRotationControl:
 	
     def __init__(self, usb):
-        self.MIN = 2500
-        self.MAX = 7000
+        self.MIN = 4700
+        self.MAX = 9200
         self.CHANNEL = 3
         self.controller = maestro.Controller(usb)
-        self.setVertSpeed()
-        self.setHorSpeed()
+        self.setSpeed()
         self.controller.setRange(self.CHANNEL, self.MIN, self.MAX)
         self.sleep()
     
@@ -19,12 +19,12 @@ class PrehenseurRotationControl:
     	self.controller.setTarget(self.CHANNEL, self.MIN)
 
     #methode permettant de definir la potition du servomoteur
-    #units: position on unites, de 0 à 1000
+    #units: position on unites, de 0 a 1000
     def setTarget(self, units):
-        target = (units*4.5) + 2500
+        target = int(units*4.5) + 4700
         self.controller.setTarget(self.CHANNEL, target)
 
-    #methode permettant de définir une vitesse de transition
+    #methode permettant de definir une vitesse de transition
     # 0 = max speed
     # 1 = min speed (1 minute pour rotation complete)
     # 60 = 1 seconde pour rotation complete
@@ -32,17 +32,17 @@ class PrehenseurRotationControl:
         self.controller.setSpeed(self.CHANNEL, speed)
 
     #methode permettant d'obtenir la position actuelle
-    #de 0 à 1000
+    #de 0 a 1000
     def getPos(self):
         position = self.controller.getPosition(self.HOR)
-        return (position - 2500)/4.5
+        return (position - 4700)/4.5
 
     #methode permettant de mettre le prehenseur en position
-    #de grab (à l'horizontal)
+    #de grab (a l'horizontal)
     def grab(self):
-    	setTarget(0)
+    	self.setTarget(0)
 
     #methode permettantde mettre le prehenseur en position
-    #de lift (à la verticale) 
+    #de lift (a la verticale) 
     def lift(self):
-    	setTarget(1000)
+    	self.setTarget(1000)
