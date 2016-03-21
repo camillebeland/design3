@@ -8,6 +8,7 @@ class Robot:
         self.__movement = Movement(pathfinder, world_map, wheels, http_service)
         self.__arduino = arduino
         self.__magnet = magnet
+        self.__http_service = http_service
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
@@ -40,4 +41,9 @@ class Robot:
         self.__movement = mock_movement
 
     def activate_magnet(self):
+        self.__http_service.log_info("Magnet Activation")
         self.__magnet.activate()
+
+    def deactivate_magnet(self):
+        self.__http_service.log_info("Magnet Deactivation")
+        self.__magnet.deactivate()
