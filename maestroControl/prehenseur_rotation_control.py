@@ -1,5 +1,4 @@
 import maestro
-import serial
 
 #classe permettant de controller le moteur du prehenseur
 #le servomoteur doit etre branche sur le 3e port (milieu)
