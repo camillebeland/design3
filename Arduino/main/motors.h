@@ -28,6 +28,11 @@ Arduino Pin	Register
 
 */
 
+// MOTOR A -> Channel 1
+// MOTOR B -> Channel 2
+// MOTOR C -> Channel 3
+// MOTOR D -> Channel 4
+
 #define INT_ENCODER_A_CH1 18
 #define INT_ENCODER_A_CH2 0
 

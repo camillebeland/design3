@@ -454,7 +454,7 @@ void PID_motors(){
 		
 		if (tick_remaining_C >0 && running_C){
 			command = (ZERO_SPEED )+ (integrator_C) + (error_C*KP) + (delta_motors_X*KSP) ;
-			OCR5A = limit_command(command);
+			OCR5C = limit_command(command);
 			
 		}
 		else if (running_C){
@@ -462,7 +462,7 @@ void PID_motors(){
 		}
 		if (tick_remaining_D >0 && running_D){
 			command = (ZERO_SPEED) + (integrator_D) + (error_D*KP) + (delta_motors_Y*KSP);
-			OCR5C = limit_command(command);
+			OCR5A = limit_command(command);
 		}
 		else if (running_D){
 			brake_motor(OUT_MOTOR_D);
