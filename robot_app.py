@@ -17,6 +17,8 @@ from robot.simulation.simulation_map import SimulationMap
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
 from robot.vision_daemon import VisionDaemon
+from robot.movement import Movement
+from robot.robot_logger_decorator import RobotLoggerDecorator
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -76,7 +78,9 @@ if __name__ == '__main__':
     mesh = Mesh(cell.partition_cells(polygons, 100))
 
     pathfinder = PathFinder(mesh)
-    robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna)
+    movement = Movement(pathfinder, world_map, wheels)
+    robot = Robot(wheels, world_map, pathfinder, manchester_antenna, movement)
+    robot_logger = RobotLoggerDecorator(robot, robot_service)
 
-    robot_web_controller.inject(robot, mesh, robot_service)
+    robot_web_controller.inject(robot_logger, mesh, robot_service)
     robot_web_controller.run(host, port)

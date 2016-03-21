@@ -1,11 +1,8 @@
-from robot.movement import Movement
-
-
 class Robot:
-    def __init__(self, wheels, world_map, pathfinder, http_service, arduino):
+    def __init__(self, wheels, world_map, pathfinder, arduino, movement):
         self.__wheels = wheels
         self.__world_map = world_map
-        self.__movement = Movement(pathfinder, world_map, wheels, http_service)
+        self.__movement = movement
         self.__arduino = arduino
 
     def move(self, delta_x, delta_y):
@@ -34,7 +31,3 @@ class Robot:
 
     def rotate(self, angle):
         self.__wheels.rotate(angle)
-
-    def set_mock_movement(self, mock_movement):
-        self.__movement = mock_movement
-
