@@ -14,9 +14,11 @@ from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
 from robot.simulation.simulation_map import SimulationMap
-from robot.wheels_usb_commands import WheelsUsbCommands
+from robot.usb_commands import UsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
 from robot.vision_daemon import VisionDaemon
+from robot.arduino_magnet import ArduinoMagnet
+from robot.simulation.simulation_magnet import SimulationMagnet
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -53,6 +55,7 @@ if __name__ == '__main__':
 
         wheels = NoisyWheels(world_map, refresh_time = refresh_time, wheels_velocity=wheels_velocity, noise=noise)
         manchester_antenna = ManchesterAntennaSimulation()
+        magnet = SimulationMagnet()
 
     elif wheelsconfig == "usb-arduino":
         vision_daemon = VisionDaemon(base_station_address)
@@ -65,8 +68,9 @@ if __name__ == '__main__':
         arduinoport = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduinoport)) != 0)
         serialport = serial.Serial(port=arduinoport[0].device, baudrate=arduino_baudrate, timeout=0.01)
-        wheels = WheelsUsbController(serialport, WheelsUsbCommands())
+        wheels = WheelsUsbController(serialport, UsbCommands())
         manchester_antenna = ManchesterAntennaUsbController(serialport)
+        magnet = ArduinoMagnet(serialport, UsbCommands())
 
     islands = WorldmapService(base_station_host, base_station_port)
     polygons = islands.get_polygons()
@@ -76,7 +80,7 @@ if __name__ == '__main__':
     mesh = Mesh(cell.partition_cells(polygons, 100))
 
     pathfinder = PathFinder(mesh)
-    robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna)
+    robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna, magnet)
 
     robot_web_controller.inject(robot, mesh, robot_service)
     robot_web_controller.run(host, port)

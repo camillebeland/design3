@@ -2,7 +2,7 @@ def encode(string):
     return string.encode(encoding='utf8')
 
 
-class WheelsUsbCommands:
+class UsbCommands:
     def __init__(self):
         pass
 
@@ -29,6 +29,12 @@ class WheelsUsbCommands:
         x_pos = self.__apply_limits(x_pos)
         y_pos = self.__apply_limits(y_pos)
         return encode("("+speed)+bytes([x_pos//256])+bytes([x_pos % 256]) + bytes([y_pos//256])+ bytes([y_pos%256])+encode(")")
+
+    def activate_magnet(self):
+        return encode('(ao)')
+
+    def deactivate_magnet(self):
+        return encode('(af)')
 
     def __apply_limits(self, number):
         number = min(number, 32767)
