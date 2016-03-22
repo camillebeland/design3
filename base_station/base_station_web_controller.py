@@ -67,4 +67,4 @@ def log_info():
 @app.route('/vision/calibration_data', methods=['GET'])
 def get_calibration_data():
     data = vision_service.get_calibration_data()
-    return data
+    return jsonify({'pixels_per_meter' : data['pixels_per_meter'], 'table_corners': data['table_contour'].tolist()})

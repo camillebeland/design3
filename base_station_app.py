@@ -5,7 +5,6 @@ from base_station import base_station_web_controller
 from base_station.camera_service import CameraService
 from base_station.mock_camera_service import MockCameraService
 from base_station.vision.island_detector import IslandDetector
-from base_station.vision.shape_detector import ShapeDetector
 from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision.table_calibrator import TableCalibrator
 from base_station.vision_service import VisionService

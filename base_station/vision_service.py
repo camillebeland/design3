@@ -51,6 +51,7 @@ class VisionService:
 
     def find_robot_position(self):
         image = ImageWrapper(self.__camera.get_frame())
+        image = image.mask_image(self.worldmap_contour['table_contour'])
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
         purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
         if not purple_circle or not purple_square:
@@ -70,7 +71,9 @@ class VisionService:
         self.worldmap_contour = worldmap_contour
 
     def get_calibration_data(self):
-        return self.worldmap_contour
+        image = ImageWrapper(self.__camera.get_frame())
+        worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
+        return worldmap_contour
 
     def __find_angle_between__(self, point1, point2):
         from math import atan2, degrees

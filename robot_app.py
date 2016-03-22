@@ -8,6 +8,7 @@ from pathfinding.pathfinding import PathFinder
 from robot.map import Map
 from robot import robot_web_controller
 from robot.worldmap_service import WorldmapService
+from robot.table_calibration_service import TableCalibrationService
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
 from robot.robot import Robot
 from robot.robot_service import RobotService
@@ -72,7 +73,18 @@ if __name__ == '__main__':
     polygons = islands.get_polygons()
     treasures = islands.get_treasures()
 
-    cell = Cell(1600, 1200, 800, 600)
+    table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
+    pixel_per_meter_ratio = table_calibration_service.get_pixel_per_meter_ratio()
+    table_corners = table_calibration_service.get_table_corners()
+
+    max_x = max(table_corners, key=lambda item: item[0])[0]
+    max_y = max(table_corners, key=lambda item: item[1])[1]
+    min_x = min(table_corners, key=lambda item: item[0])[0]
+    min_y = min(table_corners, key=lambda item: item[1])[1]
+    width = max_x - min_x
+    height = max_y - min_y
+
+    cell = Cell(width, height, width/2 + (1600 - max_x), height/2 + (1200 - max_y))
     mesh = Mesh(cell.partition_cells(polygons, 100))
 
     pathfinder = PathFinder(mesh)
