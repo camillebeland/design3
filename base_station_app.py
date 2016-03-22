@@ -29,7 +29,7 @@ def run():
     port = config.getint('baseapp', 'port')
     camera_config = config.get('baseapp', 'camera')
     camera_id = config.getint('baseapp', 'camera_id')
-    refresh_time = config.getint('baseapp', 'refresh_time')
+    refresh_time = config.getfloat('baseapp', 'refresh_time')
     camera_width = config.getint('baseapp', 'camera_width')
     camera_height = config.getint('baseapp', 'camera_height')
     logger = Logger()
