@@ -1,4 +1,5 @@
-from robot.action_machine import Action
+from robot.action import Action
+
 
 class PickUpTreasure(Action):
     def start(self):

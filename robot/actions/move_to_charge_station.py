@@ -1,4 +1,5 @@
-from robot.action_machine import Action
+from robot.action import Action
+
 
 class MoveToChargeStationAction(Action):
     def __init__(self, robot, robot_service, worldmap, embedded_camera, charge_station_angle=90):
