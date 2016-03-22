@@ -7,11 +7,12 @@ CORS(app)
 socket_io = SocketIO(app)
 
 
-def inject(a_robot, a_mesh, a_robot_service):
-    global robot, mesh, robot_service
+def inject(a_robot, a_mesh, a_robot_service, an_action_machine):
+    global robot, mesh, robot_service, action_machine
     robot = a_robot
     mesh = a_mesh
     robot_service = a_robot_service
+    action_machine = an_action_machine
 
 
 def run(host, port):
@@ -72,3 +73,15 @@ def mesh_to_json(mesh):
 
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+
+@app.route('/actions/<action>', methods = ['POST'])
+def send_action_to_robot(action):
+    try:
+        action_machine.notify_event(action)
+        return "OK"
+    except:
+        print('action : {0} did not work'.format(action))
+
+@app.route('/actions')
+def get_actions():
+    return jsonify(action_machine.get_events())

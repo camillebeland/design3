@@ -16,6 +16,11 @@ from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimu
 from robot.simulation.simulation_map import SimulationMap
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
+
+from robot.action_machine import ActionMachine
+from robot.actions.move_to_charge_station import MoveToChargeStationAction
+from pathfinding.polygon import Polygon
+
 from robot.vision_daemon import VisionDaemon
 
 if __name__ == '__main__':
@@ -76,7 +81,15 @@ if __name__ == '__main__':
     mesh = Mesh(cell.partition_cells(polygons, 100))
 
     pathfinder = PathFinder(mesh)
+    robot_service = RobotService(base_station_address, island_server_address)
     robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna)
 
-    robot_web_controller.inject(robot, mesh, robot_service)
+
+    action_machine = ActionMachine()
+
+    move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
+
+    action_machine.register('move_to_charge_station', move_to_charge_station)
+    action_machine.bind('start', 'move_to_charge_station')
+    robot_web_controller.inject(robot, mesh, robot_service, action_machine)
     robot_web_controller.run(host, port)

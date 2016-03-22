@@ -36,6 +36,18 @@ class SimulationMap:
     def get_robot_angle(self):
         return self._robot_angle
 
+    def get_recharge_station_position(self):
+        #TODO
+        return (1500,1000)
+
+    def get_treasure_closest_to(self, position):
+        #TODO
+        pass
+
+    def find_island_with_clue(self, clue):
+        #TODO
+        pass
+
     def move_robot(self, delta_x, delta_y):
         delta = rotate_vector(- self._robot_angle, np.array([delta_x, delta_y]))
         self.set_robot_position(self._robot_position[0] + delta[0], self._robot_position[1] + delta[1])
