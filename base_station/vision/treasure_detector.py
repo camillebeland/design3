@@ -3,11 +3,8 @@ import base_station.vision.vision_utils as utils
 
 
 class TreasureDetector:
-    def __init__(self, shape_detector):
-        self.__shape_detector = shape_detector
-
     def find_treasures(self, image, parameters, opencv=cv2):
-        contours = self.__shape_detector.find_polygon_color(image, 'treasure-yellow', parameters)
+        contours = self.__find_contours__(image, 'treasure-yellow', parameters)
 
         treasures = []
         for contour in contours:
@@ -20,6 +17,29 @@ class TreasureDetector:
                 treasure = self.__find_treasure_coordinates__(image, contour)
                 treasures.append(treasure)
         return treasures
+
+    def __find_contours__(self, image, color, parameters):
+        median_blur_kernel_size = parameters['median_blur_kernel_size']
+        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
+        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
+        canny_threshold1 = parameters['canny_threshold1']
+        canny_threshold2 = parameters['canny_threshold2']
+        canny_aperture_size = parameters['canny_aperture_size']
+        erode_kernel_size = parameters['erode_kernel_size']
+        erode_iterations = parameters['erode_iterations']
+        dilate_kernel_size = parameters['dilate_kernel_size']
+        dilate_ierations = parameters['dilate_ierations']
+
+        contours = (image
+                    .filter_median_blur(median_blur_kernel_size)
+                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
+                    .filter_by_color(hsv_range[color])
+                    #.canny(canny_threshold1,canny_threshold2,canny_aperture_size)
+                    .erode(erode_kernel_size, erode_iterations)
+                    .dilate(dilate_kernel_size, dilate_ierations)
+                    .find_contours())
+
+        return contours
 
     def __find_treasure_coordinates__(self, image, contour):
         treasure = {}
@@ -45,5 +65,7 @@ class TreasureDetector:
         else:
             return False
 
-
+hsv_range = {
+    'treasure-yellow': ((15,80,70), (35,255,255))
+}
 

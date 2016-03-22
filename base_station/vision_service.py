@@ -69,6 +69,8 @@ class VisionService:
         worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
         self.worldmap_contour = worldmap_contour
 
+    def get_calibration_data(self):
+        return self.worldmap_contour
 
     def __find_angle_between__(self, point1, point2):
         from math import atan2, degrees
@@ -97,9 +99,9 @@ default_camille_polygon_params = {
     'canny_threshold1' : 0,
     'canny_threshold2' : 50,
     'canny_aperture_size' : 5,
-    'dilate_kernel_size' : 51,
-    'dilate_ierations' : 1,
-    'erode_kernel_size' : 51,
-    'erode_iterations' : 1,
+    'dilate_kernel_size' : 5,
+    'dilate_ierations' : 2,
+    'erode_kernel_size' : 5,
+    'erode_iterations' : 2,
     'polygonal_approximation_error' : 4
 }

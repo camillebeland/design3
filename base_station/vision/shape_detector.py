@@ -1,8 +1,3 @@
-import cv2
-import numpy as np
-from functools import reduce
-
-
 class ShapeDetector:
     def find_circle_color(self, image, color, parameters):
         median_blur_kernel_size = parameters['median_blur_kernel_size'] 
@@ -33,18 +28,18 @@ class ShapeDetector:
         canny_threshold1 = parameters['canny_threshold1']
         canny_threshold2 = parameters['canny_threshold2']
         canny_aperture_size = parameters['canny_aperture_size']
-        dilate_kernel_size = parameters['dilate_kernel_size']
-        dilate_ierations = parameters['dilate_ierations']
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
+        dilate_kernel_size = parameters['dilate_kernel_size']
+        dilate_ierations = parameters['dilate_ierations']
 
         contours = (image
                     .filter_median_blur(median_blur_kernel_size)
                     .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
                     .filter_by_color(hsv_range[color])
-                    .canny(canny_threshold1,canny_threshold2,canny_aperture_size)
-                    .dilate(dilate_kernel_size,dilate_ierations)
+                    #.canny(canny_threshold1,canny_threshold2,canny_aperture_size)
                     .erode(erode_kernel_size, erode_iterations)
+                    .dilate(dilate_kernel_size, dilate_ierations)
                     .find_contours())
 
         return contours
@@ -55,7 +50,7 @@ hsv_range = {
     'blue': ((80,50,50), (130,255,255)),
     'yellow': ((20,100,100), (30,255,255)),
     'purple': ((110, 30, 65), (165, 190, 150)),
-    'green_calibration_square':  ((40,30,50),  (80,255,255)),
+    'green_calibration_square':  ((40,30,50), (80,255,255)),
     'treasure-yellow': ((15,80,70), (35,255,255))
 }
 

@@ -37,8 +37,7 @@ def run():
     logger = Logger()
 
     camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
-    shape_detector = ShapeDetector()
-    vision = VisionService(camera, IslandDetector(shape_detector), TreasureDetector(shape_detector), TableCalibrator(shape_detector))
+    vision = VisionService(camera, IslandDetector(), TreasureDetector(), TableCalibrator())
     vision.init_worldmap_contour()
     worldmap = vision.build_map()
 

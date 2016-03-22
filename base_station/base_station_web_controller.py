@@ -4,8 +4,6 @@ from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 
 import base_station.logger as logger
-from base_station.logger import Logger
-from base_station.vision.shape_detector import ShapeDetector
 from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision_service import VisionService
 from base_station.vision.island_detector import IslandDetector
@@ -26,9 +24,7 @@ def inject(a_camera, a_refresh_time, the_worldmap, a_logger):
     refresh_time = a_refresh_time
     worldmap = the_worldmap
     logger = a_logger
-    shape_detector = ShapeDetector()
-    vision_service = VisionService(a_camera, IslandDetector(shape_detector),
-                                   TreasureDetector(shape_detector), TableCalibrator(shape_detector))
+    vision_service = VisionService(a_camera, IslandDetector(), TreasureDetector(), TableCalibrator())
 
 
 def generate_frame(camera, refresh_time):
@@ -67,3 +63,8 @@ def fetch_position():
 def log_info():
     logger.info(request.json['message'])
     return "OK"
+
+@app.route('/vision/calibration_data', methods=['GET'])
+def get_calibration_data():
+    data = vision_service.get_calibration_data()
+    return data
