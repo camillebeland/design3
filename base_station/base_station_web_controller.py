@@ -18,13 +18,13 @@ def inject_mock_map(mock_app):
     app = mock_app
 
 
-def inject(a_camera, a_refresh_time, the_worldmap, a_logger):
+def inject(a_camera, a_refresh_time, the_worldmap, a_logger, a_vision_service):
     global camera, refresh_time, worldmap, logger, vision_service
     camera = a_camera
     refresh_time = a_refresh_time
     worldmap = the_worldmap
     logger = a_logger
-    vision_service = VisionService(a_camera, IslandDetector(), TreasureDetector(), TableCalibrator())
+    vision_service = a_vision_service
 
 
 def generate_frame(camera, refresh_time):

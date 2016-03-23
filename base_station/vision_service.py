@@ -54,6 +54,8 @@ class VisionService:
         image = image.mask_image(self.worldmap_contour['table_contour'])
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
         purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
+        print(purple_circle)
+        print(purple_square)
         if not purple_circle or not purple_square:
             return {}
         else:

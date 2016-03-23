@@ -40,7 +40,7 @@ def run():
     vision.init_worldmap_contour()
     worldmap = vision.build_map()
 
-    base_station_web_controller.inject(camera, refresh_time, worldmap, logger)
+    base_station_web_controller.inject(camera, refresh_time, worldmap, logger, vision)
     base_station_web_controller.run(host, port)
 
 if __name__ == '__main__':
