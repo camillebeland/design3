@@ -1,5 +1,4 @@
-from robot.invalid_manchester_code_error import InvalidManchesterCodeError
-from robot.invalid_percentage_error import InvalidPercentageError
+from robot.errors.invalid_manchester_code_error import InvalidManchesterCodeError
 
 
 def encode(string):

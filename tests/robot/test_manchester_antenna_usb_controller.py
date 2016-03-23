@@ -1,9 +1,10 @@
-from nose.tools import *
 from unittest.mock import *
+
+from nose.tools import *
 from nose.tools import assert_equals
+
+from robot.errors.invalid_manchester_code_error import InvalidManchesterCodeError
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
-from robot.invalid_manchester_code_error import InvalidManchesterCodeError
-from robot.invalid_percentage_error import InvalidPercentageError
 
 
 class TestManchesterAntennaUsbController:

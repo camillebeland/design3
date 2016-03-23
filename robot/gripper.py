@@ -1,5 +1,5 @@
-from robot.invalid_manchester_code_error import InvalidManchesterCodeError
-from robot.invalid_percentage_error import InvalidPercentageError
+from robot.errors.invalid_percentage_error import InvalidPercentageError
+from robot.arduino_validator import ArduinoValidator
 
 
 def encode(string):
@@ -10,23 +10,18 @@ class Gripper:
 
     def __init__(self, serial_port):
         self.serial_port = serial_port
-
-    def __validate_percentage(self, percentage):
-        is_valid = True;
-
-        if not str(percentage).isnumeric():
-            is_valid = False
-        elif int(percentage) < 0 or int(percentage) > 100:
-            is_valid = False
-
-        if not is_valid:
-            raise InvalidPercentageError("Arduino returned percentage is not valid: "+ str(percentage))
+        self.arduino_validator = ArduinoValidator()
 
     def get_capacitor_charge(self):
         self.serial_port.write(encode("(v)"))
         percentage_char = self.serial_port.read()
         percentage = ord(percentage_char)
-        print(percentage)
-        self.__validate_percentage(percentage)
+        percentage_is_valid = self.arduino_validator.validate_percentage(percentage)
+        if not percentage_is_valid:
+            raise InvalidPercentageError("Arduino returned percentage is not valid: " + str(percentage))
+
         return percentage
+
+    def set_mock_validator(self, mock_validator):
+        self.arduino_validator = mock_validator
 
