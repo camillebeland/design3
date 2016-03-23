@@ -122,7 +122,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
 
     var initRobotPositionFromVision = function() {
         visionRobotPosition = new createjs.Shape();
-        visionRobotPosition.graphics.beginFill('purple').drawPolyStar(-50, -50, radius = 50, 4, pointSize = 0.7);
+        visionRobotPosition.graphics.beginFill('purple').drawPolyStar(0, 0, radius = 50, 4, pointSize = 0.7);
         stage.addChild(visionRobotPosition);
     };
 
@@ -133,7 +133,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             } else {
                 visionRobotPosition.x = (response.center[0] * xScale);
                 visionRobotPosition.y = CANVAS_HEIGHT - (response.center[1] * yScale);
-                visionRobotPosition.rotation = response.angle;
+                visionRobotPosition.rotation = response.angle*-1;
             }
         });
     };

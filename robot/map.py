@@ -20,6 +20,17 @@ class Map:
     def relative_position(self, position):
         return rotate_vector(self._robot_angle, np.array(position) - np.array(self._robot_position))
 
+    def get_recharge_station_position(self):
+        #TODO
+        return (1500,1000)
+
+    def get_treasure_closest_to(self, position):
+        #TODO
+        pass
+
+    def find_island_with_clue(self, clue):
+        #TODO
+        pass
 
 def rotate_vector(theta, vector):
     return np.dot(rotation_matrix(theta), vector)
