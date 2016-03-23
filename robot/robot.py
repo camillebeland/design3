@@ -1,11 +1,12 @@
 class Robot:
 
-    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery):
+    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper):
         self.__wheels = wheels
         self.__world_map = world_map
         self.__movement = movement
         self.__manchester_antenna = manchester_antenna
         self.__battery = battery
+        self.__mechanical_gripper = gripper
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
@@ -20,7 +21,7 @@ class Robot:
         return self.__battery.get_level()
 
     def get_capacitor_charge(self):
-        return self.__manchester_antenna.get_capacitor_charge()
+        return self.__mechanical_gripper.get_capacitor_charge()
 
     def get_manchester_code(self):
         return self.__arduino.get_manchester_code()
