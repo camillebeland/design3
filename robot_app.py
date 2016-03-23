@@ -9,10 +9,12 @@ from robot.map import Map
 from robot import robot_web_controller
 from robot.worldmap_service import WorldmapService
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
+from robot.battery import Battery
 from robot.robot import Robot
 from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
+from robot.simulation.battery_simulation import BatterySimulation
 from robot.simulation.simulation_map import SimulationMap
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
@@ -55,6 +57,7 @@ if __name__ == '__main__':
 
         wheels = NoisyWheels(world_map, refresh_time = refresh_time, wheels_velocity=wheels_velocity, noise=noise)
         manchester_antenna = ManchesterAntennaSimulation()
+        battery = BatterySimulation()
 
     elif wheelsconfig == "usb-arduino":
         vision_daemon = VisionDaemon(base_station_address)
@@ -69,6 +72,7 @@ if __name__ == '__main__':
         serialport = serial.Serial(port=arduinoport[0].device, baudrate=arduino_baudrate, timeout=0.01)
         wheels = WheelsUsbController(serialport, WheelsUsbCommands())
         manchester_antenna = ManchesterAntennaUsbController(serialport)
+        battery = Battery()
 
     islands = WorldmapService(base_station_host, base_station_port)
     polygons = islands.get_polygons()
@@ -79,7 +83,7 @@ if __name__ == '__main__':
 
     pathfinder = PathFinder(mesh)
     movement = Movement(pathfinder, world_map, wheels)
-    robot = Robot(wheels, world_map, pathfinder, manchester_antenna, movement)
+    robot = Robot(wheels, world_map, pathfinder, manchester_antenna, movement, battery)
     robot_logger = RobotLoggerDecorator(robot, robot_service)
 
     robot_web_controller.inject(robot_logger, mesh, robot_service)

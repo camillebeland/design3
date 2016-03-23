@@ -1,6 +1,7 @@
 from threading import Thread
 from base_station.double_sided_buffer import DoubleSidedBuffer
 
+
 class CameraService(object):
     def __init__(self, camera, opencv):
         self.opencv = opencv
@@ -14,12 +15,12 @@ class CameraService(object):
         self.camera.release()
 
     def get_frame(self, format='bgr'):
-        while(self.buffer.read() == None):
+        while self.buffer.read() == None:
             pass
         img = self.buffer.read()
-        if(format == 'bgr'):
+        if format == 'bgr':
             return img
-        elif(format == 'jpeg'):
+        elif format == 'jpeg':
             ret, jpeg = self.opencv.imencode('.jpg', img)
             return jpeg
 
