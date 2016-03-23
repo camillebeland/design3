@@ -2,8 +2,7 @@ import serial
 import serial.tools.list_ports as lp
 
 from configuration import configuration
-from pathfinding.cell import Cell
-from pathfinding.mesh import Mesh
+from pathfinding.mesh_builder import MeshBuilder
 from pathfinding.pathfinding import PathFinder
 from robot.map import Map
 from robot import robot_web_controller
@@ -77,17 +76,10 @@ if __name__ == '__main__':
     pixel_per_meter_ratio = table_calibration_service.get_pixel_per_meter_ratio()
     table_corners = table_calibration_service.get_table_corners()
 
-    max_x = max(table_corners, key=lambda item: item[0])[0]
-    max_y = max(table_corners, key=lambda item: item[1])[1]
-    min_x = min(table_corners, key=lambda item: item[0])[0]
-    min_y = min(table_corners, key=lambda item: item[1])[1]
-    width = max_x - min_x
-    height = max_y - min_y
-
-    cell = Cell(width, height, width/2 + (1600 - max_x), height/2 + (1200 - max_y))
-    mesh = Mesh(cell.partition_cells(polygons, 100))
-
+    mesh_builder = MeshBuilder(table_corners)
+    mesh = mesh_builder.get_mesh()
     pathfinder = PathFinder(mesh)
+
     robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna)
 
     robot_web_controller.inject(robot, mesh, robot_service)
