@@ -33,26 +33,19 @@ class IslandDetector:
         median_blur_kernel_size = parameters['median_blur_kernel_size']
         gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
         gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
-        canny_threshold1 = parameters['canny_threshold1']
-        canny_threshold2 = parameters['canny_threshold2']
-        canny_aperture_size = parameters['canny_aperture_size']
-        dilate_kernel_size = parameters['dilate_kernel_size']
-        dilate_ierations = parameters['dilate_ierations']
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
-        polygonal_approximation_error = parameters['polygonal_approximation_error']
 
         contours = (image
                     .filter_median_blur(median_blur_kernel_size)
                     .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
                     .filter_by_color(hsv_range[color])
-                    .canny(canny_threshold1,canny_threshold2,canny_aperture_size)
-                    .dilate(dilate_kernel_size, dilate_ierations)
                     .erode(erode_kernel_size, erode_iterations)
                     .find_contours())
 
         def approx_polygon(contour):
-            return opencv.approxPolyDP(contour, polygonal_approximation_error, True)
+            epsilon = 0.02*cv2.arcLength(contour, True)
+            return opencv.approxPolyDP(contour, epsilon, True)
 
         return (
             list(

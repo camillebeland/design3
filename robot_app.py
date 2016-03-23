@@ -76,7 +76,7 @@ if __name__ == '__main__':
     pixel_per_meter_ratio = table_calibration_service.get_pixel_per_meter_ratio()
     table_corners = table_calibration_service.get_table_corners()
 
-    mesh_builder = MeshBuilder(table_corners)
+    mesh_builder = MeshBuilder(table_corners, polygons)
     mesh = mesh_builder.get_mesh()
     pathfinder = PathFinder(mesh)
 
