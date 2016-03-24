@@ -6,6 +6,7 @@ void setup() {
   serial_init();
   Serial.begin(115200); // debug
   //delay(1000);
+  
 }
 int readbuff[32];
 void loop() {
@@ -15,5 +16,6 @@ void loop() {
     }
     Serial.println(" - ");
     serial_send_manchester(readbuff);
+	analogWrite(13, 90); // POUR LE PWM DU CIRCUIT DE RECHARGE
 }
     

@@ -190,6 +190,12 @@ bool parse_and_call() {
       else if (ONOFF == 'f') {
         toggle_magnet_OFF();
       }
+	  else if(ONOFF == 'c'){
+		toggle_recharge_ON();
+	  }
+	  else if(ONOFF == 'd'){
+		toggle_recharge_OFF();
+	  }
 	  break;
 	case MANCHESTER:
 		serial_write(get_ASCII());

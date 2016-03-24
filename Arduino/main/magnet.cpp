@@ -5,6 +5,8 @@ void magnet_init(){
 	pinMode(OUT_MAGNET, OUTPUT);
 	pinMode(IN_CAPACITOR_VOLTAGE, INPUT);
 	pinMode(IN_BATTERY_VOLTAGE, INPUT);
+	pinMode(OUT_RECHARGE, OUTPUT);
+	pinMode(OUT_DISCHARGE, OUTPUT);
 	digitalWrite(OUT_MAGNET, LOW);
 }
 
@@ -13,6 +15,14 @@ void toggle_magnet_ON(){
 }
 void toggle_magnet_OFF(){
 	digitalWrite(OUT_MAGNET, LOW);
+}
+
+void toggle_recharge_ON(){
+	digitalWrite(OUT_RECHARGE, HIGH);
+}
+
+void toggle_recharge_OFF(){
+	digitalWrite(OUT_RECHARGE, HIGH);
 }
 
 
