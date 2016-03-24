@@ -10,7 +10,7 @@ test_polygon_params = {
     'canny_threshold2' : 50,
     'canny_aperture_size' : 5,
     'dilate_kernel_size' : 51,
-    'dilate_ierations' : 1,
+    'dilate_iterations' : 1,
     'erode_kernel_size' : 51,
     'erode_iterations' : 1,
     'polygonal_approximation_error' : 4,
@@ -93,9 +93,4 @@ class TestShapeDetector:
         circles = self.shape_detector.find_circle_color(self.image_mock_shapes_not_found, 'blue', test_polygon_params)
         PARSED_CIRCLES_FOUND = []
         assert_equal(PARSED_CIRCLES_FOUND, circles)
-
-    def test_find_triangle_blue_with_no_polygons_should_return_no_triangles(self):
-        triangles = self.shape_detector.find_polygon_color(self.image_mock_shapes_not_found, 'triangle', 'blue', test_polygon_params, MockOpenCV())
-        PARSED_TRIANGLES_FOUND = []
-        assert_equal(triangles, PARSED_TRIANGLES_FOUND)
 
