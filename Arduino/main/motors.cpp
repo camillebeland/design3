@@ -422,21 +422,21 @@ void PID_motors(){
 		
 		// integrators for PID of each wheel
 		integrator_A +=(error_A * KI) - (delta_motors_X*KSI);
-		if (integrator_A > 255 - ZERO_SPEED){integrator_A = 255 - ZERO_SPEED;}
+		if (integrator_A > 255 - ZERO_SPEED_A){integrator_A = 255 - ZERO_SPEED_A;}
 		
 		integrator_B +=(error_B * KI) - (delta_motors_Y*KSI) ;
-		if (integrator_B > 255 - ZERO_SPEED){integrator_B = 255 - ZERO_SPEED;}
+		if (integrator_B > 255 - ZERO_SPEED_B){integrator_B = 255 - ZERO_SPEED_B;}
 		
 		integrator_C +=(error_C * KI)+ (delta_motors_X*KSI);
-		if (integrator_C > 255 - ZERO_SPEED){integrator_C = 255 - ZERO_SPEED;}
+		if (integrator_C > 255 - ZERO_SPEED_C){integrator_C = 255 - ZERO_SPEED_C;}
 		
 		integrator_D +=(error_D * KI) + (delta_motors_Y*KSI) ;
-		if (integrator_D > 255 - ZERO_SPEED){integrator_D = 255 - ZERO_SPEED;}
+		if (integrator_D > 255 - ZERO_SPEED_D){integrator_D = 255 - ZERO_SPEED_D;}
 		
 		//Command section
 		int command = 0;
 		if (tick_remaining_A >0 && running_A){	
-			command = (ZERO_SPEED) + (integrator_A) + (error_A*KP) - (delta_motors_X*KSP) ;
+			command = (ZERO_SPEED_A) + (integrator_A) + (error_A*KP) - (delta_motors_X*KSP) ;
 			
 			OCR0A = limit_command(command);
 			//Serial.println(limit_command(command));
@@ -445,7 +445,7 @@ void PID_motors(){
 			brake_motor(OUT_MOTOR_A);
 		}
 		if (tick_remaining_B >0 && running_B){
-			 command = (ZERO_SPEED) + (integrator_B) + (error_B*KP) - (delta_motors_Y*KSP);
+			 command = (ZERO_SPEED_B) + (integrator_B) + (error_B*KP) - (delta_motors_Y*KSP);
 			 OCR5B = limit_command(command);
 		}
 		else if (running_B){
@@ -453,16 +453,16 @@ void PID_motors(){
 		}
 		
 		if (tick_remaining_C >0 && running_C){
-			command = (ZERO_SPEED )+ (integrator_C) + (error_C*KP) + (delta_motors_X*KSP) ;
-			OCR5C = limit_command(command);
+			command = (ZERO_SPEED_C )+ (integrator_C) + (error_C*KP) + (delta_motors_X*KSP) ;
+			OCR5A = limit_command(command);
 			
 		}
 		else if (running_C){
 			brake_motor(OUT_MOTOR_C);
 		}
 		if (tick_remaining_D >0 && running_D){
-			command = (ZERO_SPEED) + (integrator_D) + (error_D*KP) + (delta_motors_Y*KSP);
-			OCR5A = limit_command(command);
+			command = (ZERO_SPEED_D) + (integrator_D) + (error_D*KP) + (delta_motors_Y*KSP);
+			OCR5C = limit_command(command);
 		}
 		else if (running_D){
 			brake_motor(OUT_MOTOR_D);
@@ -481,19 +481,15 @@ int limit_command(double command){
 }
 
 //Will be used to find the deadpoint for each motor
-int deadpoint_test = 0;
+//int deadpoint_test = 0;
 void test(){
-	set_motor(OUT_MOTOR_A, 10000, true, 0);
-	set_motor(OUT_MOTOR_B, 10000, true, 0);
-	set_motor(OUT_MOTOR_C, 10000, true, 0);
-	set_motor(OUT_MOTOR_D, 10000, true, 0);
-
-	OCR0A =  limit_command(deadpoint_test++);
-	//OCR5B =  limit_command(deadpoint_test++);
-	//OCR5A =  limit_command(deadpoint_test++);
-	//OCR5C =  limit_command(deadpoint_test++);
-	Serial.println(deadpoint_test);
-
+	//set_motor(OUT_MOTOR_D, 10000, false, 750);
+	//deadpoint_test++;
+	//OCR5C = deadpoint_test;
+	//Serial.println(deadpoint_test);
+	//set_motor(OUT_MOTOR_B, 10000, false, 750);
+	//set_motor(OUT_MOTOR_C, 10000, false, 750);
+	//set_motor(OUT_MOTOR_D, 10000, false, 750);
 }
 
 

@@ -18,13 +18,13 @@ Arduino Pin	Register
 7					OCR4B
 8					OCR4C
 9					OCR2B
-10					OCR2A
-11					OCR1A
-12					OCR1B
-13					OCR0A
-44					OCR5C
-45					OCR5B
-46					OCR5A
+10				OCR2A
+11				OCR1A
+12				OCR1B
+13				OCR0A
+44				OCR5C
+45				OCR5B
+46				OCR5A
 
 */
 
@@ -60,7 +60,10 @@ Arduino Pin	Register
 #define PIN_TWO_MOTOR_C 41
 #define PIN_TWO_MOTOR_D 37
 
-#define ZERO_SPEED 50 // PWM COMMAND for near start
+#define ZERO_SPEED_A 110 // PWM COMMAND for near start
+#define ZERO_SPEED_B 75
+#define ZERO_SPEED_C 95
+#define ZERO_SPEED_D 80
 
 #define FREQ 20 //  Hz
 #define DEFAULT_SPEED 1500 // TICKS PER SEC
@@ -68,9 +71,9 @@ Arduino Pin	Register
 #define ROTATE_SPEED 500
 #define ROTATE_DIAMETER 190 //mm
 
-#define KSI 0.012 // for delta motors
-#define KSP 0.015// for delta motors
-#define KI 0.03 // for speed PID
+#define KSI 0.01 // for delta motors
+#define KSP 0.02// for delta motors
+#define KI 0.01 // for speed PID
 #define KP 0.04 //for speed PID
 
 #define TICKS_PER_MM 15.34	 //  including slip 
