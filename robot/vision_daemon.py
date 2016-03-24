@@ -1,12 +1,12 @@
-import requests
 from threading import Thread
-from robot.robot_info_assembler import RobotInfoAssembler
+
+import requests
 
 
 class VisionDaemon:
     def __init__(self, base_station_address, assembler):
         self.base_station_address = base_station_address
-        self.last_robot_info_from_vision = {}
+        self.last_robot_info_from_vision = dict()
         self.robot_info_assembler = assembler
         self.start_fetching_robot_position_from_vision()
 
@@ -34,9 +34,3 @@ class VisionDaemon:
 
     def stop_fetching_robot_position_from_vision(self):
         self.running = False
-
-'''
-self.last_robot_info_from_vision['x'] = response.json['center'][0]
-                    self.last_robot_info_from_vision['y'] = response.json['center'][1]
-                    self.last_robot_angle_from_vision = response.json['angle']
-'''
