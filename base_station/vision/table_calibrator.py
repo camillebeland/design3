@@ -30,7 +30,7 @@ class TableCalibrator:
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
         dilate_kernel_size = parameters['dilate_kernel_size']
-        dilate_ierations = parameters['dilate_ierations']
+        dilate_ierations = parameters['dilate_iterations']
 
         contours = (image
                     .filter_median_blur(median_blur_kernel_size)

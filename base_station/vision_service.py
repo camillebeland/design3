@@ -16,9 +16,9 @@ class VisionService:
         circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'yellow'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'red'))
-        #pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'green'))
-        ##pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'blue'))
-        #pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'yellow'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'green'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'blue'))
+        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'yellow'))
         pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'red'))
         triangles.extend(self.__find_polygon_color__(image, 'triangle', 'green'))
         triangles.extend(self.__find_polygon_color__(image, 'triangle', 'blue'))
@@ -54,8 +54,6 @@ class VisionService:
         image = image.mask_image(self.worldmap_contour['table_contour'])
         purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
         purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
-        print(purple_circle)
-        print(purple_square)
         if not purple_circle or not purple_square:
             return {}
         else:
@@ -105,7 +103,7 @@ default_camille_polygon_params = {
     'canny_threshold2' : 50,
     'canny_aperture_size' : 5,
     'dilate_kernel_size' : 5,
-    'dilate_ierations' : 2,
+    'dilate_iterations' : 2,
     'erode_kernel_size' : 5,
     'erode_iterations' : 2,
     'polygonal_approximation_error' : 4

@@ -34,7 +34,7 @@ def generate_frame(camera, refresh_time):
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + bytes_frame + b'\r\n\r\n')
 
 
-def run(host, port):
+def run_base_app(host, port):
     logger.info("Starting the base station app at "+str(port))
     app.run(host=host, port=port, threaded=True)
 

@@ -20,21 +20,14 @@ class TreasureDetector:
 
     def __find_contours__(self, image, color, parameters):
         median_blur_kernel_size = parameters['median_blur_kernel_size']
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
-        canny_threshold1 = parameters['canny_threshold1']
-        canny_threshold2 = parameters['canny_threshold2']
-        canny_aperture_size = parameters['canny_aperture_size']
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
         dilate_kernel_size = parameters['dilate_kernel_size']
-        dilate_ierations = parameters['dilate_ierations']
+        dilate_ierations = parameters['dilate_iterations']
 
         contours = (image
                     .filter_median_blur(median_blur_kernel_size)
-                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
                     .filter_by_color(hsv_range[color])
-                    #.canny(canny_threshold1,canny_threshold2,canny_aperture_size)
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_ierations)
                     .find_contours())

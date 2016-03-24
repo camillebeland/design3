@@ -1,8 +1,5 @@
-from nose.tools import *
 import base_station.base_station_web_controller as base_station
 from unittest.mock import *
-from base_station.base_station_web_controller import run
-import json
 
 
 class TestBaseStationWebController:
@@ -16,7 +13,7 @@ class TestBaseStationWebController:
         base_station.inject_mock_map(mock_app)
 
         # When
-        base_station.run(a_host, a_port)
+        base_station.run_base_app(a_host, a_port)
 
         # Then
         mock_app.run.assert_called_once_with(host=a_host, port=a_port, threaded=True)
@@ -30,7 +27,7 @@ class TestBaseStationWebController:
         base_station.inject_mock_map(mock_app)
 
         # When
-        base_station.run(a_host, a_port)
+        base_station.run_base_app(a_host, a_port)
 
         # Then
         mock_logger.info.assert_any_call("Starting the base station app at "+str(a_port))

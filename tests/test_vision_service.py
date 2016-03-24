@@ -1,54 +1,42 @@
-from unittest.mock import *
 from base_station.vision_service import VisionService
+from base_station.mock_camera_service import MockCameraService
+from base_station.vision.island_detector import IslandDetector
+from base_station.vision.table_calibrator import TableCalibrator
+from base_station.vision.treasure_detector import TreasureDetector
 
 class TestRobotService:
 
     def __init__(self):
-        self.camera_mock = Mock()
-        self.shape_detector_mock = Mock()
-        self.treasure_detector_mock = Mock()
-        self.vision_service = VisionService(self.camera_mock, self.shape_detector_mock, self.treasure_detector_mock)
+        self.camera_mock = MockCameraService(image_path="test_with_islands.jpg")
+        self.shape_detector_mock = IslandDetector()
+        self.treasure_detector_mock = TreasureDetector()
+        self.table_calibrator_mock = TableCalibrator()
+        self.vision_service = VisionService(self.camera_mock, self.shape_detector_mock, self.treasure_detector_mock, self.table_calibrator_mock)
+        self.vision_service.init_worldmap_contour()
 
-    def test_vision_service_with_circles_when_build_map_should_return_map_with_circles(self):
+
+    def test_vision_service_with_circles_when_build_map_should_return_map_with_circles_and_polygons(self):
         # Given
-        NO_POLYGONS = 0
-        NB_CIRCLES = 4
-        self.shape_detector_mock.find_circle_color.return_value = [{'radius': 20.892581939697266, 'x': 97.5, 'y': 391.5}]
-        self.shape_detector_mock.find_polygon_color.return_value = []
-        self.treasure_detector_mock.find_treasures.return_value = []
+        NB_TRIANGLES = 1
+        NB_CIRCLES = 1
+        NB_SQUARES = 1
+        NB_PENTAGONS = 1
 
         # When
         map = self.vision_service.build_map()
 
         # Then
         assert len(map['circles']) == NB_CIRCLES
-        assert len(map['pentagons']) == NO_POLYGONS
-        assert len(map['triangles']) == NO_POLYGONS
-        assert len(map['squares']) == NO_POLYGONS
-
-    def test_vision_service_with_polygons_when_build_map_should_return_map_with_polygons(self):
-        # Given
-        NO_CIRCLE = 0
-        NB_OF_POLYGONS = 4
-        self.shape_detector_mock.find_circle_color.return_value = []
-        self.treasure_detector_mock.find_treasures.return_value = []
-        self.shape_detector_mock.find_polygon_color.return_value = [{'x': 97.5, 'y': 391.5}]
-
-        # When
-        map = self.vision_service.build_map()
-
-        # Then
-        assert len(map['circles']) == NO_CIRCLE
-        assert len(map['pentagons']) == NB_OF_POLYGONS
-        assert len(map['triangles']) == NB_OF_POLYGONS
-        assert len(map['squares']) == NB_OF_POLYGONS
+        assert len(map['pentagons']) == NB_PENTAGONS
+        assert len(map['triangles']) == NB_TRIANGLES
+        assert len(map['squares']) == NB_SQUARES
 
     def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
         #Given
-        ROBOT_POSITION_CENTER = (97.5, 391.5)
-        self.shape_detector_mock.find_circle_color.return_value = [{'x': 97.5, 'y': 391.5, 'radius': 21.2222}]
-        self.shape_detector_mock.find_polygon_color.return_value = [{'x': 97.5, 'y': 391.5}]
-        self.treasure_detector_mock.find_treasures.return_value = []
+        ROBOT_POSITION_CENTER = (803.125, 442.375)
+        self.camera_mock = MockCameraService(image_path="test_with_robot.jpg")
+        self.vision_service = VisionService(self.camera_mock, self.shape_detector_mock, self.treasure_detector_mock, self.table_calibrator_mock)
+        self.vision_service.init_worldmap_contour()
 
         #When
         robot_position = self.vision_service.find_robot_position()
@@ -57,11 +45,6 @@ class TestRobotService:
         assert robot_position['center'] == ROBOT_POSITION_CENTER
 
     def test_vision_service_with_no_robot_when_find_robot_position_should_return_nothing(self):
-        #Given
-        self.shape_detector_mock.find_circle_color.return_value = []
-        self.shape_detector_mock.find_polygon_color.return_value = []
-        self.treasure_detector_mock.find_treasures.return_value = []
-
         #When
         robot_position = self.vision_service.find_robot_position()
 
@@ -71,11 +54,8 @@ class TestRobotService:
     def test_vision_service_with_treasure_when_find_treasure_should_return_treasure_position(self):
         #Given
         NB_TREASURE = 1
-        TREASURE_POSITION_X = 97.5
-        TREASURE_POSITION_Y = 391.5
-        self.shape_detector_mock.find_circle_color.return_value = []
-        self.shape_detector_mock.find_polygon_color.return_value = []
-        self.treasure_detector_mock.find_treasures.return_value = [{'x': 97.5, 'y': 391.5}]
+        TREASURE_POSITION_X = 1190
+        TREASURE_POSITION_Y = 237
 
         #When
         map = self.vision_service.build_map()

@@ -1,6 +1,6 @@
 from nose.tools import *
 
-from base_station.vision.shape_detector import *
+from base_station.vision.island_detector import *
 
 test_polygon_params = {
     'median_blur_kernel_size' : 5,
@@ -29,8 +29,11 @@ hsv_range = {
 }
 
 class MockOpenCV:
-    def approxPolyDP(curve, epsilon, closed, approxCurve=None):
+    def approxPolyDP(self, curve, epsilon, closed, approxCurve=None):
         return "contours"
+
+    def arcLength(self, contour, closed):
+        return 300
 
 class ImageMockCirclesFound:
     def filter_median_blur(self, kernel_size=5):
@@ -79,7 +82,7 @@ class TestShapeDetector:
     def setup(self):
         self.image_mock_circle_found = ImageMockCirclesFound()
         self.image_mock_shapes_not_found = ImageMockNoShapeFound()
-        self.shape_detector = ShapeDetector()
+        self.shape_detector = IslandDetector()
 
     def test_find_blue_circle_with_blue_circles_should_return_circles(self):
         circles = self.shape_detector.find_circle_color(self.image_mock_circle_found, 'blue', test_polygon_params)

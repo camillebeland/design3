@@ -31,20 +31,21 @@ class IslandDetector:
 
     def find_polygon_color(self, image, polygon, color, parameters, opencv=cv2):
         median_blur_kernel_size = parameters['median_blur_kernel_size']
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
+        dilate_kernel_size = parameters['dilate_kernel_size']
+        dilate_iterations = parameters['dilate_iterations']
+
 
         contours = (image
                     .filter_median_blur(median_blur_kernel_size)
-                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
                     .filter_by_color(hsv_range[color])
+                    .dilate(dilate_kernel_size, dilate_iterations)
                     .erode(erode_kernel_size, erode_iterations)
                     .find_contours())
 
         def approx_polygon(contour):
-            epsilon = 0.02*cv2.arcLength(contour, True)
+            epsilon = 0.02*opencv.arcLength(contour, True)
             return opencv.approxPolyDP(contour, epsilon, True)
 
         return (

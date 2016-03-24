@@ -24,7 +24,6 @@ class CameraService(object):
             return jpeg
 
     def __start(self):
-        print("starting")
         self.thread = Thread(target=self.__update)
         self.running = True
         self.thread.setDaemon(True)

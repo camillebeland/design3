@@ -41,7 +41,7 @@ def run():
     worldmap = vision.build_map()
 
     base_station_web_controller.inject(camera, refresh_time, worldmap, logger, vision)
-    base_station_web_controller.run(host, port)
+    base_station_web_controller.run_base_app(host, port)
 
 if __name__ == '__main__':
     run()
