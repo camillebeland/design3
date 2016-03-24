@@ -16,6 +16,7 @@ from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimu
 from robot.simulation.simulation_map import SimulationMap
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
+from robot.robot_info_assembler import RobotInfoAssembler
 
 from robot.action_machine import ActionMachine
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
@@ -60,6 +61,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaSimulation()
 
     elif wheelsconfig == "usb-arduino":
+        robot_info_assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address)
         world_map = Map(1600, 1200, vision_daemon)
 
