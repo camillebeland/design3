@@ -72,9 +72,7 @@ class VisionService:
         self.worldmap_contour = worldmap_contour
 
     def get_calibration_data(self):
-        image = ImageWrapper(self.__camera.get_frame())
-        worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
-        return worldmap_contour
+        return self.worldmap_contour
 
     def __find_angle_between__(self, point1, point2):
         from math import atan2, degrees
