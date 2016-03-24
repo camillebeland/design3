@@ -3,7 +3,7 @@ import numpy as np
 from base_station.vision import vision_utils as utils
 
 class TableCalibrator:
-    def get_table_contour(self, image, parameters, opencv = cv2):
+    def get_table_contour(self, image, parameters, opencv=cv2):
         polygonal_approximation_error = parameters['polygonal_approximation_error']
 
         def approx_polygon(contour):

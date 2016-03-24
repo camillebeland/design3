@@ -3,15 +3,17 @@ from base_station.mock_camera_service import MockCameraService
 from base_station.vision.island_detector import IslandDetector
 from base_station.vision.table_calibrator import TableCalibrator
 from base_station.vision.treasure_detector import TreasureDetector
+from base_station.vision.robot_detector import RobotDetector
 
 class TestRobotService:
 
     def __init__(self):
-        self.camera_mock = MockCameraService(image_path="test_with_islands.jpg")
-        self.shape_detector_mock = IslandDetector()
-        self.treasure_detector_mock = TreasureDetector()
-        self.table_calibrator_mock = TableCalibrator()
-        self.vision_service = VisionService(self.camera_mock, self.shape_detector_mock, self.treasure_detector_mock, self.table_calibrator_mock)
+        self.camera = MockCameraService(image_path="test_with_islands.jpg")
+        self.shape_detector = IslandDetector()
+        self.treasure_detector = TreasureDetector()
+        self.table_calibrator = TableCalibrator()
+        self.robot_detector = RobotDetector()
+        self.vision_service = VisionService(self.camera, self.shape_detector, self.treasure_detector, self.table_calibrator, self.robot_detector)
         self.vision_service.init_worldmap_contour()
 
 
@@ -35,7 +37,7 @@ class TestRobotService:
         #Given
         ROBOT_POSITION_CENTER = (803.125, 442.375)
         self.camera_mock = MockCameraService(image_path="test_with_robot.jpg")
-        self.vision_service = VisionService(self.camera_mock, self.shape_detector_mock, self.treasure_detector_mock, self.table_calibrator_mock)
+        self.vision_service = VisionService(self.camera_mock, self.shape_detector, self.treasure_detector, self.table_calibrator, self.robot_detector)
         self.vision_service.init_worldmap_contour()
 
         #When

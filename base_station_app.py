@@ -7,6 +7,7 @@ from base_station.mock_camera_service import MockCameraService
 from base_station.vision.island_detector import IslandDetector
 from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision.table_calibrator import TableCalibrator
+from base_station.vision.robot_detector import RobotDetector
 from base_station.vision_service import VisionService
 from configuration import configuration
 
@@ -36,7 +37,7 @@ def run():
     logger = Logger()
 
     camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
-    vision = VisionService(camera, IslandDetector(), TreasureDetector(), TableCalibrator())
+    vision = VisionService(camera, IslandDetector(), TreasureDetector(), TableCalibrator(), RobotDetector())
     vision.init_worldmap_contour()
     worldmap = vision.build_map()
 

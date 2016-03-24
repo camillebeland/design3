@@ -1,11 +1,12 @@
 from base_station.vision.image_wrapper import ImageWrapper
 
 class VisionService:
-    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator):
+    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
         self.__treasure_detector = treasure_detector
         self.__table_calibrator = table_calibrator
+        self.__robot_detector = robot_detector
         self.worldmap_contour = {}
 
     def build_map(self):
@@ -52,8 +53,8 @@ class VisionService:
     def find_robot_position(self):
         image = ImageWrapper(self.__camera.get_frame())
         image = image.mask_image(self.worldmap_contour['table_contour'])
-        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
-        purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
+        purple_circle = self.__robot_detector.find_circle_color(image, default_camille_circle_params)
+        purple_square = self.__robot_detector.find_polygon_color(image, default_camille_polygon_params)
         if not purple_circle or not purple_square:
             return {}
         else:
