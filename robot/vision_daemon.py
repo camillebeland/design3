@@ -9,7 +9,10 @@ class VisionDaemon:
         self.start_fetching_robot_position_from_vision()
 
     def get_robot_position_from_vision(self):
-            return self.last_robot_position_from_vision
+        return self.last_robot_position_from_vision['center']
+
+    def get_robot_angle_from_vision(self):
+        return self.last_robot_position_from_vision['angle']
 
     def __fetch_robot_position_from_vision__(self):
         while self.running:
