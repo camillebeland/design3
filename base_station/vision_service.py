@@ -54,7 +54,7 @@ class VisionService:
         image = ImageWrapper(self.__camera.get_frame())
         image = image.mask_image(self.worldmap_contour['table_contour'])
         purple_circle = self.__robot_detector.find_circle_color(image, default_camille_circle_params)
-        purple_square = self.__robot_detector.find_polygon_color(image, default_camille_polygon_params)
+        purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
         if not purple_circle or not purple_square:
             return {}
         else:
@@ -107,5 +107,19 @@ default_camille_polygon_params = {
     'dilate_iterations' : 2,
     'erode_kernel_size' : 5,
     'erode_iterations' : 2,
+    'polygonal_approximation_error' : 4
+}
+
+find_robot_position_param = {
+    'median_blur_kernel_size' : 5,
+    'gaussian_blur_kernel_size' : 5,
+    'gaussian_blur_sigma_x' : 0,
+    'canny_threshold1' : 0,
+    'canny_threshold2' : 50,
+    'canny_aperture_size' : 5,
+    'dilate_kernel_size' : 51,
+    'dilate_iterations' : 1,
+    'erode_kernel_size' : 51,
+    'erode_iterations' : 1,
     'polygonal_approximation_error' : 4
 }

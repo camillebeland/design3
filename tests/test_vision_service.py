@@ -35,7 +35,7 @@ class TestRobotService:
 
     def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
         #Given
-        ROBOT_POSITION_CENTER = (754.25, 361.0)
+        ROBOT_POSITION_CENTER = (803.0, 442.375)
         self.camera_mock = MockCameraService(image_path="test_with_robot.jpg")
         self.vision_service = VisionService(self.camera_mock, self.shape_detector, self.treasure_detector, self.table_calibrator, self.robot_detector)
         self.vision_service.init_worldmap_contour()
