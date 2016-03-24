@@ -69,4 +69,17 @@ class TestRobotService:
         assert map['treasures'][0]['y'] == TREASURE_POSITION_Y
 
 
+    def test_vision_service_when_table_calibration_should_return_table_corner_and_ratio(self):
+        #Given
+        RATIO = 745.09803921568619
+
+        #When
+        table_calibration = self.vision_service.get_calibration_data()
+        print(table_calibration)
+
+        #Then
+        assert len(table_calibration['table_contour']) == 4
+        assert table_calibration['pixels_per_meter'] == RATIO
+
+
 

@@ -67,8 +67,12 @@ class VisionService:
                     'angle': robot_position['angle']}
 
     def init_worldmap_contour(self):
-        image = ImageWrapper(self.__camera.get_frame())
-        worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
+        worldmap_contour = {}
+        print('trying to get calibration data')
+        while not worldmap_contour:
+            image = ImageWrapper(self.__camera.get_frame())
+            worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
+        print('got calibration data')
         self.worldmap_contour = worldmap_contour
 
     def get_calibration_data(self):

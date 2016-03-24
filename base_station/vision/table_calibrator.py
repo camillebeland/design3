@@ -15,13 +15,16 @@ class TableCalibrator:
             area = cv2.contourArea(contour)
             squares.append((area, approx_polygon(contour)))
 
-        biggest_square = max(squares, key=lambda item: item[0]) #find biggest square based on area
-        leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(biggest_square[1])
-        pixels_per_meter, top_left_corner, bottom_right_corner = self.__find_table_corners__(leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex)
-        table_contour = self.__calculate_table_contour__(top_left_corner, bottom_right_corner)
+        if squares:
+            biggest_square = max(squares, key=lambda item: item[0]) #find biggest square based on area
+            leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(biggest_square[1])
+            pixels_per_meter, top_left_corner, bottom_right_corner = self.__find_table_corners__(leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex)
+            table_contour = self.__calculate_table_contour__(top_left_corner, bottom_right_corner)
 
-        return {'pixels_per_meter': pixels_per_meter,
-                'table_contour': table_contour}
+            return {'pixels_per_meter': pixels_per_meter,
+                    'table_contour': table_contour}
+        else:
+            return {}
 
     def __find_contours__(self, image, color, parameters):
         median_blur_kernel_size = parameters['median_blur_kernel_size']
