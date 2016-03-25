@@ -162,7 +162,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
                 var square = new createjs.Shape();
                 var rectTopLeftX = (cell.x * xScale) - (cell.width * xScale) / 2;
                 var rectTopLeftY = (cell.y * yScale) + (cell.height * yScale) / 2;
-                square.graphics.beginStroke("black").drawRect(rectTopLeftX, CANVAS_HEIGHT - rectTopLeftY, (cell.width * xScale), (cell.height * yScale));
+                square.graphics.beginStroke("#b3b3cc").drawRect(rectTopLeftX, CANVAS_HEIGHT - rectTopLeftY, (cell.width * xScale), (cell.height * yScale));
                 completeMesh.addChild(square);
             }
             stage.addChild(completeMesh);

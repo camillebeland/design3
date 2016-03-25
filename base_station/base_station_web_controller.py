@@ -4,10 +4,10 @@ from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 
 import base_station.logger as logger
-from base_station.logger import Logger
-from base_station.vision.shape_detector import ShapeDetector
 from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision_service import VisionService
+from base_station.vision.island_detector import IslandDetector
+from base_station.vision.table_calibrator import TableCalibrator
 
 app = Flask(__name__)
 CORS(app)
@@ -18,13 +18,13 @@ def inject_mock_map(mock_app):
     app = mock_app
 
 
-def inject(a_camera, a_refresh_time, the_worldmap, a_logger):
+def inject(a_camera, a_refresh_time, the_worldmap, a_logger, a_vision_service):
     global camera, refresh_time, worldmap, logger, vision_service
     camera = a_camera
     refresh_time = a_refresh_time
     worldmap = the_worldmap
     logger = a_logger
-    vision_service = VisionService(a_camera, ShapeDetector(), TreasureDetector())
+    vision_service = a_vision_service
 
 
 def generate_frame(camera, refresh_time):
@@ -34,7 +34,7 @@ def generate_frame(camera, refresh_time):
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + bytes_frame + b'\r\n\r\n')
 
 
-def run(host, port):
+def run_base_app(host, port):
     logger.info("Starting the base station app at "+str(port))
     app.run(host=host, port=port, threaded=True)
 
@@ -63,3 +63,8 @@ def fetch_position():
 def log_info():
     logger.info(request.json['message'])
     return "OK"
+
+@app.route('/vision/calibration_data', methods=['GET'])
+def get_calibration_data():
+    data = vision_service.get_calibration_data()
+    return jsonify({'pixels_per_meter' : data['pixels_per_meter'], 'table_corners': data['table_contour'].tolist()})

@@ -17,7 +17,7 @@ if __name__ == '__main__':
     camera = CameraService(open_cv_camera,cv2)
     assert(open_cv_camera.isOpened())
 
-    img = Image.open('mock_image.jpg')
+    img = Image.open('test_with_islands.jpg')
     width, height = img.size
     left_panel = PanedWindow(main_panel, orient=VERTICAL)
     main_panel.add(left_panel)

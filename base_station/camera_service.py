@@ -14,18 +14,17 @@ class CameraService(object):
         self.camera.release()
 
     def get_frame(self, format='bgr'):
-        while(self.buffer.read() == None):
+        while self.buffer.read() is None:
             pass
         img = self.buffer.read()
-        if(format == 'bgr'):
+        if format == 'bgr':
             return img
-        elif(format == 'jpeg'):
+        elif format == 'jpeg':
             ret, jpeg = self.opencv.imencode('.jpg', img)
             return jpeg
 
     def __start(self):
-        print("starting")
-        self.thread = Thread(target = self.__update)
+        self.thread = Thread(target=self.__update)
         self.running = True
         self.thread.setDaemon(True)
         self.thread.start()

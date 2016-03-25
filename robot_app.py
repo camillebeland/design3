@@ -1,12 +1,10 @@
 import serial
 import serial.tools.list_ports as lp
 from configuration import configuration
-from pathfinding.cell import Cell
-from pathfinding.mesh import Mesh
+from pathfinding.mesh_builder import MeshBuilder
 from pathfinding.pathfinding import PathFinder
 from robot import robot_web_controller
-from robot.action_machine import ActionMachine
-from robot.actions.move_to_charge_station import MoveToChargeStationAction
+from robot.table_calibration_service import TableCalibrationService
 from robot.assemblers.robot_info_assembler import RobotInfoAssembler
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
 from robot.map import Map
@@ -15,10 +13,13 @@ from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
 from robot.simulation.simulation_map import SimulationMap
-from robot.vision_daemon import VisionDaemon
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
+from robot.wheels_correction_layer import WheelsCorrectionLayer
 from robot.worldmap_service import WorldmapService
+from robot.action_machine import ActionMachine
+from robot.actions.move_to_charge_station import MoveToChargeStationAction
+from robot.vision_daemon import VisionDaemon
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -32,6 +33,8 @@ if __name__ == '__main__':
     island_server_address = config.get('island_server', 'host')
 
     robot_service = RobotService(base_station_address, island_server_address)
+    table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
+    pixel_per_meter_ratio = table_calibration_service.get_pixel_per_meter_ratio()
 
     if wheelsconfig == "simulation":
         world_map = SimulationMap(1600, 1200)
@@ -54,6 +57,7 @@ if __name__ == '__main__':
             noise = 0
 
         wheels = NoisyWheels(world_map, refresh_time = refresh_time, wheels_velocity=wheels_velocity, noise=noise)
+        corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaSimulation()
 
     elif wheelsconfig == "usb-arduino":
@@ -69,18 +73,20 @@ if __name__ == '__main__':
         assert(len(list(arduinoport)) != 0)
         serialport = serial.Serial(port=arduinoport[0].device, baudrate=arduino_baudrate, timeout=0.01)
         wheels = WheelsUsbController(serialport, WheelsUsbCommands())
+        corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meter_ratio)
         manchester_antenna = ManchesterAntennaUsbController(serialport)
+
+    table_corners = table_calibration_service.get_table_corners()
 
     islands = WorldmapService(base_station_host, base_station_port)
     polygons = islands.get_polygons()
     treasures = islands.get_treasures()
 
-    cell = Cell(1600, 1200, 800, 600)
-    mesh = Mesh(cell.partition_cells(polygons, 100))
-
+    mesh_builder = MeshBuilder(table_corners, polygons)
+    mesh = mesh_builder.get_mesh()
     pathfinder = PathFinder(mesh)
     robot_service = RobotService(base_station_address, island_server_address)
-    robot = Robot(wheels, world_map, pathfinder, robot_service, manchester_antenna)
+    robot = Robot(corrected_wheels, world_map, pathfinder, robot_service, manchester_antenna)
 
 
     action_machine = ActionMachine()
