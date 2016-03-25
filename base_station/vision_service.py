@@ -94,34 +94,34 @@ default_camille_circle_params = {
     'hough_circle_min_distance' : 10,
     'hough_circle_param1' : 50,
     'hough_circle_param2' : 30,
-    'hough_circle_min_radius' : 0,
-    'hough_circle_max_radius' : 0
+    'hough_circle_min_radius' : 20,
+    'hough_circle_max_radius' : 120
 }
 
 default_camille_polygon_params = {
     'median_blur_kernel_size' : 5,
-    'gaussian_blur_kernel_size' : 5,
+    'gaussian_blur_kernel_size' : 11,
     'gaussian_blur_sigma_x' : 0,
     'canny_threshold1' : 0,
     'canny_threshold2' : 50,
     'canny_aperture_size' : 5,
-    'dilate_kernel_size' : 5,
+    'dilate_kernel_size' : 0,
     'dilate_iterations' : 2,
-    'erode_kernel_size' : 5,
+    'erode_kernel_size' : 0,
     'erode_iterations' : 2,
     'polygonal_approximation_error' : 4
 }
 
 find_robot_position_param = {
     'median_blur_kernel_size' : 5,
-    'gaussian_blur_kernel_size' : 5,
+    'gaussian_blur_kernel_size' : 11,
     'gaussian_blur_sigma_x' : 0,
     'canny_threshold1' : 0,
     'canny_threshold2' : 50,
     'canny_aperture_size' : 5,
-    'dilate_kernel_size' : 51,
-    'dilate_iterations' : 1,
-    'erode_kernel_size' : 51,
-    'erode_iterations' : 1,
+    'dilate_kernel_size' : 0,
+    'dilate_iterations' : 2,
+    'erode_kernel_size' : 0,
+    'erode_iterations' : 2,
     'polygonal_approximation_error' : 4
 }

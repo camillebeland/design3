@@ -5,7 +5,7 @@ var Robot = angular.module('Robot', [])
 
         var RobotModel = function() {
             this.angle = 0;
-            this.position = []
+            this.position = [];
             this.batteryLevel = 0;
             this.batteryVoltage = 0;
         };
@@ -116,7 +116,7 @@ var Robot = angular.module('Robot', [])
         }, POSITION_REFRESH_TIME_IN_MS);
 
         robot_socket.on('robotUpdated', function(robotData) {
-            robotModel.position = robotData.robotPosition;
+            robotModel.position = {'x':robotData.robotPosition.x, 'y':robotData.robotPosition.y};
             robotModel.angle = robotData.robotAngle;
             robotModel.batteryLevel = robotData.batteryLevel;
             robotModel.capacitorChargeLevel = robotData.capacitorCharge;

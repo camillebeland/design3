@@ -14,8 +14,8 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     var updateRobotPositionFromVisionInterval;
 
     var updateRobotRepresentation = function(robotModel) {
-        completeRobotRepresentation.x = (robotModel.position[0] * xScale);
-        completeRobotRepresentation.y = canvas.height - (robotModel.position[1] * yScale); //Because of y axis direction in computer graphics convention
+        completeRobotRepresentation.x = (robotModel.position.x * xScale);
+        completeRobotRepresentation.y = canvas.height - (robotModel.position.y * yScale); //Because of y axis direction in computer graphics convention
         completeRobotRepresentation.rotation = robotModel.angle;
     };
 
