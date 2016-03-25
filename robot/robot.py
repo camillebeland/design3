@@ -17,20 +17,39 @@ class Robot:
     def get_angle(self):
         return self.__world_map.get_robot_angle()
 
+    def find_manchester_code(self):
+        self.__manchester_code = self.__arduino.get_manchester_code()
+
+    def get_manchester_code(self):
+        return self.__manchester_code
+
+    def change_target_island_position(self, island_position):
+        self.__island_position = island_position
+
+    def get_target_island_position(self):
+        return self.__island_position
+
+    def change_target_treasure_position(self, treasure_position):
+        self.__treasure_position = treasure_position
+
+    def get_target_treasure_position(self):
+        return self.__treasure_position
+
     def get_battery_level(self):
         return self.__battery.get_level()
 
     def get_capacitor_charge(self):
         return self.__mechanical_gripper.get_capacitor_charge()
 
-    def get_manchester_code(self):
-        return self.__arduino.get_manchester_code()
-
     def get_path(self):
         return self.__movement.get_last_path_used()
 
     def move_to(self, final_destination):
         self.__movement.move_to(final_destination)
+
+    def find_move_to(self, position):
+        #TODO
+        pass
 
     def rotate(self, angle):
         self.__wheels.rotate(angle)

@@ -33,10 +33,8 @@ class Cell:
 
     def contains_point(self, point):
         x, y = point
-        return (x >= (self.x - self.width/2.0) and
-                x <= (self.x + self.width/2.0) and
-                y >= (self.y - self.height/2.0) and
-                y <= (self.y + self.height/2.0))
+        return ((self.x - self.width / 2.0) <= x <= (self.x + self.width / 2.0) and
+                (self.y - self.height / 2.0) <= y <= (self.y + self.height / 2.0))
 
     def is_adjacent_to(self, other_cell):
         return (((abs(self.x - other_cell.x) - (self.width + other_cell.width)/2.0) < 1e-6 and

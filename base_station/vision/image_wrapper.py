@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-from functools import reduce
-
 
 class ImageWrapper:
     def __init__(self, image_src, image_format='bgr',  open_cv=cv2):
@@ -11,6 +9,9 @@ class ImageWrapper:
 
     def get_height(self):
         return self.__image.shape[0]
+
+    def get_width(self):
+        return self.__image.shape[1]
 
     def read_image(self):
         return self.__image
@@ -62,14 +63,6 @@ class ImageWrapper:
         self.__open_cv.imshow('Image',image.__image)
         self.__open_cv.waitKey(0)
 
-    def draw_contours(self, contours):
-        img = np.copy(self.__image)
-        for contour in contours:
-            center = (int(contour['x']), int(contour['y']))
-            radius = 10
-            self.__open_cv.circle(img, center, radius, (255,0,255),3)
-        return ImageWrapper(img)
-
     def draw_circles(self, circles):
         img = np.copy(self.__image)
         for circle in circles:
@@ -77,6 +70,21 @@ class ImageWrapper:
             radius = int(circle['radius'])
             self.__open_cv.circle(img, center, radius, (0,255,255),3)
         return ImageWrapper(img)
+
+    def draw_contours(self, contours):
+        img = np.copy(self.__image)
+        for contour in contours:
+            self.__open_cv.drawContours(img, [contour], -1, (255,0,255),3)
+        return ImageWrapper(img)
+
+    def mask_image(self, contour):
+        img = np.copy(self.__image)
+        blank_image = np.zeros((self.get_height(),self.get_width()), np.uint8)
+        mask = cv2.fillPoly(blank_image, pts =[contour], color=(255,255,255))
+        mask = cv2.dilate(mask , None, iterations=int(20*((self.get_height()/1200)**2)))
+        img = cv2.bitwise_and(img, img, mask=mask)
+        return ImageWrapper(img)
+
 
 convert = {
     'bgr' : {

@@ -16,18 +16,9 @@ def find_in_log_file(message):
         if message in line:
             return True
 
-    return False;
+    return False
 
 
-def setup_function():
-    print("setup")
-
-
-def teardown_function():
-    print("teardown")
-
-
-@with_setup(setup_function, teardown_function)
 def test_can_log_something_happening_on_robot():
     # Given
     config = configuration.get_config()

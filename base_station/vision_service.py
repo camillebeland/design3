@@ -1,13 +1,17 @@
 from base_station.vision.image_wrapper import ImageWrapper
 
 class VisionService:
-    def __init__(self, camera, shape_detector, treasure_detector):
+    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
         self.__treasure_detector = treasure_detector
+        self.__table_calibrator = table_calibrator
+        self.__robot_detector = robot_detector
+        self.worldmap_contour = {}
 
     def build_map(self):
         image = ImageWrapper(self.__camera.get_frame())
+        image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
         circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
         circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
@@ -48,8 +52,9 @@ class VisionService:
 
     def find_robot_position(self):
         image = ImageWrapper(self.__camera.get_frame())
-        purple_circle = self.__shape_detector.find_circle_color(image, 'purple', default_camille_circle_params)
-        purple_square = self.__shape_detector.find_polygon_color(image, 'square', 'purple', default_camille_polygon_params)
+        image = image.mask_image(self.worldmap_contour['table_contour'])
+        purple_circle = self.__robot_detector.find_circle_color(image, default_camille_circle_params)
+        purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
         if not purple_circle or not purple_square:
             return {}
         else:
@@ -60,6 +65,18 @@ class VisionService:
             }
             return {'center' : robot_position['center'],
                     'angle': robot_position['angle']}
+
+    def init_worldmap_contour(self):
+        worldmap_contour = {}
+        print('trying to get calibration data')
+        while not worldmap_contour:
+            image = ImageWrapper(self.__camera.get_frame())
+            worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
+        print('got calibration data')
+        self.worldmap_contour = worldmap_contour
+
+    def get_calibration_data(self):
+        return self.worldmap_contour
 
     def __find_angle_between__(self, point1, point2):
         from math import atan2, degrees
@@ -88,8 +105,22 @@ default_camille_polygon_params = {
     'canny_threshold1' : 0,
     'canny_threshold2' : 50,
     'canny_aperture_size' : 5,
+    'dilate_kernel_size' : 5,
+    'dilate_iterations' : 2,
+    'erode_kernel_size' : 5,
+    'erode_iterations' : 2,
+    'polygonal_approximation_error' : 4
+}
+
+find_robot_position_param = {
+    'median_blur_kernel_size' : 5,
+    'gaussian_blur_kernel_size' : 5,
+    'gaussian_blur_sigma_x' : 0,
+    'canny_threshold1' : 0,
+    'canny_threshold2' : 50,
+    'canny_aperture_size' : 5,
     'dilate_kernel_size' : 51,
-    'dilate_ierations' : 1,
+    'dilate_iterations' : 1,
     'erode_kernel_size' : 51,
     'erode_iterations' : 1,
     'polygonal_approximation_error' : 4
