@@ -35,6 +35,7 @@ if __name__ == '__main__':
     wheels_config = config.get('robot', 'wheels')
     base_station_host = config.get('baseapp', 'host')
     base_station_port = config.get('baseapp', 'port')
+    base_station_camera = config.get('baseapp', 'camera')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
 
@@ -69,8 +70,8 @@ if __name__ == '__main__':
         gripper = GripperSimulation()
 
     elif wheels_config == "usb-arduino":
-        robot_info_assembler = RobotInfoAssembler()
-        vision_daemon = VisionDaemon(base_station_address)
+        assembler = RobotInfoAssembler()
+        vision_daemon = VisionDaemon(base_station_address, assembler)
         world_map = Map(1600, 1200, vision_daemon)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
@@ -83,8 +84,8 @@ if __name__ == '__main__':
         wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
         corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meter_ratio)
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
-        battery = Battery()
-        gripper = Gripper()
+        battery = Battery(serial_port)
+        gripper = Gripper(serial_port)
 
     table_corners = table_calibration_service.get_table_corners()
 

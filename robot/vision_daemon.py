@@ -1,4 +1,5 @@
 from threading import Thread
+import time
 
 import requests
 
@@ -11,13 +12,15 @@ class VisionDaemon:
         self.start_fetching_robot_position_from_vision()
 
     def get_robot_position_from_vision(self):
-            return self.last_robot_info_from_vision
+        return self.last_robot_info_from_vision
 
     def get_robot_angle_from_vision(self):
-        return self.last_robot_position_from_vision['angle']
+        # TODO
+        return 41
 
     def __fetch_robot_position_from_vision__(self):
         while self.running:
+            time.sleep(1)
             try:
                 response = requests.get(str(self.base_station_address) + '/vision/robot')
                 response.raise_for_status()
@@ -31,6 +34,7 @@ class VisionDaemon:
                 print('can\'t fetch robot position from vision ' + str(self.base_station_address) + ' is not available')
 
     def start_fetching_robot_position_from_vision(self):
+        print("Starting vision daemon")
         self.thread = Thread(target=self.__fetch_robot_position_from_vision__)
         self.running = True
         self.thread.start()

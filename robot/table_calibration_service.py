@@ -6,7 +6,7 @@ class TableCalibrationService:
         self.calibration_data = {}
         while not self.calibration_data:
             try:
-                self.calibration_data = requests.get('http://' + host + ':' + port + '/vision/calibration_data').json()
+                self.calibration_data = requests.get('http://' + host + ':' + port + '/vision/calibration_data', timeout=0.1).json()
             except requests.exceptions.RequestException:
                 print('can\'t fetch islands http://'+ host + ':' + port + '/vision/calibration_data' + ' is not available')
         self.pixel_per_meter_ratio = int(self.calibration_data['pixels_per_meter'])
