@@ -1,8 +1,6 @@
 from unittest.mock import *
-from nose.tools import assert_equals
+
 from robot.vision_daemon import VisionDaemon
-import robot.vision_daemon
-from nose.tools import *
 
 
 class TestVisionDaemon:
@@ -16,8 +14,9 @@ class TestVisionDaemon:
         base_station_address = "https://localhost:5000"
 
         # When
-        self.vision_daemon = VisionDaemon(base_station_address)
+        self.vision_daemon = VisionDaemon(base_station_address, Mock())
 
         # Then
         mock_requests_framework.get.assert_called_with("https://localhost:5000/vision/robot")
+
         self.teardown_function()

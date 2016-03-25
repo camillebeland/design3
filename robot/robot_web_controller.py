@@ -74,6 +74,7 @@ def mesh_to_json(mesh):
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
 
+
 @app.route('/actions/<action>', methods = ['POST'])
 def send_action_to_robot(action):
     try:
@@ -81,6 +82,7 @@ def send_action_to_robot(action):
         return "OK"
     except:
         print('action : {0} did not work'.format(action))
+
 
 @app.route('/actions')
 def get_actions():

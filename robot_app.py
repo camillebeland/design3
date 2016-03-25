@@ -1,27 +1,24 @@
 import serial
 import serial.tools.list_ports as lp
-
 from configuration import configuration
 from pathfinding.cell import Cell
 from pathfinding.mesh import Mesh
 from pathfinding.pathfinding import PathFinder
-from robot.map import Map
 from robot import robot_web_controller
-from robot.worldmap_service import WorldmapService
+from robot.action_machine import ActionMachine
+from robot.actions.move_to_charge_station import MoveToChargeStationAction
+from robot.assemblers.robot_info_assembler import RobotInfoAssembler
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
+from robot.map import Map
 from robot.robot import Robot
 from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
 from robot.simulation.simulation_map import SimulationMap
+from robot.vision_daemon import VisionDaemon
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
-
-from robot.action_machine import ActionMachine
-from robot.actions.move_to_charge_station import MoveToChargeStationAction
-from pathfinding.polygon import Polygon
-
-from robot.vision_daemon import VisionDaemon
+from robot.worldmap_service import WorldmapService
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -60,6 +57,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaSimulation()
 
     elif wheelsconfig == "usb-arduino":
+        robot_info_assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address)
         world_map = Map(1600, 1200, vision_daemon)
 
