@@ -50,7 +50,6 @@ class ManchesterAntennaUsbController:
         self.serial_port.write(encode("(v)"))
         percentage_char = self.serial_port.read()
         percentage = ord(percentage_char)
-        print(percentage)
         self.__validate_percentage(percentage)
         return percentage
 

@@ -42,7 +42,6 @@ class TestRobotService:
 
         #When
         robot_position = self.vision_service.find_robot_position()
-        print(robot_position)
 
         #Then
         assert robot_position['center'] == ROBOT_POSITION_CENTER
@@ -75,7 +74,6 @@ class TestRobotService:
 
         #When
         table_calibration = self.vision_service.get_calibration_data()
-        print(table_calibration)
 
         #Then
         assert len(table_calibration['table_contour']) == 4
