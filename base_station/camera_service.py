@@ -1,6 +1,7 @@
 from threading import Thread
 from base_station.double_sided_buffer import DoubleSidedBuffer
 
+
 class CameraService(object):
     def __init__(self, camera, opencv):
         self.opencv = opencv

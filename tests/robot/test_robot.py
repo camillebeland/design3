@@ -35,8 +35,9 @@ class MockPathFinder():
 wheels = MockWheels()
 world_map = MockMap()
 pathfinder = MockPathFinder()
+movement = Mock()
 
-robot = Robot(wheels, world_map, pathfinder, Mock(), Mock())
+robot = Robot(wheels, world_map, pathfinder, Mock(), movement, Mock(), Mock())
 
 
 def test_when_robot_move_then_wheels_move():
@@ -45,15 +46,11 @@ def test_when_robot_move_then_wheels_move():
 
 
 def test_when_robot_move_to_then_move_to_on_movement_is_called():
-    # Given
-    mock_movement = Mock()
-    robot.set_mock_movement(mock_movement)
-
     # When
     robot.move_to(FINAL_DESTINATION)
 
     # Then
-    mock_movement.move_to.assert_called_once_with(FINAL_DESTINATION)
+    movement.move_to.assert_called_once_with(FINAL_DESTINATION)
 
 
 def test_when_robot_rotate_then_wheels_rotate():
