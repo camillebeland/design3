@@ -110,5 +110,4 @@ if __name__ == '__main__':
     action_machine.bind('start', 'move_to_charge_station')
     robot_logger = RobotLoggerDecorator(robot, robot_service)
     robot_web_controller.inject(robot_logger, mesh, robot_service, action_machine)
-    robot.rotate(30)
     robot_web_controller.run(host, port)
