@@ -48,8 +48,9 @@ class Movement:
 
 
 def distance_between(position1, position2):
-    x1, y1 = position1
-    x2, y2 = position2
+    x1 = position1.x
+    y1 = position1.y
+    x2 = position2.x
+    y2 = position2.y
     euclidean_distance = math.sqrt((x2-x1)**2 + (y2-y1)**2)
     return euclidean_distance
-

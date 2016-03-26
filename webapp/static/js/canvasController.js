@@ -14,8 +14,8 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
     var updateRobotPositionFromVisionInterval;
 
     var updateRobotRepresentation = function(robotModel) {
-        completeRobotRepresentation.x = (robotModel.position[0] * xScale);
-        completeRobotRepresentation.y = canvas.height - (robotModel.position[1] * yScale); //Because of y axis direction in computer graphics convention
+        completeRobotRepresentation.x = (robotModel.position.x * xScale);
+        completeRobotRepresentation.y = canvas.height - (robotModel.position.y * yScale); //Because of y axis direction in computer graphics convention
         completeRobotRepresentation.rotation = robotModel.angle;
     };
 
@@ -24,8 +24,8 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         path = new createjs.Shape();
         path.graphics.setStrokeStyle(2).setStrokeDash([20, 10], 0).beginStroke("#000000");
         for (pathNode of pathData.robotPath) {
-            var x = pathNode[0];
-            var y = pathNode[1];
+            var x = pathNode.x;
+            var y = pathNode.y;
             var convertedX = x * xScale;
             var convertedY = y * yScale;
             path.graphics.lineTo(convertedX, CANVAS_HEIGHT - convertedY);

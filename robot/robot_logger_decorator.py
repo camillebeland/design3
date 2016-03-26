@@ -4,7 +4,8 @@ class RobotLoggerDecorator:
         self.__logger_service = logger_service
 
     def move(self, delta_x, delta_y):
-        self.__logger_service.log_info('Robot Move ({0},{1})'.format(delta_x, delta_y))
+        # TODO fix logger
+        # self.__logger_service.log_info('Robot Move ({0},{1})'.format(delta_x, delta_y))
         self.__robot.move(delta_x, delta_y)
 
     def get_position(self):
@@ -26,7 +27,7 @@ class RobotLoggerDecorator:
         return self.__robot.get_path()
 
     def move_to(self, final_destination):
-        self.__logger_service.log_info('Robot Move_to {0}'.format(final_destination))
+        #self.__logger_service.log_info('Robot Move_to {0}'.format(final_destination))
         self.__robot.move_to(final_destination)
 
     def rotate(self, angle):

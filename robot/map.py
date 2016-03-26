@@ -15,7 +15,9 @@ class Map:
         return self.vision_daemon.get_robot_angle_from_vision()
 
     def relative_position(self, position):
-        return rotate_vector(self._robot_angle, np.array(position) - np.array(self._robot_position))
+        robot_current_position = self.get_robot_position()
+        return rotate_vector(self._robot_angle,
+                             np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
 
     def get_recharge_station_position(self):
         #TODO

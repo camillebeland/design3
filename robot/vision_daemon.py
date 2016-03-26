@@ -1,5 +1,6 @@
 from threading import Thread
 import time
+from utils.position import Position
 
 import requests
 
@@ -12,7 +13,10 @@ class VisionDaemon:
         self.start_fetching_robot_position_from_vision()
 
     def get_robot_position_from_vision(self):
-        return self.last_robot_info_from_vision
+        if self.last_robot_info_from_vision:
+            return Position(self.last_robot_info_from_vision['x'], self.last_robot_info_from_vision['y'])
+        else:
+            return Position(0, 0)
 
     def get_robot_angle_from_vision(self):
         # TODO
