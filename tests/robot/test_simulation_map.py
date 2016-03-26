@@ -1,14 +1,15 @@
 from nose import with_setup
 from nose.tools import *
+from utils.position import Position
 
 from robot.simulation.simulation_map import SimulationMap
 
 WIDTH = 300.0
 HEIGHT = 100.0
-A_POSITION = [20.0,50.0]
-A_POSITION_OUTSIDE_BOUNDARIES = [500.0,200.0]
+A_POSITION = Position(20.0, 50.0)
+A_POSITION_OUTSIDE_BOUNDARIES = Position(500.0, 200.0)
 AN_ANGLE = 142
-A_MOVE_OUTSIDE = [A_POSITION[0] + WIDTH, 0.0]
+A_MOVE_OUTSIDE = Position(A_POSITION.x + WIDTH, 0.0)
 PRECISION = 1e-6
 
 world_map = SimulationMap(WIDTH, HEIGHT)
@@ -30,8 +31,11 @@ def test_when_init_map_then_height_is_set():
 
 @with_setup(setup)
 def test_when_set_robot_position_then_position_is_set():
-    world_map.set_robot_position(A_POSITION[0], A_POSITION[1])
-    assert_equal(A_POSITION, world_map.get_robot_position())
+    a_position_x = 3
+    a_position_y = 4
+    a_position = Position(a_position_x, a_position_y)
+    world_map.set_robot_position(a_position_x, a_position_y)
+    assert_equal(a_position, world_map.get_robot_position())
 
 
 @with_setup(setup)
@@ -45,8 +49,8 @@ def test_given_a_rotated_robot_of_a_small_angle_when_move_a_distance_then_robot_
     world_map.rotate_robot(30)
     world_map.move_robot(0, 10)
 
-    assert_equal_with_error(A_POSITION[0] + 5, world_map.get_robot_position()[0], PRECISION)
-    assert_equal_with_error(A_POSITION[1] + 8.66025, world_map.get_robot_position()[1], PRECISION)
+    assert_equal_with_error(A_POSITION.x + 5, world_map.get_robot_position().x, PRECISION)
+    assert_equal_with_error(A_POSITION.y + 8.66025, world_map.get_robot_position().y, PRECISION)
 
 
 @with_setup(setup)
@@ -54,8 +58,8 @@ def test_given_a_rotated_robot_of_a_large_angle_when_move_a_distance_then_robot_
     world_map.rotate_robot(200)
     world_map.move_robot(0, 10)
 
-    assert_equal_with_error(A_POSITION[0] - 3.42020143, world_map.get_robot_position()[0], PRECISION)
-    assert_equal_with_error(A_POSITION[1] - 9.39692620, world_map.get_robot_position()[1], PRECISION)
+    assert_equal_with_error(A_POSITION.x - 3.42020143, world_map.get_robot_position().x, PRECISION)
+    assert_equal_with_error(A_POSITION.y - 9.39692620, world_map.get_robot_position().y, PRECISION)
 
 
 @with_setup(setup)

@@ -86,7 +86,7 @@ class VisionService:
         dy = point1['y'] - point2['y']
         angle_in_rad = atan2(dy, dx)
         angle_in_deg = degrees(angle_in_rad)
-        return angle_in_deg
+        return -angle_in_deg
 
 
 default_camille_circle_params = {
