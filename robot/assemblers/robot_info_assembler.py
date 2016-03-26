@@ -4,5 +4,5 @@ class RobotInfoAssembler:
         robot_info = {}
         robot_info['x'] = json['center'][0]
         robot_info['y'] = json['center'][1]
-        # robot_info = json['angle']
+        robot_info['angle'] = json['angle']
         return robot_info

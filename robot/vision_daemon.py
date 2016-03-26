@@ -19,12 +19,14 @@ class VisionDaemon:
             return Position(0, 0)
 
     def get_robot_angle_from_vision(self):
-        # TODO
-        return 41
+        if self.last_robot_info_from_vision:
+            return self.last_robot_info_from_vision['angle']
+        else:
+            return 41
 
     def __fetch_robot_position_from_vision__(self):
         while self.running:
-            time.sleep(1)
+            time.sleep(0.05)
             try:
                 response = requests.get(str(self.base_station_address) + '/vision/robot')
                 response.raise_for_status()

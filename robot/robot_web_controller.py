@@ -17,7 +17,7 @@ def inject(a_robot, a_mesh, a_robot_service, an_action_machine):
 
 
 def run(host, port):
-    socket_io.run(app, host=host, port=port)
+    socket_io.run(app, host=host, port=port, debug=True)
 
 
 @app.route('/robot/move', methods=['POST'])

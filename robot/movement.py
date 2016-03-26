@@ -4,13 +4,13 @@ import math
 
 
 class Movement:
-    def __init__(self, compute, sense, control):
+    def __init__(self, compute, sense, control, loop_time=5, min_distance_to_target=40):
         self.__compute = compute
         self.__sense = sense
         self.__control = control
         self.__should_move = False
-        self.__loop_time = 1
-        self.__min_distance_to_target = 20
+        self.__loop_time = loop_time
+        self.__min_distance_to_target = min_distance_to_target
         self.__current_path = list()
 
     def get_last_path_used(self):
