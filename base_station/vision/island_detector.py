@@ -27,7 +27,7 @@ class IslandDetector:
         else:
             return []
 
-    def find_polygon_color(self, image, polygon, color, parameters, opencv=cv2):
+    def find_polygon_color(self, image, color, parameters, opencv=cv2):
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
         dilate_kernel_size = parameters['dilate_kernel_size']
@@ -47,18 +47,25 @@ class IslandDetector:
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
 
-        islands = []
+        squares, pentagons, triangles = [], [], []
         for contour in contours:
             leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(contour)
             detected_shape_length = abs(rightest_vertex - leftest_vertex)
             detected_shape_height = abs(upper_vertex - lowest_vertex)
             approx = approx_polygon(contour)
 
-            if self.__is_an_island__(detected_shape_length, detected_shape_height) and len(approx) == edges[polygon]:
-                treasure = self.__find_island_coordinates__(image, contour)
-                islands.append(treasure)
+            if self.__is_an_island__(detected_shape_length, detected_shape_height):
+                if len(approx) == edges['square']:
+                    island_square = self.__find_island_coordinates__(image, contour)
+                    squares.append(island_square)
+                elif len(approx) == edges['triangle']:
+                    island_triangle = self.__find_island_coordinates__(image, contour)
+                    triangles.append(island_triangle)
+                elif len(approx) == edges['pentagon']:
+                    island_pentagon = self.__find_island_coordinates__(image, contour)
+                    pentagons.append(island_pentagon)
 
-        return islands
+        return squares, pentagons, triangles
 
     def __find_island_coordinates__(self, image, contour):
         island = {}

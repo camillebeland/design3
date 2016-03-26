@@ -13,22 +13,17 @@ class VisionService:
         image = ImageWrapper(self.__camera.get_frame())
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
-        circles.extend(self.__find_polygon_color__(image, 'circle', 'green'))
-        circles.extend(self.__find_polygon_color__(image, 'circle', 'blue'))
-        circles.extend(self.__find_polygon_color__(image, 'circle', 'yellow'))
-        circles.extend(self.__find_polygon_color__(image, 'circle', 'red'))
-        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'green'))
-        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'blue'))
-        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'yellow'))
-        pentagons.extend(self.__find_polygon_color__(image, 'pentagon', 'red'))
-        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'green'))
-        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'blue'))
-        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'yellow'))
-        triangles.extend(self.__find_polygon_color__(image, 'triangle', 'red'))
-        squares.extend(self.__find_polygon_color__(image, 'square', 'green'))
-        squares.extend(self.__find_polygon_color__(image, 'square', 'blue'))
-        squares.extend(self.__find_polygon_color__(image, 'square', 'yellow'))
-        squares.extend(self.__find_polygon_color__(image, 'square', 'red'))
+
+        triangles_green, pentagons_green, squares_green, circles_green = self.__find_polygon_color__(image, 'green')
+        triangles_blue, pentagons_blue, squares_blue, circles_blue = self.__find_polygon_color__(image, 'blue')
+        triangles_yellow, pentagons_yellow, squares_yellow, circles_yellow = self.__find_polygon_color__(image, 'yellow')
+        triangles_red, pentagons_red, squares_red, circles_red = self.__find_polygon_color__(image, 'red')
+
+        triangles = triangles_green + triangles_blue + triangles_red + triangles_yellow
+        circles = circles_green + circles_blue + circles_red + circles_yellow
+        pentagons = pentagons_green + pentagons_blue + pentagons_red + pentagons_yellow
+        squares = squares_green + squares_blue + squares_red + squares_yellow
+
         treasures.extend(self.__treasure_detector.find_treasures(image, default_camille_polygon_params))
 
         worldmap = {
@@ -40,15 +35,22 @@ class VisionService:
         }
         return worldmap
 
-    def __find_polygon_color__(self, image, shape, color):
-        if shape == 'circle':
-            shapes = self.__shape_detector.find_circle_color(image, color, default_camille_circle_params)
-        else:
-            shapes = self.__shape_detector.find_polygon_color(image, shape, color, default_camille_polygon_params)
-        for poly in shapes:
-            poly['shape'] = shape
+    def __find_polygon_color__(self, image, color):
+        circles = self.__shape_detector.find_circle_color(image, color, default_camille_circle_params)
+        for poly in circles:
+            poly['shape'] = 'circle'
             poly['color'] = color
-        return shapes
+        squares, pentagons, triangles = self.__shape_detector.find_polygon_color(image, color, default_camille_polygon_params)
+        for poly in squares:
+            poly['shape'] = 'square'
+            poly['color'] = color
+        for poly in triangles:
+            poly['shape'] = 'triangles'
+            poly['color'] = color
+        for poly in pentagons:
+            poly['shape'] = 'pentagons'
+            poly['color'] = color
+        return triangles, pentagons, squares, circles
 
     def find_robot_position(self):
         image = ImageWrapper(self.__camera.get_frame())
