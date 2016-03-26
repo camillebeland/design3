@@ -1,5 +1,5 @@
 from nose.tools import *
-
+import numpy as np
 from base_station.vision.island_detector import *
 
 test_polygon_params = {
