@@ -38,6 +38,8 @@ if __name__ == '__main__':
     base_station_camera = config.get('baseapp', 'camera')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
+    loop_time = config.getfloat('robot', 'loop-time')
+    min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
 
     robot_service = RobotService(base_station_address, island_server_address)
     table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
@@ -72,7 +74,7 @@ if __name__ == '__main__':
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
-        world_map = Map(1600, 1200, vision_daemon)
+        world_map = Map(vision_daemon)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
@@ -96,7 +98,7 @@ if __name__ == '__main__':
     mesh_builder = MeshBuilder(table_corners, polygons)
     mesh = mesh_builder.get_mesh()
     pathfinder = PathFinder(mesh)
-    movement = Movement(pathfinder, world_map, wheels)
+    movement = Movement(pathfinder, world_map, wheels, loop_time, min_distance_to_target)
     robot_service = RobotService(base_station_address, island_server_address)
     robot = Robot(corrected_wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper)
 

@@ -2,10 +2,7 @@ import numpy as np
 
 
 class Map:
-    def __init__(self, width, height, vision_daemon):
-        self._width = width
-        self._height = height
-        self._robot_angle = 0
+    def __init__(self, vision_daemon):
         self.vision_daemon = vision_daemon
 
     def get_robot_position(self):
@@ -16,8 +13,7 @@ class Map:
 
     def relative_position(self, position):
         robot_current_position = self.get_robot_position()
-        return rotate_vector(self._robot_angle,
-                             np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
+        return rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
 
     def get_recharge_station_position(self):
         #TODO
