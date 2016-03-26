@@ -220,6 +220,8 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         initVideoStream();
         initRobot();
         initPath();
+        initMesh();
+        showIslands();
 
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
