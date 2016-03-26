@@ -5,7 +5,7 @@ var Robot = angular.module('Robot', [])
 
         var RobotModel = function() {
             this.angle = 0;
-            this.position = []
+            this.position = [];
             this.batteryLevel = 0;
             this.batteryVoltage = 0;
         };

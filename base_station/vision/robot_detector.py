@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
-from functools import reduce
-
+import base_station.vision.vision_utils as utils
 
 class RobotDetector:
     def find_circle_color(self, image, parameters):
@@ -29,48 +28,58 @@ class RobotDetector:
             return []
 
     def find_polygon_color(self, image, parameters, opencv=cv2):
-        median_blur_kernel_size = parameters['median_blur_kernel_size']
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
-        canny_threshold1 = parameters['canny_threshold1']
-        canny_threshold2 = parameters['canny_threshold2']
-        canny_aperture_size = parameters['canny_aperture_size']
-        dilate_kernel_size = parameters['dilate_kernel_size']
-        dilate_ierations = parameters['dilate_iterations']
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
-        polygonal_approximation_error = parameters['polygonal_approximation_error']
+        dilate_kernel_size = parameters['dilate_kernel_size']
+        dilate_iterations = parameters['dilate_iterations']
+        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
+        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
 
-        def approxPolygon(contour):
-            return opencv.approxPolyDP(contour, polygonal_approximation_error , True)
+
+        def approx_polygon(contour):
+            epsilon = 0.04*cv2.arcLength(contour, True)
+            return opencv.approxPolyDP(contour, epsilon, True)
 
         contours = (image
-                    .filter_median_blur(median_blur_kernel_size)
                     .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
                     .filter_by_color(hsv_range['purple'])
-                    .canny(canny_threshold1,canny_threshold2,canny_aperture_size)
-                    .dilate(dilate_kernel_size,dilate_ierations)
                     .erode(erode_kernel_size, erode_iterations)
+                    .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
 
+        islands = []
+        for contour in contours:
+            leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(contour)
+            detected_shape_length = abs(rightest_vertex - leftest_vertex)
+            detected_shape_height = abs(upper_vertex - lowest_vertex)
+            approx = approx_polygon(contour)
 
-        return (
-            list(
-                map(
-                    lambda x : {
-                        'x' : (reduce(np.add, x)/edges['square'])[0],
-                        'y' : image.get_height() - (reduce(np.add, x)/edges['square'])[1]
-                    },
-                    map(
-                        lambda x : x[:,0],
-                        filter(
-                            lambda x: len(x) == edges['square'],
-                            map(approxPolygon, contours)
-                        )
-                    )
-                )
-            )
-        )
+            if self.__is_a_robot_position_marker__(detected_shape_length, detected_shape_height) and len(approx) == edges['square']:
+                treasure = self.__find_island_coordinates__(image, contour)
+                islands.append(treasure)
+
+        return islands
+
+    def __find_island_coordinates__(self, image, contour):
+        island = {}
+        moment = cv2.moments(contour)
+        center_x = int((moment["m10"] / moment["m00"]))
+        centrer_y = int((moment["m01"] / moment["m00"]))
+        island['x'] = center_x
+        island['y'] = image.get_height() - centrer_y
+        return island
+
+    def __is_a_robot_position_marker__(self, detected_shape_length, detected_shape_height):
+        ISLAND_MAX_HEIGHT = 100
+        ISLAND_MIN_HEIGHT = 10
+        ISLAND_MAX_LENGHT = 100
+        ISLAND_MIN_LENGHT = 10
+
+        if ISLAND_MIN_HEIGHT < detected_shape_height < ISLAND_MAX_HEIGHT and \
+           ISLAND_MIN_LENGHT < detected_shape_length < ISLAND_MAX_LENGHT:
+            return True
+        else:
+            return False
 
 hsv_range = {
     'purple': ((110, 30, 65), (165, 190, 150))

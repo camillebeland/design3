@@ -19,8 +19,8 @@ class TestVisionService:
         self.vision_service.init_worldmap_contour()
 
     def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
-        # Given
-        ROBOT_POSITION_CENTER = (803.0, 442.375)
+        #Given
+        ROBOT_POSITION_CENTER = (804.75, 443.75)
         self.camera_mock = MockCameraService(image_path="test_with_robot.jpg")
         self.vision_service = VisionService(self.camera_mock, self.shape_detector, self.treasure_detector,
                                             self.table_calibrator, self.robot_detector)
@@ -42,7 +42,7 @@ class TestVisionService:
     def test_vision_service_with_treasure_when_find_treasure_should_return_treasure_position(self):
         # Given
         NB_TREASURE = 1
-        TREASURE_POSITION_X = 1190
+        TREASURE_POSITION_X = 1189
         TREASURE_POSITION_Y = 237
 
         # When
@@ -54,15 +54,16 @@ class TestVisionService:
         assert map['treasures'][0]['y'] == TREASURE_POSITION_Y
 
     def test_vision_service_when_table_calibration_should_return_table_corner_and_ratio(self):
-        # Given
-        RATIO = 745.09803921568619
+        #Given
+        RATIO_LOW = 740
+        RATIO_UP = 760
 
         # When
         table_calibration = self.vision_service.get_calibration_data()
 
         # Then
         assert len(table_calibration['table_contour']) == 4
-        assert table_calibration['pixels_per_meter'] == RATIO
+        assert RATIO_LOW < table_calibration['pixels_per_meter'] < RATIO_UP
 
 
 
