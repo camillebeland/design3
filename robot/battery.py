@@ -13,12 +13,11 @@ class Battery:
         self.arduino_validator = ArduinoValidator()
 
     def get_level(self):
-        self.serial_port.write(encode("(b)"))
-        percentage_char = self.serial_port.read()
-        percentage = ord(percentage_char)
-        percentage_is_valid = self.arduino_validator.validate_percentage(percentage)
-        if not percentage_is_valid:
-            raise InvalidPercentageError("Arduino returned percentage is not valid: " + str(percentage))
-        return percentage
-
-
+        # self.serial_port.write(encode("(b)"))
+        # percentage_char = self.serial_port.read()
+        # percentage = ord(percentage_char)
+        # percentage_is_valid = self.arduino_validator.validate_percentage(percentage)
+        # if not percentage_is_valid:
+        #    raise InvalidPercentageError("Arduino returned percentage is not valid: " + str(percentage))
+        # return percentage
+        return 41

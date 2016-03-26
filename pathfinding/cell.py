@@ -32,7 +32,8 @@ class Cell:
         return obstacle.contains(self)
 
     def contains_point(self, point):
-        x, y = point
+        x = point.x
+        y = point.y
         return ((self.x - self.width / 2.0) <= x <= (self.x + self.width / 2.0) and
                 (self.y - self.height / 2.0) <= y <= (self.y + self.height / 2.0))
 

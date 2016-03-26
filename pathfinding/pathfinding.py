@@ -1,5 +1,5 @@
 import networkx
-from functools import reduce
+from utils.position import Position
 
 
 class PathFinder:
@@ -21,13 +21,15 @@ class PathFinder:
                 to_cell = cell
 
         cell_path = networkx.astar_path(self.__graph, from_cell, to_cell)
-        path = list(map(lambda cell : (cell.x, cell.y), cell_path))
+        path = list()
+        for cell in cell_path:
+            path.append(Position(cell.x, cell.y))
         if len(path) == 1:
             path.pop()
             path.append(to_point)
         else:
             path.pop(0)
             path.pop()
-            path.insert(0,from_point)
+            path.insert(0, from_point)
             path.append(to_point)
         return path

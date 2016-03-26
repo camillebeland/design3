@@ -116,7 +116,10 @@ var Robot = angular.module('Robot', [])
         }, POSITION_REFRESH_TIME_IN_MS);
 
         robot_socket.on('robotUpdated', function(robotData) {
-            robotModel.position = {'x':robotData.robotPosition.x, 'y':robotData.robotPosition.y};
+            robotModel.position = {
+              'x':robotData.robotPosition.x,
+              'y':robotData.robotPosition.y
+            }
             robotModel.angle = robotData.robotAngle;
             robotModel.batteryLevel = robotData.batteryLevel;
             robotModel.capacitorChargeLevel = robotData.capacitorCharge;
