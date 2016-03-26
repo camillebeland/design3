@@ -1,7 +1,5 @@
 from robot.arduino_validator import ArduinoValidator
-from robot.errors.invalid_percentage_error import InvalidPercentageError
 
-from time import sleep
 
 def encode(string):
     return string.encode(encoding='utf8')
@@ -26,3 +24,6 @@ class Battery:
         if percentage_is_valid :
             return percentage
         return -1
+
+    def set_mock_validator(self, mock_validator):
+        self.arduino_validator = mock_validator
