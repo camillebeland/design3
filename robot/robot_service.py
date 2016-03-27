@@ -1,5 +1,6 @@
 import requests
 
+
 class RobotService:
     def __init__(self, base_station_address, island_server_address):
         self.base_station_address = base_station_address

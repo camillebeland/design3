@@ -46,6 +46,9 @@ class Movement:
         else:
             return self.__sense.relative_position(path[1])
 
+    def stop_any_movement(self):
+        self.__should_move = False
+
 
 def distance_between(position1, position2):
     x1 = position1.x

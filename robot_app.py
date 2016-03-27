@@ -98,10 +98,10 @@ if __name__ == '__main__':
     mesh_builder = MeshBuilder(table_corners, polygons)
     mesh = mesh_builder.get_mesh()
     pathfinder = PathFinder(mesh)
-    movement = Movement(pathfinder, world_map, wheels, loop_time, min_distance_to_target)
+    movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(base_station_address, island_server_address)
-    robot = Robot(corrected_wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper)
-
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder,
+                  manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper)
     action_machine = ActionMachine()
 
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)

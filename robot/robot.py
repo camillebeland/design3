@@ -53,3 +53,7 @@ class Robot:
 
     def rotate(self, angle):
         self.__wheels.rotate(angle)
+
+    def stop(self):
+        self.__movement.stop_any_movement()
+        self.__wheels.stop()
