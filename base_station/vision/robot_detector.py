@@ -3,30 +3,6 @@ import numpy as np
 import base_station.vision.vision_utils as utils
 
 class RobotDetector:
-    def find_circle_color(self, image, parameters):
-        median_blur_kernel_size = parameters['median_blur_kernel_size']
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
-        hough_circle_min_distance = parameters['hough_circle_min_distance']
-        hough_circle_param1 = parameters['hough_circle_param1']
-        hough_circle_param2 = parameters['hough_circle_param2']
-        hough_circle_min_radius = parameters['hough_circle_min_radius']
-        hough_circle_max_radius = parameters['hough_circle_max_radius']
-
-        circles = (image
-                   .filter_median_blur(median_blur_kernel_size)
-                   .filter_by_color(hsv_range['purple'])
-                   .filter_gaussian_blur((gaussian_blur_kernel_size, gaussian_blur_kernel_size), gaussian_blur_sigma_x)
-                   .find_hough_circles(hough_circle_min_distance,
-                                       hough_circle_param1,
-                                       hough_circle_param2,
-                                       hough_circle_min_radius,
-                                       hough_circle_max_radius))
-        if(circles is not None):
-            return list(map(lambda circle: {'x' : float(circle[0]), 'y' : image.get_height() - float(circle[1]), 'radius' : float(circle[2])}, circles[0,:]))
-        else:
-            return []
-
     def find_polygon_color(self, image, parameters, opencv=cv2):
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
