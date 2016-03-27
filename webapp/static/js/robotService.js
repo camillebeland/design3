@@ -6,8 +6,7 @@ var Robot = angular.module('Robot', [])
         var RobotModel = function() {
             this.angle = 0;
             this.position = [];
-            this.batteryLevel = 0;
-            this.batteryVoltage = 0;
+            this.capacitorLevel = 0;
         };
 
         robotModel = new RobotModel();
@@ -121,8 +120,7 @@ var Robot = angular.module('Robot', [])
               'y':robotData.robotPosition.y
             }
             robotModel.angle = robotData.robotAngle;
-            robotModel.batteryLevel = robotData.batteryLevel;
-            robotModel.capacitorChargeLevel = robotData.capacitorCharge;
+            robotModel.capacitorLevel = robotData.capacitorCharge;
             $rootScope.$broadcast('robotModelUpdated');
         });
 

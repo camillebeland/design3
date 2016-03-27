@@ -46,7 +46,6 @@ def robot_move_to():
 def robot_fetch_info():
     socket_io.emit('robotUpdated', {'robotPosition': robot.get_position().to_dict(),
                                      'robotAngle': robot.get_angle(),
-                                     'batteryLevel': robot.get_battery_level(),
                                      'capacitorCharge': robot.get_capacitor_charge()})
 
 
