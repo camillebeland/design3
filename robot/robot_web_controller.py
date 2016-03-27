@@ -57,10 +57,11 @@ def robot_fetch_info():
 
 @socket_io.on('fetchPath')
 def robot_fetch_path():
-    list = []
+    path = []
+    path.append(robot.get_position().to_dict())
     for position in robot.get_path():
-        list.append(position.to_dict())
-    socket_io.emit('path', {'robotPath': list})
+        path.append(position.to_dict())
+    socket_io.emit('path', {'robotPath': path})
 
 
 @app.route('/mesh')
