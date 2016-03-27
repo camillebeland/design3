@@ -9,3 +9,6 @@ class WheelsCorrectionLayer:
 
     def rotate(self, angle):
         self.__wheels.rotate(angle)
+
+    def stop(self):
+        self.__wheels.stop()
