@@ -61,4 +61,4 @@ class SimulationMap:
         return x > 0 and x < self._width and y > 0 and y < self._height
 
     def relative_position(self, position):
-        return rotate_vector(self._robot_angle, np.array(position.x, position.y) - np.array(self._robot_position.x, self._robot_position.y))
+        return rotate_vector(self._robot_angle, np.array([position.x, position.y]) - np.array([self._robot_position.x, self._robot_position.y]))
