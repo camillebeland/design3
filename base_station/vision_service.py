@@ -20,7 +20,7 @@ class VisionService:
         triangles_blue, pentagons_blue, squares_blue, circles_blue = self.__find_polygon_color__(image, 'blue')
         triangles_yellow, pentagons_yellow, squares_yellow, circles_yellow = self.__find_polygon_color__(image, 'yellow')
 
-        triangles = triangles_green + triangles_blue + triangles_red_upper, triangles_red_lower + triangles_yellow
+        triangles = triangles_green + triangles_blue + triangles_red_upper + triangles_red_lower + triangles_yellow
         circles = circles_green + circles_blue + circles_red_upper + circles_red_lower + circles_yellow
         pentagons = pentagons_green + pentagons_blue + pentagons_red_upper + pentagons_red_lower + pentagons_yellow
         squares = squares_green + squares_blue + squares_red_upper + squares_red_lower + squares_yellow
@@ -47,10 +47,10 @@ class VisionService:
             poly['shape'] = 'square'
             poly['color'] = color
         for poly in triangles:
-            poly['shape'] = 'triangles'
+            poly['shape'] = 'triangle'
             poly['color'] = color
         for poly in pentagons:
-            poly['shape'] = 'pentagons'
+            poly['shape'] = 'pentagon'
             poly['color'] = color
         return triangles, pentagons, squares, circles
 
