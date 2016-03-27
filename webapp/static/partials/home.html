@@ -1,87 +1,95 @@
 <div class="container">
 
-  <div class="col-md-10">
-    <h2 for="mapCanvas">Map of the sea arrh'</h2>
-    <canvas id="mapCanvas" ng-controller="canvasController"></canvas>
-  </div>
-
-  <h2>System state</h2>
-  <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
-    <label>
-      Robot's angle: <span ng-bind="robot.angle"></span>&deg;
-    </label>
-    <label>
-      Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>%
-    </label>
-  </div>
-
-  <div class="col-md-12 container">
-    <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#robotControls">Robot controls</a></li>
-      <li><a data-toggle="tab" href="#display">Display</a></li>
-      <li><a data-toggle="tab" href="#other">Other</a></li>
-    </ul>
-
-    <div class="tab-content">
-      <div id="robotControls" class="tab-pane fade in active" ng-controller="robotControlsController">
-        <div class="container optionPanelControls">
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-chevron-up" ng-click="robotUp()"></span>
-          </button>
-
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-chevron-left" ng-click="robotLeft()"></span>
-          </button>
-
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-chevron-right" ng-click="robotRight()"></span>
-          </button>
-
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-chevron-down" ng-click="robotDown()"></span>
-          </button>
-        </div>
-        <div class="container">
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-menu-left" ng-click="robotTurnLeft()"></span>
-          </button>
-
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-menu-right" ng-click="robotTurnRight()"></span>
-          </button>
-        </div>
-      </div>
-
-      <div id="display" class="tab-pane fade">
-        <div class="container optionPanelControls" ng-controller="displayControlsController">
-          <label>Mesh toggle
-            <label>
-              <input type="radio" name="meshToggle" checked="true" ng-click="meshToggleOn()"></input>On</label>
-            <label>
-              <input type="radio" name="meshToggle" ng-click="meshToggleOff()"></input>Off</label>
-          </label>
-          <label>Islands and treasures toggle
-            <label>
-              <input type="radio" name="islandToggle" checked="true" ng-click="islandToggleOn()"></input>On</label>
-            <label>
-              <input type="radio" name="islandToggle" ng-click="islandToggleOff()"></input>Off</label>
-          </label>
-          <label>Show vision's tracking of robot
-            <label>
-              <input type="radio" name="visionRobotToggle" ng-click="visionRobotToggleOn()"></input>On</label>
-            <label>
-              <input type="radio" name="visionRobotToggle" checked="true" ng-click="visionRobotToggleOff()"></input>Off</label>
-          </label>
-        </div>
-      </div>
-
-      <div id="other" class="tab-pane fade">
-        <p>Awesome features coming soon</p>
-      </div>
-
+    <div class="col-md-10">
+        <h2 for="mapCanvas">Map of the sea arrh'</h2>
+        <canvas id="mapCanvas" ng-controller="canvasController"></canvas>
     </div>
-  </div>
 
-  <img id="web-cam-stream" src="">
+    <h2>System state</h2>
+    <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
+        <label>
+            Robot's angle: <span ng-bind="robot.angle"></span>&deg;
+        </label>
+        <label>
+            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>%
+        </label>
+    </div>
+
+    <div class="col-md-12 container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#robotControls">Robot controls</a></li>
+            <li><a data-toggle="tab" href="#display">Display</a></li>
+            <li><a data-toggle="tab" href="#other">Other</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="robotControls" class="tab-pane fade in active" ng-controller="robotControlsController">
+                <div class="container optionPanelControls">
+                    <div class="container btn-group btn-group-lg">
+                        <button class="btn btn-default" ng-click="robotUp()">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        </button>
+
+                        <button class="btn btn-default" ng-click="robotLeft()">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </button>
+
+                        <button class="btn btn-default" ng-click="robotRight()">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+
+                        <button class="btn btn-default" ng-click="robotDown()">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                    </div>
+
+                    <div class="container btn-group btn-group-lg">
+                        <button class="btn btn-default" ng-click="robotTurnLeft()">
+                            <span class="glyphicon glyphicon-menu-left"></span>
+                        </button>
+
+                        <button class="btn btn-default" ng-click="robotTurnRight()">
+                            <span class="glyphicon glyphicon-menu-right"></span>
+                        </button>
+                    </div>
+                    <div class="container btn-group btn-group-lg">
+                        <button class="btn btn-danger" ng-click="robotStop()">
+                            Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="display" class="tab-pane fade">
+                <div class="container optionPanelControls" ng-controller="displayControlsController">
+                    <label>Mesh toggle
+                        <label>
+                            <input type="radio" name="meshToggle" checked="true" ng-click="meshToggleOn()"></input>On</label>
+                        <label>
+                            <input type="radio" name="meshToggle" ng-click="meshToggleOff()"></input>Off</label>
+                    </label>
+                    <label>Islands and treasures toggle
+                        <label>
+                            <input type="radio" name="islandToggle" checked="true" ng-click="islandToggleOn()"></input>On</label>
+                        <label>
+                            <input type="radio" name="islandToggle" ng-click="islandToggleOff()"></input>Off</label>
+                    </label>
+                    <label>Show vision's tracking of robot
+                        <label>
+                            <input type="radio" name="visionRobotToggle" ng-click="visionRobotToggleOn()"></input>On</label>
+                        <label>
+                            <input type="radio" name="visionRobotToggle" checked="true" ng-click="visionRobotToggleOff()"></input>Off</label>
+                    </label>
+                </div>
+            </div>
+
+            <div id="other" class="tab-pane fade">
+                <p>Awesome features coming soon</p>
+            </div>
+
+        </div>
+    </div>
+
+    <img id="web-cam-stream" src="">
 
 </div>

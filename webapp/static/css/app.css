@@ -28,3 +28,6 @@ body {
     background-color: #D3D3D3;
     border: 1px solid black;
 }
+.btn-group{
+    padding-bottom: 10px;
+}
