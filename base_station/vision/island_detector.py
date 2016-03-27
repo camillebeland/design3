@@ -47,7 +47,7 @@ class IslandDetector:
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
 
-        squares, pentagons, triangles = [], [], []
+        squares, pentagons, triangles, circles = [], [], [], []
         for contour in contours:
             leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(contour)
             detected_shape_length = abs(rightest_vertex - leftest_vertex)
@@ -64,8 +64,11 @@ class IslandDetector:
                 elif len(approx) == edges['pentagon']:
                     island_pentagon = self.__find_island_coordinates__(image, contour)
                     pentagons.append(island_pentagon)
+                elif len(approx) > 5:
+                    island_circle = self.__find_island_coordinates__(image, contour)
+                    circles.append(island_circle)
 
-        return squares, pentagons, triangles
+        return squares, pentagons, triangles, circles
 
     def __find_island_coordinates__(self, image, contour):
         island = {}
@@ -89,8 +92,9 @@ class IslandDetector:
             return False
 
 hsv_range = {
-    'red': ((160,100,100), (179,255,255)),
-    'green': ((50,100,50), (80,255,255)),
+    'red_lower': ((0, 100, 100), (10, 255, 255)),
+    'red_upper': ((160,100,100), (179,255,255)),
+    'green': ((40,30,50), (80,255,255)),
     'blue': ((80,50,50), (130,255,255)),
     'yellow': ((17,70,90), (33,255,255)),
     'purple': ((110, 30, 65), (165, 190, 150))

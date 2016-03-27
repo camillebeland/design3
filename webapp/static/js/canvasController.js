@@ -67,7 +67,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         var island = new createjs.Shape();
         var circle_x = circleData.x * xScale;
         var circle_y = CANVAS_HEIGHT - circleData.y * yScale;
-        var circle_radius = circleData.radius * xScale;
+        var circle_radius = 20;
         var circle_color = circleData.color;
         island.graphics.beginFill(circle_color).drawCircle(circle_x, circle_y, circle_radius);
         allIslands.addChild(island);
