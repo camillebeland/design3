@@ -14,11 +14,11 @@ class SimulationWheels:
         self.target = [0,0]
         self.direction = [0,0]
 
-        self.thread = Thread(target = self.__update, args = (self.refresh_time, ))
+    def __start_thread(self):
+        self.thread = Thread(target=self.__update, args = (self.refresh_time, ))
         self.running = True
         self.thread.setDaemon(True)
         self.thread.start()
-
 
     def __update(self, refresh_time):
         while self.running:
@@ -36,24 +36,30 @@ class SimulationWheels:
             self.target[0] -= delta_x
             self.target[1] -= delta_y
 
-
     def __del__(self):
         self.running = False
 
     def move(self, x_pos, y_pos):
+        self.running = False
+
         self.target[0] = x_pos
         self.target[1] = y_pos
 
         length = sqrt(pow(self.target[0], 2) + pow(self.target[1], 2))
 
-        if(length < PRECISION):
+        if length < PRECISION:
             self.direction[0] = 0
             self.direction[1] = 0
         else:
             self.direction[0] = self.target[0] / length
             self.direction[1] = self.target[1] / length
 
+        self.running = True
+        self.__start_thread()
 
     def rotate(self, angle):
         self.worldmap.rotate_robot(angle)
+
+    def stop(self):
+        self.running = False;
 
