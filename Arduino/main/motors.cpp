@@ -315,6 +315,8 @@ void move_straight(Direction direction, long tick, double speed){
 // x = mm
 // y = mm
 // MSB = negative
+bool xDirection = false;
+bool yDirection = false;
 void move(long x, long y, double speed){
 	
 	//reset_all_motors();
@@ -333,28 +335,49 @@ void move(long x, long y, double speed){
 		angle = PI/2;
 	}
 	else{
-		angle = atan(abs(y)/abs(x));
+		angle = atan2(abs(y), abs(x));
 	}
-
-	long ticks_X = (long)(float(x)*TICKS_PER_MM);
-	long ticks_Y = (long)(float(y)*TICKS_PER_MM);
+	//491 476
+	long ticks_X = (x*long(TICKS_PER_MM));
+	long ticks_Y = (y*long(TICKS_PER_MM));
 	double speed_X = cos(angle)*speed;
 	double speed_Y = sin(angle)*speed;
 
-	
 	if (ticks_Y >=0){
+		if (yDirection == false){
+			brake_motor(OUT_MOTOR_B);
+			brake_motor(OUT_MOTOR_D);
+		}
+		yDirection = true;
 		move_straight(FORWARD, ticks_Y, speed_Y);
+		
 	}
 	else if (ticks_Y < 0){
+		if (yDirection == true){
+			brake_motor(OUT_MOTOR_B);
+			brake_motor(OUT_MOTOR_D);
+		}
+		yDirection = false;
 		ticks_Y = abs(ticks_Y);
 		move_straight(BACKWARD, ticks_Y, speed_Y);
+		
 	}
 	
 	if (ticks_X >= 0){
+		if (xDirection == false){
+			brake_motor(OUT_MOTOR_A);
+			brake_motor(OUT_MOTOR_C);
+		}
+		xDirection = true;
 		ticks_X = (ticks_X);
 		move_straight(LEFT, ticks_X, speed_X);
 	}
 	else if (ticks_X <0){
+		if (xDirection == true){
+			brake_motor(OUT_MOTOR_A);
+			brake_motor(OUT_MOTOR_C);
+		}
+		xDirection = false;
 		ticks_X = abs(ticks_X);
 		move_straight(RIGHT, ticks_X, speed_X);
 	}
@@ -362,7 +385,7 @@ void move(long x, long y, double speed){
 }
 
 void rotate(Direction direction, int angle){
-	reset_all_motors();
+	//reset_all_motors();
 	int wanted_polarity;
 
 	if (direction == LEFT){

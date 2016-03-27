@@ -198,6 +198,7 @@ bool parse_and_call() {
 	  }
 	  break;
 	case MANCHESTER:
+		//Serial.println(get_ASCII());
 		serial_write(get_ASCII());
 		break;
 	case MAGNET_VOLTAGE:

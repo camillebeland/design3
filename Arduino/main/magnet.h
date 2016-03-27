@@ -21,6 +21,8 @@ uint8_t get_capacitor_percent();
 uint8_t get_battery_percent();
 void toggle_magnet_ON();
 void toggle_magnet_OFF();
+void toggle_recharge_ON();
+void toggle_recharge_OFF();
 
 // ----------------ISR ----------------
 

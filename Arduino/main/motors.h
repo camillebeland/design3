@@ -60,19 +60,19 @@ Arduino Pin	Register
 #define PIN_TWO_MOTOR_C 41
 #define PIN_TWO_MOTOR_D 37
 
-#define ZERO_SPEED_A 110 // PWM COMMAND for near start
-#define ZERO_SPEED_B 75
-#define ZERO_SPEED_C 95
-#define ZERO_SPEED_D 80
+#define ZERO_SPEED_A 60 // PWM COMMAND for near start
+#define ZERO_SPEED_B 60
+#define ZERO_SPEED_C 60
+#define ZERO_SPEED_D 60
 
 #define FREQ 20 //  Hz
-#define DEFAULT_SPEED 1500 // TICKS PER SEC
+#define DEFAULT_SPEED 1300 // TICKS PER SEC
 #define SLOW_SPEED 750
 #define ROTATE_SPEED 500
 #define ROTATE_DIAMETER 190 //mm
 
-#define KSI 0.01 // for delta motors
-#define KSP 0.02// for delta motors
+#define KSI 0.015 // for delta motors
+#define KSP 0.04// for delta motors
 #define KI 0.01 // for speed PID
 #define KP 0.04 //for speed PID
 
