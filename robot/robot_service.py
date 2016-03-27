@@ -11,6 +11,12 @@ class RobotService:
         #requests.post(str(self.base_station_address)+"/logger/info", json={'message': message_to_log})
         pass
 
+    def log_warning(self, message_to_log):
+        requests.post(str(self.base_station_address)+"/logger/warning", json={'message': message_to_log})
+
+    def log_error(self, message_to_log):
+        requests.post(str(self.base_station_address)+"/logger/error", json={'message': message_to_log})
+
     def ask_target_island(self, manchester_letter):
         payload = {'code': manchester_letter}
         care_about_ssl_certificate = False

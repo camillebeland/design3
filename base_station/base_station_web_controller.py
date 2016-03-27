@@ -59,9 +59,22 @@ def fetch_position():
     robot_position = vision_service.find_robot_position()
     return jsonify(robot_position)
 
+
 @app.route('/logger/info', methods=['POST'])
 def log_info():
     logger.info(request.json['message'])
+    return "OK"
+
+
+@app.route('/logger/warning', methods=['POST'])
+def log_info():
+    logger.warning(request.json['message'])
+    return "OK"
+
+
+@app.route('/logger/error', methods=['POST'])
+def log_info():
+    logger.error(request.json['message'])
     return "OK"
 
 @app.route('/vision/calibration_data', methods=['GET'])
