@@ -57,14 +57,13 @@ class VisionService:
     def find_robot_position(self):
         image = ImageWrapper(self.__camera.get_frame())
         image = image.mask_image(self.worldmap_contour['table_contour'])
-        purple_circle = self.__robot_detector.find_circle_color(image, default_camille_circle_params)
-        purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
+        purple_circle, purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
         if not purple_circle or not purple_square:
             return {}
         else:
-            angle = self.__find_angle_between__(purple_circle[0], purple_square[0])
+            angle = self.__find_angle_between__(purple_circle, purple_square)
             robot_position = {
-                'center': ((purple_square[0]['x'] + purple_circle[0]['x'])/2, (purple_square[0]['y'] + purple_circle[0]['y'])/2),
+                'center': ((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2),
                 'angle': angle
             }
             return {'center' : robot_position['center'],

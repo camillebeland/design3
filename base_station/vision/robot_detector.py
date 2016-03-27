@@ -47,7 +47,6 @@ class RobotDetector:
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
 
-        islands = []
         for contour in contours:
             leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(contour)
             detected_shape_length = abs(rightest_vertex - leftest_vertex)
@@ -55,19 +54,23 @@ class RobotDetector:
             approx = approx_polygon(contour)
 
             if self.__is_a_robot_position_marker__(detected_shape_length, detected_shape_height) and len(approx) == edges['square']:
-                treasure = self.__find_island_coordinates__(image, contour)
-                islands.append(treasure)
+                marker = self.__find_robot_markers_coordinates__(image, contour)
+                robot_square = marker
 
-        return islands
+            if self.__is_a_robot_position_marker__(detected_shape_length, detected_shape_height) and len(approx) > edges['pentagon']:
+                marker = self.__find_robot_markers_coordinates__(image, contour)
+                robot_circle = marker
 
-    def __find_island_coordinates__(self, image, contour):
-        island = {}
+        return robot_circle, robot_square
+
+    def __find_robot_markers_coordinates__(self, image, contour):
+        robot_marker = {}
         moment = cv2.moments(contour)
         center_x = int((moment["m10"] / moment["m00"]))
         centrer_y = int((moment["m01"] / moment["m00"]))
-        island['x'] = center_x
-        island['y'] = image.get_height() - centrer_y
-        return island
+        robot_marker['x'] = center_x
+        robot_marker['y'] = image.get_height() - centrer_y
+        return robot_marker
 
     def __is_a_robot_position_marker__(self, detected_shape_length, detected_shape_height):
         ISLAND_MAX_HEIGHT = 100
@@ -87,4 +90,5 @@ hsv_range = {
 
 edges = {
     'square': 4,
+    'pentagon':5
 }
