@@ -42,6 +42,12 @@ def robot_move_to():
     return "OK"
 
 
+@app.route('/robot/stop', methods=['POST'])
+def robot_stop():
+    robot.stop()
+    return "OK"
+
+
 @socket_io.on('fetchRobotInfo')
 def robot_fetch_info():
     socket_io.emit('robotUpdated', {'robotPosition': robot.get_position().to_dict(),

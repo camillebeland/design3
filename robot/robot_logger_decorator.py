@@ -33,3 +33,7 @@ class RobotLoggerDecorator:
     def rotate(self, angle):
         self.__logger_service.log_info('Robot Rotate {0}'.format(angle))
         self.__robot.rotate(angle)
+
+    def stop(self):
+        self.__logger_service.log_info("Robot asked to stop it's current path")
+        self.__robot.stop()

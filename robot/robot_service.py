@@ -1,5 +1,6 @@
 import requests
 
+
 class RobotService:
     def __init__(self, base_station_address, island_server_address):
         self.base_station_address = base_station_address
@@ -9,6 +10,12 @@ class RobotService:
         #TODO
         #requests.post(str(self.base_station_address)+"/logger/info", json={'message': message_to_log})
         pass
+
+    def log_warning(self, message_to_log):
+        requests.post(str(self.base_station_address)+"/logger/warning", json={'message': message_to_log})
+
+    def log_error(self, message_to_log):
+        requests.post(str(self.base_station_address)+"/logger/error", json={'message': message_to_log})
 
     def ask_target_island(self, manchester_letter):
         payload = {'code': manchester_letter}

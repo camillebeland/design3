@@ -26,4 +26,8 @@ website.controller('robotControlsController', ['$scope', '$http', 'RobotService'
   $scope.robotTurnRight = function(){
     RobotService.turnRight();
   }
+
+  $scope.robotStop = function(){
+    RobotService.stop();
+  }
 }])

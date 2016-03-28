@@ -110,6 +110,13 @@ var Robot = angular.module('Robot', [])
             });
         };
 
+        this.stop = function(){
+            $http({
+                method: 'POST',
+                url: 'http://' + ROBOT_HOST + '/robot/stop',
+            });
+        }
+
         setInterval(function() {
             robot_socket.emit('fetchRobotInfo');
         }, POSITION_REFRESH_TIME_IN_MS);
