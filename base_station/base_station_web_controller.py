@@ -67,13 +67,13 @@ def log_info():
 
 
 @app.route('/logger/warning', methods=['POST'])
-def log_info():
+def log_warning():
     logger.warning(request.json['message'])
     return "OK"
 
 
 @app.route('/logger/error', methods=['POST'])
-def log_info():
+def log_error():
     logger.error(request.json['message'])
     return "OK"
 
