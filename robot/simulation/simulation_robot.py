@@ -15,7 +15,7 @@ class SimulationWheels:
         self.direction = [0,0]
 
     def __start_thread(self):
-        self.thread = Thread(target=self.__update, args = (self.refresh_time, ))
+        self.thread = Thread(target=self.__update, args=(self.refresh_time, ))
         self.running = True
         self.thread.setDaemon(True)
         self.thread.start()

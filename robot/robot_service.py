@@ -7,8 +7,7 @@ class RobotService:
         self.island_server_address = island_server_address
 
     def log_info(self, message_to_log):
-        #TODO
-        #requests.post(str(self.base_station_address)+"/logger/info", json={'message': message_to_log})
+        requests.post(str(self.base_station_address)+"/logger/info", json={'message': message_to_log})
         pass
 
     def log_warning(self, message_to_log):
