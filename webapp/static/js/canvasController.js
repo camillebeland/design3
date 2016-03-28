@@ -96,6 +96,17 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         allIslands.addChild(island);
     };
 
+    var drawChargingStation = function(chargingStationData) {
+        var chargingStation = new createjs.Shape();
+        var polygon_x = chargingStationData.x * xScale;
+        var polygon_y = canvas.height - chargingStationData.y * yScale;
+        var charging_station_height = 10;
+        var charging_station_lenght = 30;
+        var polygon_color = 'blue';
+        island.graphics.beginFill(polygon_color).drawRect(polygon_x, polygon_y, charging_station_lenght, charging_station_height);
+        allIslands.addChild(chargingStation);
+    };
+
     var showIslands = function() {
         allIslands = new createjs.Container();
         var whenGetIsComplete = MapService.getMap();
@@ -116,6 +127,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             for (treasure of response.treasures) {
                 drawTreasure(treasure);
             }
+            drawChargingStation(response.charging-station);
             stage.addChild(allIslands);
         });
     };

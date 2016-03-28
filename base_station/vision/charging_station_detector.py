@@ -2,7 +2,7 @@ import cv2
 import base_station.vision.vision_utils as utils
 
 class ChargingStationDetector:
-    def find_polygon_color(self, image, color, parameters, opencv=cv2):
+    def find_polygon_color(self, image, parameters, opencv=cv2):
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
         dilate_kernel_size = parameters['dilate_kernel_size']
@@ -17,7 +17,7 @@ class ChargingStationDetector:
 
         contours = (image
                     .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
-                    .filter_by_color(hsv_range[color])
+                    .filter_by_color(hsv_range['blue'])
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())

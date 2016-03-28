@@ -1,12 +1,13 @@
 from base_station.vision.image_wrapper import ImageWrapper
 
 class VisionService:
-    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector):
+    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector, charging_station_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
         self.__treasure_detector = treasure_detector
         self.__table_calibrator = table_calibrator
         self.__robot_detector = robot_detector
+        self.__charging_station_detector = charging_station_detector
         self.worldmap_contour = {}
 
     def build_map(self):
@@ -27,12 +28,15 @@ class VisionService:
 
         treasures.extend(self.__treasure_detector.find_treasures(image, default_camille_polygon_params))
 
+        charging_station = self.__charging_station_detector.find_polygon_color(image, default_camille_polygon_params)
+
         worldmap = {
             'circles': circles,
             'triangles': triangles,
             'pentagons': pentagons,
             'squares': squares,
-            'treasures': treasures
+            'treasures': treasures,
+            'charging-station': charging_station
         }
         return worldmap
 
