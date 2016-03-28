@@ -67,6 +67,7 @@ Arduino Pin	Register
 
 #define FREQ 20 //  Hz
 #define DEFAULT_SPEED 1300 // TICKS PER SEC
+#define MIN_SPEED 300
 #define SLOW_SPEED 750
 #define ROTATE_SPEED 500
 #define ROTATE_DIAMETER 190 //mm

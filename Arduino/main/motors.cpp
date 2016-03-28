@@ -331,17 +331,20 @@ void move(long x, long y, double speed){
 		y = -y;
 	}
 
-	if (x == 0 && y != 0){
-		angle = PI/2;
-	}
-	else{
-		angle = atan2(abs(y), abs(x));
+	angle = atan2(abs(y), abs(x));
+	
 	}
 	//491 476
 	long ticks_X = (x*long(TICKS_PER_MM));
 	long ticks_Y = (y*long(TICKS_PER_MM));
 	double speed_X = cos(angle)*speed;
 	double speed_Y = sin(angle)*speed;
+	if (speed_X < MIN_SPEED){
+		speed_X = MIN_SPEED;
+	}]
+	if (speed_Y <  MIN_SPEED){
+		speed_Y = MIN_SPEED;
+	}
 
 	if (ticks_Y >=0){
 		if (yDirection == false){
