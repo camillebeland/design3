@@ -18,7 +18,7 @@ var Robot = angular.module('Robot', [])
         this.up = function() {
             var delta = {
                 delta_x: 0,
-                delta_y: 25
+                delta_y: 100
             };
 
             $http({
@@ -31,7 +31,7 @@ var Robot = angular.module('Robot', [])
         this.down = function() {
             var delta = {
                 delta_x: 0,
-                delta_y: -25
+                delta_y: -100
             }
 
             $http({
@@ -47,7 +47,7 @@ var Robot = angular.module('Robot', [])
 
         this.left = function() {
             var delta = {
-                delta_x: -25,
+                delta_x: -100,
                 delta_y: 0
             }
 
@@ -62,7 +62,7 @@ var Robot = angular.module('Robot', [])
 
         this.right = function() {
             var delta = {
-                delta_x: 25,
+                delta_x: 100,
                 delta_y: 0
             };
 
