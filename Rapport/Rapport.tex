@@ -1,46 +1,61 @@
-%!TEX encoding = IsoLatin
-
 \documentclass[12pt]{ULrapport}
-\usepackage[ansinew]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
 \usepackage{float}
 \restylefloat{table}
 \usepackage{hhline}
 \usepackage{pdfpages}
 \usepackage{hyperref}
+\usepackage{lscape}
+\usepackage{pdflscape}
+
+
 
 
 % Title Page
 \title{Design 3}
-\author{Name 1, Name 2, RÈmi Mercier, Name 4}
+\author{Name 1, Name 2, R√©mi Mercier, Name 4}
 
 
 
-\TitreProjet{Pirates des CaraÔbes}
-\TitreRapport{Rapport de dÈveloppement}
-\Destinataire{Dominique Grenier}
+\TitreProjet{Pirates des Cara√Øbes}
+\TitreRapport{Rapport de d√©veloppement}
+\Destinataire{Dominique Grenier, Philippe Gigu√®re, Denis Laurendeau}
 \NumeroEquipe{4}
-\NomEquipe{…quipe 1}
+%\NomEquipe{√âquipe 1}
 \TableauMembres{%
-	111\,076\,721  & Mercier, RÈmi     & \\\hline
+	111\,076\,721  & Mercier, R√©mi     & \\\hline
 	111\,076\,680  & Bilodeau, Dominic     & \\\hline
-	111\,073\,278  & BÈland, Camille     & \\\hline
+	111\,073\,278  & B√©land, Camille     & \\\hline
 	111\,040\,716  & Arel, David     & \\\hline
-	111\,096\,321  & B. Bolduc, Adam     & \\\hline 
+	111\,096\,321  & B. Bolduc, Adam     & \\\hline
+	111\,075\,609  & L√©vesque, Mathieu    & \\\hline
+	908\,188\,831  & Papillon, Maxime  & \\\hline
+	907\,152\,804  & Jean-Christophe Martin-Morin & \\\hline
 }
-\DateRemise{00 avril 2016}
+\DateRemise{28 f√©vrier 2016}
 % Contenu de l'historique des versions
 \HistoriqueVersions{%										% version & date & description \\\hline
-	   0.0  & 31 janvier 2016 & - Version initiale \\\hline
+	   1.0  & 31 janvier 2016 & - Livrable 1 \\\hline
+	   2.0  & 28 f√©vrier 2016 & - Livrable 2 \\\hline
 }
 
 \begin{document}
 \maketitle
-
+\listoffigures
 
 \input{tex/intro.tex}
+%\input{tex/diagramme_contexte.tex}
 \input{tex/DPF.tex}
-
-
+\input{tex/diagramme_fonc.tex}
+\input{tex/diagramme_physique.tex}
+\input{tex/plan_de_tests.tex}
+\input{tex/plan_integration.tex}
+%\input{tex/cas_utilisation.tex}
+\input{tex/diagrams.tex}
+\input{tex/tests_unitaires.tex}
+%\input{tex/experience_preliminaire.tex}
+\input{tex/registre_risques.tex}
+\input{tex/construction_systeme.tex}
 
 \end{document}

@@ -1,8 +1,15 @@
 import configparser
+import os
 
-def getconfig():
+
+def get_config():
     print("Reading configuration file")
     config = configparser.ConfigParser()
-    config.read('project.cfg')
+
+    base_directory = os.path.dirname(os.path.dirname(__file__))
+    config_path = os.path.join(base_directory, 'project.cfg')
+    config_file = open(config_path)
+    config.read_file(config_file)
+
     config.get('robot', 'port')
     return config

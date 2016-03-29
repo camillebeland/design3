@@ -78,7 +78,7 @@ target/
 *.mtc
 *.mtc1
 *.out
-*.pdf
+Rapport.pdf
 *.synctex.gz
 
 # Virtualenv
@@ -99,8 +99,10 @@ Rapport/Rapport.out
 
 #emacs things
 **/auto/
+**/.tern-port
 #idea things
 .idea/*
 
 **/node_modules/
 **/bower_components/
+virtualEnvironnement/
