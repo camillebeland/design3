@@ -99,3 +99,9 @@ def send_action_to_robot(action):
 @app.route('/actions')
 def get_actions():
     return jsonify(action_machine.get_events())
+
+
+@app.route('/robot/worldmap/recalcute')
+def recalculate_world_map():
+    robot.recalculate_world_map()
+    return "OK"

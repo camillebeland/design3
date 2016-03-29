@@ -24,4 +24,20 @@ website.controller('displayControlsController', ['$scope', '$rootScope', functio
     $rootScope.$broadcast('visionRobotToggleOff');
   };
 
+  /*$scope.recalculateMesh = function(){
+    $http({
+        method: 'GET',
+        url: 'http://' + BASE_STATION_HOST + '/vision/',
+    });
+  };*/
+
+  $scope.recalculateMap = function(){
+    $http({
+        method: 'GET',
+        url: 'http://' + ROBOT_HOST + '/robot/worldmap/recalculate',
+        data: angle
+    });
+    $
+  };
+
 }]);

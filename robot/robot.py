@@ -57,3 +57,6 @@ class Robot:
     def stop(self):
         self.__movement.stop_any_movement()
         self.__wheels.stop()
+
+    def recalculate_world_map(self):
+        self.__world_map.recalculate()

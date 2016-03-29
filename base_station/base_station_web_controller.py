@@ -43,15 +43,16 @@ def run_base_app(host, port):
 def video_feed():
     return Response(generate_frame(camera, refresh_time), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 def cell_to_json(cell):
-    return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+    return {'x': cell.x, 'y': cell.y, 'width': cell.width, 'height': cell.height}
 
 
 @app.route('/worldmap')
 def fetch_worldmap():
-    return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
+    return jsonify({'circles': worldmap['circles'], 'triangles': worldmap['triangles'],
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons'],
-                    'treasures':worldmap['treasures']})
+                    'treasures': worldmap['treasures']})
 
 
 @app.route('/vision/robot')
@@ -77,7 +78,8 @@ def log_error():
     logger.error(request.json['message'])
     return "OK"
 
+
 @app.route('/vision/calibration_data', methods=['GET'])
 def get_calibration_data():
     data = vision_service.get_calibration_data()
-    return jsonify({'pixels_per_meter' : data['pixels_per_meter'], 'table_corners': data['table_contour'].tolist()})
+    return jsonify({'pixels_per_meter': data['pixels_per_meter'], 'table_corners': data['table_contour'].tolist()})
