@@ -127,7 +127,9 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             for (treasure of response.treasures) {
                 drawTreasure(treasure);
             }
-            drawChargingStation(response.charging-station);
+            for(station in response.chargingStation){
+                drawChargingStation(station);
+            }
             stage.addChild(allIslands);
         });
     };

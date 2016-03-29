@@ -36,7 +36,7 @@ def generate_frame(camera, refresh_time):
 
 def run_base_app(host, port):
     logger.info("Starting the base station app at "+str(port))
-    app.run(host=host, port=port, threaded=True, debug=True)
+    app.run(host=host, port=port, threaded=True)
 
 
 @app.route('/video_feed')
@@ -51,7 +51,7 @@ def cell_to_json(cell):
 def fetch_worldmap():
     return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons'],
-                    'treasures':worldmap['treasures'], 'charging-station': worldmap['charging-station']})
+                    'treasures':worldmap['treasures'], 'chargingStation': worldmap['charging-station']})
 
 
 @app.route('/vision/robot')

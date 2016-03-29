@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 import base_station.vision.vision_utils as utils
 
 class RobotDetector:
@@ -23,6 +22,8 @@ class RobotDetector:
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
 
+        robot_square = None
+        robot_circle = None
         for contour in contours:
             leftest_vertex, lowest_vertex, rightest_vertex, upper_vertex = utils.find_shape_height_and_lenght(contour)
             detected_shape_length = abs(rightest_vertex - leftest_vertex)

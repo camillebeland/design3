@@ -11,7 +11,8 @@ class VisionService:
         self.worldmap_contour = {}
 
     def build_map(self):
-        image = ImageWrapper(self.__camera.get_frame())
+        for bad_frames in range(1, 30):
+            image = ImageWrapper(self.__camera.get_frame())
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
 
@@ -62,7 +63,7 @@ class VisionService:
         image = ImageWrapper(self.__camera.get_frame())
         image = image.mask_image(self.worldmap_contour['table_contour'])
         purple_circle, purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
-        if not purple_circle or not purple_square:
+        if purple_circle is None or purple_square is None:
             return {}
         else:
             angle = self.__find_angle_between__(purple_circle, purple_square)
