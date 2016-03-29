@@ -106,7 +106,7 @@ if __name__ == '__main__':
     action_machine = ActionMachine()
 
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
-    read_manchester_code = DiscoverManchesterCodeAction()
+    read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('read_manchester_code', read_manchester_code)
