@@ -26,7 +26,7 @@ website.controller('homeController', ['$scope', function($scope) {
   window.GRIPPER_VOLTAGE_REFRESH_RATE = 10000;
   window.ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS = 100;
   window.PATH_REFRESH_TIME_IN_MS = POSITION_REFRESH_TIME_IN_MS;
-  window.CANVAS_REFRESH_TIME_IN_MS = 1000;
+  window.CANVAS_REFRESH_TIME_IN_MS = 100;
   window.BACKEND_IMAGE_HEIGHT = 1200;
   window.BACKEND_IMAGE_WIDTH = 1600;
   window.CANVAS_HEIGHT = 600;
