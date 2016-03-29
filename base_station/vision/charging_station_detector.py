@@ -2,7 +2,7 @@ import cv2
 
 
 class ChargingStationDetector:
-    def find_polygon_color(self, image, parameters, opencv=cv2):
+    def find_polygon_color(self, image, parameters, pixel_per_meter, opencv=cv2):
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
         dilate_kernel_size = parameters['dilate_kernel_size']
@@ -17,7 +17,7 @@ class ChargingStationDetector:
 
         contours = (image
                     .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
-                    .filter_by_color(hsv_range['purple'])
+                    .filter_by_color(hsv_range['blue'])
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
@@ -28,7 +28,7 @@ class ChargingStationDetector:
             x, y, width, height = cv2.boundingRect(approx)
 
             if self.__is_a_rectangle__(width, height):
-                charging_station = {'x': x + (width/2), 'y': image.get_height() - y}
+                charging_station = {'x': x + pixel_per_meter*0.11, 'y': image.get_height() - y - pixel_per_meter * 0.25}
 
         return charging_station
 
@@ -40,7 +40,7 @@ class ChargingStationDetector:
             return True
 
 hsv_range = {
-    'purple': ((110, 30, 65), (165, 190, 190))
+    'blue': ((80,50,50), (130,255,255))
 }
 
 edges = {

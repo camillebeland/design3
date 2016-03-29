@@ -1,5 +1,5 @@
 from base_station.vision.image_wrapper import ImageWrapper
-
+import cv2
 class VisionService:
     def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector, charging_station_detector):
         self.__camera = camera
@@ -11,8 +11,10 @@ class VisionService:
         self.worldmap_contour = {}
 
     def build_map(self):
-        for bad_frames in range(1, 30):
-            image = ImageWrapper(self.__camera.get_frame())
+        for bad_frames in range(1, 11):
+            frame = self.__camera.get_frame()
+            image = ImageWrapper(frame)
+            cv2.imwrite('sweet.jpg', frame)
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
 
@@ -27,9 +29,9 @@ class VisionService:
         pentagons = pentagons_green + pentagons_blue + pentagons_red_upper + pentagons_red_lower + pentagons_yellow
         squares = squares_green + squares_blue + squares_red_upper + squares_red_lower + squares_yellow
 
-        treasures.extend(self.__treasure_detector.find_treasures(image, default_camille_polygon_params))
+        treasures.extend(self.__treasure_detector.find_treasures(image, find_treasures_param))
 
-        charging_station = self.__charging_station_detector.find_polygon_color(image, default_camille_polygon_params)
+        charging_station = self.__charging_station_detector.find_polygon_color(image, default_camille_polygon_params, self.worldmap_contour["pixels_per_meter"])
 
         worldmap = {
             'circles': circles,
@@ -131,5 +133,19 @@ find_robot_position_param = {
     'dilate_iterations' : 2,
     'erode_kernel_size' : 0,
     'erode_iterations' : 2,
+    'polygonal_approximation_error' : 4
+}
+
+find_treasures_param = {
+    'median_blur_kernel_size' : 5,
+    'gaussian_blur_kernel_size' : 11,
+    'gaussian_blur_sigma_x' : 0,
+    'canny_threshold1' : 0,
+    'canny_threshold2' : 50,
+    'canny_aperture_size' : 5,
+    'dilate_kernel_size' : 0,
+    'dilate_iterations' : 3,
+    'erode_kernel_size' : 0,
+    'erode_iterations' : 3,
     'polygonal_approximation_error' : 4
 }

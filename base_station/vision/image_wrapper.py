@@ -62,6 +62,7 @@ class ImageWrapper:
         image = self.__in_bgr()
         self.__open_cv.imshow('Image',image.__image)
         self.__open_cv.waitKey(0)
+        return ImageWrapper(image)
 
     def draw_circles(self, circles):
         img = np.copy(self.__image)

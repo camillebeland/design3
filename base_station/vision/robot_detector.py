@@ -41,10 +41,10 @@ class RobotDetector:
         return robot_circle, robot_square
 
     def __is_a_robot_position_marker__(self, detected_shape_length, detected_shape_height):
-        ISLAND_MAX_HEIGHT = 100
-        ISLAND_MIN_HEIGHT = 10
-        ISLAND_MAX_LENGHT = 100
-        ISLAND_MIN_LENGHT = 10
+        ISLAND_MAX_HEIGHT = 75
+        ISLAND_MIN_HEIGHT = 25
+        ISLAND_MAX_LENGHT = 75
+        ISLAND_MIN_LENGHT = 25
 
         if ISLAND_MIN_HEIGHT < detected_shape_height < ISLAND_MAX_HEIGHT and \
            ISLAND_MIN_LENGHT < detected_shape_length < ISLAND_MAX_LENGHT:
