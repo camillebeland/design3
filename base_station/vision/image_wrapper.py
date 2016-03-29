@@ -62,6 +62,7 @@ class ImageWrapper:
         image = self.__in_bgr()
         self.__open_cv.imshow('Image',image.__image)
         self.__open_cv.waitKey(0)
+        return ImageWrapper(image)
 
     def draw_circles(self, circles):
         img = np.copy(self.__image)
@@ -81,7 +82,7 @@ class ImageWrapper:
         img = np.copy(self.__image)
         blank_image = np.zeros((self.get_height(),self.get_width()), np.uint8)
         mask = cv2.fillPoly(blank_image, pts =[contour], color=(255,255,255))
-        mask = cv2.dilate(mask , None, iterations=int(20*((self.get_height()/1200)**2)))
+        mask = cv2.dilate(mask , None, iterations=int(40*((self.get_height()/1200)**2)))
         img = cv2.bitwise_and(img, img, mask=mask)
         return ImageWrapper(img)
 

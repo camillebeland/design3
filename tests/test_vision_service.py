@@ -4,6 +4,7 @@ from base_station.vision.island_detector import IslandDetector
 from base_station.vision.table_calibrator import TableCalibrator
 from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision.robot_detector import RobotDetector
+from base_station.vision.charging_station_detector import ChargingStationDetector
 
 
 class TestVisionService:
@@ -14,23 +15,25 @@ class TestVisionService:
         self.treasure_detector = TreasureDetector()
         self.table_calibrator = TableCalibrator()
         self.robot_detector = RobotDetector()
+        self.charging_station_detector = ChargingStationDetector()
         self.vision_service = VisionService(self.camera, self.shape_detector, self.treasure_detector,
-                                            self.table_calibrator, self.robot_detector)
+                                            self.table_calibrator, self.robot_detector, self.charging_station_detector)
         self.vision_service.init_worldmap_contour()
 
     def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
         #Given
-        ROBOT_POSITION_CENTER = (804.75, 443.75)
         self.camera_mock = MockCameraService(image_path="test_with_robot.jpg")
         self.vision_service = VisionService(self.camera_mock, self.shape_detector, self.treasure_detector,
-                                            self.table_calibrator, self.robot_detector)
+                                            self.table_calibrator, self.robot_detector, self.charging_station_detector)
         self.vision_service.init_worldmap_contour()
 
         # When
         robot_position = self.vision_service.find_robot_position()
+        print(robot_position)
 
         # Then
-        assert robot_position['center'] == ROBOT_POSITION_CENTER
+        assert 1210 <= robot_position["center"][0] <= 1220
+        assert 650 <= robot_position["center"][1] <= 670
 
     def test_vision_service_with_no_robot_when_find_robot_position_should_return_nothing(self):
         # When
@@ -42,16 +45,12 @@ class TestVisionService:
     def test_vision_service_with_treasure_when_find_treasure_should_return_treasure_position(self):
         # Given
         NB_TREASURE = 1
-        TREASURE_POSITION_X = 1189
-        TREASURE_POSITION_Y = 237
 
         # When
         map = self.vision_service.build_map()
 
         # Then
         assert len(map['treasures']) == NB_TREASURE
-        assert map['treasures'][0]['x'] == TREASURE_POSITION_X
-        assert map['treasures'][0]['y'] == TREASURE_POSITION_Y
 
     def test_vision_service_when_table_calibration_should_return_table_corner_and_ratio(self):
         #Given
