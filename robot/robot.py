@@ -64,3 +64,9 @@ class Robot:
 
     def deactivate_magnet(self):
         self.__magnet.deactivate()
+   
+    def lift_prehenseur_up(self):
+        self.__magnet.lift_up()
+
+    def lift_prehenseur_down(self):
+        self.__magnet.lift_down()

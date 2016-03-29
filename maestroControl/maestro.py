@@ -79,7 +79,7 @@ class Controller:
         msb = (target >> 7) & 0x7f #shift 7 and take next 7 bits for msb
         # Send Pololu intro, device number, command, channel, and target lsb/msb
         cmd = self.PololuCmd + chr(0x04) + chr(chan) + chr(lsb) + chr(msb)
-        self.usb.write(cmd)
+        self.usb.write(cmd.encode(encoding='UTF-8'))
         # Record Target value
         self.Targets[chan] = target
         
@@ -93,9 +93,9 @@ class Controller:
         msb = (speed >> 7) & 0x7f #shift 7 and take next 7 bits for msb
         # Send Pololu intro, device number, command, channel, speed lsb, speed msb
         cmd = self.PololuCmd + chr(0x07) + chr(chan) + chr(lsb) + chr(msb)
-        self.usb.write(cmd)
+        self.usb.write(cmd.encode(encoding='UTF-8'))
 
-    # Set acceleration of channel
+    # acceleration of channel
     # This provide soft starts and finishes when servo moves to target position.
     # Valid values are from 0 to 255. 0=unrestricted, 1 is slowest start.
     # A value of 1 will take the servo about 3s to move between 1ms to 2ms range.
@@ -104,7 +104,7 @@ class Controller:
         msb = (accel >> 7) & 0x7f #shift 7 and take next 7 bits for msb
         # Send Pololu intro, device number, command, channel, accel lsb, accel msb
         cmd = self.PololuCmd + chr(0x09) + chr(chan) + chr(lsb) + chr(msb)
-        self.usb.write(cmd)
+        self.usb.write(cmd.encode(encoding='UTF-8'))
     
     # Get the current position of the device on the specified channel
     # The result is returned in a measure of quarter-microseconds, which mirrors
@@ -115,7 +115,7 @@ class Controller:
     # it is not stalled or slowed.
     def getPosition(self, chan):
         cmd = self.PololuCmd + chr(0x10) + chr(chan)
-        self.usb.write(cmd)
+        self.usb.write(cmd.encode(encoding='UTF-8'))
         lsb = ord(self.usb.read())
         msb = ord(self.usb.read())
         return (msb << 8) + lsb
@@ -136,7 +136,7 @@ class Controller:
     # Acceleration have been set on one or more of the channels. Returns True or False.
     def getMovingState(self):
         cmd = self.PololuCmd + chr(0x13)
-        self.usb.write(cmd)
+        self.usb.write(cmd.encode(encoding='UTF-8'))
         if self.usb.read() == chr(0):
             return False
         else:
@@ -149,9 +149,9 @@ class Controller:
         cmd = self.PololuCmd + chr(0x27) + chr(subNumber)
         # can pass a param with comman 0x28
         # cmd = self.PololuCmd + chr(0x28) + chr(subNumber) + chr(lsb) + chr(msb)
-        self.usb.write(cmd)
+        self.usb.write(cmd.encode(encoding='UTF-8'))
 
     # Stop the current Maestro Script
     def stopScript(self):
         cmd = self.PololuCmd + chr(0x24)
-        self.usb.write(cmd)
+        self.usb.write(cmd.encode(encoding='UTF-8'))
