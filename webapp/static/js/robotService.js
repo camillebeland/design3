@@ -135,8 +135,14 @@ var Robot = angular.module('Robot', [])
         });
 
         robot_socket.on('gripperUpdated', function(gripperData) {
-            robotModel.capacitorLevel = gripperData.capacitorCharge;
+            robotModel.capacitorLevel = convertIntoVoltage(gripperData.capacitorCharge);
             $rootScope.$broadcast('robotModelUpdated');
         });
+
+        var convertIntoVoltage = function(percentageCharge){
+          var totalCapacitorVoltage = 2.7;
+          convertedVoltage = percentageCharge*totalCapacitorVoltage/100;
+          return convertedVoltage;
+        }
 
     }]);
