@@ -1,12 +1,13 @@
 class Robot:
 
-    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper):
+    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper, magnet):
         self.__wheels = wheels
         self.__world_map = world_map
         self.__movement = movement
         self.__manchester_antenna = manchester_antenna
         self.__battery = battery
         self.__mechanical_gripper = gripper
+        self.__magnet = magnet
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
@@ -57,3 +58,9 @@ class Robot:
     def stop(self):
         self.__movement.stop_any_movement()
         self.__wheels.stop()
+
+    def activate_magnet(self):
+        self.__magnet.activate()
+
+    def deactivate_magnet(self):
+        self.__magnet.deactivate()
