@@ -27,6 +27,7 @@ from robot.actions.pick_up_treasure import PickUpTreasure
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
+from robot.magnet import Magnet
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -83,13 +84,15 @@ if __name__ == '__main__':
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduino_port)) != 0)
-        serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.01)
+        print(arduino_port[0].device)
+        serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.1)
+        print( serial_port.isOpen())
         wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
         corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meter_ratio)
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
         gripper = Gripper(serial_port)
-
+        magnet = Magnet(serial_port)
     table_corners = table_calibration_service.get_table_corners()
 
     islands = WorldmapService(base_station_host, base_station_port)
@@ -101,17 +104,17 @@ if __name__ == '__main__':
     pathfinder = PathFinder(mesh)
     movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(base_station_address, island_server_address)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder,
-                  manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper)
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
     action_machine = ActionMachine()
 
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
-    pick_up_treasure = PickUpTreasure(robot)
+    pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.bind('start', 'move_to_charge_station')
     action_machine.register('pick_up_treasure', pick_up_treasure)
     action_machine.bind('pick_up_treasure', 'pick_up_treasure')
+    pick_up_treasure.start()
     robot_logger = RobotLoggerDecorator(robot, robot_service)
     robot_web_controller.inject(robot_logger, mesh, robot_service, action_machine)
     robot_web_controller.run(host, port)

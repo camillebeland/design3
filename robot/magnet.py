@@ -1,6 +1,4 @@
-
-
-class magnet:
+class Magnet:
     def __init__(self, serial_port):
         self.__serial_port = serial_port
 
