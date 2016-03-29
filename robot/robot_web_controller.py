@@ -80,10 +80,10 @@ def mesh_to_json(mesh):
 
 
 def cell_to_json(cell):
-    return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+    return {'x': cell.x, 'y': cell.y, 'width': cell.width, 'height': cell.height}
 
 
-@app.route('/actions/<action>', methods = ['POST'])
+@app.route('/actions/<action>', methods=['POST'])
 def send_action_to_robot(action):
     try:
         action_machine.notify_event(action)

@@ -117,6 +117,13 @@ var Robot = angular.module('Robot', [])
             });
         }
 
+        this.sendAction = function(action){
+          $http({
+              method: 'POST',
+              url: 'http://' + ROBOT_HOST + '/actions/' + action,
+          });
+        };
+
         setInterval(function() {
             robot_socket.emit('fetchRobotInfo');
         }, POSITION_REFRESH_TIME_IN_MS);
