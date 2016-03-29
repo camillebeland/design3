@@ -27,6 +27,7 @@ from robot.actions.pick_up_treasure import PickUpTreasure
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
+from robot.magnet import Magnet
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -89,6 +90,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
         gripper = Gripper(serial_port)
+        magnet = Magnet(serial_port)
 
     table_corners = table_calibration_service.get_table_corners()
 
@@ -102,11 +104,11 @@ if __name__ == '__main__':
     movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(base_station_address, island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder,
-                  manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper)
+                  manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
     action_machine = ActionMachine()
 
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
-    pick_up_treasure = PickUpTreasure(robot)
+    pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.bind('start', 'move_to_charge_station')
