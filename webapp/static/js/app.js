@@ -31,6 +31,17 @@ website.controller('homeController', ['$scope', function($scope) {
   window.BACKEND_IMAGE_WIDTH = 1600;
   window.CANVAS_HEIGHT = 600;
   window.CANVAS_WIDTH = 800;
+  window.actionsEnum = Object.freeze({
+    READ_MANCHESTER: "",
+    DROPDOWN_TREASURE: "",
+    FIND_BEST_TREASURE: "",
+    FIND_ISLAND: "",
+    MOVE_TO_CHARGE_STATION: "start",
+    MOVE_TO_TARGET_ISLAND: "",
+    MOVE_TO_TREASURE: "",
+    PICKUP_TREASURE: "",
+    RECHARGE: ""
+  })
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
