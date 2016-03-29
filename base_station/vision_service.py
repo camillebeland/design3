@@ -14,7 +14,7 @@ class VisionService:
         for bad_frames in range(1, 11):
             frame = self.__camera.get_frame()
             image = ImageWrapper(frame)
-            cv2.imwrite('sweet.jpg', frame)
+            cv2.imwrite('island_frame.jpg', frame)
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
 
