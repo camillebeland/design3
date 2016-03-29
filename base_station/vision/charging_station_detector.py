@@ -26,8 +26,6 @@ class ChargingStationDetector:
         for contour in contours:
             approx = approx_polygon(contour)
             x, y, width, height = cv2.boundingRect(approx)
-            print(width)
-            print(height)
 
             if self.__is_a_rectangle__(width, height):
                 charging_station = {'x': x + (width/2), 'y': image.get_height() - y}
