@@ -23,6 +23,7 @@ from robot.wheels_correction_layer import WheelsCorrectionLayer
 from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
+from robot.actions.pick_up_treasure import PickUpTreasure
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
@@ -105,9 +106,12 @@ if __name__ == '__main__':
     action_machine = ActionMachine()
 
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
+    pick_up_treasure = PickUpTreasure(robot)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.bind('start', 'move_to_charge_station')
+    action_machine.register('pick_up_treasure', pick_up_treasure)
+    action_machine.bind('pick_up_treasure', 'pick_up_treasure')
     robot_logger = RobotLoggerDecorator(robot, robot_service)
     robot_web_controller.inject(robot_logger, mesh, robot_service, action_machine)
     robot_web_controller.run(host, port)
