@@ -41,7 +41,6 @@ class VisionDaemon:
                 print('can\'t fetch robot position from vision ' + str(self.base_station_address) + ' is not available')
             if self.is_mock:
                 break
-            time.sleep(1)
 
 
     def start_fetching_robot_position_from_vision(self):
