@@ -5,15 +5,15 @@
     <canvas id="mapCanvas" ng-controller="canvasController"></canvas>
   </div>
 
-  <h2>System state</h2>
-  <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
-    <label>
-      Robot's angle: <span ng-bind="robot.angle"></span>&deg;
-    </label>
-    <label>
-      Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>%
-    </label>
-  </div>
+    <h2>System state</h2>
+    <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
+        <label>
+            Robot's angle: <span ng-bind="robot.angle"></span>&deg;
+        </label>
+        <label>
+            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>V on 2.7 V
+        </label>
+    </div>
 
   <div class="col-md-12 container">
     <ul class="nav nav-tabs">

@@ -128,14 +128,28 @@ var Robot = angular.module('Robot', [])
             robot_socket.emit('fetchRobotInfo');
         }, POSITION_REFRESH_TIME_IN_MS);
 
+        setInterval(function(){
+          robot_socket.emit("fetchGripperVoltage");
+        }, GRIPPER_VOLTAGE_REFRESH_RATE);
+
         robot_socket.on('robotUpdated', function(robotData) {
             robotModel.position = {
               'x':robotData.robotPosition.x,
               'y':robotData.robotPosition.y
             }
             robotModel.angle = robotData.robotAngle;
-            robotModel.capacitorLevel = robotData.capacitorCharge;
             $rootScope.$broadcast('robotModelUpdated');
         });
+
+        robot_socket.on('gripperUpdated', function(gripperData) {
+            robotModel.capacitorLevel = convertIntoVoltage(gripperData.capacitorCharge);
+            $rootScope.$broadcast('robotModelUpdated');
+        });
+
+        var convertIntoVoltage = function(percentageCharge){
+          var totalCapacitorVoltage = 2.7;
+          convertedVoltage = percentageCharge*totalCapacitorVoltage/100;
+          return convertedVoltage;
+        }
 
     }]);
