@@ -32,10 +32,10 @@ website.controller('homeController', ['$scope', function($scope) {
   window.CANVAS_WIDTH = 800;
   window.actionsEnum = Object.freeze({
     READ_MANCHESTER: "",
-    MOVE_TO_CHARGE_STATION: "start",
+    DROPDOWN_TREASURE: "",
     FIND_BEST_TREASURE: "",
     FIND_ISLAND: "",
-    MOVE_TO_CHARGE_STATION: "",
+    MOVE_TO_CHARGE_STATION: "start",
     MOVE_TO_TARGET_ISLAND: "",
     MOVE_TO_TREASURE: "",
     PICKUP_TREASURE: "",

@@ -18,10 +18,6 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
     $scope.sequenceToStart = window.actionsEnum.FIND_ISLAND
   };
 
-  $scope.actionMoveToChargeStation = function() {
-    $scope.sequenceToStart = window.actionsEnum.MOVE_TO_CHARGE_STATION
-  };
-
   $scope.actionMoveToTargetIsland = function() {
     $scope.sequenceToStart = window.actionsEnum.MOVE_TO_TARGET_ISLAND
   };
@@ -43,9 +39,25 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
   };
 
   $scope.startSequence = function() {
-    if ($scope.sequenceToStart === window.actionsEnum.MOVE_TO_CHARGE_STATION) {
-      robotService.sendAction(window.actionsEnum.MOVE_TO_CHARGE_STATION)
-    }
+    if ($scope.sequenceToStart === window.actionsEnum.READ_MANCHESTER) {
+      robotService.sendAction(window.actionsEnum.READ_MANCHESTER);
+    } else if ($scope.sequenceToStart === window.actionsEnum.DROPDOWN_TREASURE) {
+      $scope.sequenceToStart === window.actionsEnum.DROPDOWN_TREASURE;
+    }else if ($scope.sequenceToStart === window.actionsEnum.MOVE_TO_CHARGE_STATION) {
+      $scope.sequenceToStart === window.actionsEnum.MOVE_TO_CHARGE_STATION;
+    } else if ($scope.sequenceToStart === window.actionsEnum.FIND_BEST_TREASURE) {
+      $scope.sequenceToStart === window.actionsEnum.FIND_BEST_TREASURE;
+    } else if ($scope.sequenceToStart === window.actionsEnum.FIND_ISLAND) {
+      $scope.sequenceToStart === window.actionsEnum.FIND_ISLAND;
+    } else if ($scope.sequenceToStart === window.actionsEnum.MOVE_TO_TARGET_ISLAND) {
+      $scope.sequenceToStart === window.actionsEnum.MOVE_TO_TARGET_ISLAND;
+    } else if ($scope.sequenceToStart === window.actionsEnum.MOVE_TO_TREASURE) {
+      $scope.sequenceToStart === window.actionsEnum.MOVE_TO_TREASURE;
+    } else if ($scope.sequenceToStart === window.actionsEnum.PICKUP_TREASURE) {
+      $scope.sequenceToStart === window.actionsEnum.PICKUP_TREASURE;
+    } else if ($scope.sequenceToStart === window.actionsEnum.RECHARGE) {
+      $scope.sequenceToStart === window.actionsEnum.RECHARGE;
+    };
   }
 
 }]);
