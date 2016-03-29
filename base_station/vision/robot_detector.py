@@ -53,7 +53,7 @@ class RobotDetector:
             return False
 
 hsv_range = {
-    'purple': ((110, 30, 65), (165, 190, 170))
+    'purple': ((110, 30, 55), (165, 200, 170))
 }
 
 edges = {
