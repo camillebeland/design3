@@ -22,13 +22,19 @@ void toggle_recharge_ON(){
 }
 
 void toggle_recharge_OFF(){
-	digitalWrite(OUT_RECHARGE, HIGH);
+	digitalWrite(OUT_RECHARGE, LOW);
+}
+void toggle_discharge_ON(){
+	digitalWrite(OUT_DISCHARGE, HIGH);
 }
 
-
+void toggle_discharge_OFF(){
+	digitalWrite(OUT_DISCHARGE, LOW);
+}
 uint8_t get_capacitor_percent(){
-	float charge_fraction = (analogRead(IN_CAPACITOR_VOLTAGE) / ADC_N_VALUES); // sur 5 V
-	return (uint8_t)charge_fraction *100;
+	int reading = (analogRead(IN_CAPACITOR_VOLTAGE) );
+	double charge_fraction = (reading / double(ADC_N_VALUES)); // sur 5 V
+	return (uint8_t)(3*(charge_fraction *100/5));
 }
 uint8_t get_battery_percent(){
 	

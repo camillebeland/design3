@@ -196,15 +196,22 @@ bool parse_and_call() {
 	  else if(ONOFF == 'd'){
 		toggle_recharge_OFF();
 	  }
+	  else if(ONOFF == 'x'){
+		toggle_discharge_ON();
+	  }
+	  else if(ONOFF == 'z'){
+		toggle_discharge_OFF();
+	  }
 	  break;
 	case MANCHESTER:
-		//Serial.println(get_ASCII());
 		serial_write(get_ASCII());
 		break;
 	case MAGNET_VOLTAGE:
 		serial_write(get_capacitor_percent());
+		break;
 	case BATTERY:
 		serial_write(get_battery_percent());
+		break;
 	case TEST:
 		test();
 		break;

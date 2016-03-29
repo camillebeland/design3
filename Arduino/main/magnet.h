@@ -23,6 +23,8 @@ void toggle_magnet_ON();
 void toggle_magnet_OFF();
 void toggle_recharge_ON();
 void toggle_recharge_OFF();
+void toggle_discharge_ON();
+void toggle_discharge_OFF();
 
 // ----------------ISR ----------------
 

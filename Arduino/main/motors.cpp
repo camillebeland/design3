@@ -333,15 +333,13 @@ void move(long x, long y, double speed){
 
 	angle = atan2(abs(y), abs(x));
 	
-	}
-	//491 476
 	long ticks_X = (x*long(TICKS_PER_MM));
 	long ticks_Y = (y*long(TICKS_PER_MM));
 	double speed_X = cos(angle)*speed;
 	double speed_Y = sin(angle)*speed;
 	if (speed_X < MIN_SPEED){
 		speed_X = MIN_SPEED;
-	}]
+	}
 	if (speed_Y <  MIN_SPEED){
 		speed_Y = MIN_SPEED;
 	}
@@ -429,6 +427,15 @@ void PID_motors(){
 		last_tick_remaining_B = tick_remaining_B;
 		last_tick_remaining_C = tick_remaining_C;
 		last_tick_remaining_D = tick_remaining_D;
+		
+		if (tick_remaining_A < SLOW_TRIGGER or tick_remaining_C < SLOW_TRIGGER){
+			wanted_speed_A = MIN_SPEED;
+			wanted_speed_C = MIN_SPEED;
+		}
+		if (tick_remaining_B < SLOW_TRIGGER or tick_remaining_D < SLOW_TRIGGER){
+			wanted_speed_B = MIN_SPEED;
+			wanted_speed_D = MIN_SPEED;
+		}
 		
 		// Error = difference to wanted speed
 		double error_A = wanted_speed_A - actual_speed_A;
