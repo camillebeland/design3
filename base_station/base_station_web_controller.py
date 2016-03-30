@@ -51,7 +51,7 @@ def cell_to_json(cell):
 def fetch_worldmap():
     return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons'],
-                    'treasures':worldmap['treasures']})
+                    'treasures':worldmap['treasures'], 'chargingStation': worldmap['charging-station']})
 
 
 @app.route('/vision/robot')

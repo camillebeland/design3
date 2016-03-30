@@ -19,7 +19,7 @@ class Robot:
         return self.__world_map.get_robot_angle()
 
     def find_manchester_code(self):
-        self.__manchester_code = self.__arduino.get_manchester_code()
+        self.__manchester_code = self.__manchester_antenna.get_manchester_code()
 
     def get_manchester_code(self):
         return self.__manchester_code

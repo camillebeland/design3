@@ -32,7 +32,7 @@ var Robot = angular.module('Robot', [])
             var delta = {
                 delta_x: 0,
                 delta_y: -100
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -49,7 +49,7 @@ var Robot = angular.module('Robot', [])
             var delta = {
                 delta_x: -100,
                 delta_y: 0
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -113,22 +113,43 @@ var Robot = angular.module('Robot', [])
         this.stop = function(){
             $http({
                 method: 'POST',
-                url: 'http://' + ROBOT_HOST + '/robot/stop',
+                url: 'http://' + ROBOT_HOST + '/robot/stop'
             });
-        }
+        };
+
+        this.sendAction = function(action){
+          $http({
+              method: 'POST',
+              url: 'http://' + ROBOT_HOST + '/actions/' + action
+          });
+        };
 
         setInterval(function() {
             robot_socket.emit('fetchRobotInfo');
         }, POSITION_REFRESH_TIME_IN_MS);
 
+        setInterval(function(){
+          robot_socket.emit("fetchGripperVoltage");
+        }, GRIPPER_VOLTAGE_REFRESH_RATE);
+
         robot_socket.on('robotUpdated', function(robotData) {
             robotModel.position = {
               'x':robotData.robotPosition.x,
               'y':robotData.robotPosition.y
-            }
+            };
             robotModel.angle = robotData.robotAngle;
-            robotModel.capacitorLevel = robotData.capacitorCharge;
             $rootScope.$broadcast('robotModelUpdated');
         });
+
+        robot_socket.on('gripperUpdated', function(gripperData) {
+            robotModel.capacitorLevel = convertIntoVoltage(gripperData.capacitorCharge);
+            $rootScope.$broadcast('robotModelUpdated');
+        });
+
+        var convertIntoVoltage = function(percentageCharge){
+          var totalCapacitorVoltage = 2.7;
+          convertedVoltage = percentageCharge*totalCapacitorVoltage/100;
+          return convertedVoltage;
+        }
 
     }]);

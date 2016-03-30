@@ -19,10 +19,11 @@ TabEnum = Object.freeze({
 
 website.controller('homeController', ['$scope', function($scope) {
   /*Webapp constants*/
-  window.BASE_STATION_HOST = "10.248.176.10:5000";
+  window.BASE_STATION_HOST = "localhost:5000";
+  window.ROBOT_HOST = "localhost:3000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
-  window.ROBOT_HOST = "10.248.146.182:3000";
-  window.POSITION_REFRESH_TIME_IN_MS = 5000;
+  window.POSITION_REFRESH_TIME_IN_MS = 100;
+  window.GRIPPER_VOLTAGE_REFRESH_RATE = 10000;
   window.ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS = 100;
   window.PATH_REFRESH_TIME_IN_MS = POSITION_REFRESH_TIME_IN_MS;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
@@ -30,6 +31,17 @@ website.controller('homeController', ['$scope', function($scope) {
   window.BACKEND_IMAGE_WIDTH = 1600;
   window.CANVAS_HEIGHT = 600;
   window.CANVAS_WIDTH = 800;
+  window.actionsEnum = Object.freeze({
+    READ_MANCHESTER: "",
+    DROPDOWN_TREASURE: "drop_down_treasure",
+    FIND_BEST_TREASURE: "",
+    FIND_ISLAND: "",
+    MOVE_TO_CHARGE_STATION: "start",
+    MOVE_TO_TARGET_ISLAND: "",
+    MOVE_TO_TREASURE: "",
+    PICKUP_TREASURE: "pick_up_treasure",
+    RECHARGE: ""
+  });
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
