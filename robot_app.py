@@ -23,11 +23,8 @@ from robot.wheels_correction_layer import WheelsCorrectionLayer
 from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
-<<<<<<< HEAD
 from robot.actions.pick_up_treasure import PickUpTreasure
-=======
 from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
->>>>>>> development
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
