@@ -7,6 +7,7 @@ class Robot:
         self.__manchester_antenna = manchester_antenna
         self.__battery = battery
         self.__mechanical_gripper = gripper
+        self.__manchester_code = ''
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)

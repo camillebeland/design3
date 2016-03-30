@@ -80,11 +80,15 @@ def cell_to_json(cell):
     return {'x': cell.x, 'y': cell.y, 'width': cell.width, 'height': cell.height}
 
 @app.route('/manchester', methods=['GET'])
-def ask_island_from_code():
-    return jsonify({'code' : robot.get_manchester_code()})
+def get_manchester():
+    code = robot.get_manchester_code()
+    if code is None:
+        return jsonify({'code', ''})
+    else:
+        return jsonify({'code' : code.__str__()})
 
 @app.route('/manchester/<code>', methods=['POST'])
-def ask_island_from_code(code):
+def post_manchester_code(code):
     robot.set_manchester_code(code)
     return "Ok"
 
