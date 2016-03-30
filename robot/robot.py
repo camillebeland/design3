@@ -23,6 +23,9 @@ class Robot:
     def get_manchester_code(self):
         return self.__manchester_code
 
+    def set_manchester_code(self, code):
+        self.__manchester_code = code
+
     def change_target_island_position(self, island_position):
         self.__island_position = island_position
 
