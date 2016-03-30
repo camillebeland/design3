@@ -20,8 +20,16 @@ class RobotLoggerDecorator:
     def get_capacitor_charge(self):
         return self.__robot.get_capacitor_charge()
 
+    def find_manchester_code(self):
+        self.__logger_service.log_info('Robot Finding Manchester code')
+        self.__robot.find_manchester_code()
+
     def get_manchester_code(self):
         return self.__robot.get_manchester_code()
+
+    def set_manchester_code(self, code):
+        self.__logger_service.log_info('Robot Setting Manchester Code to {0}'.format(code))
+        return self.__robot.set_manchester_code(code)
 
     def get_path(self):
         return self.__robot.get_path()
