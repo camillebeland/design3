@@ -116,7 +116,6 @@ if __name__ == '__main__':
 
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
     pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
-    pick_up_treasure.start()
     drop_down_treasure = DropDownTreasure(robot, robot_service, world_map, None)
     read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
 
