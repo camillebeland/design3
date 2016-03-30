@@ -19,11 +19,12 @@ def rotate_vector(theta, vector):
 
 
 class SimulationMap:
-    def __init__(self, width, height):
+    def __init__(self, width, height, worldmap_service):
         self._width = width
         self._height = height
         self._robot_position = Position(width / 2, height / 2)
         self._robot_angle = 0
+        self.worldmap_service = worldmap_service
 
     def set_robot_position(self, x, y):
         self._robot_position = Position(x, y)
@@ -38,8 +39,9 @@ class SimulationMap:
         return self._robot_angle
 
     def get_recharge_station_position(self):
-        #TODO
-        return (1500,1000)
+        position = self.worldmap_service.get_charging_station_position()
+        charging_station_position = Position(position["x"], position["y"])
+        return charging_station_position
 
     def get_treasure_closest_to(self, position):
         #TODO
