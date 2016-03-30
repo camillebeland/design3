@@ -11,10 +11,10 @@
             Robot's angle: <span ng-bind="robot.angle"></span>&deg;
         </label>
         <label>
-            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>V on 2.7 V
+            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>/2.7 V
         </label>
-        <labal>
-            Manchester Code : <span ng-bind="robot.manchesterCode"></span>
+        <label>
+            Manchester code : <span ng-bind="robot.manchesterCode"></span>
         </label>
     </div>
 
@@ -92,9 +92,10 @@
           <div class="btn-toolbar">
             <div class="dropdown btn-group">
               <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Sequence
-                <span class="caret"></span></button>
+                <span class="caret"></span>
+              </button>
               <ul class="dropdown-menu">
-                <li><a href ng-click="actionReadManchester()" style="color: #d1d1e0">read manchester code</a></li>
+                <li><a href ng-click="actionReadManchester()">read manchester code</a></li>
                 <li><a href ng-click="actionDropdownTreasure()" style="color: #d1d1e0">dropdown treasure</a></li>
                 <li><a href ng-click="actionFindBestTreasure()" style="color: #d1d1e0">find best treasure</a></li>
                 <li><a href ng-click="actionFindIsland()" style="color: #d1d1e0">find island</a></li>

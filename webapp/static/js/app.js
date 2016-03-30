@@ -33,7 +33,7 @@ website.controller('homeController', ['$scope', function($scope) {
   window.CANVAS_HEIGHT = 600;
   window.CANVAS_WIDTH = 800;
   window.actionsEnum = Object.freeze({
-    READ_MANCHESTER: "",
+    READ_MANCHESTER: "read_manchester",
     DROPDOWN_TREASURE: "drop_down_treasure",
     FIND_BEST_TREASURE: "",
     FIND_ISLAND: "",
