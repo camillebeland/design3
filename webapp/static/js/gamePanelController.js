@@ -7,7 +7,7 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
     };
 
     $scope.actionDropdownTreasure = function() {
-        $scope.sequenceToStart = window.actionsEnum.MOVE_TO_CHARGE_STATION
+        $scope.sequenceToStart = window.actionsEnum.DROPDOWN_TREASURE
     };
 
     $scope.actionFindBestTreasure = function() {
