@@ -1,5 +1,6 @@
 from unittest.mock import *
 from robot.worldmap_service import WorldmapService
+from unittest.mock import *
 
 
 class TestIslandsService:
@@ -15,7 +16,7 @@ class TestIslandsService:
         worldmap_service.get_polygons()
 
         # Then
-        mock_requests_framework.get.assert_called_once_with('http://'+ host + ':' + port + '/worldmap')
+        mock_requests_framework.get.assert_called_once_with('http://' + host + ':' + port + '/worldmap')
 
     @patch('robot.worldmap_service.requests')
     def test_get_polygons_with_polygons_should_return_polygons(self, mock_requests_framework):
@@ -24,7 +25,8 @@ class TestIslandsService:
              "pentagons": [],
              "triangles": [],
              "squares": [],
-             "treasures": []}
+             "treasures": [],
+             "chargingStation": []}
 
         # Given
         host = "localhost"
@@ -45,7 +47,9 @@ class TestIslandsService:
              "pentagons": [],
              "triangles": [],
              "squares": [],
-             "treasures": [{"x": 400, "y": 700}]}
+             "treasures": [{"x": 400, "y": 700}],
+             "chargingStation": []
+             }
 
         # Given
         host = "localhost"
