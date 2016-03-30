@@ -8,6 +8,7 @@ class Robot:
         self.__battery = battery
         self.__mechanical_gripper = gripper
         self.__magnet = magnet
+        self.__manchester_code = ''
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
@@ -19,10 +20,13 @@ class Robot:
         return self.__world_map.get_robot_angle()
 
     def find_manchester_code(self):
-        self.__manchester_code = self.__arduino.get_manchester_code()
+        self.__manchester_code = self.__manchester_antenna.get_manchester_code()
 
     def get_manchester_code(self):
         return self.__manchester_code
+
+    def set_manchester_code(self, code):
+        self.__manchester_code = code
 
     def change_target_island_position(self, island_position):
         self.__island_position = island_position

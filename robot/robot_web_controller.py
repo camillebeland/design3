@@ -72,29 +72,33 @@ def robot_fetch_path():
 def mesh():
     return jsonify(mesh_to_json(mesh))
 
-
-@app.route('/manchester', methods=['POST'])
-def ask_island_from_code():
-    island = robot_service.ask_target_island(request.json["letter"])
-    return island
-
-
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
 
 
 def cell_to_json(cell):
-    return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+    return {'x': cell.x, 'y': cell.y, 'width': cell.width, 'height': cell.height}
 
+@app.route('/manchester', methods=['GET'])
+def get_manchester():
+    code = robot.get_manchester_code()
+    if code is None:
+        return jsonify({'code', ''})
+    else:
+        return jsonify({'code' : code.__str__()})
 
-@app.route('/actions/<action>', methods = ['POST'])
+@app.route('/manchester/<code>', methods=['POST'])
+def post_manchester_code(code):
+    robot.set_manchester_code(code)
+    return "Ok"
+
+@app.route('/actions/<action>', methods=['POST'])
 def send_action_to_robot(action):
     try:
         action_machine.notify_event(action)
         return "OK"
     except:
         print('action : {0} did not work'.format(action))
-
 
 @app.route('/actions')
 def get_actions():

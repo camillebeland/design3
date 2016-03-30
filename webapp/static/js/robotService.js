@@ -7,6 +7,7 @@ var Robot = angular.module('Robot', [])
             this.angle = 0;
             this.position = [];
             this.capacitorLevel = 0;
+            this.manchesterCode = '';
         };
 
         robotModel = new RobotModel();
@@ -32,7 +33,7 @@ var Robot = angular.module('Robot', [])
             var delta = {
                 delta_x: 0,
                 delta_y: -100
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -49,7 +50,7 @@ var Robot = angular.module('Robot', [])
             var delta = {
                 delta_x: -100,
                 delta_y: 0
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -113,9 +114,16 @@ var Robot = angular.module('Robot', [])
         this.stop = function(){
             $http({
                 method: 'POST',
-                url: 'http://' + ROBOT_HOST + '/robot/stop',
+                url: 'http://' + ROBOT_HOST + '/robot/stop'
             });
-        }
+        };
+
+        this.sendAction = function(action){
+          $http({
+              method: 'POST',
+              url: 'http://' + ROBOT_HOST + '/actions/' + action
+          });
+        };
 
         setInterval(function() {
             robot_socket.emit('fetchRobotInfo');
@@ -125,18 +133,33 @@ var Robot = angular.module('Robot', [])
           robot_socket.emit("fetchGripperVoltage");
         }, GRIPPER_VOLTAGE_REFRESH_RATE);
 
+        setInterval(function() {
+            $http({
+                method: 'GET',
+                url: 'http://' + ROBOT_HOST + '/manchester' 
+            }).then(function successCallback(response) {
+                robotModel.manchesterCode = response.data.code;
+            });
+        }, MANCHESTER_CODE_REFRESH_RATE);
+
         robot_socket.on('robotUpdated', function(robotData) {
             robotModel.position = {
               'x':robotData.robotPosition.x,
               'y':robotData.robotPosition.y
-            }
+            };
             robotModel.angle = robotData.robotAngle;
             $rootScope.$broadcast('robotModelUpdated');
         });
 
         robot_socket.on('gripperUpdated', function(gripperData) {
-            robotModel.capacitorLevel = gripperData.capacitorCharge;
+            robotModel.capacitorLevel = convertIntoVoltage(gripperData.capacitorCharge);
             $rootScope.$broadcast('robotModelUpdated');
         });
+
+        var convertIntoVoltage = function(percentageCharge){
+          var totalCapacitorVoltage = 2.7;
+          convertedVoltage = percentageCharge*totalCapacitorVoltage/100;
+          return convertedVoltage;
+        }
 
     }]);

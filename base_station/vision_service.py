@@ -1,68 +1,76 @@
 from base_station.vision.image_wrapper import ImageWrapper
-
+import cv2
 class VisionService:
-    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector):
+    def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector, charging_station_detector):
         self.__camera = camera
         self.__shape_detector = shape_detector
         self.__treasure_detector = treasure_detector
         self.__table_calibrator = table_calibrator
         self.__robot_detector = robot_detector
+        self.__charging_station_detector = charging_station_detector
         self.worldmap_contour = {}
 
     def build_map(self):
-        image = ImageWrapper(self.__camera.get_frame())
+        for bad_frames in range(1, 11):
+            frame = self.__camera.get_frame()
+            image = ImageWrapper(frame)
+            cv2.imwrite('island_frame.jpg', frame)
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
 
+        triangles_red_upper, pentagons_red_upper, squares_red_upper, circles_red_upper = self.__find_polygon_color__(image, 'red_upper')
+        triangles_red_lower, pentagons_red_lower, squares_red_lower, circles_red_lower = self.__find_polygon_color__(image, 'red_lower')
         triangles_green, pentagons_green, squares_green, circles_green = self.__find_polygon_color__(image, 'green')
         triangles_blue, pentagons_blue, squares_blue, circles_blue = self.__find_polygon_color__(image, 'blue')
         triangles_yellow, pentagons_yellow, squares_yellow, circles_yellow = self.__find_polygon_color__(image, 'yellow')
-        triangles_red, pentagons_red, squares_red, circles_red = self.__find_polygon_color__(image, 'red')
 
-        triangles = triangles_green + triangles_blue + triangles_red + triangles_yellow
-        circles = circles_green + circles_blue + circles_red + circles_yellow
-        pentagons = pentagons_green + pentagons_blue + pentagons_red + pentagons_yellow
-        squares = squares_green + squares_blue + squares_red + squares_yellow
+        triangles = triangles_green + triangles_blue + triangles_red_upper + triangles_red_lower + triangles_yellow
+        circles = circles_green + circles_blue + circles_red_upper + circles_red_lower + circles_yellow
+        pentagons = pentagons_green + pentagons_blue + pentagons_red_upper + pentagons_red_lower + pentagons_yellow
+        squares = squares_green + squares_blue + squares_red_upper + squares_red_lower + squares_yellow
 
-        treasures.extend(self.__treasure_detector.find_treasures(image, default_camille_polygon_params))
+        treasures.extend(self.__treasure_detector.find_treasures(image, find_treasures_param))
+
+        charging_station = self.__charging_station_detector.find_polygon_color(image, default_camille_polygon_params, self.worldmap_contour["pixels_per_meter"])
 
         worldmap = {
             'circles': circles,
             'triangles': triangles,
             'pentagons': pentagons,
             'squares': squares,
-            'treasures': treasures
+            'treasures': treasures,
+            'charging-station': charging_station
         }
         return worldmap
 
     def __find_polygon_color__(self, image, color):
-        circles = self.__shape_detector.find_circle_color(image, color, default_camille_circle_params)
+        squares, pentagons, triangles, circles = self.__shape_detector.find_polygon_color(image, color, default_camille_polygon_params)
+        if color is 'red_lower' or color is 'red_upper':
+            color = 'red'
         for poly in circles:
             poly['shape'] = 'circle'
             poly['color'] = color
-        squares, pentagons, triangles = self.__shape_detector.find_polygon_color(image, color, default_camille_polygon_params)
         for poly in squares:
             poly['shape'] = 'square'
             poly['color'] = color
         for poly in triangles:
-            poly['shape'] = 'triangles'
+            poly['shape'] = 'triangle'
             poly['color'] = color
         for poly in pentagons:
-            poly['shape'] = 'pentagons'
+            poly['shape'] = 'pentagon'
             poly['color'] = color
         return triangles, pentagons, squares, circles
 
     def find_robot_position(self):
         image = ImageWrapper(self.__camera.get_frame())
         image = image.mask_image(self.worldmap_contour['table_contour'])
-        purple_circle = self.__robot_detector.find_circle_color(image, default_camille_circle_params)
-        purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
-        if not purple_circle or not purple_square:
+        purple_circle, purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
+        if purple_circle is None or purple_square is None:
             return {}
         else:
-            angle = self.__find_angle_between__(purple_circle[0], purple_square[0])
+            angle = self.__find_angle_between__(purple_circle, purple_square)
             robot_position = {
-                'center': ((purple_square[0]['x'] + purple_circle[0]['x'])/2, (purple_square[0]['y'] + purple_circle[0]['y'])/2),
+                'center': ((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2),
                 'angle': angle
             }
             return {'center' : robot_position['center'],
@@ -125,5 +133,19 @@ find_robot_position_param = {
     'dilate_iterations' : 2,
     'erode_kernel_size' : 0,
     'erode_iterations' : 2,
+    'polygonal_approximation_error' : 4
+}
+
+find_treasures_param = {
+    'median_blur_kernel_size' : 5,
+    'gaussian_blur_kernel_size' : 11,
+    'gaussian_blur_sigma_x' : 0,
+    'canny_threshold1' : 0,
+    'canny_threshold2' : 50,
+    'canny_aperture_size' : 5,
+    'dilate_kernel_size' : 0,
+    'dilate_iterations' : 3,
+    'erode_kernel_size' : 0,
+    'erode_iterations' : 3,
     'polygonal_approximation_error' : 4
 }
