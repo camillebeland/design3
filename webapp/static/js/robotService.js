@@ -32,7 +32,7 @@ var Robot = angular.module('Robot', [])
             var delta = {
                 delta_x: 0,
                 delta_y: -100
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -49,7 +49,7 @@ var Robot = angular.module('Robot', [])
             var delta = {
                 delta_x: -100,
                 delta_y: 0
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -113,14 +113,14 @@ var Robot = angular.module('Robot', [])
         this.stop = function(){
             $http({
                 method: 'POST',
-                url: 'http://' + ROBOT_HOST + '/robot/stop',
+                url: 'http://' + ROBOT_HOST + '/robot/stop'
             });
-        }
+        };
 
         this.sendAction = function(action){
           $http({
               method: 'POST',
-              url: 'http://' + ROBOT_HOST + '/actions/' + action,
+              url: 'http://' + ROBOT_HOST + '/actions/' + action
           });
         };
 
@@ -136,7 +136,7 @@ var Robot = angular.module('Robot', [])
             robotModel.position = {
               'x':robotData.robotPosition.x,
               'y':robotData.robotPosition.y
-            }
+            };
             robotModel.angle = robotData.robotAngle;
             $rootScope.$broadcast('robotModelUpdated');
         });

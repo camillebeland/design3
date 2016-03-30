@@ -41,7 +41,7 @@ website.controller('homeController', ['$scope', function($scope) {
     MOVE_TO_TREASURE: "",
     PICKUP_TREASURE: "",
     RECHARGE: ""
-  })
+  });
 
   var init = function() {
     $scope.activeTab = TabEnum.CONTROLS;
