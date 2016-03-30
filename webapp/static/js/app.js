@@ -33,13 +33,13 @@ website.controller('homeController', ['$scope', function($scope) {
   window.CANVAS_WIDTH = 800;
   window.actionsEnum = Object.freeze({
     READ_MANCHESTER: "",
-    DROPDOWN_TREASURE: "",
+    DROPDOWN_TREASURE: "drop_down_treasure",
     FIND_BEST_TREASURE: "",
     FIND_ISLAND: "",
     MOVE_TO_CHARGE_STATION: "start",
     MOVE_TO_TARGET_ISLAND: "",
     MOVE_TO_TREASURE: "",
-    PICKUP_TREASURE: "",
+    PICKUP_TREASURE: "pick_up_treasure",
     RECHARGE: ""
   });
 
