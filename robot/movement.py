@@ -18,8 +18,9 @@ class Movement:
 
     def move_to(self, final_destination):
         self.__should_move = False
+        self.__control.is_currently_moving = True
         sleep(self.__loop_time)
-        self.__thread = Thread(target = self.move_to_thread, args= (final_destination,))
+        self.__thread = Thread(target=self.move_to_thread, args=(final_destination,))
         self.__should_move = True
         self.__thread.start()
 
@@ -35,6 +36,7 @@ class Movement:
             self.__control.move(target[0], target[1])
             sleep(self.__loop_time)
         self.__current_path = list()
+        self.__control.is_currently_moving = False
 
     def __not_close_enough_to_target(self, target):
         actual_distance = distance_between(self.__sense.get_robot_position(), target)
