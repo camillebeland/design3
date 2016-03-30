@@ -74,3 +74,9 @@ class Robot:
 
     def lift_prehenseur_down(self):
         self.__magnet.lift_down()
+
+    def start_recharge_magnet(self):
+        self.__magnet.start_recharge()
+
+    def stop_recharge_magnet(self):
+        self.__magnet.stop_recharge()
