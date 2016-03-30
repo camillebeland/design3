@@ -17,6 +17,7 @@ from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimu
 from robot.simulation.battery_simulation import BatterySimulation
 from robot.simulation.gripper_simulation import GripperSimulation
 from robot.simulation.simulation_map import SimulationMap
+from robot.simulation.magnet_simulation import MagnetSimulation
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
 from robot.wheels_correction_layer import WheelsCorrectionLayer
@@ -75,6 +76,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
         gripper = GripperSimulation()
+        magnet = MagnetSimulation()
 
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
@@ -112,12 +114,13 @@ if __name__ == '__main__':
     movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(base_station_address, island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
-    action_machine = ActionMachine()
+    robot_logger = RobotLoggerDecorator(robot, robot_service)
 
-    move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
-    pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
-    drop_down_treasure = DropDownTreasure(robot, robot_service, world_map, None)
-    read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
+    action_machine = ActionMachine()
+    move_to_charge_station = MoveToChargeStationAction(robot_logger, robot_service, world_map, None)
+    pick_up_treasure = PickUpTreasure(robot_logger, robot_service, world_map, None)
+    drop_down_treasure = DropDownTreasure(robot_logger, robot_service, world_map, None)
+    read_manchester_code = DiscoverManchesterCodeAction(robot_logger, robot_service, world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('read_manchester_code', read_manchester_code)
@@ -127,6 +130,5 @@ if __name__ == '__main__':
     action_machine.register('drop_down_treasure', drop_down_treasure)
     action_machine.bind('drop_down_treasure', 'drop_down_treasure')
     action_machine.bind("read_manchester", "read_manchester_code")
-    robot_logger = RobotLoggerDecorator(robot, robot_service)
     robot_web_controller.inject(robot_logger, mesh, robot_service, action_machine)
     robot_web_controller.run(host, port)

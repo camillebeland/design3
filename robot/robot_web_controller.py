@@ -92,6 +92,16 @@ def post_manchester_code(code):
     robot.set_manchester_code(code)
     return "Ok"
 
+@app.route('/island', methods=['GET'])
+def get_island():
+    clue = robot.get_island_clue()
+    return jsonify({'island' : clue})
+
+@app.route('/island/<clue>', methods=['POST'])
+def set_island(clue):
+    robot.set_island_clue(clue)
+    return "Ok"
+
 @app.route('/actions/<action>', methods=['POST'])
 def send_action_to_robot(action):
     try:

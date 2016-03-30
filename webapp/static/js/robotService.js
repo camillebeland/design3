@@ -8,6 +8,7 @@ var Robot = angular.module('Robot', [])
             this.position = [];
             this.capacitorLevel = 0;
             this.manchesterCode = '';
+            this.island = '';
         };
 
         robotModel = new RobotModel();
@@ -141,6 +142,15 @@ var Robot = angular.module('Robot', [])
                 robotModel.manchesterCode = response.data.code;
             });
         }, MANCHESTER_CODE_REFRESH_RATE);
+
+        setInterval(function() {
+            $http({
+                method: 'GET',
+                url: 'http://' + ROBOT_HOST + '/island' 
+            }).then(function successCallback(response) {
+                robotModel.island = response.data.island;
+            });
+        }, ISLAND_CLUE_REFRESH_RATE);
 
         robot_socket.on('robotUpdated', function(robotData) {
             robotModel.position = {
