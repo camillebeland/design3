@@ -3,7 +3,8 @@ from time import sleep
 
 class RechargeAction(Action):
     def start(self):
-        self.__robot.start_recharge_magnet()
-        while(self.__robot.get_capacitor_charge < 90.0):
+        self._robot.start_recharge_magnet()
+        while(self._robot.get_capacitor_charge() < 90.0):
+            print(self._robot.get_capacitor_charge())
             sleep(1)
-        self.__robot.stop_recharge_magnet()
+        self._robot.stop_recharge_magnet()

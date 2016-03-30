@@ -25,6 +25,7 @@ from robot.action_machine import ActionMachine
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
 from robot.actions.pick_up_treasure import PickUpTreasure
 from robot.actions.drop_down_treasure import DropDownTreasure
+from robot.actions.recharge import RechargeAction
 from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
@@ -95,7 +96,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
         gripper = Gripper(serial_port)
-        polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
+        polulu_port = serial.Serial(port='/dev/ttyACM0', timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
 
@@ -117,6 +118,7 @@ if __name__ == '__main__':
     pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
     drop_down_treasure = DropDownTreasure(robot, robot_service, world_map, None)
     read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
+    recharge = RechargeAction(robot, robot_service,world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('read_manchester_code', read_manchester_code)
@@ -126,6 +128,8 @@ if __name__ == '__main__':
     action_machine.register('drop_down_treasure', drop_down_treasure)
     action_machine.bind('drop_down_treasure', 'drop_down_treasure')
     action_machine.bind("read_manchester", "read_manchester_code")
+    action_machine.register("recharge", recharge)
+    action_machine.bind("recharge", "recharge")
     robot_logger = RobotLoggerDecorator(robot, robot_service)
     robot_web_controller.inject(robot_logger, mesh, robot_service, action_machine)
     robot_web_controller.run(host, port)
