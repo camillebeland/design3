@@ -7,3 +7,15 @@ class Magnet:
 
     def deactivate(self):
         self.__serial_port.write('(af)'.encode())
+
+    def start_recharge(self):
+        self.__serial_port.write('(ac)'.encode())
+
+    def stop_recharge(self):
+        self.__serial_port.write('(ad)'.encode())
+
+    def start_discharge(self):
+        self.__serial_port.write('(ax)'.encode())
+
+    def stop_discharge(self):
+        self.__serial_port.write('(az)'.encode())

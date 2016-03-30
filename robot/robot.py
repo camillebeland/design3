@@ -64,3 +64,9 @@ class Robot:
 
     def deactivate_magnet(self):
         self.__magnet.deactivate()
+
+    def start_recharge_magnet(self):
+        self.__magnet.start_recharge()
+
+    def stop_recharge_magnet(self):
+        self.__magnet.stop_recharge()
