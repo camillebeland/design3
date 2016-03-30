@@ -30,6 +30,7 @@ from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
 from robot.magnet import Magnet
+from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 
 if __name__ == '__main__':
@@ -76,6 +77,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
         gripper = GripperSimulation()
+        magnet = MagnetSimulation()
 
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
