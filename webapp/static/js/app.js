@@ -19,12 +19,13 @@ TabEnum = Object.freeze({
 
 website.controller('homeController', ['$scope', function($scope) {
   /*Webapp constants*/
-  window.BASE_STATION_HOST = "localhost:5000";
-  window.ROBOT_HOST = "localhost:3000";
+  window.BASE_STATION_HOST = "192.168.0.35:5000";
+  window.ROBOT_HOST = "192.168.0.34:3000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
   window.GRIPPER_VOLTAGE_REFRESH_RATE = 10000;
   window.ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS = 100;
+  window.MANCHESTER_CODE_REFRESH_RATE = 2000;
   window.PATH_REFRESH_TIME_IN_MS = POSITION_REFRESH_TIME_IN_MS;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
   window.BACKEND_IMAGE_HEIGHT = 1200;
@@ -32,7 +33,7 @@ website.controller('homeController', ['$scope', function($scope) {
   window.CANVAS_HEIGHT = 600;
   window.CANVAS_WIDTH = 800;
   window.actionsEnum = Object.freeze({
-    READ_MANCHESTER: "",
+    READ_MANCHESTER: "read_manchester",
     DROPDOWN_TREASURE: "drop_down_treasure",
     FIND_BEST_TREASURE: "",
     FIND_ISLAND: "",

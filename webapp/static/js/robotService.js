@@ -7,6 +7,7 @@ var Robot = angular.module('Robot', [])
             this.angle = 0;
             this.position = [];
             this.capacitorLevel = 0;
+            this.manchesterCode = '';
         };
 
         robotModel = new RobotModel();
@@ -131,6 +132,15 @@ var Robot = angular.module('Robot', [])
         setInterval(function(){
           robot_socket.emit("fetchGripperVoltage");
         }, GRIPPER_VOLTAGE_REFRESH_RATE);
+
+        setInterval(function() {
+            $http({
+                method: 'GET',
+                url: 'http://' + ROBOT_HOST + '/manchester' 
+            }).then(function successCallback(response) {
+                robotModel.manchesterCode = response.data.code;
+            });
+        }, MANCHESTER_CODE_REFRESH_RATE);
 
         robot_socket.on('robotUpdated', function(robotData) {
             robotModel.position = {

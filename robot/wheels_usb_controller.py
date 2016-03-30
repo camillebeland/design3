@@ -4,6 +4,8 @@ class WheelsUsbController:
         self.wheels_usb_commands = wheels_usb_commands
 
     def move(self, x_pos, y_pos):
+        print(self.serialport.isOpen())
+        print(self.wheels_usb_commands.move(int(x_pos), int(y_pos)))
         self.serialport.write(self.wheels_usb_commands.move(int(x_pos), int(y_pos)))
 
     def rotate(self, angle):
