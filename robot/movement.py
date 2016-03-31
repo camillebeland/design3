@@ -16,14 +16,14 @@ class Movement:
     def get_last_path_used(self):
         return self.__current_path
 
-    def move_to(self, final_destination):
+    def move_to(self, final_destination, callback=None):
         self.__should_move = False
         sleep(self.__loop_time)
-        self.__thread = Thread(target = self.move_to_thread, args= (final_destination,))
+        self.__thread = Thread(target = self.move_to_thread, args= (final_destination, callback,))
         self.__should_move = True
         self.__thread.start()
 
-    def move_to_thread(self, final_destination):
+    def move_to_thread(self, final_destination, callback):
         while self.__should_move and self.__not_close_enough_to_target(final_destination):
             # sense
             position = self.__sense.get_robot_position()
@@ -34,6 +34,8 @@ class Movement:
             # control
             self.__control.move(target[0], target[1])
             sleep(self.__loop_time)
+        if callback is not None:
+            callback()
         self.__current_path = list()
 
     def __not_close_enough_to_target(self, target):

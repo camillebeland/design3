@@ -8,7 +8,9 @@ class MoveToChargeStationAction(Action):
 
     def start(self):
         recharge_station_position = self._worldmap.get_recharge_station_position()
-        self._robot.move_to(recharge_station_position)
+        self._robot.move_to(recharge_station_position, self.__rotate)
+
+    def __rotate(self):
         robot_angle = self._worldmap.get_robot_angle()
         self._robot.rotate(self.__charge_station_angle - robot_angle)
 

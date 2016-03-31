@@ -39,7 +39,7 @@ class SimulationMap:
 
     def get_recharge_station_position(self):
         #TODO
-        return (1500,1000)
+        return Position(1500,1000)
 
     def get_treasure_closest_to(self, position):
         #TODO

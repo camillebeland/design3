@@ -50,8 +50,8 @@ class Robot:
     def get_path(self):
         return self.__movement.get_last_path_used()
 
-    def move_to(self, final_destination):
-        self.__movement.move_to(final_destination)
+    def move_to(self, final_destination, callback):
+        self.__movement.move_to(final_destination, callback)
 
     def find_move_to(self, position):
         #TODO
