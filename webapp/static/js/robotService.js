@@ -148,11 +148,13 @@ var Robot = angular.module('Robot', [])
                 method: 'GET',
                 url: 'http://' + ROBOT_HOST + '/island' 
             }).then(function successCallback(response) {
-                clue = JSON.parse(response.data.island);
-                if(clue.couleur !== undefined)
-                    robotModel.island = clue.couleur;
-                else
-                    robotModel.island = clue.forme;
+                if(response.data.island !== ''){
+                    clue = JSON.parse(response.data.island);
+                    if(clue.couleur !== undefined)
+                        robotModel.island = clue.couleur;
+                    else
+                        robotModel.island = clue.forme;
+                }
             });
         }, ISLAND_CLUE_REFRESH_RATE);
 

@@ -122,6 +122,7 @@ if __name__ == '__main__':
     pick_up_treasure = PickUpTreasure(robot_logger, robot_service, world_map, None)
     drop_down_treasure = DropDownTreasure(robot_logger, robot_service, world_map, None)
     read_manchester_code = DiscoverManchesterCodeAction(robot_logger, robot_service, world_map, None)
+    find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
     recharge = RechargeAction(robot, robot_service,world_map, None)
     find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
 
