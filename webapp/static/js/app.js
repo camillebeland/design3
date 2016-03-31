@@ -23,7 +23,7 @@ website.controller('homeController', ['$scope', function($scope) {
   window.ROBOT_HOST = "localhost:3000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
-  window.GRIPPER_VOLTAGE_REFRESH_RATE = 10000;
+  window.GRIPPER_VOLTAGE_REFRESH_RATE = 5000;
   window.ROBOT_POSITION_FROM_VISION_REFRESH_TIME_IN_MS = 100;
   window.MANCHESTER_CODE_REFRESH_RATE = 2000;
   window.ISLAND_CLUE_REFRESH_RATE = 2000;
@@ -42,7 +42,7 @@ website.controller('homeController', ['$scope', function($scope) {
     MOVE_TO_TARGET_ISLAND: "",
     MOVE_TO_TREASURE: "",
     PICKUP_TREASURE: "pick_up_treasure",
-    RECHARGE: ""
+    RECHARGE: "recharge"
   });
 
   var init = function() {

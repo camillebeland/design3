@@ -79,5 +79,12 @@ class Robot:
     def get_island_clue(self):
         return self.__island_clue
 
+    def start_recharge_magnet(self):
+        self.__magnet.start_recharge()
+
+
+    def stop_recharge_magnet(self):
+        self.__magnet.stop_recharge()
+
     def set_island_clue(self, clue):
         self.__island_clue = clue

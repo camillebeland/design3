@@ -20,7 +20,7 @@ var Robot = angular.module('Robot', [])
         this.up = function() {
             var delta = {
                 delta_x: 0,
-                delta_y: 100
+                delta_y: 30
             };
 
             $http({
@@ -33,7 +33,7 @@ var Robot = angular.module('Robot', [])
         this.down = function() {
             var delta = {
                 delta_x: 0,
-                delta_y: -100
+                delta_y: -30
             };
 
             $http({
@@ -49,7 +49,7 @@ var Robot = angular.module('Robot', [])
 
         this.left = function() {
             var delta = {
-                delta_x: -100,
+                delta_x: -30,
                 delta_y: 0
             };
 
@@ -64,7 +64,7 @@ var Robot = angular.module('Robot', [])
 
         this.right = function() {
             var delta = {
-                delta_x: 100,
+                delta_x: 30,
                 delta_y: 0
             };
 
@@ -81,7 +81,7 @@ var Robot = angular.module('Robot', [])
 
         this.turnLeft = function() {
             var angle = {
-                angle: -30
+                angle: -10
             };
 
             $http({
@@ -93,7 +93,7 @@ var Robot = angular.module('Robot', [])
 
         this.turnRight = function() {
             var angle = {
-                angle: 30
+                angle: 10
             };
 
             $http({
