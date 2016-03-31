@@ -9,6 +9,7 @@ class Robot:
         self.__mechanical_gripper = gripper
         self.__magnet = magnet
         self.__manchester_code = ''
+        self.__island_clue = ''
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
@@ -68,7 +69,7 @@ class Robot:
 
     def deactivate_magnet(self):
         self.__magnet.deactivate()
-   
+
     def lift_prehenseur_up(self):
         self.__magnet.lift_up()
 
@@ -78,5 +79,11 @@ class Robot:
     def start_recharge_magnet(self):
         self.__magnet.start_recharge()
 
+    def get_island_clue(self):
+        return self.__island_clue
+
     def stop_recharge_magnet(self):
         self.__magnet.stop_recharge()
+
+    def set_island_clue(self, clue):
+        self.__island_clue = clue
