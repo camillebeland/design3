@@ -1,13 +1,16 @@
 class MagnetSimulation:
+    def __init__(self):
+        self.__activated = False
+        self.__prehenseur_up = False
 
     def activate(self):
-        print("magnet activate")
+        self.__activated = True
 
     def deactivate(self):
-        print("magnet deactivate")
+        self.__activated = False
 
     def lift_up(self):
-        print("magnet lift up")
+        self.__prehenseur_up = True
 
     def lift_down(self):
-        print("magnet lift down")
+        self.__prehenseur_up = False

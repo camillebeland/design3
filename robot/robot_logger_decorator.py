@@ -45,3 +45,26 @@ class RobotLoggerDecorator:
     def stop(self):
         self.__logger_service.log_info("Robot asked to stop it's current path")
         self.__robot.stop()
+
+    def activate_magnet(self):
+        self.__logger_service.log_info("Robot asked to activate magnet")
+        self.__robot.activate_magnet()
+
+    def deactivate_magnet(self):
+        self.__logger_service.log_info("Robot asked to deactivate magnet")
+        self.__robot.deactivate_magnet()
+
+    def lift_prehenseur_up(self):
+        self.__logger_service.log_info("Robot asked to lift the prehenseur up")
+        self.__robot.lift_prehenseur_up()
+
+    def lift_prehenseur_down(self):
+        self.__logger_service.log_info("Robot asked to lift the prehenseur down")
+        self.__robot.lift_prehenseur_down()
+
+    def get_island_clue(self):
+        return self.__robot.get_island_clue()
+
+    def set_island_clue(self, clue):
+        self.__logger_service.log_info("Robot setting island clue to {0}".format(clue))
+        self.__robot.set_island_clue(clue)

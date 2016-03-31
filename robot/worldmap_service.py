@@ -32,7 +32,7 @@ class WorldmapService:
         self.charging_station = self.worldmap_objects['chargingStation']
 
     def __create_polygon_list__(self):
-        self.polygons.extend([Polygon(circle['x'], circle['y'], 200) for circle in self.circles])
-        self.polygons.extend([Polygon(pentagon['x'], pentagon['y'], 200) for pentagon in self.pentagons])
-        self.polygons.extend([Polygon(square['x'], square['y'], 200) for square in self.squares])
-        self.polygons.extend([Polygon(triangle['x'], triangle['y'], 200) for triangle in self.triangles])
+        self.polygons.extend([Polygon(circle['x'], circle['y'], 250) for circle in self.circles])
+        self.polygons.extend([Polygon(pentagon['x'], pentagon['y'], 250) for pentagon in self.pentagons])
+        self.polygons.extend([Polygon(square['x'], square['y'], 250) for square in self.squares])
+        self.polygons.extend([Polygon(triangle['x'], triangle['y'], 250) for triangle in self.triangles])
