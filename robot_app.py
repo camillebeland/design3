@@ -10,6 +10,7 @@ from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbControll
 from robot.battery import Battery
 from robot.gripper import Gripper
 from robot.map import Map
+from robot.vision_perspective_correction import VisionPerspectiveCorrection
 from robot.robot import Robot
 from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
@@ -34,6 +35,8 @@ from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
 from robot.magnet import Magnet
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
+
+from utils.position import Position
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -83,7 +86,12 @@ if __name__ == '__main__':
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
-        world_map = Map(vision_daemon)
+        vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
+        world_map = Map(vision_perspective_corrected)
+        camera_position_x = config.getint('robot', 'camera-position-x')
+        camera_position_y = config.getint('robot', 'camera-position-y')
+        camera_height = config.getfloat('robot', 'camera-height')
+        robot_height = config.getfloat('robot', 'robot-height')
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
@@ -96,6 +104,7 @@ if __name__ == '__main__':
         print( serial_port.isOpen())
         wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
         corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meter_ratio)
+        
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
         gripper = Gripper(serial_port)
