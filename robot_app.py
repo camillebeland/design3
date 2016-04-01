@@ -17,16 +17,23 @@ from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimu
 from robot.simulation.battery_simulation import BatterySimulation
 from robot.simulation.gripper_simulation import GripperSimulation
 from robot.simulation.simulation_map import SimulationMap
+from robot.simulation.magnet_simulation import MagnetSimulation
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
 from robot.wheels_correction_layer import WheelsCorrectionLayer
 from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
+from robot.actions.pick_up_treasure import PickUpTreasure
+from robot.actions.drop_down_treasure import DropDownTreasure
+from robot.actions.recharge import RechargeAction
 from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
+from robot.actions.find_island_clue import FindIslandClue
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
+from robot.magnet import Magnet
+from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -71,6 +78,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
         gripper = GripperSimulation()
+        magnet = MagnetSimulation()
 
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
@@ -83,12 +91,17 @@ if __name__ == '__main__':
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         assert(len(list(arduino_port)) != 0)
-        serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.01)
+        print(arduino_port[0].device)
+        serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.1)
+        print( serial_port.isOpen())
         wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
         corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meter_ratio)
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
         gripper = Gripper(serial_port)
+        polulu_port = serial.Serial(port='/dev/ttyACM0', timeout=1)
+        prehenseur = PrehenseurRotationControl(polulu_port)
+        magnet = Magnet(serial_port, prehenseur)
 
     table_corners = table_calibration_service.get_table_corners()
 
@@ -101,17 +114,30 @@ if __name__ == '__main__':
     pathfinder = PathFinder(mesh)
     movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(base_station_address, island_server_address)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder,
-                  manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper)
-    action_machine = ActionMachine()
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
+    robot_logger = RobotLoggerDecorator(robot, robot_service)
 
-    move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
-    read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
+    action_machine = ActionMachine()
+    move_to_charge_station = MoveToChargeStationAction(robot_logger, robot_service, world_map, None)
+    pick_up_treasure = PickUpTreasure(robot_logger, robot_service, world_map, None)
+    drop_down_treasure = DropDownTreasure(robot_logger, robot_service, world_map, None)
+    read_manchester_code = DiscoverManchesterCodeAction(robot_logger, robot_service, world_map, None)
+    find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
+    recharge = RechargeAction(robot, robot_service,world_map, None)
+    find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('read_manchester_code', read_manchester_code)
     action_machine.bind('start', 'move_to_charge_station')
+    action_machine.register('pick_up_treasure', pick_up_treasure)
+    action_machine.bind('pick_up_treasure', 'pick_up_treasure')
+    action_machine.register('drop_down_treasure', drop_down_treasure)
+    action_machine.bind('drop_down_treasure', 'drop_down_treasure')
     action_machine.bind("read_manchester", "read_manchester_code")
-    robot_logger = RobotLoggerDecorator(robot, robot_service)
+    action_machine.register('find_island_clue', find_island_clue)
+    action_machine.bind('find_island_clue', 'find_island_clue')
+    action_machine.register("recharge", recharge)
+    action_machine.bind("recharge", "recharge")
+
     robot_web_controller.inject(robot_logger, mesh, robot_service, action_machine)
     robot_web_controller.run(host, port)

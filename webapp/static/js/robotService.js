@@ -7,6 +7,8 @@ var Robot = angular.module('Robot', [])
             this.angle = 0;
             this.position = [];
             this.capacitorLevel = 0;
+            this.manchesterCode = '';
+            this.island = '';
         };
 
         robotModel = new RobotModel();
@@ -18,7 +20,7 @@ var Robot = angular.module('Robot', [])
         this.up = function() {
             var delta = {
                 delta_x: 0,
-                delta_y: 100
+                delta_y: 30
             };
 
             $http({
@@ -31,8 +33,8 @@ var Robot = angular.module('Robot', [])
         this.down = function() {
             var delta = {
                 delta_x: 0,
-                delta_y: -100
-            }
+                delta_y: -30
+            };
 
             $http({
                 method: 'POST',
@@ -47,9 +49,9 @@ var Robot = angular.module('Robot', [])
 
         this.left = function() {
             var delta = {
-                delta_x: -100,
+                delta_x: -30,
                 delta_y: 0
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -62,7 +64,7 @@ var Robot = angular.module('Robot', [])
 
         this.right = function() {
             var delta = {
-                delta_x: 100,
+                delta_x: 30,
                 delta_y: 0
             };
 
@@ -79,7 +81,7 @@ var Robot = angular.module('Robot', [])
 
         this.turnLeft = function() {
             var angle = {
-                angle: -30
+                angle: -10
             };
 
             $http({
@@ -91,7 +93,7 @@ var Robot = angular.module('Robot', [])
 
         this.turnRight = function() {
             var angle = {
-                angle: 30
+                angle: 10
             };
 
             $http({
@@ -113,14 +115,14 @@ var Robot = angular.module('Robot', [])
         this.stop = function(){
             $http({
                 method: 'POST',
-                url: 'http://' + ROBOT_HOST + '/robot/stop',
+                url: 'http://' + ROBOT_HOST + '/robot/stop'
             });
-        }
+        };
 
         this.sendAction = function(action){
           $http({
               method: 'POST',
-              url: 'http://' + ROBOT_HOST + '/actions/' + action,
+              url: 'http://' + ROBOT_HOST + '/actions/' + action
           });
         };
 
@@ -132,11 +134,35 @@ var Robot = angular.module('Robot', [])
           robot_socket.emit("fetchGripperVoltage");
         }, GRIPPER_VOLTAGE_REFRESH_RATE);
 
+        setInterval(function() {
+            $http({
+                method: 'GET',
+                url: 'http://' + ROBOT_HOST + '/manchester' 
+            }).then(function successCallback(response) {
+                robotModel.manchesterCode = response.data.code;
+            });
+        }, MANCHESTER_CODE_REFRESH_RATE);
+
+        setInterval(function() {
+            $http({
+                method: 'GET',
+                url: 'http://' + ROBOT_HOST + '/island' 
+            }).then(function successCallback(response) {
+                if(response.data.island !== ''){
+                    clue = JSON.parse(response.data.island);
+                    if(clue.couleur !== undefined)
+                        robotModel.island = clue.couleur;
+                    else
+                        robotModel.island = clue.forme;
+                }
+            });
+        }, ISLAND_CLUE_REFRESH_RATE);
+
         robot_socket.on('robotUpdated', function(robotData) {
             robotModel.position = {
               'x':robotData.robotPosition.x,
               'y':robotData.robotPosition.y
-            }
+            };
             robotModel.angle = robotData.robotAngle;
             $rootScope.$broadcast('robotModelUpdated');
         });

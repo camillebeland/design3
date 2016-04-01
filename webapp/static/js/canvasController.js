@@ -67,7 +67,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         var island = new createjs.Shape();
         var circle_x = circleData.x * xScale;
         var circle_y = CANVAS_HEIGHT - circleData.y * yScale;
-        var circle_radius = circleData.radius * xScale;
+        var circle_radius = 20;
         var circle_color = circleData.color;
         island.graphics.beginFill(circle_color).drawCircle(circle_x, circle_y, circle_radius);
         allIslands.addChild(island);
@@ -96,6 +96,17 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         allIslands.addChild(island);
     };
 
+    var drawChargingStation = function(chargingStationData) {
+        var chargingStation = new createjs.Shape();
+        var polygon_x = chargingStationData.x * xScale;
+        var polygon_y = canvas.height - chargingStationData.y * yScale;
+        var charging_station_height = 10;
+        var charging_station_lenght = 10;
+        var polygon_color = 'blue';
+        chargingStation.graphics.beginFill(polygon_color).drawRect(polygon_x, polygon_y, charging_station_lenght, charging_station_height);
+        allIslands.addChild(chargingStation);
+    };
+
     var showIslands = function() {
         allIslands = new createjs.Container();
         var whenGetIsComplete = MapService.getMap();
@@ -116,6 +127,7 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
             for (treasure of response.treasures) {
                 drawTreasure(treasure);
             }
+            drawChargingStation(response.chargingStation);
             stage.addChild(allIslands);
         });
     };

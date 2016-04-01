@@ -13,8 +13,8 @@ class Gripper:
 
     def get_capacitor_charge(self):
         self.serial_port.write(encode("(v)"))
+        print("condensateur")
         percentage_char = self.serial_port.read()
-
         try:
             percentage = ord(percentage_char)
             percentage_is_valid = self.arduino_validator.validate_percentage(percentage)

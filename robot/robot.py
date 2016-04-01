@@ -1,12 +1,15 @@
 class Robot:
 
-    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper):
+    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper, magnet):
         self.__wheels = wheels
         self.__world_map = world_map
         self.__movement = movement
         self.__manchester_antenna = manchester_antenna
         self.__battery = battery
         self.__mechanical_gripper = gripper
+        self.__magnet = magnet
+        self.__manchester_code = ''
+        self.__island_clue = ''
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
@@ -22,6 +25,9 @@ class Robot:
 
     def get_manchester_code(self):
         return self.__manchester_code
+
+    def set_manchester_code(self, code):
+        self.__manchester_code = code
 
     def change_target_island_position(self, island_position):
         self.__island_position = island_position
@@ -44,8 +50,8 @@ class Robot:
     def get_path(self):
         return self.__movement.get_last_path_used()
 
-    def move_to(self, final_destination):
-        self.__movement.move_to(final_destination)
+    def move_to(self, final_destination, callback):
+        self.__movement.move_to(final_destination, callback)
 
     def find_move_to(self, position):
         #TODO
@@ -58,5 +64,27 @@ class Robot:
         self.__movement.stop_any_movement()
         self.__wheels.stop()
 
-    def recalculate_world_map(self):
-        self.__world_map.recalculate()
+    def activate_magnet(self):
+        self.__magnet.activate()
+
+    def deactivate_magnet(self):
+        self.__magnet.deactivate()
+
+    def lift_prehenseur_up(self):
+        self.__magnet.lift_up()
+
+    def lift_prehenseur_down(self):
+        self.__magnet.lift_down()
+
+    def get_island_clue(self):
+        return self.__island_clue
+
+    def start_recharge_magnet(self):
+        self.__magnet.start_recharge()
+
+
+    def stop_recharge_magnet(self):
+        self.__magnet.stop_recharge()
+
+    def set_island_clue(self, clue):
+        self.__island_clue = clue

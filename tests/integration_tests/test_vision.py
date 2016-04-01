@@ -4,6 +4,7 @@ from base_station.vision.island_detector import IslandDetector
 from base_station.vision.table_calibrator import TableCalibrator
 from base_station.vision.treasure_detector import TreasureDetector
 from base_station.vision.robot_detector import RobotDetector
+from base_station.vision.charging_station_detector import ChargingStationDetector
 import os
 
 
@@ -18,8 +19,9 @@ class TestVision:
         self.treasure_detector = TreasureDetector()
         self.table_calibrator = TableCalibrator()
         self.robot_detector = RobotDetector()
+        self.charging_station_detector = ChargingStationDetector()
         self.vision_service = VisionService(self.camera, self.shape_detector, self.treasure_detector,
-                                            self.table_calibrator, self.robot_detector)
+                                            self.table_calibrator, self.robot_detector, self.charging_station_detector)
         self.vision_service.init_worldmap_contour()
 
     def test_vision_service_when_build_map_should_return_map_islands(self):
