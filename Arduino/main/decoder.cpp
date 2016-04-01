@@ -198,9 +198,11 @@ bool parse_and_call() {
 	  }
 	  else if(ONOFF == 'x'){
 		toggle_discharge_ON();
+		toggle_magnet_ON();
 	  }
 	  else if(ONOFF == 'z'){
 		toggle_discharge_OFF();
+		toggle_magnet_OFF();
 	  }
 	  break;
 	case MANCHESTER:

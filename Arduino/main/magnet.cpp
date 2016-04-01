@@ -34,7 +34,7 @@ void toggle_discharge_OFF(){
 uint8_t get_capacitor_percent(){
 	int reading = (analogRead(IN_CAPACITOR_VOLTAGE) );
 	double charge_fraction = (reading / double(ADC_N_VALUES)); // sur 5 V
-	return (uint8_t)(3*(charge_fraction *100/5));
+	return (uint8_t)(100*5*(charge_fraction /3));
 }
 uint8_t get_battery_percent(){
 	
