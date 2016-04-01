@@ -34,9 +34,9 @@ class RobotLoggerDecorator:
     def get_path(self):
         return self.__robot.get_path()
 
-    def move_to(self, final_destination):
+    def move_to(self, final_destination, callback=None):
         #self.__logger_service.log_info('Robot Move_to {0}'.format(final_destination))
-        self.__robot.move_to(final_destination)
+        self.__robot.move_to(final_destination, callback)
 
     def rotate(self, angle):
         self.__logger_service.log_info('Robot Rotate {0}'.format(angle))
