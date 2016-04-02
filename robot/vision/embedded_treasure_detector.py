@@ -1,53 +1,20 @@
 import cv2
-track_treasure_params = {
-	'gaussian_blur_kernel_size' : 15,
-	'gaussian_blur_sigma_x' : 0,
-	'dilate_kernel_size' : 0,
-	'dilate_iterations' : 5,
-	'erode_kernel_size' : 0,
-	'erode_iterations' : 5,
-	'min_area': 100,
-	'max_area': 50000
-}
-mask_params = {
-	'gaussian_blur_kernel_size' : 15,
-	'gaussian_blur_sigma_x' : 0,
-	'dilate_kernel_size' : 0,
-	'dilate_iterations' : 60,
-	'erode_kernel_size' : 0,
-	'erode_iterations' : 5
-}
 
-map_treasures_params = {
-	'gaussian_blur_kernel_size' : 7,
-	'gaussian_blur_sigma_x' : 0,
-	'dilate_kernel_size' : 0,
-	'dilate_iterations' : 2,
-	'erode_kernel_size' : 0,
-	'erode_iterations' : 2,
-}
-
-
-
-max_delta_position = 250
 
 # ************ EMBEDDED CAMERA FOV IS 63.53 deg *****************
 
 class EmbeddedTreasureDetector:
 
-	def __init__(self, embedded_camera_controller):
+	def __init__(self):
 		self.tracked_treasure_position = (0,0)
 		self.consecutive_tracked_frame = 0
 		self.consecutive_lost_frame = 0
-		self.embedded_camera_controller = embedded_camera_controller
 		
-	def map_treasures(self, mask_params = mask_params, treasures_params = map_treasures_params, opencv=cv2):
+	def map_treasures(self, image, mask_params, treasures_params , opencv=cv2):
 		
 		
 		#camera must be in correct orientation (straight)
-		#DO IT HERE IF YOU WANT TO :D
 		
-		image = self.embedded_camera_controller.get_image()
 		#black mask
 		erode_kernel_size = mask_params['erode_kernel_size']
 		erode_iterations = mask_params['erode_iterations']
@@ -106,7 +73,7 @@ class EmbeddedTreasureDetector:
 		
 		
 		
-	def track_treasure(self, parameters = track_treasure_params, opencv=cv2):
+	def track_treasure(self, image, parameters , opencv=cv2):
 		image = embedded_camera_controller.get_image()
 		erode_kernel_size = parameters['erode_kernel_size']
 		erode_iterations = parameters['erode_iterations']
@@ -116,6 +83,7 @@ class EmbeddedTreasureDetector:
 		gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
 		min_area = parameters['min_area']
 		max_area = parameters['max_area']
+		max_delta_position = parameters['max_delta_position']
 
 		contours = (image
 					.filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
