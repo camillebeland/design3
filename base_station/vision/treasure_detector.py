@@ -31,6 +31,7 @@ class TreasureDetector:
                     .filter_by_color(hsv_range[color])
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_ierations)
+                    .show()
                     .find_contours())
 
         return contours
