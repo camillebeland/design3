@@ -3,6 +3,7 @@ class Robot:
     def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, gripper, magnet):
         self.__wheels = wheels
         self.__world_map = world_map
+        self.__pathfinder = pathfinder
         self.__movement = movement
         self.__manchester_antenna = manchester_antenna
         self.__battery = battery
@@ -10,6 +11,11 @@ class Robot:
         self.__magnet = magnet
         self.__manchester_code = ''
         self.__island_clue = ''
+
+
+    def init_vision(self, pathfinder):
+        self.__pathfinder = pathfinder
+        self.__movement.init_vision(pathfinder)
 
     def move(self, delta_x, delta_y):
         self.__wheels.move(delta_x, delta_y)
@@ -49,6 +55,10 @@ class Robot:
 
     def get_path(self):
         return self.__movement.get_last_path_used()
+
+    def get_mesh(self):
+        if self.__pathfinder is not None:
+            return self.__pathfinder.get_mesh()
 
     def move_to(self, final_destination, callback):
         self.__movement.move_to(final_destination, callback)

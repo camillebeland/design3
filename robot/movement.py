@@ -13,15 +13,21 @@ class Movement:
         self.__min_distance_to_target = min_distance_to_target
         self.__current_path = list()
 
+    def init_vision(self, pathfinder):
+        self.__compute = pathfinder
+
     def get_last_path_used(self):
         return self.__current_path
 
     def move_to(self, final_destination, callback=None):
-        self.__should_move = False
-        sleep(self.__loop_time)
-        self.__thread = Thread(target = self.move_to_thread, args= (final_destination, callback,))
-        self.__should_move = True
-        self.__thread.start()
+        if self.__compute is not None:
+            self.__should_move = False
+            sleep(self.__loop_time)
+            self.__thread = Thread(target = self.move_to_thread, args= (final_destination, callback,))
+            self.__should_move = True
+            self.__thread.start()
+        else:
+            print('Need to initialize vision')
 
     def move_to_thread(self, final_destination, callback):
         while self.__should_move and self.__not_close_enough_to_target(final_destination):
@@ -50,6 +56,9 @@ class Movement:
 
     def stop_any_movement(self):
         self.__should_move = False
+
+    def change_path_finder(self, pathfinder):
+        self.__compute = pathfinder
 
 
 def distance_between(position1, position2):

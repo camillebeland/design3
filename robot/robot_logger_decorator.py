@@ -3,6 +3,10 @@ class RobotLoggerDecorator:
         self.__robot = robot
         self.__logger_service = logger_service
 
+    def init_vision(self, pathfinder):
+        self.__logger_service.log_info('refreshing robot vision')
+        self.__robot.init_vision(pathfinder)
+
     def move(self, delta_x, delta_y):
         # TODO fix logger
         # self.__logger_service.log_info('Robot Move ({0},{1})'.format(delta_x, delta_y))
@@ -33,6 +37,9 @@ class RobotLoggerDecorator:
 
     def get_path(self):
         return self.__robot.get_path()
+
+    def get_mesh(self):
+        return self.__robot.get_mesh()
 
     def move_to(self, final_destination, callback=None):
         #self.__logger_service.log_info('Robot Move_to {0}'.format(final_destination))
