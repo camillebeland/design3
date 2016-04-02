@@ -1,0 +1,79 @@
+\chapter{Vision numérique}
+
+\section{Algorithmes}
+
+Afin de détecter les différents éléments nécessaires au projet, différentes stratégies de traitement d'images sont utilisées dans OpenCV. Les principaux algorithmes utilisés seront décrient dans les sous-sections suivantes. Ensuite, pour chaque élément différent à détecter, la stratégie exacte utilisée avec la séquence de filtres sera expliquée.
+
+\subsection{Gaussian Blur}
+
+Le filtre Gaussien est un filtre moyenneur qui suit les propriétés d'une courbe de distribution gaussienne. Ses paramètres sont la déviation normale en X, en Y et la taille du kernel. Ces paramètres vont former la courbe Gausienne et donc donner le "poids" relatif de chaque pixel sur ses voisins. Plus on augmente la taille du kernel et la déviation en X ou en Y, plus on obtient une image "flou". Ce filtre permet d'enlever le bruit dans l'image et de l'uniformiser, ce qui va simplifier les traitements subséquents. Cependant, un trop grand "flou" entraîne la perte de détail et n'est donc pas souhaitable pour la détection de petits éléments.
+
+\subsection{Color Range (inRange)}
+
+La fonction inRange() d'OpenCV permet de transformer une image à 3 dimensions de couleurs 8 bits en une image à une seule dimension de couleur binaire, soit blanc ou noir. On y définit une gamme de couleur où tous les pixels s'y trouvant deviendront blanc. Tous ceux ne s'y trouvant pas devienent noir. Cette fonction permet donc de détecter des éléments avec un éventail de couleurs spécifiques, ce qui s'avère être une stratégie simple et efficace afin de trouver des éléments de couleur. Cependant, il est important de mettre le filtre plus large que nécessaire, particulièrement dans le traitement d'image en temps réel avec une caméra puisque des changements de lumière ou de balance des blancs suffisent à rendre un filtre trop précis totalement inutile. Selon nos expériences, il est plus facile de faire les traitements subséquents sur un filtre de couleur trop large que pas assez. Par exemple, les grandes surfaces en bois de la table sont détectéspar le filtre jaune. Puisqu'elles font de très gros contours, il est facile de les éliminer en fonction de leur aire par la suite.
+
+
+\subsection{Erode et Dilate}
+
+Les fonctions erode() et dilate() utilisées conjointement permettent d'enlever le bruit et les petites imperfections sur les contours des images binaires. La fonction erode(), comme son nom l'indique, érodent les contours sur l'image. Sur les très petits contours, erode() avec suffisamment d'itérations permet de les faire disparaitre. Sur les contours qui n'ont pas disparu en raison de leur plus grande taille, il suffit alors de faire l'opération inverse, un dilate() avec le même nombre d'itérations, afin de retrouver la taille originale du contour. Ces deux fonctions permettent par exemple d'enlever le bruit restant après un inRange() afin de garder seulement les plus grosses forment bien définies.
+
+\subsection{Contours}
+
+La fonction findContours() permet d'identifier une série de point formant un contour, idéalement à partir d'une image binaire comme celle formée par la fonction inRange(). Les contours trouvés correspondent à une région formant une aire fermée dans l'image binaire. Les contours peuvent être approximé afin de limiter la quantité de points trouvés et donc de limiter l'utilisation de ressources.
+
+\subsection{Traitement sur les contours}
+
+Un coutour correspond à une série de point formant une aire fermé. Différent traitement peuvent être fait afin de filtrer les contours indésirables. Par exemple, les fonction arcLenght() et contourArea() permettent d'identifier le diamètre et l'aire d'un contour. Il est alors possible de filtrer les contours en fonction de leur taille. Également, la fonction approxPolyDP() permet de représenter un contour en un minimum de points possible. Ainsi, il est possible de déterminer le type de forme géométrique correspondant au contour en comptant le nombre de point résultant de l'approximation. Également, il est possible d'utiliser la fonction isContourConvex() afin d'éliminer toutes les formes non convexes trouvées. Enfin, si la forme désirées se retrouve toujours dans la même région de l'image, il est possible de tout simplement éliminer les contours dont les points sortant de la zone d'intérêt.
+
+\section{Caméra world} 
+
+\subsection{Vision des îles et des trésors}
+
+Étapes:
+\begin{enumerate}
+\item Gaussian Blur
+\item Color Range
+\item Erode
+\item Dilate
+\item Find Contours
+\item Approx Polygon
+\item Filtre par taille (largeur, hauteur et aire)
+\end{enumerate}
+
+
+Explication: Le filtre gaussien permet premièrement d'enlever une partie du bruit dans l'image et de l'uniformiser. Ensuite, un filtre spécifique de couleur pour chaque type d'île et les trésor est utilisé, s'en suit une image binaire. Afin d'enlever les petits points non désirés dans l'image binaire, une série d'erode et de dilate est appliqué, ce qui uniformise également les contours désirés si le filtre de couleur n'a pas capter la forme parfaitement. Il est à noter que la quantité d'ittération pour les erode() est moindre pour les trésors afin de ne pas les perdre en raison de leur petite taille. Ensuite, on trouve tous les contours et on les approxime en des polygons simples. Enfin, chaque contour approximé est analyser en fonction de sa taille, de son nombre de point (forme) et de son aire afin de correspondre aux spécification d'une île ou d'un trésor.  Par exemple, un trésor est attendu comme un contour rectangle jaune et de petite taille.
+
+\subsection{Masque de la table}
+
+Puisque le champs de vision de la caméra world dépasse la table, il est intéressant de supprimer tous les pixels en dehors de la zone de jeu avant de commencer à faire le traitement des images. Pour ce faire, la même technique servant à détecter les îles est utilisée afin de trouver le carré vert de calibration sur la table. Puisque les dimensions du carré vert par rapport à la table sont fixes, il est possible de trouver le ratio $pixel/mètre$ et de trouver les 4 coins de la table à partir du carré. Une fois les 4 coins trouvé, un masque binaire est formé et appliqué par dessus toutes les images, ce qui évite de trouver des îles dans les motifs du plancher... Également, puisque la calibration est faite à partir du carré vert, elle fonctionne sur toutes les tables en s'ajustant à sa position relative sur l'image (le ratio $pixel/mètre$ est différent d'une table à l'autre).
+
+
+\subsection{Vision de la position du robot}
+
+Le robot a un carré mauve et un cercle mauve à sa surface dans une orientation précise. Les mêmes étapes que la détection des îles est appliquée afin de trouver les deux formes sur le robot. Le mauve fut choisi puisque aucun autre élément possède la même couleur. Les filtre de tailles sont ajustés afin de correspondre exactement au cercle et au carré mauve. Avec les deux formes trouvées et leurs positions, il est facile de trouver la position centre du robot (moyenne des deux points) ainsi que l'angle du robot (par trigonométrie).
+
+
+\subsection{Vision de la station de recharge}
+
+La station de recharge est recouverte d'un grand carton bleu, formant un grand rectangle bleu vu par la caméra world. Puisqu'il s'agit du seul grand rectangle bleu, la station de base est identifié de la même façon que les îles mais avec les paramètres de grosseur et de forme spécifiques à la station de recharge.
+
+\section{Caméra embarquée}
+
+\subsection{Alignement sur un trésor}
+
+Étapes:
+\begin{enumerate}
+\item Gaussian Blur
+\item Color Range
+\item Erode
+\item Dilate
+\item Find Contours
+\item Approx Polygon
+\item Filtre par taille (largeur, hauteur et aire)
+\item Filtre "Le plus haut"
+\item Calcul du delta X
+\end{enumerate}
+
+Explication: Le traitement des images servant à s'aligner sur les trésor ressemble beaucoup au traitement servant à trouver les trésors avec la caméra world.  L'une des principale différence
+
+\subsection{Alignement sur la station de recharge}
