@@ -15,7 +15,7 @@ La fonction inRange() d'OpenCV permet de transformer une image à 3 dimensions d
 
 \subsection{Erode et Dilate}
 
-Les fonctions erode() et dilate() utilisées conjointement permettent d'enlever le bruit et les petites imperfections sur les contours des images binaires. La fonction erode(), comme son nom l'indique, érodent les contours sur l'image. Sur les très petits contours, erode() avec suffisamment d'itérations permet de les faire disparaitre. Sur les contours qui n'ont pas disparu en raison de leur plus grande taille, il suffit alors de faire l'opération inverse, un dilate() avec le même nombre d'itérations, afin de retrouver la taille originale du contour. Ces deux fonctions permettent par exemple d'enlever le bruit restant après un inRange() afin de garder seulement les plus grosses forment bien définies.
+Les fonctions erode() et dilate() utilisées conjointement permettent d'enlever le bruit et les petites imperfections sur les contours des images binaires. La fonction erode(), comme son nom l'indique, érodent les contours sur l'image. Sur les très petits contours, erode() avec suffisamment d'itérations permet de les faire disparaitre. Sur les contours qui n'ont pas disparu en raison de leur plus grande taille, il suffit alors de faire l'opération inverse, un dilate() avec le même nombre d'itérations, afin de retrouver la taille originale du contour. Ces deux fonctions permettent par exemple d'enlever le bruit restant après un inRange() afin de garder seulement les plus grosses forment bien définies. Elles permettent également de remplir des trous dans des formes qui n'ont pas étés correctement captés par des filtres comme inRange().
 
 \subsection{Contours}
 
@@ -32,7 +32,7 @@ Un coutour correspond à une série de point formant une aire fermé. Différent
 Étapes:
 \begin{enumerate}
 \item Gaussian Blur
-\item Color Range
+\item Color Range (jaune)
 \item Erode
 \item Dilate
 \item Find Contours
@@ -41,39 +41,54 @@ Un coutour correspond à une série de point formant une aire fermé. Différent
 \end{enumerate}
 
 
-Explication: Le filtre gaussien permet premièrement d'enlever une partie du bruit dans l'image et de l'uniformiser. Ensuite, un filtre spécifique de couleur pour chaque type d'île et les trésor est utilisé, s'en suit une image binaire. Afin d'enlever les petits points non désirés dans l'image binaire, une série d'erode et de dilate est appliqué, ce qui uniformise également les contours désirés si le filtre de couleur n'a pas capter la forme parfaitement. Il est à noter que la quantité d'ittération pour les erode() est moindre pour les trésors afin de ne pas les perdre en raison de leur petite taille. Ensuite, on trouve tous les contours et on les approxime en des polygons simples. Enfin, chaque contour approximé est analyser en fonction de sa taille, de son nombre de point (forme) et de son aire afin de correspondre aux spécification d'une île ou d'un trésor.  Par exemple, un trésor est attendu comme un contour rectangle jaune et de petite taille.
+Explication: Le filtre gaussien permet premièrement d'enlever une partie du bruit dans l'image et de l'uniformiser. Ensuite, un filtre spécifique de couleur pour chaque type d'île et les trésors est utilisé, s'en suit une image binaire. Afin d'enlever les petits points non désirés dans l'image binaire, une série d'erode et de dilate est appliqué, ce qui uniformise également les contours désirés si le filtre de couleur n'a pas capté la forme parfaitement. Il est à noter que la quantité d'ittération pour les erode() est moindre pour les trésors afin de ne pas les perdre en raison de leur petite taille. Ensuite, on trouve tous les contours et on les approxime en des polygons simples. Enfin, chaque contour approximé est analysé en fonction de sa taille, de son nombre de point (forme) et de son aire afin de correspondre aux spécifications d'une île ou d'un trésor.  Par exemple, un trésor est attendu comme un contour rectangle jaune et de petite taille.
 
 \subsection{Masque de la table}
 
-Puisque le champs de vision de la caméra world dépasse la table, il est intéressant de supprimer tous les pixels en dehors de la zone de jeu avant de commencer à faire le traitement des images. Pour ce faire, la même technique servant à détecter les îles est utilisée afin de trouver le carré vert de calibration sur la table. Puisque les dimensions du carré vert par rapport à la table sont fixes, il est possible de trouver le ratio $pixel/mètre$ et de trouver les 4 coins de la table à partir du carré. Une fois les 4 coins trouvé, un masque binaire est formé et appliqué par dessus toutes les images, ce qui évite de trouver des îles dans les motifs du plancher... Également, puisque la calibration est faite à partir du carré vert, elle fonctionne sur toutes les tables en s'ajustant à sa position relative sur l'image (le ratio $pixel/mètre$ est différent d'une table à l'autre).
+Puisque le champ de vision de la caméra world dépasse la table, il est intéressant de supprimer tous les pixels en dehors de la zone de jeu avant de commencer à faire le traitement des images. Pour ce faire, la même technique servant à détecter les îles est utilisée afin de trouver le carré vert de calibration sur la table. Puisque les dimensions du carré vert par rapport à la table sont fixes, il est possible de trouver le ratio $pixel/mètre$ et de trouver les 4 coins de la table à partir du carré. Une fois les 4 coins trouvés, un masque binaire est formé et appliqué par-dessus toutes les images, ce qui évite de trouver des îles dans les motifs du plancher... Également, puisque la calibration est faite à partir du carré vert, elle fonctionne sur toutes les tables en s'ajustant à sa position relative sur l'image (le ratio $pixel/mètre$ est différent d'une table à l'autre).
 
 
 \subsection{Vision de la position du robot}
 
-Le robot a un carré mauve et un cercle mauve à sa surface dans une orientation précise. Les mêmes étapes que la détection des îles est appliquée afin de trouver les deux formes sur le robot. Le mauve fut choisi puisque aucun autre élément possède la même couleur. Les filtre de tailles sont ajustés afin de correspondre exactement au cercle et au carré mauve. Avec les deux formes trouvées et leurs positions, il est facile de trouver la position centre du robot (moyenne des deux points) ainsi que l'angle du robot (par trigonométrie).
+Le robot a un carré mauve et un cercle mauve à sa surface dans une orientation précise. Les mêmes étapes que la détection des îles est appliquée afin de trouver les deux formes sur le robot. Le mauve fut choisi puisque aucun autre élément ne possède la même couleur. Les filtres de tailles sont ajustés afin de correspondre exactement au cercle et au carré mauve. Avec les deux formes trouvées et leurs positions, il est facile de trouver la position centre du robot (moyenne des deux points) ainsi que l'angle du robot (par trigonométrie).
 
 
 \subsection{Vision de la station de recharge}
 
-La station de recharge est recouverte d'un grand carton bleu, formant un grand rectangle bleu vu par la caméra world. Puisqu'il s'agit du seul grand rectangle bleu, la station de base est identifié de la même façon que les îles mais avec les paramètres de grosseur et de forme spécifiques à la station de recharge.
+La station de recharge est recouverte d'un grand carton bleu, formant un grand rectangle bleu vu par la caméra world. Puisqu'il s'agit du seul grand rectangle bleu, la station de base est identifiée de la même façon que les îles mais avec les paramètres de grosseur et de forme spécifiques à la station de recharge.
 
 \section{Caméra embarquée}
 
-\subsection{Alignement sur un trésor}
+\subsection{Trouver les trésors manquants}
 
-Étapes:
+Afin de trouver les trésors qui se trouvent en dehors du champ de vision de la caméra world, il faut utiliser la vision embarquée du robot et extrapoler la position des trésors trouvés sur le grillage formé par la caméra world. La vision des trésors de cet angle est beaucoup plus complexe par rapport à la caméra world puisque la vision ici n'est pas statique mais mobile. La stratégie employé ici est d'assumer que les trésors que nous recherchons sont nécessairement sur un fond noir. De ce fait, il est possible de former un masque à partir des murs noir sur la table et de par la suite de chercher des contours jaunes, soit des trésors. Les étapes afin de former le masque sont les suivantes:
+
 \begin{enumerate}
 \item Gaussian Blur
-\item Color Range
+\item Color Range (noir)
 \item Erode
-\item Dilate
+\item Dilate ( > erode itterations)
+\item Erode (dilate itterations - erode itterations)
 \item Find Contours
-\item Approx Polygon
-\item Filtre par taille (largeur, hauteur et aire)
-\item Filtre "Le plus haut"
-\item Calcul du delta X
+\item Filtre par taille (le plus gros contour)
 \end{enumerate}
 
-Explication: Le traitement des images servant à s'aligner sur les trésor ressemble beaucoup au traitement servant à trouver les trésors avec la caméra world.  L'une des principale différence
+La stratégie utilisé ici avec erode() et dilate() permet de combler les trous formé par les trésors sur le fond noir tout en conservant la taille original du contour formé par les murs noirs. Par la suite, les filtres suivant sont appliqués afin de trouver les trésors:
+
+\begin{enumerate}
+\item Gaussian Blur
+\item Color Range (jaune)
+\item Erode
+\item Dilate 
+\item Find Contours
+\end{enumerate}
+
+Tout ce qu'il reste à faire par la suite c'est de trouver la position du centre de tous les contours trouvés afin d'avoir la position des trésors par rapport à la position du robot. En sachant la largeur de l'angle de vue de la caméra et la position du robot, il est possible de calculer la position des trésors trouvé sur la carte de la caméra world.
+
+\subsection{Alignement sur un trésor}
+
+On assume ici que le robot fut position correctement devant le trésor désiré à partir de la caméra world. Le traitement des images servant à s'aligner sur les trésors ressemble beaucoup au traitement servant à trouver les trésors manquants.  L'une des principales différences est un système de $motion tracking$ qui est ajouté afin d'assurer que le contour trouvé ne peut se trouver à plus d'une certaine distance par rapport au contour de l'image précédente. Ce système permet d'éviter que la vision perde spontanément la position du contour (trésor) désiré pour un autre qui aurait des caractéristiques similaires aux trésors. Par exemple, un reflet jaune sur la table avec la lumière sur une seule image pourrait être considéré comme un trésor ce qui déstabiliserait le robot dans sa tâche de s'aligner sur un trésor précis.
 
 \subsection{Alignement sur la station de recharge}
+
+On assume ici que le robot fut préalablement positionné correctement devant la station de recharge avec la bonne orientation à partir de la caméra world. La station de recharge comporte un petit marqueur rouge au-dessus du transformateur servant à la recharge. Toute la surface en bois de la station de recharge est bleue. Tout ce qu'il a à faire est de former un masque à partir de la surface bleue (comme avec les murs noir pour la recherche des trésors manquants) et de rechercher un contour rouge afin d'obtenir la position précise sur laquelle le robot doit se centrer. 
