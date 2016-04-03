@@ -65,7 +65,7 @@ class TableCalibrator:
 
 
 hsv_range = {
-    'green_calibration_square':  ((40,30,50), (80,255,255))
+    'green_calibration_square':  ((40,45,50), (80,255,255))
 }
 
 green_square_measurements_in_meters = {
