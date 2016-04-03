@@ -1,9 +1,10 @@
 import numpy as np
-
+from utils.position import Position
 
 class Map:
-    def __init__(self, vision_daemon):
+    def __init__(self, vision_daemon, worldmap_service):
         self.vision_daemon = vision_daemon
+        self.worldmap_service = worldmap_service
 
     def get_robot_position(self):
         return self.vision_daemon.get_robot_position_from_vision()
@@ -16,8 +17,9 @@ class Map:
         return rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
 
     def get_recharge_station_position(self):
-        #TODO
-        return (1500,1000)
+        position = self.worldmap_service.get_charging_station_position()
+        charging_station_position = Position(position["x"], position["y"])
+        return charging_station_position
 
     def get_treasure_closest_to(self, position):
         #TODO
