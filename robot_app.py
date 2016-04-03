@@ -33,6 +33,7 @@ from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.robot_logger_decorator import RobotLoggerDecorator
 from robot.magnet import Magnet
+from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 
 if __name__ == '__main__':
@@ -52,9 +53,10 @@ if __name__ == '__main__':
     robot_service = RobotService(base_station_address, island_server_address)
     table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
     pixel_per_meter_ratio = table_calibration_service.get_pixel_per_meter_ratio()
+    world_map_service = WorldmapService(base_station_host, base_station_port)
 
     if wheels_config == "simulation":
-        world_map = SimulationMap(1600, 1200)
+        world_map = SimulationMap(1600, 1200, world_map_service)
         try:
             refresh_time = config.getint('robot', 'wheels-refresh-time')
         except:
@@ -83,7 +85,7 @@ if __name__ == '__main__':
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
-        world_map = Map(vision_daemon)
+        world_map = Map(vision_daemon, world_map_service)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
@@ -104,10 +106,8 @@ if __name__ == '__main__':
         magnet = Magnet(serial_port, prehenseur)
 
     table_corners = table_calibration_service.get_table_corners()
-
-    islands = WorldmapService(base_station_host, base_station_port)
-    polygons = islands.get_polygons()
-    treasures = islands.get_treasures()
+    polygons = world_map_service.get_polygons()
+    treasures = world_map_service.get_treasures()
 
     mesh_builder = MeshBuilder(table_corners, polygons)
     mesh = mesh_builder.get_mesh()

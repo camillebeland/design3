@@ -1,6 +1,7 @@
 from nose import with_setup
 from nose.tools import *
 from utils.position import Position
+from unittest.mock import *
 
 from robot.simulation.simulation_map import SimulationMap
 
@@ -12,11 +13,11 @@ AN_ANGLE = 142
 A_MOVE_OUTSIDE = Position(A_POSITION.x + WIDTH, 0.0)
 PRECISION = 1e-6
 
-world_map = SimulationMap(WIDTH, HEIGHT)
+world_map = SimulationMap(WIDTH, HEIGHT, Mock())
 
 
 def setup():
-    world_map.__init__(WIDTH, HEIGHT)
+    world_map.__init__(WIDTH, HEIGHT, Mock())
 
 
 @with_setup(setup)

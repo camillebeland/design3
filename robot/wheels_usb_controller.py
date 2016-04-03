@@ -7,7 +7,7 @@ class WheelsUsbController:
         self.serialport.write(self.wheels_usb_commands.move(int(x_pos), int(y_pos)))
 
     def rotate(self, angle):
-        angle = int(angle)%360
+        angle = int(angle) % 360
         if angle > 180:
             angle -= 360
 
