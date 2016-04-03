@@ -2,6 +2,7 @@ from pathfinding.cell import Cell
 from pathfinding.mesh import Mesh
 from pathfinding.polygon import Polygon
 
+
 class MeshBuilder:
     def __init__(self, table_corners, polygons):
         self.max_x = max(table_corners, key=lambda item: item[0])[0]
@@ -22,10 +23,10 @@ class MeshBuilder:
 
         self.polygons.extend([top, bottom, right, left])
 
-        self.__create_cell__(table_corners)
+        self.__create_cell__()
 
     def get_mesh(self):
         return Mesh(self.cell.partition_cells(self.polygons, 100))
 
-    def __create_cell__(self, table_corners):
+    def __create_cell__(self):
         self.cell = Cell(self.width, self.height, self.x, self.y)

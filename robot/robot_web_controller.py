@@ -38,7 +38,7 @@ def robot_rotate():
 @app.route('/robot/move_to', methods=['POST'])
 def robot_move_to():
     destination = Position(request.json['x'], request.json['y'])
-    robot.move_to(destination)
+    robot.move_to(destination, None)
     return "OK"
 
 

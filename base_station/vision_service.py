@@ -1,5 +1,7 @@
 from base_station.vision.image_wrapper import ImageWrapper
 import cv2
+
+
 class VisionService:
     def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector, charging_station_detector):
         self.__camera = camera
@@ -11,10 +13,8 @@ class VisionService:
         self.worldmap_contour = {}
 
     def build_map(self):
-        for bad_frames in range(1, 11):
-            frame = self.__camera.get_frame()
-            image = ImageWrapper(frame)
-            cv2.imwrite('island_frame.jpg', frame)
+        image = self.eliminate_first_frames()
+
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
 
@@ -42,6 +42,13 @@ class VisionService:
             'charging-station': charging_station
         }
         return worldmap
+
+    def eliminate_first_frames(self):
+        for bad_frames in range(1, 11):
+            frame = self.__camera.get_frame()
+            image = ImageWrapper(frame)
+        cv2.imwrite('island_frame.jpg', frame)
+        return image
 
     def __find_polygon_color__(self, image, color):
         squares, pentagons, triangles, circles = self.__shape_detector.find_polygon_color(image, color, default_camille_polygon_params)

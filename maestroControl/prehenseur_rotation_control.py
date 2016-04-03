@@ -1,7 +1,7 @@
 from maestroControl import maestro
 
-#classe permettant de controller le moteur du prehenseur
-#le servomoteur doit etre branche sur le 3e port (milieu)
+# classe permettant de controller le moteur du prehenseur
+# le servomoteur doit etre branche sur le 3e port (milieu)
 class PrehenseurRotationControl:
 	
     def __init__(self, usb):
@@ -13,7 +13,7 @@ class PrehenseurRotationControl:
         self.controller.setRange(self.CHANNEL, self.MIN, self.MAX)
         self.sleep()
     
-    #position de repos
+    # position de repos
     def sleep(self):
     	self.controller.setTarget(self.CHANNEL, self.MIN)
 

@@ -11,7 +11,7 @@ import os
 class TestVision:
     def __init__(self):
         base_directory = os.path.dirname(os.path.dirname(__file__))
-        image_path = os.path.join(base_directory, 'test_with_islands.jpg')
+        image_path = os.path.join(base_directory, 'integration_tests/test_with_islands.jpg')
         print(image_path)
 
         self.camera = MockCameraService(image_path=image_path)
@@ -43,7 +43,7 @@ class TestVision:
     def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
         #Given
         base_directory = os.path.dirname(os.path.dirname(__file__))
-        image_path = os.path.join(base_directory, 'test_with_robot.jpg')
+        image_path = os.path.join(base_directory, 'integration_tests/test_with_robot.jpg')
         print(image_path)
 
         self.camera = MockCameraService(image_path=image_path)
@@ -61,5 +61,5 @@ class TestVision:
         print(robot_position)
 
         # Then
-        assert 1210 <= robot_position["center"][0] <= 1220
-        assert 650 <= robot_position["center"][1] <= 670
+        assert 1350 <= robot_position["center"][0] <= 1360
+        assert 540 <= robot_position["center"][1] <= 550

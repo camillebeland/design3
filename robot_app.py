@@ -31,7 +31,6 @@ from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.actions.find_island_clue import FindIslandClue
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
-from robot.robot_logger_decorator import RobotLoggerDecorator
 from robot.magnet import Magnet
 from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
