@@ -31,7 +31,6 @@ from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.actions.find_island_clue import FindIslandClue
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
-from robot.robot_logger_decorator import RobotLoggerDecorator
 from robot.magnet import Magnet
 from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
@@ -113,7 +112,7 @@ if __name__ == '__main__':
     mesh = mesh_builder.get_mesh()
     pathfinder = PathFinder(mesh)
     movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
-    robot_service = RobotService(base_station_address, island_server_address)
+    robot_service = RobotService(island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
 
     action_machine = ActionMachine()
