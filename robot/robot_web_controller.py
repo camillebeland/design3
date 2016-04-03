@@ -72,12 +72,14 @@ def robot_fetch_path():
 def mesh():
     return jsonify(mesh_to_json(mesh))
 
+
 def mesh_to_json(mesh):
     return {'cells': list(map(cell_to_json, mesh.get_cells()))}
 
 
 def cell_to_json(cell):
     return {'x': cell.x, 'y': cell.y, 'width': cell.width, 'height': cell.height}
+
 
 @app.route('/manchester', methods=['GET'])
 def get_manchester():
@@ -87,20 +89,24 @@ def get_manchester():
     else:
         return jsonify({'code' : code.__str__()})
 
+
 @app.route('/manchester/<code>', methods=['POST'])
 def post_manchester_code(code):
     robot.set_manchester_code(code)
     return "Ok"
+
 
 @app.route('/island', methods=['GET'])
 def get_island():
     clue = robot.get_island_clue()
     return jsonify({'island' : clue})
 
+
 @app.route('/island/<clue>', methods=['POST'])
 def set_island(clue):
     robot.set_island_clue(clue)
     return "Ok"
+
 
 @app.route('/actions/<action>', methods=['POST'])
 def send_action_to_robot(action):
@@ -109,6 +115,7 @@ def send_action_to_robot(action):
         return "OK"
     except:
         print('action : {0} did not work'.format(action))
+
 
 @app.route('/actions')
 def get_actions():
