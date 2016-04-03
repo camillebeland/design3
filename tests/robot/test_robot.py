@@ -37,7 +37,7 @@ world_map = MockMap()
 pathfinder = MockPathFinder()
 movement = Mock()
 
-robot = Robot(wheels, world_map, pathfinder, Mock(), movement, Mock(), Mock())
+robot = Robot(wheels, world_map, pathfinder, Mock(), movement, Mock(), Mock(), Mock())
 
 
 def test_when_robot_move_then_wheels_move():
@@ -47,10 +47,11 @@ def test_when_robot_move_then_wheels_move():
 
 def test_when_robot_move_to_then_move_to_on_movement_is_called():
     # When
-    robot.move_to(FINAL_DESTINATION)
+    callback = Mock()
+    robot.move_to(FINAL_DESTINATION, callback)
 
     # Then
-    movement.move_to.assert_called_once_with(FINAL_DESTINATION)
+    movement.move_to.assert_called_once_with(FINAL_DESTINATION, callback)
 
 
 def test_when_robot_rotate_then_wheels_rotate():
