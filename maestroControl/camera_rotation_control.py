@@ -1,11 +1,12 @@
 import maestro
 
-#classe permettant de controller la camera sur deux axes de rotation.
-#le servomoteur du haut (self.VERTical) doit etre branche sur le 
-#5e port du pololu, le servomoteur du bas (self.HORizontal) doit etre
-#branche sur le 4e port 
+# classe permettant de controller la camera sur deux axes de rotation.
+# le servomoteur du haut (self.VERTical) doit etre branche sur le
+# 5e port du pololu, le servomoteur du bas (self.HORizontal) doit etre
+# branche sur le 4e port
+
+
 class CameraRotationControl:
-	
     def __init__(self, usb):
         self.MIDDLE = 6000
         VERT_MAX = 6000

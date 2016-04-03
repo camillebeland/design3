@@ -20,7 +20,7 @@ class Cell:
         ]
 
     def contains_any(self, obstacles):
-        return reduce(lambda x,y : x or y,
+        return reduce(lambda x, y: x or y,
                       map(self.contains, obstacles),
                       False
         )
