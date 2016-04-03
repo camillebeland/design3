@@ -1,3 +1,6 @@
+from time import sleep
+from threading import Thread
+
 class Magnet:
     def __init__(self, serial_port, prehenseur):
         self.__serial_port = serial_port
@@ -15,14 +18,45 @@ class Magnet:
     def lift_down(self):
         self.__prehenseur.grab()
 
-    def start_recharge(self):
+    def recharge(self, callback):
+        self.thread = Thread(target=self.__thread_recharge, args=(callback,))
+        self.thread.setDaemon(True)
+        self.thread.start()
+
+    def __thread_recharge(self, callback):
+        self.__start_recharge()
+        while(self.get_charge() < 90.0):
+            print(self.get_charge())
+            sleep(1)
+        self.__stop_recharge()
+        callback()
+
+    def __start_recharge(self):
         self.__serial_port.write('(ac)'.encode())
 
-    def stop_recharge(self):
+    def __stop_recharge(self):
         self.__serial_port.write('(ad)'.encode())
 
-    def start_discharge(self):
+
+    def discharge(self):
+        self.__start_discharge()
+        while(self.get_charge() > 5.0):
+            print(self.get_charge())
+            sleep(1)
+        self.__stop_discharge()
+
+    def __start_discharge(self):
         self.__serial_port.write('(ax)'.encode())
 
-    def stop_discharge(self):
+    def __stop_discharge(self):
         self.__serial_port.write('(az)'.encode())
+
+    def get_charge(self):
+        self.serial_port.write('(v)'.encode())
+        percentage_char = self.serial_port.read()
+        try:
+            percentage = ord(percentage_char)
+        except TypeError:
+            return -1
+        return percentage
+
