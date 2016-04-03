@@ -12,11 +12,11 @@ FINAL_DESTINATION = [1, 2]
 
 class MockWheels():
     def move(self, delta_x, delta_y):
-        if(delta_x == DELTA_X and delta_y == DELTA_Y):
+        if delta_x == DELTA_X and delta_y == DELTA_Y:
             self.moveCalledWithGoodArguments = True
 
     def rotate(self, angle):
-        if(angle == AN_ANGLE):
+        if angle == AN_ANGLE:
             self.rotateCalled = True
 
 

@@ -34,10 +34,14 @@ class MockUsbCommands:
         pass
 
     def move(self, x, y):
-        if(x == FORWARD and y == 0): return FORWARDCOMMAND
-        if(x == BACKWARD and y == 0): return BACKWARDCOMMAND
-        if(x == 0 and y == LEFT): return LEFTCOMMAND
-        if(x == 0 and y == RIGHT): return RIGHTCOMMAND
+        if x == FORWARD and y == 0:
+            return FORWARDCOMMAND
+        if x == BACKWARD and y == 0:
+            return BACKWARDCOMMAND
+        if x == 0 and y == LEFT:
+            return LEFTCOMMAND
+        if x == 0 and y == RIGHT:
+            return RIGHTCOMMAND
 
     def rotate_right(self, angle):
         return ROTATERIGHTCOMMAND+angle.__str__()
