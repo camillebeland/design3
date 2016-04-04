@@ -9,6 +9,7 @@ class EmbeddedTreasureDetector:
 		self.tracked_treasure_position = (0,0)
 		self.consecutive_tracked_frame = 0
 		self.consecutive_lost_frame = 0
+		self.first_frame = True
 		
 	def map_treasures(self, image, mask_params, treasures_params , opencv=cv2):
 		
@@ -93,7 +94,14 @@ class EmbeddedTreasureDetector:
 					.erode(erode_kernel_size, erode_iterations)
 					.dilate(dilate_kernel_size, dilate_iterations)
 					.find_contours())
-		
+		if (len(contours) == 0):
+			self.consecutive_lost_frame +=1
+			if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
+				self.tracked_treasure_position = (0,0)
+				self.consecutive_tracked_frame = 0
+				self.first_frame = True
+			return False
+			
 		def approx_polygon(contour):
 			epsilon = 0.04*cv2.arcLength(contour, True)
 			return opencv.approxPolyDP(contour, epsilon, True)
@@ -105,25 +113,32 @@ class EmbeddedTreasureDetector:
 			approx = approx_polygon(contour)
 			x, y, width, height = cv2.boundingRect(approx)
 			area = cv2.contourArea(contour)
-			if (min_area < area <  max_area and y < highest_contour_y):
+			if (min_area < area <  max_area and y < highest_contour_y and len(approx) == 4):
 				highest_contour = contour
 				highest_contour_y = y +height/2
 				highest_contour_x = x+width/2
-		
-		if (highest_contour_x != 0 and (abs(self.tracked_treasure_position[0] - highest_contour_x)**2 + abs(self.tracked_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
+				
+		if (self.first_frame == True):
+			self.consecutive_tracked_frame +=1
+			self.consecutive_lost_frame = 0
+			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
+			self.first_frame = False
+			return True
+		elif (highest_contour_x != 0 and (abs(self.tracked_treasure_position[0] - highest_contour_x)**2 + abs(self.tracked_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
 			self.consecutive_tracked_frame +=1
 			self.consecutive_lost_frame = 0
 			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
 			return True
 		else:
 			self.consecutive_lost_frame +=1
-			if (self.consecutive_lost_frame >= 30): #we lost the treasure :(
+			if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
 				self.tracked_treasure_position = (0,0)
 				self.consecutive_tracked_frame = 0
+				self.first_frame = True
 			return False
 	
 	def get_tracked_treasure_position(self):
-		if (self.consecutive_tracked_frame > 30):
+		if (self.consecutive_tracked_frame > 15):
 			return self.tracked_treasure_position
 		else:
 			return (0,0)
