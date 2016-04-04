@@ -26,3 +26,14 @@ class Position:
 
     def distance(self, other_position):
         return sqrt((self.x - other_position.x)**2 + (self.y - other_position.y)**2)
+
+    def __add__(self, other):
+        assert type(other) is type(self)
+        return Position(self.x+other.x,self.y+other.y)
+
+    def __sub__(self, other):
+        assert type(other) is type(self)
+        return Position(self.x-other.x,self.y-other.y)
+
+    def __mul__(self, factor):
+        return Position(factor * self.x, factor * self.y)

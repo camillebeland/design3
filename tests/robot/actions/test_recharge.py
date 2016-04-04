@@ -1,6 +1,7 @@
 from robot.actions.recharge import RechargeAction
 from robot.action import Action
 from unittest.mock import *
+from nose.tools import *
 
 
 class TestRecharge:
@@ -15,4 +16,4 @@ class TestRecharge:
         recharge_action.start()
 
         # Then
-        mock_robot.start_recharge_magnet.assert_called_once_with()
+        assert_true(mock_robot.recharge_magnet.called)

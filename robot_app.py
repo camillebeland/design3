@@ -4,18 +4,16 @@ from configuration import configuration
 from pathfinding.mesh_builder import MeshBuilder
 from pathfinding.pathfinding import PathFinder
 from robot import robot_web_controller
-from robot.table_calibration_service import TableCalibrationService
 from robot.assemblers.robot_info_assembler import RobotInfoAssembler
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
 from robot.battery import Battery
-from robot.gripper import Gripper
 from robot.map import Map
+from robot.vision_perspective_correction import VisionPerspectiveCorrection
 from robot.robot import Robot
 from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
 from robot.simulation.battery_simulation import BatterySimulation
-from robot.simulation.gripper_simulation import GripperSimulation
 from robot.simulation.simulation_map import SimulationMap
 from robot.simulation.magnet_simulation import MagnetSimulation
 from robot.wheels_usb_commands import WheelsUsbCommands
@@ -34,6 +32,9 @@ from robot.movement import Movement
 from robot.magnet import Magnet
 from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
+from robot.vision_refresher import VisionRefresher
+
+from utils.position import Position
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -50,8 +51,6 @@ if __name__ == '__main__':
     min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
 
     robot_service = RobotService(island_server_address)
-    table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
-    pixel_per_meter_ratio = table_calibration_service.get_pixel_per_meter_ratio()
     world_map_service = WorldmapService(base_station_host, base_station_port)
 
     if wheels_config == "simulation":
@@ -78,13 +77,17 @@ if __name__ == '__main__':
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
-        gripper = GripperSimulation()
         magnet = MagnetSimulation()
 
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
-        world_map = Map(vision_daemon, world_map_service)
+        camera_position_x = config.getint('robot', 'camera-position-x')
+        camera_position_y = config.getint('robot', 'camera-position-y')
+        camera_height = config.getfloat('robot', 'camera-height')
+        robot_height = config.getfloat('robot', 'robot-height')
+        vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
+        world_map = Map(vision_perspective_corrected, world_map_service)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
@@ -96,24 +99,19 @@ if __name__ == '__main__':
         serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.1)
         print( serial_port.isOpen())
         wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
-        corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meter_ratio)
+
+        corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
-        gripper = Gripper(serial_port)
-        polulu_port = serial.Serial(port='/dev/ttyACM0', timeout=1)
+        polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
 
-    table_corners = table_calibration_service.get_table_corners()
-    polygons = world_map_service.get_polygons()
-    treasures = world_map_service.get_treasures()
-
-    mesh_builder = MeshBuilder(table_corners, polygons)
-    mesh = mesh_builder.get_mesh()
-    pathfinder = PathFinder(mesh)
-    movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
+    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(island_server_address)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
+
+    vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port)
 
     action_machine = ActionMachine()
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
@@ -137,5 +135,5 @@ if __name__ == '__main__':
     action_machine.register("recharge", recharge)
     action_machine.bind("recharge", "recharge")
 
-    robot_web_controller.inject(robot, mesh, robot_service, action_machine)
+    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
     robot_web_controller.run(host, port)

@@ -4,6 +4,9 @@ class WheelsCorrectionLayer:
         self.__wheels = wheels
         self.__ratio = ratio
 
+    def set_correction(self, ratio):
+        self.__ratio = ratio
+
     def move(self, x_pos, y_pos):
         self.__wheels.move(x_pos / self.__ratio * 1000, y_pos / self.__ratio * 1000)
 
