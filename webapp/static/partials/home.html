@@ -5,21 +5,21 @@
     <canvas id="mapCanvas" ng-controller="canvasController"></canvas>
   </div>
 
-    <h2>System state</h2>
-    <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
-        <label>
-            Robot's angle: <span ng-bind="robot.angle"></span>&deg;
-        </label>
-        <label>
-            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>/2.7 V
-        </label>
-        <label>
-            Manchester code : <span ng-bind="robot.manchesterCode"></span>
-        </label>
-        <label>
-            Island : <span ng-bind="robot.island"></span>
-        </label>
-    </div>
+  <h2>System state</h2>
+  <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
+    <label>
+      Robot's angle: <span ng-bind="robot.angle"></span>&deg;
+    </label>
+    <label>
+      Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>/2.7 V
+    </label>
+    <label>
+      Manchester code : <span ng-bind="robot.manchesterCode"></span>
+    </label>
+    <label>
+      Island : <span ng-bind="robot.island"></span>
+    </label>
+  </div>
 
   <div class="col-md-12 container">
     <ul class="nav nav-tabs">
@@ -70,15 +70,15 @@
         <div class="container optionPanelControls" ng-controller="displayControlsController">
           <label>Mesh toggle
             <label>
-              <input type="radio" name="meshToggle" checked="true" ng-click="meshToggleOn()"></input>On</label>
+              <input type="radio" name="meshToggle" ng-click="meshToggleOn()"></input>On</label>
             <label>
-              <input type="radio" name="meshToggle" ng-click="meshToggleOff()"></input>Off</label>
+              <input type="radio" name="meshToggle" checked="true" ng-click="meshToggleOff()"></input>Off</label>
           </label>
           <label>Islands and treasures toggle
             <label>
-              <input type="radio" name="islandToggle" checked="true" ng-click="islandToggleOn()"></input>On</label>
+              <input type="radio" name="islandToggle" ng-click="islandToggleOn()"></input>On</label>
             <label>
-              <input type="radio" name="islandToggle" ng-click="islandToggleOff()"></input>Off</label>
+              <input type="radio" name="islandToggle" checked="true" ng-click="islandToggleOff()"></input>Off</label>
           </label>
           <label>Show vision's tracking of robot
             <label>
@@ -102,12 +102,12 @@
                 <li><a href ng-click="actionReadManchester()">read manchester code</a></li>
                 <li><a href ng-click="actionDropdownTreasure()">dropdown treasure</a></li>
                 <li><a href ng-click="actionFindBestTreasure()" style="color: #d1d1e0">find best treasure</a></li>
-                <li><a href ng-click="actionFindIsland()" >find island</a></li>
-                <li><a href ng-click="actionMoveToChargeStation()" >move to charge station</a></li>
+                <li><a href ng-click="actionFindIsland()">find island</a></li>
+                <li><a href ng-click="actionMoveToChargeStation()">move to charge station</a></li>
                 <li><a href ng-click="actionMoveToTargetIsland()" style="color: #d1d1e0">move to target island</a></li>
                 <li><a href ng-click="actionMoveToTreasure()" style="color: #d1d1e0">move to treasure</a></li>
-                <li><a href ng-click="actionPickUpTreasure()" >pick up treasure</a></li>
-                <li><a href ng-click="actionRecharge()" >recharge</a></li>
+                <li><a href ng-click="actionPickUpTreasure()">pick up treasure</a></li>
+                <li><a href ng-click="actionRecharge()">recharge</a></li>
               </ul>
             </div>
             <button class="btn btn-primary btn-group" ng-click="startSequence()">
