@@ -113,7 +113,7 @@ class EmbeddedTreasureDetector:
 			approx = approx_polygon(contour)
 			x, y, width, height = cv2.boundingRect(approx)
 			area = cv2.contourArea(contour)
-			if (min_area < area <  max_area and y < highest_contour_y and len(approx) == 4):
+			if (min_area < area <  max_area and y < highest_contour_y and len(approx) == 4 and (abs(self.tracked_treasure_position[0] - highest_contour_x)**2 + abs(self.tracked_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
 				highest_contour = contour
 				highest_contour_y = y +height/2
 				highest_contour_x = x+width/2
@@ -124,7 +124,7 @@ class EmbeddedTreasureDetector:
 			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
 			self.first_frame = False
 			return True
-		elif (highest_contour_x != 0 and (abs(self.tracked_treasure_position[0] - highest_contour_x)**2 + abs(self.tracked_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
+		elif (highest_contour_x != 0):
 			self.consecutive_tracked_frame +=1
 			self.consecutive_lost_frame = 0
 			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
