@@ -2,9 +2,13 @@ import time
 
 from flask import Flask, Response, jsonify
 from flask_cors import CORS
+import logging
 
 app = Flask(__name__)
 CORS(app)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 def inject_mock_map(mock_app):

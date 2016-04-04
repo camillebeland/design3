@@ -2,10 +2,14 @@ from flask import Flask, request, jsonify
 from flask.ext.socketio import SocketIO
 from flask_cors import CORS
 from utils.position import Position
+import logging
 
 app = Flask(__name__)
 CORS(app)
 socket_io = SocketIO(app)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 def inject(a_robot, a_vision_refresher, a_robot_service, an_action_machine):
