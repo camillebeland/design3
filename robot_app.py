@@ -8,7 +8,6 @@ from robot.table_calibration_service import TableCalibrationService
 from robot.assemblers.robot_info_assembler import RobotInfoAssembler
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
 from robot.battery import Battery
-from robot.gripper import Gripper
 from robot.map import Map
 from robot.vision_perspective_correction import VisionPerspectiveCorrection
 from robot.robot import Robot
@@ -16,7 +15,6 @@ from robot.robot_service import RobotService
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
 from robot.simulation.battery_simulation import BatterySimulation
-from robot.simulation.gripper_simulation import GripperSimulation
 from robot.simulation.simulation_map import SimulationMap
 from robot.simulation.magnet_simulation import MagnetSimulation
 from robot.wheels_usb_commands import WheelsUsbCommands
@@ -81,7 +79,6 @@ if __name__ == '__main__':
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
-        gripper = GripperSimulation()
         magnet = MagnetSimulation()
 
     elif wheels_config == "usb-arduino":
@@ -108,7 +105,6 @@ if __name__ == '__main__':
         
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
-        gripper = Gripper(serial_port)
         polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
@@ -122,7 +118,7 @@ if __name__ == '__main__':
     pathfinder = PathFinder(mesh)
     movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(island_server_address)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
     action_machine = ActionMachine()
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
