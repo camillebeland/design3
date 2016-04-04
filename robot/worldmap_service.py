@@ -7,6 +7,7 @@ class WorldmapService:
         self.worldmap_objects = {}
         while not self.worldmap_objects:
             try:
+                requests.post('http://' + host + ':' + port + '/refresh_worldmap')
                 self.worldmap_objects = requests.get('http://' + host + ':' + port + '/worldmap').json()
             except requests.exceptions.RequestException:
                 print('can\'t fetch islands http://'+ host + ':' + port + '/worldmap' + ' is not available')

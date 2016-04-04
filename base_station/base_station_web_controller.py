@@ -1,6 +1,6 @@
 import time
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -37,6 +37,11 @@ def video_feed():
 
 def cell_to_json(cell):
     return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+
+
+@app.route('/refresh_worldmap', methods=['POST'])
+def refresh_worldmap():
+    vision_service.build_map()
 
 
 @app.route('/worldmap')
