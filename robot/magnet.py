@@ -52,8 +52,8 @@ class Magnet:
         self.__serial_port.write('(az)'.encode())
 
     def get_charge(self):
-        self.serial_port.write('(v)'.encode())
-        percentage_char = self.serial_port.read()
+        self.__serial_port.write('(v)'.encode())
+        percentage_char = self.__serial_port.read()
         try:
             percentage = ord(percentage_char)
         except TypeError:

@@ -97,7 +97,7 @@ if __name__ == '__main__':
         corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meter_ratio)
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
-        polulu_port = serial.Serial(port='/dev/ttyACM0', timeout=1)
+        polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
 
