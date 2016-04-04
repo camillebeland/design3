@@ -32,8 +32,8 @@ from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.actions.find_island_clue import FindIslandClue
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
-from robot.robot_logger_decorator import RobotLoggerDecorator
 from robot.magnet import Magnet
+from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 
 from utils.position import Position
@@ -52,12 +52,13 @@ if __name__ == '__main__':
     loop_time = config.getfloat('robot', 'loop-time')
     min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
 
-    robot_service = RobotService(base_station_address, island_server_address)
+    robot_service = RobotService(island_server_address)
     table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
     pixel_per_meter_ratio = table_calibration_service.get_pixel_per_meter_ratio()
+    world_map_service = WorldmapService(base_station_host, base_station_port)
 
     if wheels_config == "simulation":
-        world_map = SimulationMap(1600, 1200)
+        world_map = SimulationMap(1600, 1200, world_map_service)
         try:
             refresh_time = config.getint('robot', 'wheels-refresh-time')
         except:
@@ -91,7 +92,8 @@ if __name__ == '__main__':
         camera_height = config.getfloat('robot', 'camera-height')
         robot_height = config.getfloat('robot', 'robot-height')
         vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
-        world_map = Map(vision_perspective_corrected)
+        world_map = Map(vision_perspective_corrected, world_map_service)
+
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
         arduino_baudrate = config.getint('robot', 'arduino-baudrate')
@@ -112,27 +114,24 @@ if __name__ == '__main__':
         magnet = Magnet(serial_port, prehenseur)
 
     table_corners = table_calibration_service.get_table_corners()
-
-    islands = WorldmapService(base_station_host, base_station_port)
-    polygons = islands.get_polygons()
-    treasures = islands.get_treasures()
+    polygons = world_map_service.get_polygons()
+    treasures = world_map_service.get_treasures()
 
     mesh_builder = MeshBuilder(table_corners, polygons)
     mesh = mesh_builder.get_mesh()
     pathfinder = PathFinder(mesh)
     movement = Movement(compute=pathfinder, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
-    robot_service = RobotService(base_station_address, island_server_address)
+    robot_service = RobotService(island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=pathfinder, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
-    robot_logger = RobotLoggerDecorator(robot, robot_service)
 
     action_machine = ActionMachine()
-    move_to_charge_station = MoveToChargeStationAction(robot_logger, robot_service, world_map, None)
-    pick_up_treasure = PickUpTreasure(robot_logger, robot_service, world_map, None)
-    drop_down_treasure = DropDownTreasure(robot_logger, robot_service, world_map, None)
-    read_manchester_code = DiscoverManchesterCodeAction(robot_logger, robot_service, world_map, None)
-    find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
+    move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
+    pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
+    drop_down_treasure = DropDownTreasure(robot, robot_service, world_map, None)
+    read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
+    find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
     recharge = RechargeAction(robot, robot_service,world_map, None)
-    find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
+    find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('read_manchester_code', read_manchester_code)
@@ -147,5 +146,5 @@ if __name__ == '__main__':
     action_machine.register("recharge", recharge)
     action_machine.bind("recharge", "recharge")
 
-    robot_web_controller.inject(robot_logger, mesh, robot_service, action_machine)
+    robot_web_controller.inject(robot, mesh, robot_service, action_machine)
     robot_web_controller.run(host, port)

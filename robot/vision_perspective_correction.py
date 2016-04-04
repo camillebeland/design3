@@ -10,5 +10,5 @@ class VisionPerspectiveCorrection:
         corrected_position = ((perspective_position - self.__camera_position) * self.__correction_factor) + self.__camera_position
         return corrected_position
 
-    def get_robot_angle(self):
+    def get_robot_angle_from_vision(self):
         return self.__actual_vision.get_robot_angle_from_vision()

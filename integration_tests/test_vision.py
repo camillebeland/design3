@@ -11,7 +11,7 @@ import os
 class TestVision:
     def __init__(self):
         base_directory = os.path.dirname(os.path.dirname(__file__))
-        image_path = os.path.join(base_directory, 'test_with_islands.jpg')
+        image_path = os.path.join(base_directory, 'integration_tests/test_with_islands.jpg')
         print(image_path)
 
         self.camera = MockCameraService(image_path=image_path)
@@ -39,3 +39,27 @@ class TestVision:
         assert len(map['pentagons']) == NB_PENTAGONS
         assert len(map['triangles']) == NB_TRIANGLES
         assert len(map['squares']) == NB_SQUARES
+
+    def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
+        #Given
+        base_directory = os.path.dirname(os.path.dirname(__file__))
+        image_path = os.path.join(base_directory, 'integration_tests/test_with_robot.jpg')
+        print(image_path)
+
+        self.camera = MockCameraService(image_path=image_path)
+        self.shape_detector = IslandDetector()
+        self.treasure_detector = TreasureDetector()
+        self.table_calibrator = TableCalibrator()
+        self.robot_detector = RobotDetector()
+        self.charging_station_detector = ChargingStationDetector()
+        self.vision_service = VisionService(self.camera, self.shape_detector, self.treasure_detector,
+                                            self.table_calibrator, self.robot_detector, self.charging_station_detector)
+        self.vision_service.init_worldmap_contour()
+
+        # When
+        robot_position = self.vision_service.find_robot_position()
+        print(robot_position)
+
+        # Then
+        assert 1350 <= robot_position["center"][0] <= 1360
+        assert 540 <= robot_position["center"][1] <= 550

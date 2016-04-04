@@ -90,7 +90,7 @@
       </div>
 
       <div id="game" class="tab-pane fade">
-        <div class="container optionPanelControls notImplemented" ng-controller="gamePanelController">
+        <div class="container optionPanelControls" ng-controller="gamePanelController">
           <label>Choose a game sequence to play</label>
           <div class="btn-toolbar">
             <div class="dropdown btn-group">
@@ -114,7 +114,7 @@
             </button>
           </div>
 
-          <label>Continue game after sequence
+          <label class="notImplemented">Continue game after sequence
             <label>
               <input type="radio" name="islandToggle" ng-click="continueSequenceToggle('true')"></input>Yes</label>
             <label>

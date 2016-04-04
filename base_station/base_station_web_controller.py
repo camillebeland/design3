@@ -3,12 +3,6 @@ import time
 from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 
-import base_station.logger as logger
-from base_station.vision.treasure_detector import TreasureDetector
-from base_station.vision_service import VisionService
-from base_station.vision.island_detector import IslandDetector
-from base_station.vision.table_calibrator import TableCalibrator
-
 app = Flask(__name__)
 CORS(app)
 
@@ -18,12 +12,11 @@ def inject_mock_map(mock_app):
     app = mock_app
 
 
-def inject(a_camera, a_refresh_time, the_worldmap, a_logger, a_vision_service):
-    global camera, refresh_time, worldmap, logger, vision_service
+def inject(a_camera, a_refresh_time, the_worldmap, a_vision_service):
+    global camera, refresh_time, worldmap, vision_service
     camera = a_camera
     refresh_time = a_refresh_time
     worldmap = the_worldmap
-    logger = a_logger
     vision_service = a_vision_service
 
 
@@ -35,7 +28,6 @@ def generate_frame(camera, refresh_time):
 
 
 def run_base_app(host, port):
-    logger.info("Starting the base station app at "+str(port))
     app.run(host=host, port=port, threaded=True)
 
 
@@ -59,23 +51,6 @@ def fetch_position():
     robot_position = vision_service.find_robot_position()
     return jsonify(robot_position)
 
-
-@app.route('/logger/info', methods=['POST'])
-def log_info():
-    logger.info(request.json['message'])
-    return "OK"
-
-
-@app.route('/logger/warning', methods=['POST'])
-def log_warning():
-    logger.warning(request.json['message'])
-    return "OK"
-
-
-@app.route('/logger/error', methods=['POST'])
-def log_error():
-    logger.error(request.json['message'])
-    return "OK"
 
 @app.route('/vision/calibration_data', methods=['GET'])
 def get_calibration_data():

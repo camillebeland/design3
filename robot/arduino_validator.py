@@ -1,6 +1,3 @@
-from robot.errors.invalid_percentage_error import InvalidPercentageError
-
-
 class ArduinoValidator:
 
     def validate_percentage(self, percentage):
