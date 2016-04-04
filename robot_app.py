@@ -30,8 +30,8 @@ from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.actions.find_island_clue import FindIslandClue
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
-from robot.robot_logger_decorator import RobotLoggerDecorator
 from robot.magnet import Magnet
+from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 from robot.vision_refresher import VisionRefresher
 
@@ -49,10 +49,11 @@ if __name__ == '__main__':
     loop_time = config.getfloat('robot', 'loop-time')
     min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
 
-    robot_service = RobotService(base_station_address, island_server_address)
+    robot_service = RobotService(island_server_address)
+    world_map_service = WorldmapService(base_station_host, base_station_port)
 
     if wheels_config == "simulation":
-        world_map = SimulationMap(1600, 1200)
+        world_map = SimulationMap(1600, 1200, world_map_service)
         try:
             refresh_time = config.getint('robot', 'wheels-refresh-time')
         except:
@@ -81,7 +82,7 @@ if __name__ == '__main__':
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
-        world_map = Map(vision_daemon)
+        world_map = Map(vision_daemon, world_map_service)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
@@ -101,22 +102,20 @@ if __name__ == '__main__':
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
 
-
-
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
-    robot_service = RobotService(base_station_address, island_server_address)
+    robot_service = RobotService(island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, gripper=gripper, magnet=magnet)
-    robot_logger = RobotLoggerDecorator(robot, robot_service)
+
     vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port)
 
     action_machine = ActionMachine()
-    move_to_charge_station = MoveToChargeStationAction(robot_logger, robot_service, world_map, None)
-    pick_up_treasure = PickUpTreasure(robot_logger, robot_service, world_map, None)
-    drop_down_treasure = DropDownTreasure(robot_logger, robot_service, world_map, None)
-    read_manchester_code = DiscoverManchesterCodeAction(robot_logger, robot_service, world_map, None)
-    find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
+    move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
+    pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
+    drop_down_treasure = DropDownTreasure(robot, robot_service, world_map, None)
+    read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
+    find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
     recharge = RechargeAction(robot, robot_service,world_map, None)
-    find_island_clue = FindIslandClue(robot_logger, robot_service, world_map, None)
+    find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('read_manchester_code', read_manchester_code)
@@ -131,5 +130,5 @@ if __name__ == '__main__':
     action_machine.register("recharge", recharge)
     action_machine.bind("recharge", "recharge")
 
-    robot_web_controller.inject(robot_logger, vision_refresher, robot_service, action_machine)
+    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
     robot_web_controller.run(host, port)

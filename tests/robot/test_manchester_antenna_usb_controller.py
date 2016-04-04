@@ -31,6 +31,6 @@ class TestManchesterAntennaUsbController:
         usb_controller = ManchesterAntennaUsbController(mock_serial_port)
 
         # When
-        actual_code = usb_controller.get_manchester_code()
+        usb_controller.get_manchester_code()
 
         # Then assert expected exception is raised

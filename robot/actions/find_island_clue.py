@@ -1,5 +1,6 @@
 from robot.action import Action
 
+
 class FindIslandClue(Action):
     def start(self):
         code = self._robot.get_manchester_code()

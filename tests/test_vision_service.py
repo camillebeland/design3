@@ -20,20 +20,6 @@ class TestVisionService:
                                             self.table_calibrator, self.robot_detector, self.charging_station_detector)
         self.vision_service.init_worldmap_contour()
 
-    def test_vision_service_with_robot_when_find_robot_position_should_return_robot_position(self):
-        #Given
-        self.camera_mock = MockCameraService(image_path="test_with_robot.jpg")
-        self.vision_service = VisionService(self.camera_mock, self.shape_detector, self.treasure_detector,
-                                            self.table_calibrator, self.robot_detector, self.charging_station_detector)
-        self.vision_service.init_worldmap_contour()
-
-        # When
-        robot_position = self.vision_service.find_robot_position()
-        print(robot_position)
-
-        # Then
-        assert 1210 <= robot_position["center"][0] <= 1220
-        assert 650 <= robot_position["center"][1] <= 670
 
     def test_vision_service_with_no_robot_when_find_robot_position_should_return_nothing(self):
         # When

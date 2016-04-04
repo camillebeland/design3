@@ -2,7 +2,7 @@ from robot.action import Action
 
 
 class MoveToChargeStationAction(Action):
-    def __init__(self, robot, robot_service, worldmap, embedded_camera, charge_station_angle=90):
+    def __init__(self, robot, robot_service, worldmap, embedded_camera, charge_station_angle=-90):
         super().__init__(robot, robot_service, worldmap, embedded_camera)
         self.__charge_station_angle = charge_station_angle
 
