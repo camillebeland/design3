@@ -109,12 +109,12 @@ class EmbeddedTreasureDetector:
 				highest_contour_x = x+width/2
 		
 		if (highest_contour_x != 0 and (abs(self.last_treasure_position[0] - highest_contour_x)**2 + abs(self.last_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
-			consecutive_tracked_frame = consecutive_tracked_frame+1
+			consecutive_tracked_frame +=1
 			consecutive_lost_frame = 0
 			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
 			return True
 		else:
-			consecutive_lost_frame = consecutive_lost_frame +1
+			consecutive_lost_frame +=1
 			if (consecutive_lost_frame >= 30): #we lost the treasure :(
 				self.tracked_treasure_position = (0,0)
 				consecutive_tracked_frame = 0
