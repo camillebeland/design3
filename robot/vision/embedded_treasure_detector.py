@@ -67,14 +67,16 @@ class EmbeddedTreasureDetector:
 			approx = approx_polygon(contour)
 			x, y, width, height = cv2.boundingRect(approx)
 			x_positions.append(x)
-				
+		
+		x_to_deg = 63.53/1600
+		angles = list(map(lambda x : x*x_to_deg , x_positions))
+		
 		#return x positions of all treasures relative to FOV
-		return x_positions
+		return angles
 		
 		
 		
 	def track_treasure(self, image, parameters , opencv=cv2):
-		image = embedded_camera_controller.get_image()
 		erode_kernel_size = parameters['erode_kernel_size']
 		erode_iterations = parameters['erode_iterations']
 		dilate_kernel_size = parameters['dilate_kernel_size']
@@ -108,21 +110,21 @@ class EmbeddedTreasureDetector:
 				highest_contour_y = y +height/2
 				highest_contour_x = x+width/2
 		
-		if (highest_contour_x != 0 and (abs(self.last_treasure_position[0] - highest_contour_x)**2 + abs(self.last_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
-			consecutive_tracked_frame +=1
-			consecutive_lost_frame = 0
+		if (highest_contour_x != 0 and (abs(self.tracked_treasure_position[0] - highest_contour_x)**2 + abs(self.tracked_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
+			self.consecutive_tracked_frame +=1
+			self.consecutive_lost_frame = 0
 			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
 			return True
 		else:
-			consecutive_lost_frame +=1
-			if (consecutive_lost_frame >= 30): #we lost the treasure :(
+			self.consecutive_lost_frame +=1
+			if (self.consecutive_lost_frame >= 30): #we lost the treasure :(
 				self.tracked_treasure_position = (0,0)
-				consecutive_tracked_frame = 0
+				self.consecutive_tracked_frame = 0
 			return False
 	
 	def get_tracked_treasure_position(self):
 		if (self.consecutive_tracked_frame > 30):
-			return tracked_treasure_position
+			return self.tracked_treasure_position
 		else:
 			return (0,0)
 		

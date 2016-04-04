@@ -1,5 +1,7 @@
 import cv2
-from embedded_treasure_detector import EmbeddedTreasureDetector as etd
+from embedded_treasure_detector import EmbeddedTreasureDetector as ETD
+from embedded_camera_service import EmbeddedCameraService as ECS
+from embedded_vision_service import EmbeddedVisionService as EVS
 import argparse
 from image_wrapper import ImageWrapper as IW
 # construct the argument parse and parse the arguments
@@ -18,15 +20,31 @@ if not args.get("video", False):
 else:
     camera = cv2.VideoCapture(args["video"])
 
-#mock class for the embedded camera controller
-class controller:
-    def __init__(self, camera):
-        self.camera = camera
-    def get_image(self):
-        (grabbed, frame) = camera.read()
-        return IW(frame)
-        
-myController = controller(camera)
-myETD = etd(myController)
-map = myETD.map_treasures()
-print(map)
+class MockCameraControl:
+	def set_hor(self, x):
+		pass
+	def set_ver(self, y):
+		pass
+
+control = MockCameraControl()
+cam = ECS(camera)
+treasure_detector = ETD()
+embedded_vision = EVS(cam, control, treasure_detector)
+map = embedded_vision.get_treasure_map()
+while True:
+	
+	embedded_vision.get_tracked_treasure_position()
+	#cv2.imshow("Frame", image)
+	print(embedded_vision.get_tracked_treasure_position())
+	key = cv2.waitKey(1) & 0xFF
+
+	#if the 'q' key is pressed, stop the loop
+	if key == ord("q"):
+		break
+
+# cleanup the camera and close any open windows
+camera.release()
+cv2.destroyAllWindows()
+
+
+
