@@ -79,36 +79,31 @@ class EmbeddedRechargeStationDetector:
 		x, y, width, height = cv2.boundingRect(approx)
 		
 		if (self.first_frame == True):
-			self.consecutive_tracked_frame +=1
-			self.consecutive_lost_frame = 0
-			self.tracked_marker_position = (x+width/2, y+height/2)
-			self.first_frame = False
+			self.__tracked(x+width/2, y+height/2)
 			return True
 			
 		elif ((abs(self.tracked_marker_position[0] - (x+width/2))**2 + abs(self.tracked_marker_position[1] - (y+height/2))**2)**(0.5) < max_delta_position):
-			self.consecutive_tracked_frame +=1
-			self.consecutive_lost_frame = 0
-			self.tracked_marker_position =  (x+width/2, y+height/2)
+			self.__tracked(x+width/2, y+height/2)
 			return True
 		else:
 			self.consecutive_lost_frame +=1
 			if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
-				self.tracked_marker_position = (0,0)
-				self.consecutive_tracked_frame = 0
-				self.first_frame = True
-			return False
-		
-		self.track_marker_position = (x+width/2, y+height/2)
-		consecutive_tracked_frame +=1
-		consecutive_lost_frame = 0
-		return True
+				self.__lost()
+				return False
+
 		
 	def get_tracked_marker_position(self):
 		if (self.consecutive_tracked_frame > 15):
 			return self.tracked_marker_position
 		else:
 			return (0,0)
-			
+	
+	def __tracked(self,x,y):
+		self.consecutive_tracked_frame +=1
+		self.consecutive_lost_frame = 0
+		self.tracked_marker_position = (x, y)
+		self.first_frame = False
+		
 	def __lost(self):
 		self.consecutive_lost_frame +=1
 		if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
