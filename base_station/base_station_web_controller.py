@@ -1,6 +1,6 @@
 import time
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -35,13 +35,19 @@ def run_base_app(host, port):
 def video_feed():
     return Response(generate_frame(camera, refresh_time), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 def cell_to_json(cell):
-    return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+    return {'x': cell.x, 'y': cell.y, 'width': cell.width, 'height': cell.height}
+
+
+@app.route('/refresh_worldmap', methods=['POST'])
+def refresh_worldmap():
+    vision_service.build_map()
 
 
 @app.route('/worldmap')
 def fetch_worldmap():
-    return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
+    return jsonify({'circles': worldmap['circles'], 'triangles': worldmap['triangles'],
                     'squares': worldmap['squares'], 'pentagons': worldmap['pentagons'],
                     'treasures':worldmap['treasures'], 'chargingStation': worldmap['charging-station']})
 
@@ -55,4 +61,4 @@ def fetch_position():
 @app.route('/vision/calibration_data', methods=['GET'])
 def get_calibration_data():
     data = vision_service.get_calibration_data()
-    return jsonify({'pixels_per_meter' : data['pixels_per_meter'], 'table_corners': data['table_contour'].tolist()})
+    return jsonify({'pixels_per_meter': data['pixels_per_meter'], 'table_corners': data['table_contour'].tolist()})

@@ -1,15 +1,18 @@
 import networkx
 from utils.position import Position
 
-
 class PathFinder:
     def __init__(self, mesh):
+        self.__mesh = mesh
         self.__graph = networkx.Graph()
         for cell in mesh.get_cells():
             self.__graph.add_node(cell)
             for other_cell in mesh.get_cells():
                 if cell.is_adjacent_to(other_cell):
                     self.__graph.add_edge(cell, other_cell)
+
+    def get_mesh(self):
+        return self.__mesh
 
     def find_path(self, from_point, to_point):
         from_cell = None

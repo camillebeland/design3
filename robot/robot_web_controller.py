@@ -8,12 +8,12 @@ CORS(app)
 socket_io = SocketIO(app)
 
 
-def inject(a_robot, a_mesh, a_robot_service, an_action_machine):
-    global robot, mesh, robot_service, action_machine
+def inject(a_robot, a_vision_refresher, a_robot_service, an_action_machine):
+    global robot, vision_refresher, robot_service, action_machine
     robot = a_robot
-    mesh = a_mesh
     robot_service = a_robot_service
     action_machine = an_action_machine
+    vision_refresher = a_vision_refresher
 
 
 def run(host, port):
@@ -70,7 +70,7 @@ def robot_fetch_path():
 
 @app.route('/mesh')
 def mesh():
-    return jsonify(mesh_to_json(mesh))
+    return jsonify(mesh_to_json(robot.get_mesh()))
 
 
 def mesh_to_json(mesh):
@@ -120,3 +120,9 @@ def send_action_to_robot(action):
 @app.route('/actions')
 def get_actions():
     return jsonify(action_machine.get_events())
+
+
+@app.route('/robot/vision/refresh', methods=['POST'])
+def recalculate_world_map():
+    vision_refresher.refresh()
+    return "OK"
