@@ -17,16 +17,15 @@ class VisionService:
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
 
-        triangles_red_upper, pentagons_red_upper, squares_red_upper, circles_red_upper = self.__find_polygon_color__(image, 'red_upper')
-        triangles_red_lower, pentagons_red_lower, squares_red_lower, circles_red_lower = self.__find_polygon_color__(image, 'red_lower')
+        triangles_red, pentagons_red, squares_red, circles_red = self.__find_polygon_color__(image, 'red')
         triangles_green, pentagons_green, squares_green, circles_green = self.__find_polygon_color__(image, 'green')
         triangles_blue, pentagons_blue, squares_blue, circles_blue = self.__find_polygon_color__(image, 'blue')
         triangles_yellow, pentagons_yellow, squares_yellow, circles_yellow = self.__find_polygon_color__(image, 'yellow')
 
-        triangles = triangles_green + triangles_blue + triangles_red_upper + triangles_red_lower + triangles_yellow
-        circles = circles_green + circles_blue + circles_red_upper + circles_red_lower + circles_yellow
-        pentagons = pentagons_green + pentagons_blue + pentagons_red_upper + pentagons_red_lower + pentagons_yellow
-        squares = squares_green + squares_blue + squares_red_upper + squares_red_lower + squares_yellow
+        triangles = triangles_green + triangles_blue + triangles_red + triangles_yellow
+        circles = circles_green + circles_blue + circles_red + circles_yellow
+        pentagons = pentagons_green + pentagons_blue + pentagons_red + pentagons_yellow
+        squares = squares_green + squares_blue + squares_red + squares_yellow
 
         treasures.extend(self.__treasure_detector.find_treasures(image, find_treasures_param))
 
@@ -51,8 +50,6 @@ class VisionService:
 
     def __find_polygon_color__(self, image, color):
         squares, pentagons, triangles, circles = self.__shape_detector.find_polygon_color(image, color, default_camille_polygon_params)
-        if color is 'red_lower' or color is 'red_upper':
-            color = 'red'
         for poly in circles:
             poly['shape'] = 'circle'
             poly['color'] = color

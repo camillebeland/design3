@@ -1,6 +1,6 @@
 import cv2
 import base_station.vision.vision_utils as utils
-
+from base_station.vision.image_wrapper import ImageWrapper
 
 class IslandDetector:
     def find_polygon_color(self, image, color, parameters, opencv=cv2):
@@ -15,9 +15,20 @@ class IslandDetector:
             epsilon = 0.04*cv2.arcLength(contour, True)
             return opencv.approxPolyDP(contour, epsilon, True)
 
-        contours = (image
-                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
-                    .filter_by_color(hsv_range[color])
+        blurred_image = (image
+                         .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x))
+
+        if color is 'red':
+            red_low_image = blurred_image.filter_by_color(hsv_range['red_lower'])
+            red_up_image = blurred_image.filter_by_color(hsv_range['red_upper'])
+            frame1 = red_up_image.read_image()
+            frame2 = red_low_image.read_image()
+            image_red = cv2.bitwise_or(frame1, frame2)
+            blurred_image = ImageWrapper(image_red, 'gray')
+        else:
+            blurred_image = blurred_image.filter_by_color(hsv_range[color])
+
+        contours = (blurred_image
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
