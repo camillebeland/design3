@@ -42,7 +42,8 @@ def cell_to_json(cell):
 
 @app.route('/refresh_worldmap', methods=['POST'])
 def refresh_worldmap():
-    vision_service.build_map()
+    global worldmap
+    worldmap = vision_service.build_map()
 
 
 @app.route('/worldmap')

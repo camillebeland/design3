@@ -14,7 +14,6 @@ class VisionService:
 
     def build_map(self):
         image = self.eliminate_first_frames()
-
         image = image.mask_image(self.worldmap_contour['table_contour'])
         circles, pentagons, squares, triangles, treasures = [], [], [], [], []
 
