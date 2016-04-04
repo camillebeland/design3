@@ -1,4 +1,4 @@
-website.controller('displayControlsController', ['$scope', '$rootScope', function($scope, $rootScope) {
+website.controller('displayControlsController', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
 
   $scope.meshToggleOn = function() {
     $rootScope.$broadcast('meshToggleOn');
@@ -24,20 +24,11 @@ website.controller('displayControlsController', ['$scope', '$rootScope', functio
     $rootScope.$broadcast('visionRobotToggleOff');
   };
 
-  /*$scope.recalculateMesh = function(){
-    $http({
-        method: 'GET',
-        url: 'http://' + BASE_STATION_HOST + '/vision/',
-    });
-  };*/
-
   $scope.recalculateMap = function(){
     $http({
-        method: 'GET',
-        url: 'http://' + ROBOT_HOST + '/robot/worldmap/recalculate',
-        data: angle
+        method: 'POST',
+        url: 'http://' + ROBOT_HOST + '/robot/vision/refresh',
     });
-    $
   };
 
 }]);
