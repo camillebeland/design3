@@ -86,13 +86,12 @@ if __name__ == '__main__':
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
-        vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
-        world_map = Map(vision_perspective_corrected)
         camera_position_x = config.getint('robot', 'camera-position-x')
         camera_position_y = config.getint('robot', 'camera-position-y')
         camera_height = config.getfloat('robot', 'camera-height')
         robot_height = config.getfloat('robot', 'robot-height')
-
+        vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
+        world_map = Map(vision_perspective_corrected)
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
         arduino_baudrate = config.getint('robot', 'arduino-baudrate')
@@ -108,7 +107,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
         gripper = Gripper(serial_port)
-        polulu_port = serial.Serial(port='/dev/ttyACM0', timeout=1)
+        polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
 
