@@ -12,8 +12,8 @@ class EmbeddedVisionService:
         self.embedded_recharge_station_detector = embedded_recharge_station_detector
 
     def get_treasure_map(self):
-        self.camera_rotation_control.set_hor(0)
-        self.camera_rotation_control.set_ver(0)
+        #self.camera_rotation_control.set_hor(0)
+        #self.camera_rotation_control.set_ver(0)
         sleep(1)
         return self.embedded_treasure_detector.map_treasures(ImageWrapper(self.camera.get_frame()), mask_params, map_treasures_params)
 

@@ -1,8 +1,6 @@
 import serial
 import serial.tools.list_ports as lp
 from configuration import configuration
-from pathfinding.mesh_builder import MeshBuilder
-from pathfinding.pathfinding import PathFinder
 from robot import robot_web_controller
 from robot.assemblers.robot_info_assembler import RobotInfoAssembler
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
@@ -15,7 +13,6 @@ from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
 from robot.simulation.battery_simulation import BatterySimulation
 from robot.simulation.simulation_map import SimulationMap
-from robot.simulation.magnet_simulation import MagnetSimulation
 from robot.wheels_usb_commands import WheelsUsbCommands
 from robot.wheels_usb_controller import WheelsUsbController
 from robot.wheels_correction_layer import WheelsCorrectionLayer
@@ -33,8 +30,23 @@ from robot.magnet import Magnet
 from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 from robot.vision_refresher import VisionRefresher
+from vision_utils.camera_service import CameraService
+from vision_utils.mock_camera_service import MockCameraService
+import cv2
 
 from utils.position import Position
+
+def camera_builder(camera_config, camera_id, camera_width, camera_height):
+    if camera_config == "webcam":
+        open_cv_camera = cv2.VideoCapture(camera_id)
+        WIDTH_PARAMETER_ID = 3
+        HEIGHT_PARAMETER_ID = 4
+        open_cv_camera.set(WIDTH_PARAMETER_ID, camera_width)
+        open_cv_camera.set(HEIGHT_PARAMETER_ID, camera_height)
+        camera = CameraService(open_cv_camera, cv2)
+    if camera_config == "mock":
+        camera = MockCameraService()
+    return camera
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -44,12 +56,16 @@ if __name__ == '__main__':
     wheels_config = config.get('robot', 'wheels')
     base_station_host = config.get('baseapp', 'host')
     base_station_port = config.get('baseapp', 'port')
-    base_station_camera = config.get('baseapp', 'camera')
+    camera_height = config.getint('baseapp', 'camera_height')
+    camera_width = config.getint('baseapp', 'camera_width')
+    embedded_camera = config.get('robot', 'camera')
+    embedded_camera_id = config.getint('robot', 'camera_id')
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
     loop_time = config.getfloat('robot', 'loop-time')
     min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
 
+    camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height)
     robot_service = RobotService(island_server_address)
     world_map_service = WorldmapService(base_station_host, base_station_port)
 
