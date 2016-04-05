@@ -1,5 +1,5 @@
 import cv2
-from image_wrapper import ImageWrapper as Image
+from vision_utils.image_wrapper import ImageWrapper as Image
 class EmbeddedRechargeStationDetector:
 
     def __init__(self):

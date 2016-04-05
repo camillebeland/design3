@@ -16,5 +16,4 @@ class TableCalibrationService:
         return self.pixel_per_meter_ratio
 
     def get_table_corners(self):
-        print(self.table_corners)
         return self.table_corners

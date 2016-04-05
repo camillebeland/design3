@@ -1,5 +1,5 @@
 import cv2
-
+from vision_utils.image_wrapper import ImageWrapper
 
 # ************ EMBEDDED CAMERA FOV IS 63.53 deg *****************
 

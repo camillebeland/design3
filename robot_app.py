@@ -128,7 +128,6 @@ if __name__ == '__main__':
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
     vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port, camera, vision_daemon)
-
     action_machine = ActionMachine()
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
     pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)

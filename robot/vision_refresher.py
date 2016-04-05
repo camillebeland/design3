@@ -5,6 +5,8 @@ from robot.table_calibration_service import TableCalibrationService
 from robot.embedded_camera import EmbeddedCamera
 from robot.vision.embedded_vision_service import EmbeddedVisionService
 from robot.vision.embedded_treasure_detector import EmbeddedTreasureDetector
+from robot.vision.embedded_recharge_station_detector import EmbeddedRechargeStationDetector
+from maestroControl.camera_rotation_control import CameraRotationControl
 
 class VisionRefresher:
     def __init__(self, robot, corrected_wheels, island_host, island_port, camera, vision_daemon):
@@ -29,7 +31,6 @@ class VisionRefresher:
         pathfinder = PathFinder(mesh)
         self.__robot.init_vision(pathfinder)
 
-        embedded_vision_service = EmbeddedVisionService(self.__camera, EmbeddedTreasureDetector())
+        embedded_vision_service = EmbeddedVisionService(self.__camera, EmbeddedTreasureDetector(), EmbeddedRechargeStationDetector())
         embedded_camera = EmbeddedCamera(table_calibration, embedded_vision_service, self.__vision_daemon)
         treasures = embedded_camera.get_treasures()
-        print(treasures)
