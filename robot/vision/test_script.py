@@ -33,13 +33,15 @@ treasure_detector = ETD()
 recharge_detector = ERSD()
 embedded_vision = EVS(cam, control, treasure_detector, recharge_detector)
 map = embedded_vision.get_treasure_map()
-while True:
+print(map)
+#while True:
 	
 	#embedded_vision.track_treasure()
 	#cv2.imshow("Frame", image)
+	#print(treasure_detector.consecutive_tracked_frame)
 	#print(embedded_vision.get_tracked_treasure_position())
-	embedded_vision.track_marker()
-	print(embedded_vision.get_recharge_station_position())
+	#embedded_vision.track_marker()
+	#print(embedded_vision.get_recharge_station_position())
 	#print(treasure_detector.consecutive_tracked_frame)
 	#key = cv2.waitKey(1) & 0xFF
 
