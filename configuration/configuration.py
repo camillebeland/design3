@@ -3,6 +3,7 @@ import os
 
 
 def get_config():
+
     print("Reading configuration file")
     config = configparser.ConfigParser()
 

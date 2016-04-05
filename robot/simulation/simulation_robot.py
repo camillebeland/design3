@@ -6,7 +6,7 @@ PRECISION = 0.00001
 
 
 class SimulationWheels:
-    def __init__ (self, worldmap, wheels_velocity=5, refresh_time = 10):
+    def __init__(self, worldmap, wheels_velocity=5, refresh_time=10):
         self.refresh_time = refresh_time
         self.running = False
         self.worldmap = worldmap

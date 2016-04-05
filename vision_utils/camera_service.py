@@ -38,3 +38,6 @@ class CameraService(object):
 
     def stop(self):
         self.running = False
+
+    def set_mock_buffer(self, mock_buffer):
+        self.buffer = mock_buffer

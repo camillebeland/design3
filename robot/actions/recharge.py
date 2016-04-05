@@ -3,6 +3,7 @@ from robot.action import Action
 
 class RechargeAction(Action):
     def start(self):
-        alignment_correction = self.__embedded_camera.get_recharge_station_position()
-        self.__robot.fine_move_to(alignment_correction)
+        self._robot.recharge_magnet(self.recharge_done)
 
+    def recharge_done(self):
+        print('recharge done')
