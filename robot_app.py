@@ -120,7 +120,6 @@ if __name__ == '__main__':
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
     vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port)
-    vision_refresher.refresh()
 
     action_machine = ActionMachine()
 
