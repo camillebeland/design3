@@ -11,6 +11,7 @@ from robot.map import Map
 from robot.vision_perspective_correction import VisionPerspectiveCorrection
 from robot.robot import Robot
 from robot.robot_service import RobotService
+from robot.simulation.robot_service_simulation import RobotServiceSimulation
 from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
 from robot.simulation.battery_simulation import BatterySimulation
@@ -21,12 +22,18 @@ from robot.wheels_usb_controller import WheelsUsbController
 from robot.wheels_correction_layer import WheelsCorrectionLayer
 from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
+from robot.context import Context
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
-from robot.actions.pick_up_treasure import PickUpTreasure
+from robot.actions.pick_up_treasure import PickUpTreasureAction
 from robot.actions.drop_down_treasure import DropDownTreasure
 from robot.actions.recharge import RechargeAction
 from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.actions.find_island_clue import FindIslandClue
+from robot.actions.end_sequence import EndSequenceAction
+from robot.actions.find_best_treasure import FindBestTreasureAction
+from robot.actions.find_island import FindIslandAction
+from robot.actions.move_to_target_island import MoveToTargetIslandAction
+from robot.actions.move_to_treasure import MoveToTreasureAction
 from robot.vision_daemon import VisionDaemon
 from robot.movement import Movement
 from robot.magnet import Magnet
@@ -78,6 +85,7 @@ if __name__ == '__main__':
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
         magnet = MagnetSimulation()
+        robot_service = RobotServiceSimulation()
 
     elif wheels_config == "usb-arduino":
         assembler = RobotInfoAssembler()
@@ -106,34 +114,67 @@ if __name__ == '__main__':
         polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
+        robot_service = RobotService(island_server_address)
 
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
-    robot_service = RobotService(island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
     vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port)
+    vision_refresher.refresh()
 
     action_machine = ActionMachine()
-    move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
-    pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
-    drop_down_treasure = DropDownTreasure(robot, robot_service, world_map, None)
-    read_manchester_code = DiscoverManchesterCodeAction(robot, robot_service, world_map, None)
-    find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
-    recharge = RechargeAction(robot, robot_service,world_map, None)
-    find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
+
+    context = Context(robot, robot_service, world_map, None, action_machine)
+
+    move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
+    pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
+    drop_down_treasure = DropDownTreasure(context, 'drop_down_treasure_done')
+    discover_manchester_code = DiscoverManchesterCodeAction(context, 'discover_manchester_code_done')
+    find_island_clue = FindIslandClue(context, 'find_island_clue_done')
+    recharge = RechargeAction(context, 'recharge_done')
+    find_best_treasure = FindBestTreasureAction(context, 'find_best_treasure_done')
+    find_island = FindIslandAction(context, 'find_island_done')
+    move_to_target_island = MoveToTargetIslandAction(context, 'move_to_target_island_done')
+    end_action = EndSequenceAction(context, None)
+    move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
-    action_machine.register('read_manchester_code', read_manchester_code)
-    action_machine.bind('start', 'move_to_charge_station')
+    action_machine.register('discover_manchester_code', discover_manchester_code)
     action_machine.register('pick_up_treasure', pick_up_treasure)
-    action_machine.bind('pick_up_treasure', 'pick_up_treasure')
+    action_machine.register('end_action', end_action)
     action_machine.register('drop_down_treasure', drop_down_treasure)
-    action_machine.bind('drop_down_treasure', 'drop_down_treasure')
-    action_machine.bind("read_manchester", "read_manchester_code")
     action_machine.register('find_island_clue', find_island_clue)
+    action_machine.register('recharge', recharge)
+    action_machine.register('move_to_target_island', move_to_target_island)
+    action_machine.register('move_to_treasure', move_to_treasure)
+    action_machine.register('find_island', find_island)
+    action_machine.register('find_best_treasure', find_best_treasure)
+
+
+    action_machine.bind('move_to_charge_station', 'move_to_charge_station')
+    action_machine.bind('find_island', 'find_island')
+    action_machine.bind('move_to_treasure', 'move_to_treasure')
+    action_machine.bind('move_to_target_island', 'move_to_target_island')
+    action_machine.bind('find_best_treasure', 'find_best_treasure')
+    action_machine.bind('pick_up_treasure', 'pick_up_treasure')
+    action_machine.bind('drop_down_treasure', 'drop_down_treasure')
+    action_machine.bind("read_manchester", "discover_manchester_code")
     action_machine.bind('find_island_clue', 'find_island_clue')
-    action_machine.register("recharge", recharge)
     action_machine.bind("recharge", "recharge")
+
+
+    action_machine.bind('start', 'move_to_charge_station')
+    action_machine.bind('move_to_charge_station_done', 'recharge')
+    action_machine.bind('recharge_done', 'discover_manchester_code')
+    action_machine.bind('discover_manchester_code_done', 'find_island_clue')
+    action_machine.bind('find_island_clue_done', 'find_island')
+    action_machine.bind('find_island_done', 'find_best_treasure')
+    action_machine.bind('find_best_treasure_done', 'move_to_treasure')
+    action_machine.bind('move_to_treasure_done', 'pick_up_treasure')
+    action_machine.bind('pick_up_treasure_done', 'move_to_target_island')
+    action_machine.bind('move_to_target_island_done', 'drop_down_treasure')
+    action_machine.bind('drop_down_treasure_done', 'end_action')
+
 
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
     robot_web_controller.run(host, port)
