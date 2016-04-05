@@ -65,7 +65,7 @@ if __name__ == '__main__':
     loop_time = config.getfloat('robot', 'loop-time')
     min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
 
-    camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height)
+    camera = camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height)
     robot_service = RobotService(island_server_address)
     world_map_service = WorldmapService(base_station_host, base_station_port)
 
@@ -127,7 +127,7 @@ if __name__ == '__main__':
     robot_service = RobotService(island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
-    vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port)
+    vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port, camera, vision_daemon)
 
     action_machine = ActionMachine()
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
@@ -150,6 +150,7 @@ if __name__ == '__main__':
     action_machine.bind('find_island_clue', 'find_island_clue')
     action_machine.register("recharge", recharge)
     action_machine.bind("recharge", "recharge")
+
 
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
     robot_web_controller.run(host, port)

@@ -5,22 +5,21 @@ from time import sleep
 #on doit lui passer un camera_service, un camera_rotation_control et les detector
 
 class EmbeddedVisionService:
-    def __init__(self, camera_service,  camera_rotation_control, embedded_treasure_detector, embedded_recharge_station_detector):
+    def __init__(self, camera_service, embedded_treasure_detector):
         self.camera = camera_service
-        self.camera_rotation_control = camera_rotation_control
+        #self.camera_rotation_control = camera_rotation_control
         self.embedded_treasure_detector = embedded_treasure_detector
-        self.embedded_recharge_station_detector = embedded_recharge_station_detector
+        #self.embedded_recharge_station_detector = embedded_recharge_station_detector
 
     def get_treasure_map(self):
-        self.camera_rotation_control.set_hor(0)
-        self.camera_rotation_control.set_ver(0)
+        #self.camera_rotation_control.set_hor(0)
+        #self.camera_rotation_control.set_ver(0)
         sleep(1)
         return self.embedded_treasure_detector.map_treasures(ImageWrapper(self.camera.get_frame()), mask_params, map_treasures_params)
 
     def track_treasure(self):
         image = ImageWrapper(self.camera.get_frame())
         return self.embedded_treasure_detector.track_treasure(image, track_treasure_params)
-
 
     def get_tracked_treasure_position(self):
         return self.embedded_treasure_detector.get_tracked_treasure_position()
