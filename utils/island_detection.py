@@ -1,10 +1,12 @@
+from configparser import ConfigParser
 from tkinter import *
 from tkinter import filedialog
-from PIL import Image, ImageTk
 from tkinter.scrolledtext import ScrolledText
-from configparser import ConfigParser
+
 import cv2
-from base_station.camera_service import CameraService
+from PIL import Image, ImageTk
+
+from vision_utils.camera_service import CameraService
 
 if __name__ == '__main__':
 

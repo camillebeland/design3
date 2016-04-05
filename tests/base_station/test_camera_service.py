@@ -1,5 +1,4 @@
-from nose.tools import *
-from base_station.camera_service import CameraService
+from vision_utils.camera_service import CameraService
 
 class TestCameraService:
     def setup(self):

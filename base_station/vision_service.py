@@ -1,4 +1,4 @@
-from base_station.vision.image_wrapper import ImageWrapper
+from vision_utils.image_wrapper import ImageWrapper
 
 class VisionService:
     def __init__(self, camera, shape_detector, treasure_detector, table_calibrator, robot_detector):

@@ -47,7 +47,7 @@ while True:
 #if key == ord("q"):
 	#break
 
-#cleanup the camera and close any open windows
+#cleanup the vision_utils and close any open windows
 camera.release()
 cv2.destroyAllWindows()
 

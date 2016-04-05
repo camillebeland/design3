@@ -1,10 +1,10 @@
 from threading import Thread
-from double_sided_buffer import DoubleSidedBuffer
-import cv2
+
+from vision_utils.double_sided_buffer import DoubleSidedBuffer
 
 
-class EmbeddedCameraService(object):
-    def __init__(self, camera, opencv = cv2):
+class CameraService(object):
+    def __init__(self, camera, opencv):
         self.opencv = opencv
         self.camera = camera
         self.running = True

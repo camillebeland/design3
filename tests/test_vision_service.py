@@ -1,9 +1,9 @@
-from base_station.vision_service import VisionService
-from base_station.mock_camera_service import MockCameraService
 from base_station.vision.island_detector import IslandDetector
+from base_station.vision.robot_detector import RobotDetector
 from base_station.vision.table_calibrator import TableCalibrator
 from base_station.vision.treasure_detector import TreasureDetector
-from base_station.vision.robot_detector import RobotDetector
+from base_station.vision_service import VisionService
+from vision_utils.mock_camera_service import MockCameraService
 
 
 class TestVisionService:
