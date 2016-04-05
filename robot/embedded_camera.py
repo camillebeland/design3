@@ -39,11 +39,11 @@ class EmbeddedCamera:
             distance_rear = math.sqrt((camera_position[0] - treasure_rear_x)**2 + (camera_position[1] - treasure_rear_y)**2)
 
             treasure_distance = min([distance_bottom, distance_top, distance_rear])
-            if treasure_distance == distance_bottom:
+            if treasure_distance == distance_bottom and treasure_bottom_x < camera_position[0]:
                 detected_treasures.append((treasure_bottom_y, treasure_bottom_y))
             elif treasure_distance == distance_rear:
                 detected_treasures.append((treasure_rear_y, treasure_rear_y))
-            elif treasure_distance == distance_top:
+            elif treasure_distance == distance_top and treasure_top_x < camera_position[0]:
                 detected_treasures.append((treasure_top_y, treasure_top_y))
         print(detected_treasures)
         return detected_treasures
