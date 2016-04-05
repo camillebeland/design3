@@ -19,7 +19,7 @@ TabEnum = Object.freeze({
 
 website.controller('homeController', ['$scope', function($scope) {
   /*Webapp constants*/
-  window.BASE_STATION_HOST = "192.168.0.35:5000";
+  window.BASE_STATION_HOST = "192.168.0.34:5000";
   window.ROBOT_HOST = "192.168.0.34:3000";
   window.VIDEO_STREAM = BASE_STATION_HOST + "/video_feed";
   window.POSITION_REFRESH_TIME_IN_MS = 100;
