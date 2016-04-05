@@ -28,7 +28,7 @@ class EmbeddedTreasureDetector:
 			.filter_by_color(hsv_range['black'])
 			.erode(erode_kernel_size, erode_iterations)
 			.dilate(dilate_kernel_size, dilate_iterations)
-			.erode(erode_kernel_size, dilate_iterations - erode_iterations)
+			.erode(erode_kernel_size, dilate_iterations - 2*erode_iterations)
 			.find_contours())
 
 		def find_biggest_contour(cnts):
@@ -78,6 +78,7 @@ class EmbeddedTreasureDetector:
 		
 		
 	def track_treasure(self, image, parameters , opencv=cv2):
+		resized = image.resize(400)
 		erode_kernel_size = parameters['erode_kernel_size']
 		erode_iterations = parameters['erode_iterations']
 		dilate_kernel_size = parameters['dilate_kernel_size']
@@ -88,7 +89,7 @@ class EmbeddedTreasureDetector:
 		max_area = parameters['max_area']
 		max_delta_position = parameters['max_delta_position']
 
-		contours = (image
+		contours = (resized
 					.filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
 					.filter_by_color(hsv_range['yellow'])
 					.erode(erode_kernel_size, erode_iterations)
@@ -106,28 +107,30 @@ class EmbeddedTreasureDetector:
 			epsilon = 0.04*cv2.arcLength(contour, True)
 			return opencv.approxPolyDP(contour, epsilon, True)
 		
-		highest_contour = 0
-		highest_contour_y = image.get_height()
-		highest_contour_x = 0
+		center_contour = 0
+		center_contour_y = 0
+		center_contour_x = resized.get_width()
 		for contour in contours:
 			approx = approx_polygon(contour)
 			x, y, width, height = cv2.boundingRect(approx)
 			area = cv2.contourArea(contour)
-			if (min_area < area <  max_area and y < highest_contour_y and len(approx) == 4 and (abs(self.tracked_treasure_position[0] - highest_contour_x)**2 + abs(self.tracked_treasure_position[1] - highest_contour_y)**2)**(0.5) < max_delta_position):
-				highest_contour = contour
-				highest_contour_y = y +height/2
-				highest_contour_x = x+width/2
+			if (min_area < area <  max_area):
+				if ((abs(self.tracked_treasure_position[0] - x)**2 + abs(self.tracked_treasure_position[1] - y)**2)**(0.5) < max_delta_position or self.first_frame == True):
+					if (abs((x+width/2) - resized.get_width()/2) < center_contour_x):
+						center_contour = contour
+						center_contour_y = y +height/2
+						center_contour_x = x+width/2
 				
 		if (self.first_frame == True):
 			self.consecutive_tracked_frame +=1
 			self.consecutive_lost_frame = 0
-			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
+			self.tracked_treasure_position = (center_contour_x, center_contour_y)
 			self.first_frame = False
 			return True
-		elif (highest_contour_x != 0):
+		elif (center_contour_y != 0):
 			self.consecutive_tracked_frame +=1
 			self.consecutive_lost_frame = 0
-			self.tracked_treasure_position = (highest_contour_x, highest_contour_y)
+			self.tracked_treasure_position = (center_contour_x, center_contour_y)
 			return True
 		else:
 			self.consecutive_lost_frame +=1
@@ -139,7 +142,7 @@ class EmbeddedTreasureDetector:
 	
 	def get_tracked_treasure_position(self):
 		if (self.consecutive_tracked_frame > 15):
-			return self.tracked_treasure_position
+			return (self.tracked_treasure_position[0]*4, self.tracked_treasure_position[1]*4)
 		else:
 			return (0,0)
 		
