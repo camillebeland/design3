@@ -15,10 +15,10 @@ class EmbeddedVisionService:
         self.camera_rotation_control.set_hor(0)
         self.camera_rotation_control.set_ver(0)
         sleep(1)
-        return self.embedded_treasure_detector.map_treasures(IW(self.camera.get_frame()), mask_params, map_treasures_params)
+        return self.embedded_treasure_detector.map_treasures(ImageWrapper(self.camera.get_frame()), mask_params, map_treasures_params)
 
     def track_treasure(self):
-        image = IW(self.camera.get_frame())
+        image = ImageWrapper(self.camera.get_frame())
         return self.embedded_treasure_detector.track_treasure(image, track_treasure_params)
 
 
@@ -26,7 +26,7 @@ class EmbeddedVisionService:
         return self.embedded_treasure_detector.get_tracked_treasure_position()
 
     def track_marker(self):
-        image = IW(self.camera.get_frame())
+        image = ImageWrapper(self.camera.get_frame())
         self.embedded_recharge_station_detector.track_marker_position(image, mask_recharge_params, marker_params)
 
     def get_recharge_station_position(self):
@@ -71,6 +71,15 @@ map_treasures_params = {
     'dilate_iterations' : 2,
     'erode_kernel_size' : 0,
     'erode_iterations' : 2,
+}
+
+mask_params = {
+    'gaussian_blur_kernel_size': 15,
+    'gaussian_blur_sigma_x': 0,
+    'dilate_kernel_size': 0,
+    'dilate_iterations': 75,
+    'erode_kernel_size': 0,
+    'erode_iterations': 5
 }
 
 
