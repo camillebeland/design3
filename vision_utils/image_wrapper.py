@@ -1,12 +1,16 @@
 import cv2
 import numpy as np
-
+import imutils
 
 class ImageWrapper:
     def __init__(self, image_src, image_format='bgr', open_cv=cv2):
         self.__open_cv = open_cv
         self.__image = image_src
         self.__image_format = image_format
+
+    def resize(self, width):
+        resized = imutils.resize(self.__image, width=width)
+        return ImageWrapper(resized)
 
     def get_height(self):
         return self.__image.shape[0]
