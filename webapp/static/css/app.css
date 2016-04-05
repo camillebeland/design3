@@ -34,3 +34,7 @@ body {
 .notImplemented{
   color: #d1d1e0
 }
+.readinessLed{
+  height:15px;
+  display:inline;
+}
