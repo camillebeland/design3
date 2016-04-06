@@ -312,16 +312,10 @@ void move_straight(Direction direction, long tick, double speed){
 	
 }
 
-// x = mm
-// y = mm
-// MSB = negative
 bool xDirection = false;
 bool yDirection = false;
 void move(long x, long y, double speed){
 	
-	//reset_all_motors();
-
-	double angle;
 	if (x>= 32768){
 		x = x- 32768;
 		x = -x;
@@ -330,11 +324,12 @@ void move(long x, long y, double speed){
 		y = y -32768;
 		y = -y;
 	}
-
+	
+	double angle;
 	angle = atan2(abs(y), abs(x));
 	
-	long ticks_X = (x*long(TICKS_PER_MM));
-	long ticks_Y = (y*long(TICKS_PER_MM));
+	long ticks_X = long(x*(TICKS_PER_MM));
+	long ticks_Y = long(y*(TICKS_PER_MM));
 	double speed_X = cos(angle)*speed;
 	double speed_Y = sin(angle)*speed;
 	if (speed_X < MIN_SPEED){
@@ -370,8 +365,8 @@ void move(long x, long y, double speed){
 			brake_motor(OUT_MOTOR_C);
 		}
 		xDirection = true;
-		ticks_X = (ticks_X);
 		move_straight(LEFT, ticks_X, speed_X);
+		
 	}
 	else if (ticks_X <0){
 		if (xDirection == true){
@@ -386,7 +381,6 @@ void move(long x, long y, double speed){
 }
 
 void rotate(Direction direction, int angle){
-	//reset_all_motors();
 	int wanted_polarity;
 
 	if (direction == LEFT){
@@ -415,8 +409,7 @@ void PID_motors(){
 	if (last_PID_ISR_count != PID_ISR_count){
 		
 		last_PID_ISR_count = PID_ISR_count;
-		//last_millis = millis();
-		
+
 		//get speed of each wheel (ticks/sec)
 		actual_speed_A = FREQ*(last_tick_remaining_A - tick_remaining_A);
 		actual_speed_B = FREQ*(last_tick_remaining_B - tick_remaining_B);
@@ -472,7 +465,6 @@ void PID_motors(){
 			command = (ZERO_SPEED_A) + (integrator_A) + (error_A*KP) - (delta_motors_X*KSP) ;
 			
 			OCR0A = limit_command(command);
-			//Serial.println(limit_command(command));
 		}
 		else if (running_A){
 			brake_motor(OUT_MOTOR_A);
@@ -488,7 +480,6 @@ void PID_motors(){
 		if (tick_remaining_C >0 && running_C){
 			command = (ZERO_SPEED_C )+ (integrator_C) + (error_C*KP) + (delta_motors_X*KSP) ;
 			OCR5A = limit_command(command);
-			
 		}
 		else if (running_C){
 			brake_motor(OUT_MOTOR_C);

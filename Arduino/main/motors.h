@@ -67,10 +67,10 @@ Arduino Pin	Register
 
 #define FREQ 20 //  Hz
 #define DEFAULT_SPEED 1300 // TICKS PER SEC
-#define SLOW_TRIGGER 350
+#define SLOW_TRIGGER 500
 #define MIN_SPEED 300
 #define SLOW_SPEED 750
-#define ROTATE_SPEED 500
+#define ROTATE_SPEED 750
 #define ROTATE_DIAMETER 190 //mm
 
 #define KSI 0.015 // for delta motors
