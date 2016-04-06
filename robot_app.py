@@ -41,6 +41,7 @@ import cv2
 
 from utils.position import Position
 
+
 def camera_builder(camera_config, camera_id, camera_width, camera_height):
     if camera_config == "webcam":
         open_cv_camera = cv2.VideoCapture(camera_id)
