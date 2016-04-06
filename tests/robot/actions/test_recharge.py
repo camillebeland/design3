@@ -8,10 +8,8 @@ class TestRecharge:
     def test_start_should_call_recharge_on_robot(self):
         # Given
         mock_robot = Mock()
-        full_capacitor_value = 90
-        mock_robot.get_capacitor_charge.return_value = full_capacitor_value
         mock_context = Mock()
-        mock_context.robot.return_value = mock_robot
+        mock_context.robot = mock_robot
         recharge_action = RechargeAction(mock_context, Mock())
 
         # When
