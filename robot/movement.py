@@ -36,12 +36,12 @@ class Movement:
             self.__actual_position = self.__sense.get_robot_position()
             self.__actual_robot_angle = self.__sense.get_robot_angle()
             # compute
-            path = self.__compute.find_path(self.__actual_position, final_destination)
-            self.__current_path = path
-            target = self.find_relative_target(path)
+            self.__current_path = self.__compute.find_path(self.__actual_position, final_destination)
+            target = self.find_relative_target(self.__current_path)
             # control
             self.__control.move(target[0], target[1])
             sleep(self.__loop_time)
+
         if callback is not None:
             callback()
         self.__current_path = list()
@@ -51,7 +51,10 @@ class Movement:
         return self.__actual_distance > self.__min_distance_to_target
 
     def find_relative_target(self, path):
-        if len(path) == 1:
+        if len(path) is 0:
+            self.__should_move = False
+            return (0,0)
+        elif len(path) is 1:
             return self._relative_position(path[0])
         else:
             return self._relative_position(path[1])
