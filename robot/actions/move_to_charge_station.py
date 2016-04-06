@@ -16,6 +16,6 @@ class MoveToChargeStationAction(Action):
     def __rotate_done(self):
         self._context.event_listener.notify_event(self._end_message)
 
-    def stop():
+    def stop(self):
         #TODO
         raise NotImplementedError()

@@ -30,6 +30,17 @@ class Movement:
         else:
             print('Need to initialize vision')
 
+    def move_to_target(self, target, callback):
+        self.__start_target_collider()
+        self.move_to(target, callback)
+
+    def __start_target_collider(self, target):
+        self.__has_ = False
+        sleep(self.__loop_time)
+        self.__thread = Thread(target=self.move_to_thread, args=(final_destination, callback,))
+        self.__should_move = True
+        self.__thread.start()
+
     def move_to_thread(self, final_destination, callback):
         while self.__should_move and self.__not_close_enough_to_target(final_destination):
             # sense

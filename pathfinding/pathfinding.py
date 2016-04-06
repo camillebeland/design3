@@ -3,6 +3,7 @@ from functools import reduce
 from pathfinding.cell import Cell
 from utils.position import Position
 
+
 class PathFinder:
     def __init__(self, mesh, polygons=[]):
         self.__mesh = mesh

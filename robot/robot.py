@@ -64,6 +64,9 @@ class Robot:
     def move_to(self, final_destination, callback):
         self.__movement.move_to(final_destination, callback)
 
+    def move_to_target(self, target, callback):
+        self.__movement.move_to_target(target, callback)
+
     def find_move_to(self, position):
         #TODO
         pass
@@ -104,3 +107,4 @@ class Robot:
 
     def set_island_clue(self, clue):
         self.__island_clue = clue
+
