@@ -50,10 +50,11 @@ def test_when_robot_move_to_then_move_to_on_movement_is_called():
     callback = Mock()
     robot.move_to(FINAL_DESTINATION, callback)
 
-    # Then
+    #
     movement.move_to.assert_called_once_with(FINAL_DESTINATION, callback)
 
 
-def test_when_robot_rotate_then_wheels_rotate():
-    robot.rotate(AN_ANGLE)
-    assert_true(wheels.rotateCalled)
+#TODO that's an integration test
+# def test_when_robot_rotate_then_wheels_rotate():
+#     robot.rotate(AN_ANGLE)
+#     assert_true(wheels.rotateCalled)

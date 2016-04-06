@@ -17,5 +17,5 @@ class VisionRefresher:
         polygons = islands.get_polygons()
         mesh_builder = MeshBuilder(self.__table_corners, polygons)
         mesh = mesh_builder.get_mesh()
-        pathfinder = PathFinder(mesh)
+        pathfinder = PathFinder(mesh, polygons)
         self.__robot.init_vision(pathfinder)

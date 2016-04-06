@@ -3,7 +3,9 @@ from robot.action import Action
 
 class RechargeAction(Action):
     def start(self):
-        self._robot.recharge_magnet(self.recharge_done)
+        print('Recharging')
+        print(self._context.robot)
+        self._context.robot.recharge_magnet(self.recharge_done)
 
     def recharge_done(self):
-        print('recharge done')
+        self._context.event_listener.notify_event(self._end_message)
