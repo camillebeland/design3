@@ -3,5 +3,9 @@ from robot.action import Action
 
 class MoveToTreasureAction(Action):
     def start(self):
-        treasure_position = self._robot.get_target_treasure_position()
-        self._robot.move_to(treasure_position)
+        print('Moving to Treasure')
+        treasure_position = self._context.robot.get_target_treasure_position()
+        self._context.robot.move_to(treasure_position, self.move_done)
+
+    def move_done(self):
+        self._context.event_listener.notify_event(self._end_message)

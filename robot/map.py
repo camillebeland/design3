@@ -29,7 +29,6 @@ class Map:
         #TODO
         pass
 
-
 def rotate_vector(theta, vector):
     return np.dot(rotation_matrix(theta), vector)
 

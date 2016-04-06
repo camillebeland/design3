@@ -18,6 +18,7 @@ class ActionMachine:
 
     def notify_event(self, event):
         assert(event in self.__events)
+        print("Event : {0}".format(event))
         action_name = self.__events[event]
         action = self.__actions[action_name]
         action.start()

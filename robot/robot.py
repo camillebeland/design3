@@ -1,3 +1,5 @@
+from time import sleep
+
 class Robot:
 
     def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, magnet):
@@ -66,8 +68,17 @@ class Robot:
         #TODO
         pass
 
-    def rotate(self, angle):
-        self.__wheels.rotate(angle)
+    def rotate(self, angle, callback=None):
+        current_angle = self.get_angle()
+        target_angle = current_angle + angle
+        while abs(target_angle - current_angle) % 360 > 2.0:
+            self.__wheels.rotate(target_angle - current_angle)
+            current_angle = self.get_angle()
+            print(target_angle)
+            print(current_angle)
+            sleep(1)
+        if callback is not None:
+            callback()
 
     def stop(self):
         self.__movement.stop_any_movement()
