@@ -29,11 +29,11 @@ class SimulationMap:
 
     def get_treasure_closest_to(self, position):
         #TODO
-        pass
+        return Position(500,600)
 
     def find_island_with_clue(self, clue):
         #TODO
-        pass
+        return Position(500,500)
 
     def move_robot(self, delta_x, delta_y):
         delta = rotate_vector(- self._robot_angle, Position(delta_x, delta_y))

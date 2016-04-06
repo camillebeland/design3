@@ -3,6 +3,8 @@ from robot.action import Action
 
 class FindIslandClue(Action):
     def start(self):
-        code = self._robot.get_manchester_code()
-        island_clue = self._robot_service.ask_target_island(code)
-        self._robot.set_island_clue(island_clue)
+        print('Finding Island Clue')
+        code = self._context.robot.get_manchester_code()
+        island_clue = self._context.robot_service.ask_target_island(code)
+        self._context.robot.set_island_clue(island_clue)
+        self._context.event_listener.notify_event(self._end_message)

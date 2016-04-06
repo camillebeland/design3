@@ -1,12 +1,11 @@
 class Action:
-    def __init__(self, robot, robot_service, worldmap, embedded_camera):
-        self._embedded_camera = embedded_camera
-        self._robot = robot
-        self._robot_service = robot_service
-        self._worldmap = worldmap
+    def __init__(self, context, end_message):
+        self._context = context
+        self._end_message = end_message
 
     def start(self):
         raise NotImplementedError()
 
     def stop(self):
         raise NotImplementedError()
+

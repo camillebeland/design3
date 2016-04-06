@@ -2,17 +2,19 @@ from robot.action import Action
 
 
 class MoveToChargeStationAction(Action):
-    def __init__(self, robot, robot_service, worldmap, embedded_camera, charge_station_angle=-90):
-        super().__init__(robot, robot_service, worldmap, embedded_camera)
-        self.__charge_station_angle = charge_station_angle
 
     def start(self):
-        recharge_station_position = self._worldmap.get_recharge_station_position()
-        self._robot.move_to(recharge_station_position, self.__rotate)
+        print('Moving To Charge Station')
+        self.__charge_station_angle = -90
+        recharge_station_position = self._context.worldmap.get_recharge_station_position()
+        self._context.robot.move_to(recharge_station_position, self.__rotate)
 
     def __rotate(self):
-        robot_angle = self._worldmap.get_robot_angle()
-        self._robot.rotate(self.__charge_station_angle - robot_angle)
+        robot_angle = self._context.worldmap.get_robot_angle()
+        self._context.robot.rotate(self.__charge_station_angle - robot_angle, self.__rotate_done)
+
+    def __rotate_done(self):
+        self._context.event_listener.notify_event(self._end_message)
 
     def stop():
         #TODO
