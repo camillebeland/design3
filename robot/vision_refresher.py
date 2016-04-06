@@ -21,6 +21,6 @@ class VisionRefresher:
         table_corners = table_calibration.get_table_corners()
         mesh_builder = MeshBuilder(table_corners, polygons)
         mesh = mesh_builder.get_mesh()
-        pathfinder = PathFinder(mesh)
+        pathfinder = PathFinder(mesh, polygons)
 
         self.__robot.init_vision(pathfinder)
