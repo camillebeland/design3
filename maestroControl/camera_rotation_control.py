@@ -1,4 +1,4 @@
-import maestro
+from maestroControl import maestro
 
 # classe permettant de controller la camera sur deux axes de rotation.
 # le servomoteur du haut (self.VERTical) doit etre branche sur le
@@ -24,8 +24,8 @@ class CameraRotationControl:
     
     #position de repos
     def sleep(self):
-    	self.controller.setTarget(self.HOR, self.MIDDLE)
-    	self.controller.setTarget(self.VERT, self.MIDDLE)
+        self.controller.setTarget(self.HOR, self.MIDDLE)
+        self.controller.setTarget(self.VERT, self.MIDDLE)
 
     #methode permettant de definir la potition horizontale de la camera
     #units: position on unites, de -1000 a 1000
@@ -78,4 +78,3 @@ class CameraRotationControl:
     def getVertPos(self):
         position = self.controller.getPosition(self.VERT)
         return (position - 2500)/3.5
-        

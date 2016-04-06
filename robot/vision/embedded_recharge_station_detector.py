@@ -1,7 +1,8 @@
 import cv2
 from vision_utils.image_wrapper import ImageWrapper as Image
-class EmbeddedRechargeStationDetector:
 
+
+class EmbeddedRechargeStationDetector:
     def __init__(self):
         self.tracked_marker_position = (0,0)
         self.consecutive_tracked_frame = 0

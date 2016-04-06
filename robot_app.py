@@ -25,6 +25,7 @@ from robot.actions.recharge import RechargeAction
 from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.actions.find_island_clue import FindIslandClue
 from robot.vision_daemon import VisionDaemon
+from robot.actions.scan_treasures import ScanTreasuresAction
 from robot.movement import Movement
 from robot.magnet import Magnet
 from robot.simulation.magnet_simulation import MagnetSimulation
@@ -32,6 +33,10 @@ from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 from robot.vision_refresher import VisionRefresher
 from vision_utils.camera_service import CameraService
 from vision_utils.mock_camera_service import MockCameraService
+from robot.vision.embedded_vision_service import EmbeddedVisionService
+from robot.vision.embedded_treasure_detector import EmbeddedTreasureDetector
+from robot.vision.embedded_recharge_station_detector import EmbeddedRechargeStationDetector
+from robot.table_calibration_service import TableCalibrationService
 import cv2
 
 from utils.position import Position
@@ -45,7 +50,7 @@ def camera_builder(camera_config, camera_id, camera_width, camera_height):
         open_cv_camera.set(HEIGHT_PARAMETER_ID, camera_height)
         camera = CameraService(open_cv_camera, cv2)
     if camera_config == "mock":
-        camera = MockCameraService()
+        camera = MockCameraService(image_path='vision_utils/embedded_treasures.jpg')
     return camera
 
 if __name__ == '__main__':
@@ -68,9 +73,12 @@ if __name__ == '__main__':
     camera = camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height)
     robot_service = RobotService(island_server_address)
     world_map_service = WorldmapService(base_station_host, base_station_port)
+    table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
+    table_corners = table_calibration_service.get_table_corners()
+    pixel_per_meters = table_calibration_service.get_pixel_per_meter_ratio()
 
     if wheels_config == "simulation":
-        world_map = SimulationMap(1600, 1200, world_map_service)
+        world_map = SimulationMap(1600, 1200, world_map_service, table_calibration_service)
         try:
             refresh_time = config.getint('robot', 'wheels-refresh-time')
         except:
@@ -103,7 +111,7 @@ if __name__ == '__main__':
         camera_height = config.getfloat('robot', 'camera-height')
         robot_height = config.getfloat('robot', 'robot-height')
         vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
-        world_map = Map(vision_perspective_corrected, world_map_service)
+        world_map = Map(vision_perspective_corrected, world_map_service, table_calibration_service)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
@@ -123,11 +131,12 @@ if __name__ == '__main__':
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
 
+    corrected_wheels.set_correction(pixel_per_meters)
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot_service = RobotService(island_server_address)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
-    vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port, camera, vision_daemon)
+    vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners)
     action_machine = ActionMachine()
     move_to_charge_station = MoveToChargeStationAction(robot, robot_service, world_map, None)
     pick_up_treasure = PickUpTreasure(robot, robot_service, world_map, None)
@@ -136,6 +145,12 @@ if __name__ == '__main__':
     find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
     recharge = RechargeAction(robot, robot_service,world_map, None)
     find_island_clue = FindIslandClue(robot, robot_service, world_map, None)
+    embedded_vision_service = EmbeddedVisionService(
+        camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height),
+        EmbeddedTreasureDetector(),
+        EmbeddedRechargeStationDetector())
+
+    scan_treasure = ScanTreasuresAction(robot, robot_service, world_map, embedded_vision_service)
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('read_manchester_code', read_manchester_code)
@@ -149,7 +164,8 @@ if __name__ == '__main__':
     action_machine.bind('find_island_clue', 'find_island_clue')
     action_machine.register("recharge", recharge)
     action_machine.bind("recharge", "recharge")
-
+    action_machine.register("scan_treasures", scan_treasure)
+    action_machine.bind("scan_treasures", "scan_treasures")
 
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
     robot_web_controller.run(host, port)

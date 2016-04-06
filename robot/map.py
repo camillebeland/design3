@@ -2,9 +2,10 @@ import numpy as np
 from utils.position import Position
 
 class Map:
-    def __init__(self, vision_daemon, worldmap_service):
+    def __init__(self, vision_daemon, worldmap_service, table_calibration_service):
         self.vision_daemon = vision_daemon
         self.worldmap_service = worldmap_service
+        self.table_calibration_service = table_calibration_service
 
     def get_robot_position(self):
         return self.vision_daemon.get_robot_position_from_vision()
@@ -20,6 +21,9 @@ class Map:
         position = self.worldmap_service.get_charging_station_position()
         charging_station_position = Position(position["x"], position["y"])
         return charging_station_position
+
+    def get_table_corners(self):
+        return self.table_calibration_service.get_table_corners()
 
     def get_treasure_closest_to(self, position):
         #TODO

@@ -11,7 +11,6 @@ class Robot:
         self.__manchester_code = ''
         self.__island_clue = ''
 
-
     def init_vision(self, pathfinder):
         self.__pathfinder = pathfinder
         self.__movement.init_vision(pathfinder)
