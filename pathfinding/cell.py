@@ -1,5 +1,8 @@
 from functools import reduce
 
+def sqrt(x):
+    return x**(1/2)
+
 
 class Cell:
     def __init__(self, width, height, x, y):
@@ -52,3 +55,6 @@ class Cell:
                           map(lambda cell: cell.partition_cells(obstacles, area_treshold), childCells))
         else:
             return [self]
+
+    def distance(self, point):
+        return sqrt((self.x - point.x) ** 2 + (self.y - point.y) **2)
