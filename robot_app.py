@@ -44,6 +44,8 @@ from robot.vision.embedded_vision_service import EmbeddedVisionService
 from robot.vision.embedded_treasure_detector import EmbeddedTreasureDetector
 from robot.vision.embedded_recharge_station_detector import EmbeddedRechargeStationDetector
 from robot.table_calibration_service import TableCalibrationService
+from robot.actions.align_with_treasure import AlignWithTreasureAction
+from robot.actions.align_with_charging_station_action import AlignWithChargingStationAction
 import cv2
 
 from utils.position import Position
@@ -166,6 +168,8 @@ if __name__ == '__main__':
     end_action = EndSequenceAction(context, None)
 
     scan_treasure = ScanTreasuresAction(context, 'scan_treasures_done')
+    align_charging_station = AlignWithChargingStationAction(context, 'align_charging_station_done')
+    align_treasure = AlignWithTreasureAction(context, 'align_treasure_done')
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
@@ -179,6 +183,9 @@ if __name__ == '__main__':
     action_machine.register('move_to_treasure', move_to_treasure)
     action_machine.register('find_island', find_island)
     action_machine.register('find_best_treasure', find_best_treasure)
+    action_machine.register('align_charging_station', align_charging_station)
+    action_machine.register('align_treasure', align_treasure)
+    action_machine.register("scan_treasures", scan_treasure)
 
 
     action_machine.bind('move_to_charge_station', 'move_to_charge_station')
@@ -191,8 +198,9 @@ if __name__ == '__main__':
     action_machine.bind("read_manchester", "discover_manchester_code")
     action_machine.bind('find_island_clue', 'find_island_clue')
     action_machine.bind("recharge", "recharge")
-    action_machine.register("scan_treasures", scan_treasure)
     action_machine.bind("scan_treasures", "scan_treasures")
+    action_machine.bind('align_treasure', 'align_treasure')
+    action_machine.bind('align_charging_station', 'align_charging_station')
     action_machine.bind('start', 'move_to_charge_station')
     action_machine.bind('move_to_charge_station_done', 'recharge')
     action_machine.bind('recharge_done', 'discover_manchester_code')
