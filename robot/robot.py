@@ -64,7 +64,7 @@ class Robot:
         self.__movement.move_to(final_destination, callback)
 
     def move_to_target(self, callback):
-        self.__movement.move_to_target(target, callback)
+        self.__movement.move_to_target(callback)
 
     def find_move_to(self, position):
         #TODO
@@ -81,6 +81,22 @@ class Robot:
             sleep(1)
         if callback is not None:
             callback()
+
+    def rotate_towards(self, target, callback=None):
+        angle_to_target = self.__find_line_angle__(self.get_position(), target)
+        self.rotate(angle_to_target)
+
+        if callback is not None:
+            callback()
+
+    def __find_line_angle__(self, point1, point2):
+        from math import atan2, degrees
+        dx = point1['x'] - point2['x']
+        dy = point1['y'] - point2['y']
+        angle_in_rad = atan2(dy, dx)
+        angle_in_deg = degrees(angle_in_rad)
+        return -angle_in_deg
+
 
     def stop(self):
         self.__movement.stop_any_movement()

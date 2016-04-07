@@ -80,7 +80,7 @@ if __name__ == '__main__':
             print("Warning : noise not specified, setting 0")
             noise = 0
 
-        wheels = NoisyWheels(world_map, refresh_time = refresh_time, wheels_velocity=wheels_velocity, noise=noise)
+        wheels = NoisyWheels(world_map, refresh_time=refresh_time, wheels_velocity=wheels_velocity, noise=noise)
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
@@ -94,7 +94,7 @@ if __name__ == '__main__':
         camera_position_y = config.getint('robot', 'camera-position-y')
         camera_height = config.getfloat('robot', 'camera-height')
         robot_height = config.getfloat('robot', 'robot-height')
-        vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
+        vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x, camera_position_y), camera_height, robot_height)
         world_map = Map(vision_perspective_corrected, world_map_service)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         assert(len(list(arduino_port)) != 0)
         print(arduino_port[0].device)
         serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.1)
-        print( serial_port.isOpen())
+        print(serial_port.isOpen())
         wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
 
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
