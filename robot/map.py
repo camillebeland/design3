@@ -26,7 +26,7 @@ class Map:
         pass
 
     def find_island_with_clue(self, clue):
-        #TODO
+        self.worldmap_service.get_islands()
         pass
 
 def rotate_vector(theta, vector):
