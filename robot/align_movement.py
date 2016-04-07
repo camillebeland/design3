@@ -11,36 +11,37 @@ class AlignMovement:
         self.__align_move_distance = align_move_distance
         self.__min_distance_to_target = min_distance_to_target
 
-    def init_vision(self):
+    def __init_vision__(self):
         self.__position_deamon.start_fetching_treasure_position_from_vision()
 
-    def start(self):
-        move_direction = self.compute_move_direction()
+    def start(self, callback):
+        self.__init_vision__()
+        move_direction = self.__compute_move_direction__()
         self.__robot.move(move_direction)
-        self.align()
+        self.__align__(callback)
 
-    def align(self, callback=None):
-        self.__thread = Thread(target=self.align_thread, args=(callback,))
+    def __align__(self, callback=None):
+        self.__thread = Thread(target=self.__align_thread__, args=(callback,))
         self.__thread.start()
 
-    def align_thread(self, callback):
+    def __align_thread__(self, callback):
         target = self.__position_deamon.get_position_from_vision[0]
-        while not self.__close_enough_to_target(target):
+        while not self.__close_enough_to_target__(target):
             target = self.__position_deamon.get_position_from_vision[0]
-        self.stop_any_movement()
+        self.__stop_any_movement__()
         if callback is not None:
             callback()
 
-    def __close_enough_to_target(self, target):
+    def __close_enough_to_target__(self, target):
         if -self.__min_distance_to_target < target < self.__min_distance_to_target:
             return True
         else:
             return False
 
-    def stop_any_movement(self):
+    def __stop_any_movement__(self):
         self.__robot.stop()
 
-    def compute_move_direction(self):
+    def __compute_move_direction__(self):
         if self.__position_deamon.get_position_from_vision[0] > 800:
             return -self.__align_move_distance
         else:
