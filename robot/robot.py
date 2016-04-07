@@ -13,7 +13,6 @@ class Robot:
         self.__manchester_code = ''
         self.__island_clue = ''
 
-
     def init_vision(self, pathfinder):
         self.__pathfinder = pathfinder
         self.__movement.init_vision(pathfinder)
@@ -64,7 +63,7 @@ class Robot:
     def move_to(self, final_destination, callback):
         self.__movement.move_to(final_destination, callback)
 
-    def move_to_target(self, target, callback):
+    def move_to_target(self, callback):
         self.__movement.move_to_target(target, callback)
 
     def find_move_to(self, position):
