@@ -24,6 +24,9 @@ class EmbeddedVisionService:
         self.embedded_recharge_station_detector.track_marker_position(image, mask_recharge_params, marker_params)
     
     def get_recharge_station_position(self):
+        position = self.embedded_recharge_station_detector.get_tracked_marker_position()
+        print(position)
+        print("embedded")
         return self.embedded_recharge_station_detector.get_tracked_marker_position()
     
 

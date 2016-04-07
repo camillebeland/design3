@@ -150,7 +150,7 @@ if __name__ == '__main__':
     vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners)
     action_machine = ActionMachine()
     embedded_vision_service = EmbeddedVisionService(
-        camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height),
+        camera,
         EmbeddedTreasureDetector(),
         EmbeddedRechargeStationDetector())
 
