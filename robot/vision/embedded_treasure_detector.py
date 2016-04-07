@@ -7,7 +7,6 @@ class EmbeddedTreasureDetector:
 
     def __init__(self):
         self.tracked_treasure_position = (0,0)
-        self.consecutive_tracked_frame = 0
         self.consecutive_lost_frame = 0
         self.first_frame = True
         
@@ -121,31 +120,30 @@ class EmbeddedTreasureDetector:
                         center_contour_y = y +height/2
                         center_contour_x = x+width/2
                 
-        if (self.first_frame == True):
-            self.consecutive_tracked_frame +=1
-            self.consecutive_lost_frame = 0
-            self.tracked_treasure_position = (center_contour_x, center_contour_y)
-            self.first_frame = False
-            return True
-        elif (center_contour_y != 0):
-            self.consecutive_tracked_frame +=1
-            self.consecutive_lost_frame = 0
-            self.tracked_treasure_position = (center_contour_x, center_contour_y)
+        if (self.first_frame == True or center_contour_y != 0):
+            self.__tracked(center_contour_x, center_contour_y)
             return True
         else:
-            self.consecutive_lost_frame +=1
-            if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
-                self.tracked_treasure_position = (0,0)
-                self.consecutive_tracked_frame = 0
-                self.first_frame = True
+            self.__lost()
             return False
     
     def get_tracked_treasure_position(self):
-        if (self.consecutive_tracked_frame > 15):
+        if (self.consecutive_lost_frame < 15):
             return (self.tracked_treasure_position[0]*4, self.tracked_treasure_position[1]*4)
         else:
             return (0,0)
+
+    def __tracked(self,x,y):
+        self.consecutive_lost_frame = 0
+        self.tracked_treasure_position = (x, y)
+        self.first_frame = False
         
+    def __lost(self):
+        self.consecutive_lost_frame +=1
+        if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
+            self.tracked_treasure_position = (0,0)
+            self.first_frame = True
+                    
 
 hsv_range = {
     'yellow': ((15,100,75), (35,255,255)),

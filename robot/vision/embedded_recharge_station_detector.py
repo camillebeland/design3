@@ -5,12 +5,12 @@ from vision_utils.image_wrapper import ImageWrapper as Image
 class EmbeddedRechargeStationDetector:
     def __init__(self):
         self.tracked_marker_position = (0,0)
-        self.consecutive_tracked_frame = 0
         self.consecutive_lost_frame = 0
         self.first_frame = True
         
     def track_marker_position(self, image, mask_params, marker_params , opencv=cv2):
         #camera must be in correct orientation (straight)
+        #camera must record at 1600/1200
         #blue mask
         resized = image.resize(400)
         erode_kernel_size = mask_params['erode_kernel_size']
@@ -80,11 +80,7 @@ class EmbeddedRechargeStationDetector:
         #if len(approx) == 3:
         x, y, width, height = cv2.boundingRect(approx)
         
-        if (self.first_frame == True):
-            self.__tracked(x+width/2, y+height/2)
-            return True
-            
-        elif ((abs(self.tracked_marker_position[0] - (x+width/2))**2 + abs(self.tracked_marker_position[1] - (y+height/2))**2)**(0.5) < max_delta_position):
+        if (self.first_frame == True or (abs(self.tracked_marker_position[0] - (x+width/2))**2 + abs(self.tracked_marker_position[1] - (y+height/2))**2)**(0.5) < max_delta_position):
             self.__tracked(x+width/2, y+height/2)
             return True
         else:
@@ -95,13 +91,12 @@ class EmbeddedRechargeStationDetector:
 
         
     def get_tracked_marker_position(self):
-        if (self.consecutive_tracked_frame > 15):
+        if (self.consecutive_lost_frame < 15):
             return (self.tracked_marker_position[0]*4,self.tracked_marker_position[1]*4)
         else:
             return (0,0)
     
     def __tracked(self,x,y):
-        self.consecutive_tracked_frame +=1
         self.consecutive_lost_frame = 0
         self.tracked_marker_position = (x, y)
         self.first_frame = False
@@ -109,8 +104,7 @@ class EmbeddedRechargeStationDetector:
     def __lost(self):
         self.consecutive_lost_frame +=1
         if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
-            self.tracked_treasure_position = (0,0)
-            self.consecutive_tracked_frame = 0
+            self.tracked_marker_position = (0,0)
             self.first_frame = True
         
 hsv_range = {
