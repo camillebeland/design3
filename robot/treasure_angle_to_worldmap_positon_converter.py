@@ -14,8 +14,6 @@ class TreasureAngleToWorldmapPositionConverter:
 
     def __convert_to_map_position__(self):
         treasures_angles = self.treasure_angles
-        print("treasures angle list")
-        print(treasures_angles)
         table_corners = self.table_calibration_service.get_table_corners()
 
         bottom_slope = (table_corners[0][1] - table_corners[1][1]) / (table_corners[0][0] - table_corners[1][0])
@@ -50,13 +48,11 @@ class TreasureAngleToWorldmapPositionConverter:
 
             treasure_distance = min(min_list)
             if treasure_distance == distance_bottom:
-                detected_treasures.append((treasure_bottom_x, treasure_bottom_y))
+                detected_treasures.append({'x': treasure_bottom_x, 'y' : treasure_bottom_y})
             elif treasure_distance == distance_rear:
-                detected_treasures.append((treasure_rear_x, treasure_rear_y))
+                detected_treasures.append({'x': treasure_rear_x, 'y' : treasure_rear_y})
             elif treasure_distance == distance_top:
-                detected_treasures.append((treasure_top_x, treasure_top_y))
-        print("detected_treasures")
-        print(detected_treasures)
+                detected_treasures.append({'x': treasure_top_x, 'y' : treasure_top_y})
         return detected_treasures
 
     def __compute_camera_position__(self):
