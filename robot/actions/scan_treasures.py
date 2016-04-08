@@ -1,5 +1,5 @@
 from robot.action import Action
-from robot.treasure_angle_to_worldmap_positon_converter import TreasureAngleToWorldmapPositionConverter
+from robot.vision.treasure_angle_to_worldmap_positon_converter import TreasureAngleToWorldmapPositionConverter
 
 
 class ScanTreasuresAction(Action):
