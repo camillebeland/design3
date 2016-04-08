@@ -21,10 +21,6 @@ class Map:
         charging_station_position = Position(position["x"], position["y"])
         return charging_station_position
 
-    def get_treasure_closest_to(self, position):
-        #TODO
-        pass
-
     def find_island_with_clue(self, clue):
         self.worldmap_service.get_islands()
         pass

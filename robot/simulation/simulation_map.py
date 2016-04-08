@@ -27,10 +27,6 @@ class SimulationMap:
         charging_station_position = Position(position["x"], position["y"])
         return charging_station_position
 
-    def get_treasure_closest_to(self, position):
-        #TODO
-        return Position(500,600)
-
     def find_island_with_clue(self, clue):
         islands = self.worldmap_service.get_islands()
         target_islands = list(filter(lambda island : self.filter_by_clue(island,clue), islands))
