@@ -41,6 +41,14 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
     $scope.actionScanTreasures = function(){
         $scope.sequenceToStart = window.actionsEnum.SCAN_TREASURES
     };
+    
+    $scope.actionsAlignWithChargingStation = function(){
+        $scope.sequenceToStart = window.actionsEnum.ALIGN_WITH_CHARGING_STATION
+    };
+    
+    $scope.actionAlignWithTreasure = function(){
+        $scope.sequenceToStart = window.actionsEnum.ALIGN_WITH_TREASURE
+    };
 
     $scope.continueSequenceToggle = function(boolean) {
         this.continueSequence = boolean;

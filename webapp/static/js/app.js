@@ -43,7 +43,9 @@ website.controller('homeController', ['$scope', function($scope) {
     MOVE_TO_TREASURE: "",
     PICKUP_TREASURE: "pick_up_treasure",
     RECHARGE: "recharge",
-    SCAN_TREASURES : "scan_treasures"
+    SCAN_TREASURES : "scan_treasures",
+    ALIGN_WITH_CHARGING_STATION : "align_charging_station",
+    ALIGN_WITH_TREASURE : "align_treasure"
   });
 
   var init = function() {

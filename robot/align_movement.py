@@ -3,7 +3,7 @@ from threading import Thread
 
 
 class AlignMovement:
-    def __init__(self, position_deamon, robot, align_move_distance=3, min_distance_to_target=15, marker_position_x=1215, time_sleep=1):
+    def __init__(self, position_deamon, robot, align_move_distance, min_distance_to_target, marker_position_x, time_sleep):
         self.__robot = robot
         self.__position_deamon = position_deamon
         self.__align_move_distance = align_move_distance

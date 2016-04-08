@@ -2,15 +2,15 @@ from unittest.mock import *
 from vision_utils.camera_service import CameraService
 
 
-#def get_frame(self, format='bgr'):
-#    img = self.buffer.read()
-#    while img is None:
-#        pass
-#    if format == 'bgr':
-#        return img
-#    elif format == 'jpeg':
-#        ret, jpeg = self.opencv.imencode('.jpg', img)
-#        return jpeg
+def get_frame(self, format='bgr'):
+    img = self.buffer.read()
+    while img is None:
+        pass
+    if format == 'bgr':
+        return img
+    elif format == 'jpeg':
+        ret, jpeg = self.opencv.imencode('.jpg', img)
+    return jpeg
 
 
 class TestCameraService:
@@ -32,7 +32,7 @@ class TestCameraService:
         image_returned = self.cameraService.get_frame(format="bgr")
 
         # Then
-        assert_equals(an_image, image_returned)
+        assert an_image == image_returned
 
 
     def test_stop_should_set_running_to_false(self):
@@ -43,4 +43,4 @@ class TestCameraService:
         self.cameraService.stop()
 
         # Then
-        assert_false(self.cameraService.running)
+        assert self.cameraService.running is False
