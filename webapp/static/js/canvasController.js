@@ -140,7 +140,6 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
 
     var updateRobotPositionFromVision = function() {
         MapService.getRobotPositionFromVision().then(function(response) {
-          console.log(response)
             if (response.position == undefined) {
                 console.log("No robot's position was returned from the vision")
             } else {
