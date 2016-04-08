@@ -25,12 +25,8 @@ class Map:
     def get_table_corners(self):
         return self.table_calibration_service.get_table_corners()
 
-    def get_treasure_closest_to(self, position):
-        #TODO
-        pass
-
     def find_island_with_clue(self, clue):
-        #TODO
+        self.worldmap_service.get_islands()
         pass
 
 def rotate_vector(theta, vector):

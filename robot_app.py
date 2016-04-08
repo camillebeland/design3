@@ -45,6 +45,7 @@ from robot.vision.embedded_treasure_detector import EmbeddedTreasureDetector
 from robot.vision.embedded_recharge_station_detector import EmbeddedRechargeStationDetector
 from robot.table_calibration_service import TableCalibrationService
 import cv2
+from robot.treasure_easiest_path import TreasureEasiestPath
 
 from utils.position import Position
 
@@ -140,19 +141,16 @@ if __name__ == '__main__':
         prehenseur = PrehenseurRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
+        corrected_wheels.set_correction(pixel_per_meters)
 
-    corrected_wheels.set_correction(pixel_per_meters)
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
-    vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners)
+    treasure_easiest_path = TreasureEasiestPath()
+    vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners, treasure_easiest_path)
     action_machine = ActionMachine()
-    embedded_vision_service = EmbeddedVisionService(
-        camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height),
-        EmbeddedTreasureDetector(),
-        EmbeddedRechargeStationDetector())
-
-    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine)
+    embedded_vision_service = EmbeddedVisionService(camera, EmbeddedTreasureDetector(), EmbeddedRechargeStationDetector())
+    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path)
 
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
