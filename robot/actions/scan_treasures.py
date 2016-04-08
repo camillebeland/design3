@@ -8,6 +8,8 @@ class ScanTreasuresAction(Action):
         self._context.robot.rotate(180 - robot_angle, self.scan_treasures())
 
     def start(self):
+        # TODO
+        raise NotImplementedError
         self.__rotate()
 
     def scan_treasures(self):
