@@ -8,14 +8,14 @@ from maestroControl import maestro
 
 class CameraRotationControl:
     def __init__(self, usb):
-    	#constantes identifiees des servomoteurs
+        #constantes identifiees des servomoteurs
         self.__MIDDLE = 6000
         self.__VERT_MAX = 6000
         self.__VERT_MIN = 2500
         self.__HOR_MAX = 10000
         self.__HOR_MIN = 2000
-        self.__HOR_CONV_FACTOR = (self.__MIDDLE-self.__MIN)/90
-        self.__VERT_CONV_FACTOR = (self.__MAX-self.__MIN)/90
+        self.__HOR_CONV_FACTOR = (self.__MIDDLE-self.__HOR_MIN)/90
+        self.__VERT_CONV_FACTOR = (self.__VERT_MAX-self.__VERT_MIN)/90
         #channels des servomoteurs
         self.__HOR = 4
         self.__VERT = 5
@@ -23,14 +23,14 @@ class CameraRotationControl:
         self.__controller = maestro.Controller(usb)
         self.setVertSpeed()
         self.setHorSpeed()
-        self.controller.setRange(self.__HOR, self.__HOR_MIN, self.__HOR_MAX)
-        self.controller.setRange(self.__VERT, self.__VERT_MIN, self.__VERT_MAX)
+        self.__controller.setRange(self.__HOR, self.__HOR_MIN, self.__HOR_MAX)
+        self.__controller.setRange(self.__VERT, self.__VERT_MIN, self.__VERT_MAX)
         self.sleep()
     
     #position de repos
     def sleep(self):
-    	self.controller.setTarget(self.__HOR, self.__MIDDLE)
-    	self.controller.setTarget(self.__VERT, self.__MIDDLE)
+        self.__controller.setTarget(self.__HOR, self.__MIDDLE)
+        self.__controller.setTarget(self.__VERT, self.__MIDDLE)
 
     #methode permettant de definir la potition horizontale de la camera
     #angle: position en degres, de -90 a 90

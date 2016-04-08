@@ -46,6 +46,7 @@ from robot.vision.embedded_recharge_station_detector import EmbeddedRechargeStat
 from robot.table_calibration_service import TableCalibrationService
 from robot.actions.align_with_treasure import AlignWithTreasureAction
 from robot.actions.align_with_charging_station_action import AlignWithChargingStationAction
+from maestroControl.camera_rotation_control import CameraRotationControl
 import cv2
 
 from utils.position import Position
@@ -138,14 +139,15 @@ if __name__ == '__main__':
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaUsbController(serial_port)
         battery = Battery(serial_port)
-        polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
+        polulu_port = serial.Serial(port='/dev/ttyACM0', timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
+        camera_rotation_control = CameraRotationControl(polulu_port)
         magnet = Magnet(serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
 
     corrected_wheels.set_correction(pixel_per_meters)
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet, camera_rotation=camera_rotation_control)
 
     vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners)
     action_machine = ActionMachine()

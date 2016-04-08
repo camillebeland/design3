@@ -2,7 +2,7 @@ from time import sleep
 
 class Robot:
 
-    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, magnet):
+    def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, magnet, camera_rotation):
         self.__wheels = wheels
         self.__world_map = world_map
         self.__pathfinder = pathfinder
@@ -12,6 +12,7 @@ class Robot:
         self.__magnet = magnet
         self.__manchester_code = ''
         self.__island_clue = ''
+        self.__camera_rotation_control = camera_rotation
 
     def init_vision(self, pathfinder):
         self.__pathfinder = pathfinder
@@ -94,6 +95,10 @@ class Robot:
 
     def lift_prehenseur_down(self):
         self.__magnet.lift_down()
+
+    def set_camera_angle(self, vertical_angle, horizontal_angle):
+        self.__camera_rotation_control.setHor(horizontal_angle)
+        self.__camera_rotation_control.setVert(vertical_angle)
 
     def get_island_clue(self):
         return self.__island_clue
