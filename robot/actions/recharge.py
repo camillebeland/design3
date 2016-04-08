@@ -9,3 +9,6 @@ class RechargeAction(Action):
 
     def recharge_done(self):
         self._context.event_listener.notify_event(self._end_message)
+
+    def stop(self):
+        raise NotImplementedError

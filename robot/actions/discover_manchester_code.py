@@ -1,5 +1,6 @@
 from robot.action import Action
 
+
 class DiscoverManchesterCodeAction(Action):
     def start(self):
         print('Discovering Manchester Code')

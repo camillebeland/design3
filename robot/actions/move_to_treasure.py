@@ -9,9 +9,9 @@ class MoveToTreasureAction(Action):
     def start(self):
         print('Moving to Treasure')
         self.treasure_position = self._context.robot.get_target_treasure_position()
-        self._context.robot.move_to_target(self.treasure_position, self.move_done)
+        self._context.robot.move_to_target(self.treasure_position, self.path_done)
 
-    def move_done(self):
+    def path_done(self):
         self._context.robot.rotate_towards(self.treasure_position, self.rotate_done)
 
     def rotate_done(self):

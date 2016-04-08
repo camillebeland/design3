@@ -8,3 +8,6 @@ class FindIslandClue(Action):
         island_clue = self._context.robot_service.ask_target_island(code)
         self._context.robot.set_island_clue(island_clue)
         self._context.event_listener.notify_event(self._end_message)
+
+    def stop(self):
+        raise NotImplementedError

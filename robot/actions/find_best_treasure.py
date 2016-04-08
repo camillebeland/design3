@@ -1,5 +1,6 @@
 from robot.action import Action
 
+
 class FindBestTreasureAction(Action):
     def start(self):
         print('Finding Best Treasure')
