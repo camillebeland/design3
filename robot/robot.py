@@ -1,5 +1,6 @@
 from time import sleep
 
+
 class Robot:
 
     def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, magnet):
@@ -12,7 +13,6 @@ class Robot:
         self.__magnet = magnet
         self.__manchester_code = ''
         self.__island_clue = ''
-
 
     def init_vision(self, pathfinder):
         self.__pathfinder = pathfinder
@@ -104,3 +104,9 @@ class Robot:
 
     def set_island_clue(self, clue):
         self.__island_clue = clue
+
+    def set_position_from_vision(self, position):
+        self.__world_map.set_position_from_vision(position)
+
+    def set_angle_from_vision(self, angle):
+        self.__world_map.set_angle_from_vision(angle)

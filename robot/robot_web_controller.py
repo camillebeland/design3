@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify
-from flask.ext.socketio import SocketIO
-from flask_cors import CORS
-from utils.position import Position
 import logging
+
+from flask.ext.socketio import SocketIO
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from utils.dto.position import Position
 
 app = Flask(__name__)
 CORS(app)
@@ -129,4 +131,13 @@ def get_actions():
 @app.route('/robot/vision/refresh', methods=['POST'])
 def recalculate_world_map():
     vision_refresher.refresh()
+    return "OK"
+
+
+@app.route('/robot', methods=['POST'])
+def recalculate_world_map():
+    request.json['position']['x']
+    position = Position()
+    robot.set_position_from_vision(request.json['position'])
+    robot.set_angle_from_vision(request.json['angle'])
     return "OK"

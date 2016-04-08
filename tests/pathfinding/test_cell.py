@@ -1,6 +1,6 @@
-from pathfinding.cell import Cell
-from utils.position import Position
 from nose.tools import *
+from pathfinding.cell import Cell
+from utils.dto.position import Position
 
 
 class TestCell:

@@ -1,16 +1,24 @@
 import numpy as np
-from utils.position import Position
+from utils.dto.position import Position
+
 
 class Map:
-    def __init__(self, vision_daemon, worldmap_service):
-        self.vision_daemon = vision_daemon
+    def __init__(self, worldmap_service):
         self.worldmap_service = worldmap_service
+        self.robot_position_from_vision = None
+        self.robot_angle_from_vision = None
 
     def get_robot_position(self):
-        return self.vision_daemon.get_robot_position_from_vision()
+        return self.robot_angle_from_vision
 
     def get_robot_angle(self):
-        return self.vision_daemon.get_robot_angle_from_vision()
+        return self.robot_angle_from_vision
+
+    def set_robot_position_from_vision(self, position):
+        self.robot_position_from_vision = position
+
+    def set_robot_angle_from_vision(self, angle):
+        self.robot_angle_from_vision = angle
 
     def relative_position(self, position):
         robot_current_position = self.get_robot_position()
@@ -28,6 +36,7 @@ class Map:
     def find_island_with_clue(self, clue):
         #TODO
         pass
+
 
 def rotate_vector(theta, vector):
     return np.dot(rotation_matrix(theta), vector)

@@ -1,47 +1,40 @@
 import serial
 import serial.tools.list_ports as lp
 from configuration import configuration
-from pathfinding.mesh_builder import MeshBuilder
-from pathfinding.pathfinding import PathFinder
+from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 from robot import robot_web_controller
-from robot.assemblers.robot_info_assembler import RobotInfoAssembler
-from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
-from robot.battery import Battery
-from robot.map import Map
-from robot.vision_perspective_correction import VisionPerspectiveCorrection
-from robot.robot import Robot
-from robot.robot_service import RobotService
-from robot.simulation.robot_service_simulation import RobotServiceSimulation
-from robot.simulation.error_simulation import NoisyWheels
-from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
-from robot.simulation.battery_simulation import BatterySimulation
-from robot.simulation.simulation_map import SimulationMap
-from robot.simulation.magnet_simulation import MagnetSimulation
-from robot.wheels_usb_commands import WheelsUsbCommands
-from robot.wheels_usb_controller import WheelsUsbController
-from robot.wheels_correction_layer import WheelsCorrectionLayer
-from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
-from robot.context import Context
-from robot.actions.move_to_charge_station import MoveToChargeStationAction
-from robot.actions.pick_up_treasure import PickUpTreasureAction
-from robot.actions.drop_down_treasure import DropDownTreasure
-from robot.actions.recharge import RechargeAction
 from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
-from robot.actions.find_island_clue import FindIslandClue
+from robot.actions.drop_down_treasure import DropDownTreasure
 from robot.actions.end_sequence import EndSequenceAction
 from robot.actions.find_best_treasure import FindBestTreasureAction
 from robot.actions.find_island import FindIslandAction
+from robot.actions.find_island_clue import FindIslandClue
+from robot.actions.move_to_charge_station import MoveToChargeStationAction
 from robot.actions.move_to_target_island import MoveToTargetIslandAction
 from robot.actions.move_to_treasure import MoveToTreasureAction
-from robot.vision_daemon import VisionDaemon
-from robot.movement import Movement
+from robot.actions.pick_up_treasure import PickUpTreasureAction
+from robot.actions.recharge import RechargeAction
+from robot.battery import Battery
+from robot.context import Context
 from robot.magnet import Magnet
+from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
+from robot.map import Map
+from robot.movement import Movement
+from robot.robot import Robot
+from robot.robot_service import RobotService
+from robot.simulation.battery_simulation import BatterySimulation
+from robot.simulation.error_simulation import NoisyWheels
 from robot.simulation.magnet_simulation import MagnetSimulation
-from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
+from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
+from robot.simulation.robot_service_simulation import RobotServiceSimulation
+from robot.simulation.simulation_map import SimulationMap
 from robot.vision_refresher import VisionRefresher
+from robot.wheels_correction_layer import WheelsCorrectionLayer
+from robot.wheels_usb_commands import WheelsUsbCommands
+from robot.wheels_usb_controller import WheelsUsbController
+from robot.worldmap_service import WorldmapService
 
-from utils.position import Position
 
 if __name__ == '__main__':
     config = configuration.get_config()
@@ -88,14 +81,7 @@ if __name__ == '__main__':
         robot_service = RobotServiceSimulation()
 
     elif wheels_config == "usb-arduino":
-        assembler = RobotInfoAssembler()
-        vision_daemon = VisionDaemon(base_station_address, assembler)
-        camera_position_x = config.getint('robot', 'camera-position-x')
-        camera_position_y = config.getint('robot', 'camera-position-y')
-        camera_height = config.getfloat('robot', 'camera-height')
-        robot_height = config.getfloat('robot', 'robot-height')
-        vision_perspective_corrected= VisionPerspectiveCorrection(vision_daemon, Position(camera_position_x,camera_position_y), camera_height, robot_height)
-        world_map = Map(vision_perspective_corrected, world_map_service)
+        world_map = Map(world_map_service)
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
@@ -116,8 +102,10 @@ if __name__ == '__main__':
         magnet = Magnet(serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
 
-    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
+    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time,
+                        min_distance_to_target=min_distance_to_target)
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna,
+                  movement=movement, battery=battery, magnet=magnet)
 
     vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port)
 

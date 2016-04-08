@@ -1,7 +1,7 @@
 import networkx
 from functools import reduce
 from pathfinding.cell import Cell
-from utils.position import Position
+from utils.dto.position import Position
 
 class PathFinder:
     def __init__(self, mesh, polygons=[]):

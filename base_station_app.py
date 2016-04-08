@@ -9,6 +9,8 @@ from base_station.vision.charging_station_detector import ChargingStationDetecto
 from base_station.vision.robot_detector import RobotDetector
 from base_station.vision_service import VisionService
 from configuration import configuration
+from base_station.vision.robot_vision_daemon import RobotVisionDaemon
+from utils.dto.position import Position
 
 
 def camera_builder(camera_config, camera_id, camera_width, camera_height):
@@ -33,11 +35,23 @@ def run():
     refresh_time = config.getfloat('baseapp', 'refresh_time')
     camera_width = config.getint('baseapp', 'camera_width')
     camera_height = config.getint('baseapp', 'camera_height')
+    wheels_config = config.get('robot', 'wheels')
 
     camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
     vision = VisionService(camera, IslandDetector(), TreasureDetector(), TableCalibrator(), RobotDetector(), ChargingStationDetector())
     vision.init_worldmap_contour()
     worldmap = vision.build_map()
+
+    if wheels_config == "usb-arduino":
+        camera_position_x = config.getint('robot', 'camera-position-x')
+        camera_position_y = config.getint('robot', 'camera-position-y')
+        camera_position = Position(camera_position_x, camera_position_y)
+        camera_height = config.getfloat('robot', 'camera-height')
+        robot_height = config.getfloat('robot', 'robot-height')
+        robot_host = config.get('robot', 'host')
+        robot_port = config.get('robot', 'port')
+        robot_address = "http://" + robot_host + ":" + robot_port
+        RobotVisionDaemon(robot_address, camera_position, camera_height, robot_height)
 
     base_station_web_controller.inject(camera, refresh_time, worldmap, vision)
     base_station_web_controller.run_base_app(host, port)

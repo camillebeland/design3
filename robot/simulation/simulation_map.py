@@ -1,6 +1,5 @@
-import numpy as np
-from utils.position import Position
-from utils.math import cos, sin, rotate_vector
+from utils.dto.position import Position
+from utils.math import rotate_vector
 
 class SimulationMap:
     def __init__(self, width, height, worldmap_service):

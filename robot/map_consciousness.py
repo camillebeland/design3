@@ -1,5 +1,7 @@
 from time import time
-from utils.position import Position
+
+from utils.dto.position import Position
+
 
 class MapConsciousness:
     def __init__(self, actual_map, initial_position, initial_angle, distance_threshold=50):

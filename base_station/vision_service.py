@@ -1,5 +1,8 @@
-from base_station.vision.image_wrapper import ImageWrapper
 import cv2
+
+from base_station.vision.image_wrapper import ImageWrapper
+from utils.dto.position import Position
+from utils.dto.robot_info import RobotInfo
 
 
 class VisionService:
@@ -72,12 +75,9 @@ class VisionService:
             return {}
         else:
             angle = self.__find_angle_between__(purple_circle, purple_square)
-            robot_position = {
-                'center': ((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2),
-                'angle': angle
-            }
-            return {'center' : robot_position['center'],
-                    'angle': robot_position['angle']}
+            robot_position = Position((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2)
+            robot_info = RobotInfo(robot_position, angle)
+            return robot_info
 
     def init_worldmap_contour(self):
         worldmap_contour = {}

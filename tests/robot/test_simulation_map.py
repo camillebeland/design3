@@ -1,9 +1,8 @@
-from nose import with_setup
-from nose.tools import *
-from utils.position import Position
 from unittest.mock import *
 
+from nose.tools import *
 from robot.simulation.simulation_map import SimulationMap
+from utils.dto.position import Position
 
 WIDTH = 300.0
 HEIGHT = 100.0

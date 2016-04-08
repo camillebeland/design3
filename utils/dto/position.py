@@ -1,5 +1,6 @@
 from math import sqrt
 
+
 class Position:
 
     def __init__(self, x_position, y_position):
@@ -29,11 +30,11 @@ class Position:
 
     def __add__(self, other):
         assert type(other) is type(self)
-        return Position(self.x+other.x,self.y+other.y)
+        return Position(self.x+other.x, self.y+other.y)
 
     def __sub__(self, other):
         assert type(other) is type(self)
-        return Position(self.x-other.x,self.y-other.y)
+        return Position(self.x-other.x, self.y-other.y)
 
     def __mul__(self, factor):
         return Position(factor * self.x, factor * self.y)
