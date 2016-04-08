@@ -89,7 +89,7 @@ def robot_fetch_info():
 
 @socket_io.on('fetchPath')
 def robot_fetch_path():
-    path = []
+    path = list()
     try:
         path.append(robot.get_position().to_dict())
         for position in robot.get_path():
@@ -144,12 +144,13 @@ def post_manchester_code(code):
 
 @app.route('/island', methods=['GET'])
 def get_island():
+    clue = None
     try:
         clue = robot.get_island_clue()
     except Exception as any_error:
         print(any_error)
         raise any_error
-    return jsonify({'island': clue})
+    return jsonify({clue})
 
 
 @app.route('/island/<clue>', methods=['POST'])

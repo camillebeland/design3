@@ -37,3 +37,11 @@ class WorldmapService:
         self.polygons.extend([Polygon(pentagon['x'], pentagon['y'], 250) for pentagon in self.pentagons])
         self.polygons.extend([Polygon(square['x'], square['y'], 250) for square in self.squares])
         self.polygons.extend([Polygon(triangle['x'], triangle['y'], 250) for triangle in self.triangles])
+
+    def get_islands(self):
+        islands = []
+        islands.extend(self.worldmap_objects['circles'])
+        islands.extend(self.worldmap_objects['pentagons'])
+        islands.extend(self.worldmap_objects['squares'])
+        islands.extend(self.worldmap_objects['triangles'])
+        return islands

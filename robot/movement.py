@@ -25,7 +25,7 @@ class Movement:
         if self.__compute is not None:
             self.__should_move = False
             sleep(self.__loop_time)
-            self.__thread = Thread(target=self.move_to_thread, args=(final_destination, callback,))
+            self.__thread = Thread(target=self.move_to_thread, args=(final_destination, callback))
             self.__should_move = True
             self.__thread.start()
         else:
@@ -54,7 +54,7 @@ class Movement:
     def find_relative_target(self, path):
         if len(path) is 0:
             self.__should_move = False
-            return (0, 0)
+            return 0, 0
         elif len(path) is 1:
             return self._relative_position(path[0])
         else:
