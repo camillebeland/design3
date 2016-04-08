@@ -40,6 +40,7 @@ from robot.magnet import Magnet
 from robot.simulation.magnet_simulation import MagnetSimulation
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
 from robot.vision_refresher import VisionRefresher
+from robot.treasure_easiest_path import TreasureEasiestPath
 
 from utils.position import Position
 
@@ -119,11 +120,12 @@ if __name__ == '__main__':
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
-    vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port)
+    treasure_easiest_path = TreasureEasiestPath()
+    vision_refresher = VisionRefresher(robot, corrected_wheels, base_station_host, base_station_port, treasure_easiest_path)
 
     action_machine = ActionMachine()
 
-    context = Context(robot, robot_service, world_map, None, action_machine)
+    context = Context(robot, robot_service, world_map, None, action_machine, treasure_easiest_path)
 
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
