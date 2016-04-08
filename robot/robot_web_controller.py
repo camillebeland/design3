@@ -93,7 +93,7 @@ def get_manchester():
     if code is None:
         return jsonify({'code', ''})
     else:
-        return jsonify({'code' : code.__str__()})
+        return jsonify({'code': code.__str__()})
 
 
 @app.route('/manchester/<code>', methods=['POST'])
@@ -135,7 +135,7 @@ def recalculate_world_map():
 
 
 @app.route('/robot', methods=['POST'])
-def recalculate_world_map():
+def update_robot_info_from_vision():
     request.json['position']['x']
     position = Position()
     robot.set_position_from_vision(request.json['position'])

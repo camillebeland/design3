@@ -60,7 +60,7 @@ def fetch_worldmap():
 @app.route('/vision/robot')
 def fetch_position():
     robot_position = vision_service.find_robot_position()
-    return jsonify(robot_position)
+    return jsonify(robot_position.to_dict())
 
 
 @app.route('/vision/calibration_data', methods=['GET'])

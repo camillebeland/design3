@@ -140,11 +140,12 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
 
     var updateRobotPositionFromVision = function() {
         MapService.getRobotPositionFromVision().then(function(response) {
-            if (response.center == undefined) {
+          console.log(response)
+            if (response.position == undefined) {
                 console.log("No robot's position was returned from the vision")
             } else {
-                visionRobotPosition.x = (response.center[0] * xScale);
-                visionRobotPosition.y = CANVAS_HEIGHT - (response.center[1] * yScale);
+                visionRobotPosition.x = (response.position.x * xScale);
+                visionRobotPosition.y = CANVAS_HEIGHT - (response.position.y * yScale);
                 visionRobotPosition.rotation = response.angle*-1;
             }
         });
