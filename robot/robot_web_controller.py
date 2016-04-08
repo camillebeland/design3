@@ -103,7 +103,7 @@ def post_manchester_code(code):
 @app.route('/island', methods=['GET'])
 def get_island():
     clue = robot.get_island_clue()
-    return jsonify({'island' : clue})
+    return jsonify(clue)
 
 
 @app.route('/island/<clue>', methods=['POST'])
