@@ -55,7 +55,7 @@ def robot_stop():
 @socket_io.on('fetchRobotInfo')
 def robot_fetch_info():
     socket_io.emit('robotUpdated', {'robotPosition': robot.get_position().to_dict(),
-                                     'robotAngle': robot.get_angle()})
+                                    'robotAngle': robot.get_angle()})
 
 
 @socket_io.on('fetchGripperVoltage')
@@ -65,7 +65,7 @@ def robot_fetch_info():
 
 @socket_io.on('fetchPath')
 def robot_fetch_path():
-    path = []
+    path = list()
     path.append(robot.get_position().to_dict())
     for position in robot.get_path():
         path.append(position.to_dict())
