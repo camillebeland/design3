@@ -87,7 +87,7 @@ if __name__ == '__main__':
     pixel_per_meters = table_calibration_service.get_pixel_per_meter_ratio()
 
     if wheels_config == "simulation":
-        world_map = SimulationMap(1600, 1200, world_map_service, table_calibration_service)
+        world_map = SimulationMap(1600, 1200, world_map_service)
         try:
             refresh_time = config.getint('robot', 'wheels-refresh-time')
         except:

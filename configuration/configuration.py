@@ -14,5 +14,3 @@ def get_config():
 
     config.get('robot', 'port')
     return config
-
-

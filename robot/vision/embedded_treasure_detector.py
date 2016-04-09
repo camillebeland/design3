@@ -9,9 +9,9 @@ class EmbeddedTreasureDetector:
         self.first_frame = True
         self.embedded_camera_fov = 63.53
         
-    def map_treasures(self, image, mask_params, treasures_params , opencv=cv2):
-        #camera must be in correct orientation (straight)
-        #black mask
+    def map_treasures(self, image, mask_params, treasures_params, opencv=cv2):
+        # camera must be in correct orientation (straight)
+        # black mask
         erode_kernel_size = mask_params['erode_kernel_size']
         erode_iterations = mask_params['erode_iterations']
         dilate_kernel_size = mask_params['dilate_kernel_size']
@@ -66,7 +66,7 @@ class EmbeddedTreasureDetector:
         x_to_deg = self.embedded_camera_fov/1600
         angles = list(map(lambda x: x * x_to_deg, x_positions))
         
-        #return x positions of all treasures relative to FOV
+        # return x positions of all treasures relative to FOV
         return angles
 
     def track_treasure(self, image, parameters, opencv=cv2):
@@ -87,9 +87,9 @@ class EmbeddedTreasureDetector:
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_iterations)
                     .find_contours())
-        if (len(contours) == 0):
-            self.consecutive_lost_frame +=1
-            if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
+        if len(contours) == 0:
+            self.consecutive_lost_frame += 1
+            if self.consecutive_lost_frame >= 15:  # we lost the treasure :(
                 self.tracked_treasure_position = (0,0)
                 self.consecutive_tracked_frame = 0
                 self.first_frame = True
@@ -105,11 +105,11 @@ class EmbeddedTreasureDetector:
             approx = approx_polygon(contour)
             x, y, width, height = opencv.boundingRect(approx)
             area = opencv.contourArea(contour)
-            if min_area < area <  max_area:
+            if min_area < area < max_area:
                 if ((abs(self.tracked_treasure_position[0] - x)**2 + abs(self.tracked_treasure_position[1] - y)**2)**(0.5)
                         < max_delta_position or self.first_frame is True):
-                    if abs((x+width/2) - resized.get_width()/2) < center_contour_x :
-                        center_contour_y = y +height/2
+                    if abs((x+width/2) - resized.get_width()/2) < center_contour_x:
+                        center_contour_y = y + height/2
                         center_contour_x = x+width/2
                 
         if self.first_frame == True or center_contour_y != 0:
@@ -125,19 +125,19 @@ class EmbeddedTreasureDetector:
         else:
             return 0, 0
 
-    def __tracked(self,x,y):
+    def __tracked(self, x, y):
         self.consecutive_lost_frame = 0
         self.tracked_treasure_position = (x, y)
         self.first_frame = False
         
     def __lost(self):
         self.consecutive_lost_frame += 1
-        if self.consecutive_lost_frame >= 15: #we lost the treasure :(
+        if self.consecutive_lost_frame >= 15:  # we lost the treasure :(
             self.tracked_treasure_position = (0, 0)
             self.first_frame = True
                     
 
 hsv_range = {
-    'yellow': ((15,100,75), (35,255,255)),
-    'black':((0,0,0),(180,255,85))
+    'yellow': ((15, 100, 75), (35, 255, 255)),
+    'black':((0, 0, 0), (180, 255, 85))
 }

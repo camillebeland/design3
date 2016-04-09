@@ -13,9 +13,9 @@ class ScanTreasuresAction(Action):
         self.__rotate()
 
     def scan_treasures(self):
-        treasures_positon_converter = TreasureAngleToWorldmapPositionConverter(
+        treasures_position_converter = TreasureAngleToWorldmapPositionConverter(
             self._context.worldmap.table_calibration_service,
             self._context.embedded_camera.get_treasure_angles(), self._context.robot)
 
-        treasures = treasures_positon_converter.get_treasures()
+        treasures = treasures_position_converter.get_treasures()
         self._context.worldmap.worldmap_service.add_treasures(treasures)

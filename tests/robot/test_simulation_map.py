@@ -13,11 +13,11 @@ AN_ANGLE = 142
 A_MOVE_OUTSIDE = Position(A_POSITION.x + WIDTH, 0.0)
 PRECISION = 1e-6
 
-world_map = SimulationMap(WIDTH, HEIGHT, Mock(), Mock())
+world_map = SimulationMap(WIDTH, HEIGHT, Mock())
 
 
 def setup():
-    world_map.__init__(WIDTH, HEIGHT, Mock(), Mock())
+    world_map.__init__(WIDTH, HEIGHT, Mock())
 
 
 @with_setup(setup)

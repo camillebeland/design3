@@ -31,10 +31,10 @@ class EmbeddedRechargeStationDetector:
             self.__lost()
             return False
             
-        def find_biggest_contour(cnts):
+        def find_biggest_contour(contours):
             biggest_contour_area = 0
             contour = 0
-            for contour in cnts:
+            for contour in contours:
                 area = opencv.contourArea(contour)
                 if area > biggest_contour_area:
                     biggest_contour_area = area
@@ -83,31 +83,30 @@ class EmbeddedRechargeStationDetector:
             self.__tracked(x+width/2, y+height/2)
             return True
         else:
-            self.consecutive_lost_frame +=1
-            if (self.consecutive_lost_frame >= 15): #we lost the treasure :(
+            self.consecutive_lost_frame += 1
+            if self.consecutive_lost_frame >= 15:  # we lost the treasure :(
                 self.__lost()
                 return False
-
         
     def get_tracked_marker_position(self):
         if self.consecutive_lost_frame < 15:
-            return self.tracked_marker_position[0]*4,self.tracked_marker_position[1]*4
+            return self.tracked_marker_position[0]*4, self.tracked_marker_position[1]*4
         else:
-            return 0,0
+            return 0, 0
     
-    def __tracked(self,x,y):
+    def __tracked(self, x, y):
         self.consecutive_lost_frame = 0
         self.tracked_marker_position = (x, y)
         self.first_frame = False
         
     def __lost(self):
-        self.consecutive_lost_frame +=1
-        if  self.consecutive_lost_frame >= 15: #we lost the treasure :(
+        self.consecutive_lost_frame += 1
+        if  self.consecutive_lost_frame >= 15:  # we lost the treasure :(
             self.tracked_marker_position = (0, 0)
             self.first_frame = True
         
 hsv_range = {
-    'blue': ((80,50,130), (130,255,255)),
+    'blue': ((80, 50, 130), (130, 255, 255)),
     'red_lower': ((0, 100, 100), (10, 255, 255)),
-    'red_upper': ((160,100,100), (179,255,255))
+    'red_upper': ((160, 100, 100), (179, 255, 255))
 }
