@@ -3,9 +3,6 @@ from utils.position import Position
 
 
 class MoveToTargetIslandAction(Action):
-    def __init__(self):
-        self.island_position = Position()
-
     def start(self):
         print('Moving to Target Island')
         self.island_position = self._context.robot.get_target_island_position()

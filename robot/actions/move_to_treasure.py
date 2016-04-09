@@ -3,13 +3,14 @@ from utils.position import Position
 
 
 class MoveToTreasureAction(Action):
-    def __init__(self):
-        self.treasure_position = Position()
-
     def start(self):
         print('Moving to Treasure')
         self.treasure_position = self._context.robot.get_target_treasure_position()
-        self._context.robot.move_to_target(self.treasure_position, self.path_done)
+        print(self.treasure_position)
+        try:
+            self._context.robot.move_to_target(self.treasure_position, self.path_done)
+        except Exception as error:
+            print(error) 
 
     def path_done(self):
         self._context.robot.rotate_towards(self.treasure_position, self.rotate_done)
@@ -19,4 +20,3 @@ class MoveToTreasureAction(Action):
 
     def stop(self):
         raise NotImplementedError
-

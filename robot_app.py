@@ -117,7 +117,7 @@ if __name__ == '__main__':
         magnet = Magnet(arduino_serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
 
-    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
+    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
     treasure_easiest_path = TreasureEasiestPath()

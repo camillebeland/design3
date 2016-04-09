@@ -12,7 +12,7 @@ class Movement:
         self.__should_move = False
         self.__loop_time = loop_time
         self.__min_distance_to_destination = min_distance_to_destination
-        self.__min_distance_to_target = 1040
+        self.__min_distance_to_target = 200
         self.__current_path = list()
 
     def init_vision(self, pathfinder):
@@ -64,7 +64,7 @@ class Movement:
         if self.__compute is not None:
             self.__should_move = False
             sleep(self.__loop_time)
-            self.__thread = Thread(target=self.move_to_thread, args=(target, type, callback,))
+            self.__thread = Thread(target=self.move_to_thread, args=(target, callback))
             self.__should_move = True
             self.__thread.start()
         else:
@@ -111,4 +111,3 @@ def distance_between(position1, position2):
     y2 = position2.y
     euclidean_distance = math.sqrt((x2-x1)**2 + (y2-y1)**2)
     return euclidean_distance
-

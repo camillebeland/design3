@@ -1,4 +1,5 @@
 from time import sleep
+from math import atan2, degrees
 
 class Robot:
 
@@ -63,8 +64,8 @@ class Robot:
     def move_to(self, final_destination, callback):
         self.__movement.move_to(final_destination, callback)
 
-    def move_to_target(self, callback):
-        self.__movement.move_to_target(callback)
+    def move_to_target(self, target, callback):
+        self.__movement.move_to_target(target, callback)
 
     def find_move_to(self, position):
         #TODO
@@ -88,9 +89,8 @@ class Robot:
             callback()
 
     def __find_line_angle__(self, point1, point2):
-        from math import atan2, degrees
-        dx = point1['x'] - point2['x']
-        dy = point1['y'] - point2['y']
+        dx = point1.x - point2.x
+        dy = point1.y - point2.y
         angle_in_rad = atan2(dy, dx)
         angle_in_deg = degrees(angle_in_rad)
         return -angle_in_deg
@@ -120,4 +120,3 @@ class Robot:
 
     def set_island_clue(self, clue):
         self.__island_clue = clue
-
