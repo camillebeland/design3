@@ -10,20 +10,17 @@ class Map:
         return self.vision_daemon.get_robot_position_from_vision()
 
     def get_robot_angle(self):
-        return self.vision_daemon.get_robot_angle_from_vision()
+        return self.vision_daemon.get_robot_angle_from_vision() % 360
 
     def relative_position(self, position):
         robot_current_position = self.get_robot_position()
-        return rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
+        matrix = rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
+        return Position(matrix[0], matrix[1])
 
     def get_recharge_station_position(self):
         position = self.worldmap_service.get_charging_station_position()
         charging_station_position = Position(position["x"], position["y"])
         return charging_station_position
-
-    def find_island_with_clue(self, clue):
-        self.worldmap_service.get_islands()
-        pass
 
     def find_island_with_clue(self, clue):
         islands = self.worldmap_service.get_islands()
