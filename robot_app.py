@@ -59,8 +59,7 @@ if __name__ == '__main__':
     min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
 
     robot_service = RobotService(island_server_address)
-    world_map_service = WorldmapService(base_station_host, base_station_port)
-
+    world_map_service = WorldmapService(base_station_host,base_station_port)
     if wheels_config == "simulation":
         world_map = SimulationMap(1600, 1200, world_map_service)
         try:
@@ -89,6 +88,7 @@ if __name__ == '__main__':
         robot_service = RobotServiceSimulation()
 
     elif wheels_config == "usb-arduino":
+
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
         camera_position_x = config.getint('robot', 'camera-position-x')
@@ -100,21 +100,24 @@ if __name__ == '__main__':
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
+        polulu_pid = config.getint('robot','polulu-pid')
+        polulu_vid = config.getint('robot', 'polulu-vid')
         arduino_baudrate = config.getint('robot', 'arduino-baudrate')
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
+        polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
         assert(len(list(arduino_port)) != 0)
-        print(arduino_port[0].device)
-        serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.1)
-        print( serial_port.isOpen())
-        wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
+        assert(len(list(polulu_port)) != 0)
+        real_polulu_port = min(map(lambda x:x.device, polulu_port))
+        arduino_serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=1)
+        wheels = WheelsUsbController(arduino_serial_port, WheelsUsbCommands())
 
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
-        manchester_antenna = ManchesterAntennaUsbController(serial_port)
-        battery = Battery(serial_port)
-        polulu_port = serial.Serial(port='/dev/ttyACM1', timeout=1)
+        manchester_antenna = ManchesterAntennaUsbController(arduino_serial_port)
+        battery = Battery(arduino_serial_port)
+        polulu_port = serial.Serial(port=real_polulu_port, timeout=1)
         prehenseur = PrehenseurRotationControl(polulu_port)
-        magnet = Magnet(serial_port, prehenseur)
+        magnet = Magnet(arduino_serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
 
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
@@ -138,6 +141,7 @@ if __name__ == '__main__':
     move_to_target_island = MoveToTargetIslandAction(context, 'move_to_target_island_done')
     end_action = EndSequenceAction(context, None)
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
+
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('discover_manchester_code', discover_manchester_code)
