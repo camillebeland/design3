@@ -12,7 +12,7 @@ class Movement:
         self.__should_move = False
         self.__loop_time = loop_time
         self.__min_distance_to_destination = min_distance_to_destination
-        self.__min_distance_to_target = 200
+        self.__min_distance_to_target = 300
         self.__current_path = list()
 
     def init_vision(self, pathfinder):
@@ -25,7 +25,7 @@ class Movement:
         if self.__compute is not None:
             self.__should_move = False
             sleep(self.__loop_time)
-            self.__thread = Thread(target=self.move_to_thread, args=(final_destination, callback))
+            self.__thread = Thread(target=self.move_to_target_thread, args=(final_destination, callback))
             self.__should_move = True
             self.__thread.start()
         else:
@@ -88,7 +88,7 @@ class Movement:
 
     def __not_close_enough_to_target(self, target):
         self.__actual_distance = distance_between(self.__sense.get_robot_position(), target)
-        return self.__actual_distance > self.__min_distance_to_destination
+        return self.__actual_distance > self.__min_distance_to_target
 
     def check_if_collided_on_target(self, target):
         self.__actual_distance = distance_between(self.__sense.get_robot_position(), target)
