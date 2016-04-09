@@ -10,7 +10,7 @@ class Map:
         return self.vision_daemon.get_robot_position_from_vision()
 
     def get_robot_angle(self):
-        return self.vision_daemon.get_robot_angle_from_vision()
+        return self.vision_daemon.get_robot_angle_from_vision() % 360
 
     def relative_position(self, position):
         robot_current_position = self.get_robot_position()
