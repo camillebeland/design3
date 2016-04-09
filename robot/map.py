@@ -25,6 +25,21 @@ class Map:
         self.worldmap_service.get_islands()
         pass
 
+    def find_island_with_clue(self, clue):
+        islands = self.worldmap_service.get_islands()
+        target_islands = list(filter(lambda island : self.filter_by_clue(island,clue), islands))
+        target_island = target_islands.pop()
+        return Position(target_island['x'], target_island['y'])
+
+    def filter_by_clue(self, island, clue):
+        if('color' in clue.keys()):
+            return island['color'] == clue['color']
+        elif('shape' in clue.keys()):
+            return island['shape'] == clue['shape']
+        else:
+            return False
+
+
 def rotate_vector(theta, vector):
     return np.dot(rotation_matrix(theta), vector)
 
