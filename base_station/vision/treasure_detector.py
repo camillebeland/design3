@@ -19,15 +19,14 @@ class TreasureDetector:
         return treasures
 
     def __find_contours__(self, image, color, parameters):
-        gaussian_blur_kernel_size = parameters['gaussian_blur_kernel_size']
-        gaussian_blur_sigma_x = parameters['gaussian_blur_sigma_x']
+        blur_kernel_size = parameters['blur_kernel_size']
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
         dilate_kernel_size = parameters['dilate_kernel_size']
         dilate_ierations = parameters['dilate_iterations']
 
         contours = (image
-                    .filter_gaussian_blur((gaussian_blur_kernel_size,gaussian_blur_kernel_size),gaussian_blur_sigma_x)
+                    .filter_blur((gaussian_blur_kernel_size,blur_kernel_size))
                     .filter_by_color(hsv_range[color])
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_ierations)
@@ -36,12 +35,12 @@ class TreasureDetector:
         return contours
 
     def __is_a_treasure__(self, detected_shape_length, detected_shape_height, area):
-        TREASURE_MAX_HEIGHT = 60
+        TREASURE_MAX_HEIGHT = 50
         TREASURE_MIN_HEIGHT = 3
-        TREASURE_MAX_LENGHT = 60
+        TREASURE_MAX_LENGHT = 50
         TREASURE_MIN_LENGHT = 3
         TREASURE_MAX_AREA = 400
-        TREASURE_MIN_AREA = 150
+        TREASURE_MIN_AREA = 100
 
         if TREASURE_MIN_HEIGHT < detected_shape_height < TREASURE_MAX_HEIGHT and \
            TREASURE_MIN_LENGHT < detected_shape_length < TREASURE_MAX_LENGHT and \
@@ -51,6 +50,6 @@ class TreasureDetector:
             return False
 
 hsv_range = {
-    'treasure-yellow': ((15, 95, 70), (35, 255, 255))
+    'treasure-yellow': ((15, 95, 60), (35, 255, 255))
 }
 
