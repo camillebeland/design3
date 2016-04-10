@@ -1,14 +1,14 @@
-import numpy as np
 from utils.position import Position
-from utils.math import cos, sin, rotate_vector
+from utils.math import rotate_vector
 
 class SimulationMap:
-    def __init__(self, width, height, worldmap_service):
+    def __init__(self, width, height, worldmap_service, table_calibration_service):
         self._width = width
         self._height = height
         self._robot_position = Position(width / 2, height / 2)
         self._robot_angle = 0
         self.worldmap_service = worldmap_service
+        self.table_calibration_service = table_calibration_service
 
     def set_robot_position(self, x, y):
         self._robot_position = Position(x, y)
@@ -26,6 +26,13 @@ class SimulationMap:
         position = self.worldmap_service.get_charging_station_position()
         charging_station_position = Position(position["x"], position["y"])
         return charging_station_position
+
+    def get_table_corners(self):
+        return self.table_calibration_service.get_table_corners()
+
+    def get_treasure_closest_to(self, position):
+        #TODO
+        return Position(500,600)
 
     def find_island_with_clue(self, clue):
         islands = self.worldmap_service.get_islands()
