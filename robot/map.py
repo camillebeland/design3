@@ -5,11 +5,11 @@ from utils.dto.position import Position
 class Map:
     def __init__(self, worldmap_service):
         self.worldmap_service = worldmap_service
-        self.robot_position_from_vision = None
-        self.robot_angle_from_vision = None
+        self.robot_position_from_vision = Position(0, 0)
+        self.robot_angle_from_vision = 0
 
     def get_robot_position(self):
-        return self.robot_angle_from_vision
+        return self.robot_position_from_vision
 
     def get_robot_angle(self):
         return self.robot_angle_from_vision % 360
