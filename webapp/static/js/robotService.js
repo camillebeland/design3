@@ -151,10 +151,10 @@ var Robot = angular.module('Robot', [])
             }).then(function successCallback(response) {
                 if (response.data.island !== '') {
                     clue = response.data;
-                    if (clue.couleur !== undefined)
-                        robotModel.island = clue.couleur;
+                    if (clue.color !== undefined)
+                        robotModel.island = clue.color;
                     else
-                        robotModel.island = clue.forme;
+                        robotModel.island = clue.shape;
                 }
             });
         }, ISLAND_CLUE_REFRESH_RATE);
@@ -164,7 +164,7 @@ var Robot = angular.module('Robot', [])
                 'x': robotData.robotPosition.x,
                 'y': robotData.robotPosition.y
             };
-            robotModel.angle = robotData.robotAngle;
+            robotModel.angle = robotData.robotAngle.toPrecision(4);
             $rootScope.$broadcast('robotModelUpdated');
         });
 
