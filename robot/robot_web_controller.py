@@ -28,53 +28,87 @@ def run(host, port):
 def robot_move():
     delta_x = request.json['delta_x']
     delta_y = request.json['delta_y']
-    robot.move(delta_x, delta_y)
+    try:
+        robot.move(delta_x, delta_y)
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     return "OK"
 
 
 @app.route('/robot/rotate', methods=['POST'])
 def robot_rotate():
     angle = request.json['angle']
-    robot.rotate(angle)
+    try:
+        robot.rotate(angle)
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     return "OK"
 
 
 @app.route('/robot/move_to', methods=['POST'])
 def robot_move_to():
     destination = Position(request.json['x'], request.json['y'])
-    robot.move_to(destination, None)
+    try:
+        robot.move_to(destination, None)
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     return "OK"
 
 
 @app.route('/robot/stop', methods=['POST'])
 def robot_stop():
-    robot.stop()
+    try:
+        robot.stop()
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     return "OK"
 
 
 @socket_io.on('fetchRobotInfo')
 def robot_fetch_info():
-    socket_io.emit('robotUpdated', {'robotPosition': robot.get_position().to_dict(),
-                                     'robotAngle': robot.get_angle()})
+    try:
+        socket_io.emit('robotUpdated', {'robotPosition': robot.get_position().to_dict(),
+                                        'robotAngle': robot.get_angle()})
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
 
 
 @socket_io.on('fetchGripperVoltage')
 def robot_fetch_info():
-    socket_io.emit('gripperUpdated', {'capacitorCharge': robot.get_capacitor_charge()})
+    try:
+        socket_io.emit('gripperUpdated', {'capacitorCharge': robot.get_capacitor_charge()})
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
 
 
 @socket_io.on('fetchPath')
 def robot_fetch_path():
-    path = []
-    path.append(robot.get_position().to_dict())
-    for position in robot.get_path():
-        path.append(position.to_dict())
-    socket_io.emit('path', {'robotPath': path})
+    path = list()
+    try:
+        path.append(robot.get_position().to_dict())
+        for position in robot.get_path():
+            path.append(position.to_dict())
+        socket_io.emit('path', {'robotPath': path})
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
 
 
 @app.route('/mesh')
 def mesh():
-    return jsonify(mesh_to_json(robot.get_mesh()))
+    mesh = None
+    try:
+        mesh = robot.get_mesh()
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
+    return jsonify(mesh_to_json(mesh))
 
 
 def mesh_to_json(mesh):
@@ -87,28 +121,45 @@ def cell_to_json(cell):
 
 @app.route('/manchester', methods=['GET'])
 def get_manchester():
-    code = robot.get_manchester_code()
+    try:
+        code = robot.get_manchester_code()
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     if code is None:
         return jsonify({'code', ''})
     else:
-        return jsonify({'code' : code.__str__()})
+        return jsonify({'code': code.__str__()})
 
 
 @app.route('/manchester/<code>', methods=['POST'])
 def post_manchester_code(code):
-    robot.set_manchester_code(code)
+    try:
+        robot.set_manchester_code(code)
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     return "Ok"
 
 
 @app.route('/island', methods=['GET'])
 def get_island():
-    clue = robot.get_island_clue()
-    return jsonify({'island' : clue})
+    clue = None
+    try:
+        clue = robot.get_island_clue()
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
+    return jsonify({clue})
 
 
 @app.route('/island/<clue>', methods=['POST'])
 def set_island(clue):
-    robot.set_island_clue(clue)
+    try:
+        robot.set_island_clue(clue)
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     return "Ok"
 
 
@@ -124,10 +175,20 @@ def send_action_to_robot(action):
 
 @app.route('/actions')
 def get_actions():
-    return jsonify(action_machine.get_events())
+    events = None
+    try:
+        events = action_machine.get_events()
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
+    return jsonify(events)
 
 
 @app.route('/robot/vision/refresh', methods=['POST'])
 def recalculate_world_map():
-    vision_refresher.refresh()
+    try:
+        vision_refresher.refresh()
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
     return "OK"

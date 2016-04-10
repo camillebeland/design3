@@ -3,6 +3,7 @@ from functools import reduce
 from pathfinding.cell import Cell
 from utils.position import Position
 
+
 class PathFinder:
     def __init__(self, mesh, polygons=[]):
         self.__mesh = mesh
@@ -37,22 +38,9 @@ class PathFinder:
 
 
     def find_path(self, from_point, to_point):
-        from_cell = None
-        to_cell = None
+        from_cell = self.find_closest_node_to(from_point)
+        to_cell = self.find_closest_node_to(to_point)
 
-        if self.any_obstacles_contains_point(from_point):
-            from_cell = self.find_closest_node_to(from_point)
-        else:
-            for cell in self.__graph.nodes():
-                if cell.contains_point(from_point):
-                    from_cell = cell
-
-        if self.any_obstacles_contains_point(to_point):
-            to_cell = self.find_closest_node_to(to_point)
-        else:
-            for cell in self.__graph.nodes():
-                if cell.contains_point(to_point):
-                    to_cell = cell
         try:
             cell_path = networkx.astar_path(self.__graph, from_cell, to_cell)
         except:

@@ -150,7 +150,7 @@ var Robot = angular.module('Robot', [])
                 url: 'http://' + ROBOT_HOST + '/island'
             }).then(function successCallback(response) {
                 if (response.data.island !== '') {
-                    clue = JSON.parse(response.data.island);
+                    clue = response.data;
                     if (clue.couleur !== undefined)
                         robotModel.island = clue.couleur;
                     else
@@ -186,6 +186,7 @@ var Robot = angular.module('Robot', [])
         var convertIntoVoltage = function(percentageCharge) {
             var totalCapacitorVoltage = 2.7;
             convertedVoltage = percentageCharge * totalCapacitorVoltage / 100;
+            convertedVoltage = convertedVoltage.toPrecision(3)
             return convertedVoltage;
         }
 

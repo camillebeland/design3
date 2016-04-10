@@ -48,7 +48,7 @@ from robot.actions.align_with_treasure import AlignWithTreasureAction
 from robot.actions.align_with_charging_station_action import AlignWithChargingStationAction
 from maestroControl.camera_rotation_control import CameraRotationControl
 import cv2
-
+from robot.treasure_easiest_path import TreasureEasiestPath
 from utils.position import Position
 
 
@@ -79,10 +79,11 @@ if __name__ == '__main__':
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
     loop_time = config.getfloat('robot', 'loop-time')
-    min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
+    min_distance_to_destination = config.getfloat('robot', 'min-distance-to-destination')
 
     camera = camera_builder(embedded_camera, embedded_camera_id, camera_width, camera_height)
     robot_service = RobotService(island_server_address)
+
     world_map_service = WorldmapService(base_station_host, base_station_port)
     table_calibration_service = TableCalibrationService(base_station_host, base_station_port)
     table_corners = table_calibration_service.get_table_corners()
@@ -97,7 +98,7 @@ if __name__ == '__main__':
             refresh_time = 10
 
         try:
-            wheels_velocity= config.getint('robot', 'wheels-velocity')
+            wheels_velocity = config.getint('robot', 'wheels-velocity')
         except:
             print("Warning : wheels-velocity not specified, setting 5")
             wheels_velocity = 5
@@ -108,7 +109,7 @@ if __name__ == '__main__':
             print("Warning : noise not specified, setting 0")
             noise = 0
 
-        wheels = NoisyWheels(world_map, refresh_time = refresh_time, wheels_velocity=wheels_velocity, noise=noise)
+        wheels = NoisyWheels(world_map, refresh_time=refresh_time, wheels_velocity=wheels_velocity, noise=noise)
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaSimulation()
         battery = BatterySimulation()
@@ -116,6 +117,7 @@ if __name__ == '__main__':
         robot_service = RobotServiceSimulation()
 
     elif wheels_config == "usb-arduino":
+
         assembler = RobotInfoAssembler()
         vision_daemon = VisionDaemon(base_station_address, assembler)
         camera_position_x = config.getint('robot', 'camera-position-x')
@@ -127,28 +129,32 @@ if __name__ == '__main__':
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
+        polulu_pid = config.getint('robot', 'polulu-pid')
+        polulu_vid = config.getint('robot', 'polulu-vid')
         arduino_baudrate = config.getint('robot', 'arduino-baudrate')
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
+        polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
+        polulu_port_hardcoded = serial.Serial(port='/dev/ttyACM0', timeout=1) #TODO port hardcodé pour tester 
         assert(len(list(arduino_port)) != 0)
-        print(arduino_port[0].device)
-        serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=0.1)
-        print( serial_port.isOpen())
-        wheels = WheelsUsbController(serial_port, WheelsUsbCommands())
-
+        assert(len(list(polulu_port)) != 0)
+        real_polulu_port = min(map(lambda x: x.device, polulu_port))
+        arduino_serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=1)
+        wheels = WheelsUsbController(arduino_serial_port, WheelsUsbCommands())
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
-        manchester_antenna = ManchesterAntennaUsbController(serial_port)
-        battery = Battery(serial_port)
-        polulu_port = serial.Serial(port='/dev/ttyACM0', timeout=1)
-        prehenseur = PrehenseurRotationControl(polulu_port)
-        camera_rotation_control = CameraRotationControl(polulu_port)
-        magnet = Magnet(serial_port, prehenseur)
+
+        manchester_antenna = ManchesterAntennaUsbController(arduino_serial_port)
+        battery = Battery(arduino_serial_port)
+        polulu_port_serial = serial.Serial(port=real_polulu_port, timeout=1)
+        prehenseur = PrehenseurRotationControl(polulu_port_hardcoded)
+        magnet = Magnet(arduino_serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
+        camera_rotation = CameraRotationControl(polulu_port_hardcoded)
 
-    corrected_wheels.set_correction(pixel_per_meters)
-    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_target=min_distance_to_target)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet, camera_rotation=camera_rotation_control)
+    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_destination=min_distance_to_destination)
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet, camera_rotation = )
 
+    treasure_easiest_path = TreasureEasiestPath()
     vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners)
     action_machine = ActionMachine()
     embedded_vision_service = EmbeddedVisionService(
@@ -156,8 +162,7 @@ if __name__ == '__main__':
         EmbeddedTreasureDetector(),
         EmbeddedRechargeStationDetector())
 
-    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine)
-
+    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path)
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
     drop_down_treasure = DropDownTreasure(context, 'drop_down_treasure_done')
@@ -173,6 +178,7 @@ if __name__ == '__main__':
     align_charging_station = AlignWithChargingStationAction(context, 'align_charging_station_done')
     align_treasure = AlignWithTreasureAction(context, 'align_treasure_done')
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
+
 
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('discover_manchester_code', discover_manchester_code)

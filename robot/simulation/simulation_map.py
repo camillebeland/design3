@@ -1,6 +1,5 @@
-import numpy as np
 from utils.position import Position
-from utils.math import cos, sin, rotate_vector
+from utils.math import rotate_vector
 
 class SimulationMap:
     def __init__(self, width, height, worldmap_service, table_calibration_service):
@@ -36,8 +35,18 @@ class SimulationMap:
         return Position(500,600)
 
     def find_island_with_clue(self, clue):
-        #TODO
-        return Position(500,500)
+        islands = self.worldmap_service.get_islands()
+        target_islands = list(filter(lambda island : self.filter_by_clue(island,clue), islands))
+        target_island = target_islands.pop()
+        return Position(target_island['x'], target_island['y'])
+
+    def filter_by_clue(self, island, clue):
+        if('color' in clue.keys()):
+            return island['color'] == clue['color']
+        elif('shape' in clue.keys()):
+            return island['shape'] == clue['shape']
+        else:
+            return False
 
     def move_robot(self, delta_x, delta_y):
         delta = rotate_vector(- self._robot_angle, Position(delta_x, delta_y))

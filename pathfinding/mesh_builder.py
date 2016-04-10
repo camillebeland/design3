@@ -16,10 +16,12 @@ class MeshBuilder:
 
         self.polygons = polygons
 
-        top = Polygon(self.x, self.y + self.height / 2 + self.width / 2, self.width)
-        bottom = Polygon(self.x, self.y - self.height / 2 - self.width / 2, self.width)
-        left = Polygon(self.x - self.width / 2 - self.height / 2, self.y, self.height)
-        right = Polygon(self.x + self.width / 2 + self.height / 2, self.y, self.height)
+        padding = 250
+
+        top = Polygon(self.x, self.y + self.height / 2 + self.width / 2, self.width + padding)
+        bottom = Polygon(self.x, self.y - self.height / 2 - self.width / 2, self.width + padding)
+        left = Polygon(self.x - self.width / 2 - self.height / 2, self.y, self.height + padding)
+        right = Polygon(self.x + self.width / 2 + self.height / 2, self.y, self.height + padding)
 
         self.polygons.extend([top, bottom, right, left])
 

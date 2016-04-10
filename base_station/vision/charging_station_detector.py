@@ -28,7 +28,7 @@ class ChargingStationDetector:
             x, y, width, height = cv2.boundingRect(approx)
 
             if self.__is_a_rectangle__(width, height):
-                charging_station = {'x': x + pixel_per_meter*0.11, 'y': image.get_height() - y - pixel_per_meter * 0.25}
+                charging_station = {'x': x , 'y': image.get_height() - y - pixel_per_meter * 0.25}
 
         return charging_station
 

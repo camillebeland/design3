@@ -1,4 +1,5 @@
 from time import sleep
+from math import atan2, degrees
 
 class Robot:
 
@@ -64,6 +65,9 @@ class Robot:
     def move_to(self, final_destination, callback):
         self.__movement.move_to(final_destination, callback)
 
+    def move_to_target(self, target, callback):
+        self.__movement.move_to_target(target, callback)
+
     def find_move_to(self, position):
         #TODO
         pass
@@ -71,14 +75,24 @@ class Robot:
     def rotate(self, angle, callback=None):
         current_angle = self.get_angle()
         target_angle = current_angle + angle
-        while abs(target_angle - current_angle) % 360 > 2.0:
-            self.__wheels.rotate(target_angle - current_angle)
+        while abs(target_angle - current_angle) > 2.0:
             current_angle = self.get_angle()
-            print(target_angle)
-            print(current_angle)
-            sleep(1)
+            self.__wheels.rotate(target_angle - current_angle)
+            sleep(5)
         if callback is not None:
             callback()
+
+    def rotate_towards(self, target, callback=None):
+        angle_to_target = self.__find_line_angle__(self.get_position(), target)
+        self.rotate(angle_to_target, callback)
+
+    def __find_line_angle__(self, point1, point2):
+        dx = point1.x - point2.x
+        dy = point1.y - point2.y
+        angle_in_rad = atan2(dy, dx)
+        angle_in_deg = degrees(angle_in_rad)
+        return -angle_in_deg
+
 
     def stop(self):
         self.__movement.stop_any_movement()
