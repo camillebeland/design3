@@ -112,8 +112,8 @@ if __name__ == '__main__':
         corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
         manchester_antenna = ManchesterAntennaUsbController(arduino_serial_port)
         battery = Battery(arduino_serial_port)
-        polulu_port = serial.Serial(port=real_polulu_port, timeout=1)
-        prehenseur = PrehenseurRotationControl(polulu_port)
+        polulu_port_serial = serial.Serial(port=real_polulu_port, timeout=1)
+        prehenseur = PrehenseurRotationControl(polulu_port_serial)
         magnet = Magnet(arduino_serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
 

@@ -83,10 +83,7 @@ class Robot:
 
     def rotate_towards(self, target, callback=None):
         angle_to_target = self.__find_line_angle__(self.get_position(), target)
-        self.rotate(angle_to_target)
-
-        if callback is not None:
-            callback()
+        self.rotate(angle_to_target, callback)
 
     def __find_line_angle__(self, point1, point2):
         dx = point1.x - point2.x
