@@ -51,7 +51,7 @@ def run():
         robot_host = config.get('robot', 'host')
         robot_port = config.get('robot', 'port')
         robot_address = "http://" + robot_host + ":" + robot_port
-        RobotVisionDaemon(robot_address, camera_position, camera_height, robot_height)
+        RobotVisionDaemon(robot_address, vision, camera_position, camera_height, robot_height)
 
     base_station_web_controller.inject(camera, refresh_time, worldmap, vision)
     base_station_web_controller.run_base_app(host, port)

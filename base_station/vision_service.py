@@ -72,7 +72,7 @@ class VisionService:
         image = image.mask_image(self.worldmap_contour['table_contour'])
         purple_circle, purple_square = self.__robot_detector.find_polygon_color(image, find_robot_position_param)
         if purple_circle is None or purple_square is None:
-            return {}
+            return None
         else:
             angle = self.__find_angle_between__(purple_circle, purple_square)
             robot_position = Position((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2)

@@ -1,5 +1,7 @@
 import threading
 import requests
+from utils.dto.robot_info import RobotInfo
+from utils.dto.position import Position
 
 
 class RobotVisionDaemon:
@@ -9,13 +11,18 @@ class RobotVisionDaemon:
         self.__correction_factor = 1.0 - (robot_height / camera_height)
         self.__camera_position = camera_position
         self.start_thread()
+        self.last_position_found = RobotInfo(Position(0,0), 0)
 
     def __post_robot_info_from_vision_to_robot__(self):
         while self.running:
             robot_info_from_vision = self.vision.find_robot_position()
-            robot_info_corrected = self.__adjust_for_perspective(robot_info_from_vision)
+            if robot_info_from_vision is None:
+                print("Vision did not found any robot position")
+            else:
+                robot_info_corrected = self.__adjust_for_perspective(robot_info_from_vision)
+                self.last_position_found = robot_info_corrected
             try:
-                response = requests.post(str(self.robot_address) + '/vision/robot', robot_info_corrected.to_dict())
+                response = requests.post(str(self.robot_address) + '/vision/robot', self.last_position_found.to_dict())
                 response.raise_for_status()
             except requests.exceptions.RequestException:
                 print('can\'t post robot position from vision to robot' + str(self.robot_address) + ' is not available')
