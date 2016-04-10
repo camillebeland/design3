@@ -93,6 +93,7 @@ class Movement:
 
     def stop_any_movement(self):
         self.__should_move = False
+        self.__control.close_connection()
 
     def _relative_position(self, position):
         matrix = rotate_vector(self.__actual_robot_angle, position - self.__actual_position)
