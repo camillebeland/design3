@@ -135,7 +135,7 @@ if __name__ == '__main__':
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
-        polulu_port_hardcoded = serial.Serial(port='/dev/ttyACM0', timeout=1) #TODO port hardcodé pour tester 
+        polulu_port_hardcoded = serial.Serial(port='/dev/ttyACM0', timeout=1) #TODO port hardcodé pour tester
         assert(len(list(arduino_port)) != 0)
         assert(len(list(polulu_port)) != 0)
         real_polulu_port = min(map(lambda x: x.device, polulu_port))
