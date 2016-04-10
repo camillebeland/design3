@@ -2,23 +2,8 @@ import serial
 import serial.tools.list_ports as lp
 from configuration import configuration
 from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
+from utils.assemblers.position_assembler import PositionAssembler
 from robot import robot_web_controller
-from robot import robot_web_controller
-from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
-from robot.battery import Battery
-from robot.map import Map
-from robot.vision_perspective_correction import VisionPerspectiveCorrection
-from robot.robot import Robot
-from robot.robot_service import RobotService
-from robot.simulation.robot_service_simulation import RobotServiceSimulation
-from robot.simulation.error_simulation import NoisyWheels
-from robot.simulation.manchester_antenna_simulation import ManchesterAntennaSimulation
-from robot.simulation.battery_simulation import BatterySimulation
-from robot.simulation.simulation_map import SimulationMap
-from robot.wheels_usb_commands import WheelsUsbCommands
-from robot.wheels_usb_controller import WheelsUsbController
-from robot.wheels_correction_layer import WheelsCorrectionLayer
-from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
 from robot.actions.discover_manchester_code import DiscoverManchesterCodeAction
 from robot.actions.drop_down_treasure import DropDownTreasure
@@ -184,5 +169,5 @@ if __name__ == '__main__':
     action_machine.bind('drop_down_treasure_done', 'end_action')
 
 
-    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
+    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, PositionAssembler())
     robot_web_controller.run(host, port)

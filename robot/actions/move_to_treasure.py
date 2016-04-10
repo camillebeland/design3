@@ -1,5 +1,4 @@
 from robot.action import Action
-from utils.position import Position
 
 
 class MoveToTreasureAction(Action):

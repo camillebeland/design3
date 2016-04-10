@@ -14,12 +14,13 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 
-def inject(a_robot, a_vision_refresher, a_robot_service, an_action_machine):
-    global robot, vision_refresher, robot_service, action_machine
+def inject(a_robot, a_vision_refresher, a_robot_service, an_action_machine, a_position_assembler):
+    global robot, vision_refresher, robot_service, action_machine, position_assembler
     robot = a_robot
     robot_service = a_robot_service
     action_machine = an_action_machine
     vision_refresher = a_vision_refresher
+    position_assembler = a_position_assembler
 
 
 def run(host, port):
@@ -197,8 +198,7 @@ def recalculate_world_map():
 
 @app.route('/robot', methods=['POST'])
 def update_robot_info_from_vision():
-    request.json['position']['x']
-    position = Position()
-    robot.set_position_from_vision(request.json['position'])
+    position = position_assembler.from_dict(request.json['position'])
+    robot.set_position_from_vision(position)
     robot.set_angle_from_vision(request.json['angle'])
     return "OK"

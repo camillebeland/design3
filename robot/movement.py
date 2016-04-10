@@ -2,7 +2,7 @@ from time import sleep
 from threading import Thread
 import math
 from utils.math import rotate_vector
-from utils.position import Position
+from utils.dto.position import Position
 
 
 class Movement:
