@@ -41,9 +41,7 @@ class AlignMovement:
             callback()
 
     def __move_thread__(self, time_sleep):
-        print("movebefore")
         while self.should_move:
-            print("move")
             self.__robot.move(0, self.move_distance)
             time.sleep(time_sleep)
 

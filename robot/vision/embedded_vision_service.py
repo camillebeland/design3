@@ -25,8 +25,6 @@ class EmbeddedVisionService:
     
     def get_recharge_station_position(self):
         position = self.embedded_recharge_station_detector.get_tracked_marker_position()
-        print(position)
-        print("embedded")
         return self.embedded_recharge_station_detector.get_tracked_marker_position()
     
 

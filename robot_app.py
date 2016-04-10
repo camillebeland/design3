@@ -135,13 +135,13 @@ if __name__ == '__main__':
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
-        polulu_port_hardcoded = serial.Serial(port='/dev/ttyACM0', timeout=1) #TODO port hardcodé pour tester 
+        polulu_port_hardcoded = serial.Serial(port='/dev/ttyACM0', timeout=1) #TODO port hardcodé pour tester
         assert(len(list(arduino_port)) != 0)
         assert(len(list(polulu_port)) != 0)
         real_polulu_port = min(map(lambda x: x.device, polulu_port))
         arduino_serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=1)
         wheels = WheelsUsbController(arduino_serial_port, WheelsUsbCommands())
-        corrected_wheels = WheelsCorrectionLayer(wheels, 1.0)
+        corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meters)
 
         manchester_antenna = ManchesterAntennaUsbController(arduino_serial_port)
         battery = Battery(arduino_serial_port)
@@ -152,10 +152,11 @@ if __name__ == '__main__':
         camera_rotation = CameraRotationControl(polulu_port_hardcoded)
 
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_destination=min_distance_to_destination)
-    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet, camera_rotation = )
+    robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None,
+                  manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet, camera_rotation = camera_rotation)
 
     treasure_easiest_path = TreasureEasiestPath()
-    vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners)
+    vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners, treasure_easiest_path)
     action_machine = ActionMachine()
     embedded_vision_service = EmbeddedVisionService(
         camera,
@@ -197,6 +198,7 @@ if __name__ == '__main__':
 
 
     action_machine.bind('move_to_charge_station', 'move_to_charge_station')
+    action_machine.bind('align_charging_station', 'align_charging_station')
     action_machine.bind('find_island', 'find_island')
     action_machine.bind('move_to_treasure', 'move_to_treasure')
     action_machine.bind('move_to_target_island', 'move_to_target_island')
@@ -208,9 +210,9 @@ if __name__ == '__main__':
     action_machine.bind("recharge", "recharge")
     action_machine.bind("scan_treasures", "scan_treasures")
     action_machine.bind('align_treasure', 'align_treasure')
-    action_machine.bind('align_charging_station', 'align_charging_station')
     action_machine.bind('start', 'move_to_charge_station')
-    action_machine.bind('move_to_charge_station_done', 'recharge')
+    action_machine.bind('move_to_charge_station_done', 'align_charging_station')
+    action_machine.bind('align_charging_station_done', 'recharge')
     action_machine.bind('recharge_done', 'discover_manchester_code')
     action_machine.bind('discover_manchester_code_done', 'find_island_clue')
     action_machine.bind('find_island_clue_done', 'find_island')
