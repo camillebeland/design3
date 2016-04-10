@@ -50,7 +50,7 @@ from maestroControl.camera_rotation_control import CameraRotationControl
 import cv2
 from robot.treasure_easiest_path import TreasureEasiestPath
 from utils.position import Position
-from unittest.mock import *
+from unittest.mock import Mock
 
 
 def camera_builder(camera_config, camera_id, camera_width, camera_height):
