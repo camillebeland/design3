@@ -24,6 +24,9 @@ class WorldmapService:
     def get_charging_station_position(self):
         return self.charging_station
 
+    def add_treasures(self, treasures):
+        self.treasures.extend(treasures)
+
     def __robot_fetch_islands__(self):
         self.circles = self.worldmap_objects['circles']
         self.pentagons = self.worldmap_objects['pentagons']

@@ -4,7 +4,7 @@ import os
 
 class MockCameraService(object):
 
-    def __init__(self, image_path="base_station/test_with_robot.jpg"):
+    def __init__(self, image_path="vision_utils/mock_image.jpg"):
         image = cv2.imread(image_path)
         self.image = image
 

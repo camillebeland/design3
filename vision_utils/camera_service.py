@@ -1,5 +1,6 @@
 from threading import Thread
-from base_station.double_sided_buffer import DoubleSidedBuffer
+import time
+from vision_utils.double_sided_buffer import DoubleSidedBuffer
 
 
 class CameraService(object):

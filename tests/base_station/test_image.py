@@ -1,7 +1,7 @@
-from nose.tools import *
-from base_station.vision.image_wrapper import ImageWrapper
-from base_station.vision.island_detector import *
 import numpy as np
+from nose.tools import *
+
+from vision_utils.image_wrapper import ImageWrapper
 
 test_polygon_params = {
     'median_blur_kernel_size' : 5,

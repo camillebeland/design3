@@ -1,6 +1,6 @@
 import cv2
 import base_station.vision.vision_utils as utils
-from base_station.vision.image_wrapper import ImageWrapper
+from vision_utils.image_wrapper import ImageWrapper
 
 class IslandDetector:
     def find_polygon_color(self, image, color, parameters, opencv=cv2):

@@ -168,9 +168,10 @@ def send_action_to_robot(action):
     try:
         action_machine.notify_event(action)
         return "OK"
-    except:
+    except Exception as error:
         print('action : {0} did not work'.format(action))
-
+        print(error)
+        raise error
 
 @app.route('/actions')
 def get_actions():

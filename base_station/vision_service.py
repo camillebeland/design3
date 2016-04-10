@@ -1,4 +1,4 @@
-from base_station.vision.image_wrapper import ImageWrapper
+from vision_utils.image_wrapper import ImageWrapper
 import cv2
 
 
