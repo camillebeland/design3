@@ -12,7 +12,7 @@ class Map:
         return self.robot_angle_from_vision
 
     def get_robot_angle(self):
-        return self.robot_angle_from_vision
+        return self.robot_angle_from_vision % 360
 
     def set_robot_position_from_vision(self, position):
         self.robot_position_from_vision = position
@@ -22,20 +22,28 @@ class Map:
 
     def relative_position(self, position):
         robot_current_position = self.get_robot_position()
-        return rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
+        matrix = rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
+        return Position(matrix[0], matrix[1])
 
     def get_recharge_station_position(self):
         position = self.worldmap_service.get_charging_station_position()
         charging_station_position = Position(position["x"], position["y"])
         return charging_station_position
 
-    def get_treasure_closest_to(self, position):
-        #TODO
-        pass
-
     def find_island_with_clue(self, clue):
-        #TODO
-        pass
+        islands = self.worldmap_service.get_islands()
+        target_islands = list(filter(lambda island: self.filter_by_clue(island, clue), islands))
+        target_island = target_islands.pop()
+        return Position(target_island['x'], target_island['y'])
+
+    def filter_by_clue(self, island, clue):
+        if('color' in clue.keys()):
+            return island['color'] == clue['color']
+        elif('shape' in clue.keys()):
+            return island['shape'] == clue['shape']
+        else:
+            return False
+
 
 
 def rotate_vector(theta, vector):
