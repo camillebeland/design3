@@ -24,7 +24,7 @@ class Map:
 
     def find_island_with_clue(self, clue):
         islands = self.worldmap_service.get_islands()
-        target_islands = list(filter(lambda island : self.filter_by_clue(island,clue), islands))
+        target_islands = list(filter(lambda island: self.filter_by_clue(island, clue), islands))
         target_island = target_islands.pop()
         return Position(target_island['x'], target_island['y'])
 

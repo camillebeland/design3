@@ -53,7 +53,7 @@ if __name__ == '__main__':
     base_station_address = "http://" + base_station_host + ":" + base_station_port
     island_server_address = config.get('island_server', 'host')
     loop_time = config.getfloat('robot', 'loop-time')
-    min_distance_to_target = config.getfloat('robot', 'min-distance-to-target')
+    min_distance_to_destination = config.getfloat('robot', 'min-distance-to-destination')
 
     robot_service = RobotService(island_server_address)
     world_map_service = WorldmapService(base_station_host,base_station_port)
@@ -66,7 +66,7 @@ if __name__ == '__main__':
             refresh_time = 10
 
         try:
-            wheels_velocity= config.getint('robot', 'wheels-velocity')
+            wheels_velocity = config.getint('robot', 'wheels-velocity')
         except:
             print("Warning : wheels-velocity not specified, setting 5")
             wheels_velocity = 5
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
-        polulu_pid = config.getint('robot','polulu-pid')
+        polulu_pid = config.getint('robot', 'polulu-pid')
         polulu_vid = config.getint('robot', 'polulu-vid')
         arduino_baudrate = config.getint('robot', 'arduino-baudrate')
         ports = lp.comports()
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
         assert(len(list(arduino_port)) != 0)
         assert(len(list(polulu_port)) != 0)
-        real_polulu_port = min(map(lambda x:x.device, polulu_port))
+        real_polulu_port = min(map(lambda x: x.device, polulu_port))
         arduino_serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=1)
         wheels = WheelsUsbController(arduino_serial_port, WheelsUsbCommands())
 
@@ -117,7 +117,7 @@ if __name__ == '__main__':
         magnet = Magnet(arduino_serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
 
-    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time)
+    movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_destination=min_distance_to_destination)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None, manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet)
 
     treasure_easiest_path = TreasureEasiestPath()

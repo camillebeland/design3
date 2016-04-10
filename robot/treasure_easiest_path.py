@@ -1,5 +1,6 @@
 from utils.position import Position
 
+
 class TreasureEasiestPath:
     def __init__(self, pathfinder=None, worldmap=None):
         self.__pathfinder = pathfinder
