@@ -16,7 +16,7 @@ class MeshBuilder:
 
         self.polygons = polygons
 
-        padding = 200
+        padding = 250
 
         top = Polygon(self.x, self.y + self.height / 2 + self.width / 2, self.width + padding)
         bottom = Polygon(self.x, self.y - self.height / 2 - self.width / 2, self.width + padding)

@@ -13,7 +13,7 @@ class Movement:
         self.__should_move = False
         self.__loop_time = loop_time
         self.__min_distance_to_destination = min_distance_to_destination
-        self.__min_distance_to_target = 100
+        self.__min_distance_to_target = 250
         self.__current_path = list()
 
     def init_vision(self, pathfinder):
@@ -78,9 +78,9 @@ class Movement:
             self.__actual_robot_angle = self.__sense.get_robot_angle()
             # compute
             self.__current_path = self.__compute.find_path(self.__actual_position, target)
-            target = self.find_relative_target(self.__current_path)
+            relative_target = self.find_relative_target(self.__current_path)
             # control
-            self.__control.move(target.x, target.y)
+            self.__control.move(relative_target.x, relative_target.y)
             sleep(self.__loop_time)
 
         if callback is not None:
