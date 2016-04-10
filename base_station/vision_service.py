@@ -118,8 +118,7 @@ class VisionService:
                 side = "top"
 
             if side is not None:
-                treasure['wall_side'] = side
-                treasures_filtered.append()
+                treasures_filtered.append(treasure)
 
         return treasures_filtered
 
