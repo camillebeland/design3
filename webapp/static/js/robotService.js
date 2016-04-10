@@ -116,7 +116,7 @@ var Robot = angular.module('Robot', [])
         this.stop = function() {
             $http({
                 method: 'POST',
-                url: 'http://' + ROBOT_HOST + '/robot/stop'
+                url: 'http://' + ROBOT_HOST + '/shutdown'
             });
         };
 

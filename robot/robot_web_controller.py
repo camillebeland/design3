@@ -192,3 +192,17 @@ def recalculate_world_map():
         print(any_error)
         raise any_error
     return "OK"
+
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    print("Shutting down server")
+    shutdown_server()
+    return "OK"
+
+
+def shutdown_server():
+    shutdown_server_function = request.environ.get('werkzeug.server.shutdown')
+    if shutdown_server_function is None:
+        raise RuntimeError('Cant shutdown, not running with the Werkzeug Server')
+    shutdown_server_function()
