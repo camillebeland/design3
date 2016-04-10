@@ -6,7 +6,7 @@ class TreasurePositionDeamon:
         self.embedded_vision_service = embedded_vision_service
 
     def get_position_from_vision(self):
-        self.embedded_vision_service.get_tracked_treasure_position()
+        return self.embedded_vision_service.get_tracked_treasure_position()
 
     def __fetch_treasure_position_from_vision__(self):
         while self.running:
