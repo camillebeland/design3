@@ -142,8 +142,8 @@ find_robot_position_param = {
 find_treasures_param = {
     'blur_kernel_size' : 7,
     'dilate_kernel_size' : 0,
-    'dilate_iterations' : 1,
+    'dilate_iterations' : 3,
     'erode_kernel_size' : 0,
-    'erode_iterations' : 1,
+    'erode_iterations' : 3,
     'polygonal_approximation_error' : 4
 }

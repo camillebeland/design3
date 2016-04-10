@@ -40,7 +40,7 @@ class TreasureDetector:
         TREASURE_MAX_LENGHT = 50
         TREASURE_MIN_LENGHT = 3
         TREASURE_MAX_AREA = 400
-        TREASURE_MIN_AREA = 150
+        TREASURE_MIN_AREA = 100
 
         if TREASURE_MIN_HEIGHT < detected_shape_height < TREASURE_MAX_HEIGHT and \
            TREASURE_MIN_LENGHT < detected_shape_length < TREASURE_MAX_LENGHT and \
@@ -50,6 +50,6 @@ class TreasureDetector:
             return False
 
 hsv_range = {
-    'treasure-yellow': ((15, 95, 70), (35, 255, 255))
+    'treasure-yellow': ((15, 95, 60), (35, 255, 255))
 }
 
