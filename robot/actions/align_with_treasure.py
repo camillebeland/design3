@@ -9,8 +9,8 @@ class AlignWithTreasureAction(Action):
         self.running = True
         treasures_position_deamon = TreasurePositionDeamon(self._context.embedded_camera)
         print(treasures_position_deamon)
-        align_movement = AlignMovement(treasures_position_deamon, self._context.robot, align_move_distance=1,
-                                       min_distance_to_target=2, marker_position_x=870, time_sleep=0.20)
+        align_movement = AlignMovement(treasures_position_deamon, self._context.robot, align_move_distance=0.75,
+                                       min_distance_to_target=2, marker_position_x=870, time_sleep=0.25)
         self._context.robot.set_camera_angle(25, 0)
         time.sleep(2)
         try:
