@@ -18,3 +18,6 @@ class WheelsUsbController:
 
     def stop(self):
         self.serialport.write(self.wheels_usb_commands.stop())
+
+    def close_connection(self):
+        self.serialport.flushInput()

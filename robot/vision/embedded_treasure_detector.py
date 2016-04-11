@@ -78,7 +78,7 @@ class EmbeddedTreasureDetector:
         
         
     def track_treasure(self, image, parameters , opencv=cv2):
-        resized = image.resize(400)
+        resized = image.resize(800)
         erode_kernel_size = parameters['erode_kernel_size']
         erode_iterations = parameters['erode_iterations']
         dilate_kernel_size = parameters['dilate_kernel_size']
@@ -142,7 +142,7 @@ class EmbeddedTreasureDetector:
     
     def get_tracked_treasure_position(self):
         if (self.consecutive_tracked_frame > 15):
-            return (self.tracked_treasure_position[0]*4, self.tracked_treasure_position[1]*4)
+            return (self.tracked_treasure_position[0]*2, self.tracked_treasure_position[1]*2)
         else:
             return (0,0)
         

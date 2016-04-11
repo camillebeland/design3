@@ -99,9 +99,9 @@ class Robot:
     def __find_line_angle__(self, point1, point2):
         dx = point2.x - point1.x
         dy = point2.y - point1.y
-        angle_in_rad = atan2(dy, dx)
+        angle_in_rad = -atan2(dy, dx)
         angle_in_deg = degrees(angle_in_rad)
-        return angle_in_deg % 360
+        return (angle_in_deg % 360)
 
     def rotate_towards_treasure(self, treasure_position, callback=None):
         facing_angle = self.__find_facing_angle_when_upfront(treasure_position)
@@ -125,6 +125,7 @@ class Robot:
         return facing_angle
 
     def stop(self):
+        print("robot stop")
         self.__movement.stop_any_movement()
         self.__wheels.stop()
 

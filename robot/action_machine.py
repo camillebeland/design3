@@ -2,6 +2,7 @@ class ActionMachine:
     def __init__(self):
         self.__actions = {}
         self.__events = {}
+        self.last_action = None
 
     def register(self, name, action):
         self.__actions[name] = action
@@ -21,4 +22,8 @@ class ActionMachine:
         print("Event : {0}".format(event))
         action_name = self.__events[event]
         action = self.__actions[action_name]
+        if self.last_action is not None:
+            if self.last_action.is_running():
+                self.last_action.stop()
+        self.last_action = action
         action.start()

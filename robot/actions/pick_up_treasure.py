@@ -4,6 +4,7 @@ from time import sleep
 
 class PickUpTreasureAction(Action):
     def start(self):
+        self.running = True
         print('Picking Up Treasure')
         self._context.robot.lift_prehenseur_down()
         sleep(1)
@@ -12,9 +13,14 @@ class PickUpTreasureAction(Action):
         self._context.robot.move(-15, 0)
         sleep(2)
         self._context.robot.lift_prehenseur_up()
-        sleep(1)
+        sleep(3)
         self._context.robot.deactivate_magnet()
-        self._context.event_listener.notify_event(self._end_message)
+
+        if self.running:
+            self._context.event_listener.notify_event(self._end_message)
+        self.running = False
 
     def stop(self):
-        raise NotADirectoryError
+        print("Pick up treasure asked to stop")
+        self.running = False
+

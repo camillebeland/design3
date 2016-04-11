@@ -62,6 +62,7 @@ def robot_move_to():
 def robot_stop():
     try:
         robot.stop()
+        action_machine.notify_event("stop")
     except Exception as any_error:
         print(any_error)
         raise any_error
@@ -201,3 +202,4 @@ def robot_fetch_sequence_time():
     except Exception as any_error:
         print(any_error)
         raise any_error
+

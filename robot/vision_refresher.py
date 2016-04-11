@@ -2,6 +2,7 @@ from pathfinding.mesh_builder import MeshBuilder
 from pathfinding.pathfinding import PathFinder
 from robot.worldmap_service import WorldmapService
 
+
 class VisionRefresher:
     def __init__(self, robot, island_host, island_port, camera, table_corners, treasure_easiest_path):
         self.__table_corners = table_corners
@@ -12,7 +13,6 @@ class VisionRefresher:
         self.__treasure_easiest_path = treasure_easiest_path
 
     def refresh(self):
-        self.__robot.stop()
         worldmap = WorldmapService(self.__island_host, self.__island_port)
         polygons = worldmap.get_polygons()
         mesh_builder = MeshBuilder(self.__table_corners, polygons)
