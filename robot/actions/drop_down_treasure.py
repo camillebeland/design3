@@ -8,7 +8,7 @@ class DropDownTreasure(Action):
         print('Dropping Treasure')
         self._context.robot.activate_magnet()
         self._context.robot.lift_prehenseur_down()
-        sleep(1)
+        sleep(3)
         self._context.robot.deactivate_magnet()
         if self.running:
             self._context.event_listener.notify_event(self._end_message)
