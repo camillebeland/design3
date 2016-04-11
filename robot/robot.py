@@ -125,6 +125,7 @@ class Robot:
         return facing_angle
 
     def stop(self):
+        print("robot stop")
         self.__movement.stop_any_movement()
         self.__wheels.stop()
 
