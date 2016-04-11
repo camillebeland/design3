@@ -103,27 +103,6 @@ class Robot:
         angle_in_deg = degrees(angle_in_rad)
         return (angle_in_deg % 360)
 
-    def rotate_towards_treasure(self, treasure_position, callback=None):
-        facing_angle = self.__find_facing_angle_when_upfront(treasure_position)
-        gripper_offset = 270
-        self.rotate_to(facing_angle+gripper_offset, callback)
-
-    def __find_facing_angle_when_upfront(self, treasure_position):
-        facing_angle = None
-        approximated_left_limit = 0
-        approximated_top_limit = 975
-        approximated_bottom_limit = 250
-
-        if treasure_position.y < approximated_bottom_limit:
-            facing_angle = 180
-        elif treasure_position.x < approximated_left_limit:
-            facing_angle = 270
-        elif treasure_position.y > approximated_top_limit:
-            facing_angle = 0
-        elif facing_angle is None:
-            facing_angle = 180
-        return facing_angle
-
     def stop(self):
         print("robot stop")
         self.__movement.stop_any_movement()
