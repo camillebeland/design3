@@ -26,7 +26,7 @@ class TreasureDetector:
         dilate_ierations = parameters['dilate_iterations']
 
         contours = (image
-                    .filter_blur((gaussian_blur_kernel_size,blur_kernel_size))
+                    .filter_blur((blur_kernel_size, blur_kernel_size))
                     .filter_by_color(hsv_range[color])
                     .erode(erode_kernel_size, erode_iterations)
                     .dilate(dilate_kernel_size, dilate_ierations)
