@@ -7,5 +7,5 @@ class EndSequenceAction(Action):
         print('Sequence is done')
 
     def stop(self):
-        print("End sequence action asked to stop, lol")
+        print("End sequence action asked to stop")
         self.running = False

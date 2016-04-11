@@ -25,6 +25,7 @@ class AlignWithTreasureAction(Action):
         time.sleep(2)
         if self.running:
             self._context.event_listener.notify_event(self._end_message)
+            self.running = False
 
     def stop(self):
         print("Align treasure asked to stop")

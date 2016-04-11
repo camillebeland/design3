@@ -15,6 +15,7 @@ class FindBestTreasureAction(Action):
         self._context.robot.change_target_treasure_position(treasure_position)
         if self.running:
             self._context.event_listener.notify_event(self._end_message)
+            self.running = False
 
     def stop(self):
         print("Find best treasure asked to stop")

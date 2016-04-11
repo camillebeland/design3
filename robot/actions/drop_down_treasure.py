@@ -12,6 +12,7 @@ class DropDownTreasure(Action):
         self._context.robot.deactivate_magnet()
         if self.running:
             self._context.event_listener.notify_event(self._end_message)
+            self.running = False
 
     def stop(self):
         print("Drop down treasure asked to stop")

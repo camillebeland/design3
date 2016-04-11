@@ -12,6 +12,7 @@ class DiscoverManchesterCodeAction(Action):
             print(e)
         if self.running:
             self._context.event_listener.notify_event(self._end_message)
+            self.running = False
 
     def stop(self):
         print("Discover manchester code asked to stop")
