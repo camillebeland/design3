@@ -61,6 +61,7 @@ def robot_move_to():
 @app.route('/robot/stop', methods=['POST'])
 def robot_stop():
     try:
+        robot.stop()
         action_machine.notify_event("stop")
     except Exception as any_error:
         print(any_error)
