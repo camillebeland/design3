@@ -18,5 +18,5 @@ class VisionRefresher:
         mesh_builder = MeshBuilder(self.__table_corners, polygons)
         mesh = mesh_builder.get_mesh()
         pathfinder = PathFinder(mesh, polygons)
-        self.__treasure_easiest_path.__init__(pathfinder, worldmap)
+        self.__treasure_easiest_path.reset_attributes(pathfinder, worldmap)
         self.__robot.init_vision(pathfinder)

@@ -1,6 +1,7 @@
 from time import sleep
 from math import atan2, degrees
 
+
 class Robot:
 
     def __init__(self, wheels, world_map, pathfinder, manchester_antenna, movement, battery, magnet, camera_rotation):
@@ -74,25 +75,54 @@ class Robot:
 
     def rotate(self, angle, callback=None):
         current_angle = self.get_angle()
-        target_angle = current_angle + angle
-        while abs(target_angle - current_angle) > 2.0:
+        target_angle = (current_angle + angle) % 360
+        while abs(target_angle - current_angle) > 1.5:
             current_angle = self.get_angle()
+            print("current_angle")
+            print(current_angle)
+            print("target angle")
+            print(target_angle)
             self.__wheels.rotate(target_angle - current_angle)
-            sleep(5)
+            sleep(2)
         if callback is not None:
             callback()
 
+    def rotate_to(self, target_angle, callback=None):
+        current_angle = self.get_angle()
+        angle_to_actually_rotate = target_angle - current_angle
+        self.rotate(angle_to_actually_rotate, callback)
+
     def rotate_towards(self, target, callback=None):
         angle_to_target = self.__find_line_angle__(self.get_position(), target)
-        self.rotate(angle_to_target, callback)
+        self.rotate_to(angle_to_target, callback)
 
     def __find_line_angle__(self, point1, point2):
-        dx = point1.x - point2.x
-        dy = point1.y - point2.y
+        dx = point2.x - point1.x
+        dy = point2.y - point1.y
         angle_in_rad = atan2(dy, dx)
         angle_in_deg = degrees(angle_in_rad)
-        return -angle_in_deg
+        return angle_in_deg % 360
 
+    def rotate_towards_treasure(self, treasure_position, callback=None):
+        facing_angle = self.__find_facing_angle_when_upfront(treasure_position)
+        gripper_offset = 270
+        self.rotate_to(facing_angle+gripper_offset, callback)
+
+    def __find_facing_angle_when_upfront(self, treasure_position):
+        facing_angle = None
+        approximated_left_limit = 0
+        approximated_top_limit = 975
+        approximated_bottom_limit = 250
+
+        if treasure_position.y < approximated_bottom_limit:
+            facing_angle = 180
+        elif treasure_position.x < approximated_left_limit:
+            facing_angle = 270
+        elif treasure_position.y > approximated_top_limit:
+            facing_angle = 0
+        elif facing_angle is None:
+            facing_angle = 180
+        return facing_angle
 
     def stop(self):
         self.__movement.stop_any_movement()

@@ -14,7 +14,7 @@ class MoveToTreasureAction(Action):
             print(error) 
 
     def path_done(self):
-        self._context.robot.rotate_towards(self.treasure_position, self.rotate_done)
+        self._context.robot.rotate_towards_treasure(self.treasure_position, self.rotate_done)
 
     def rotate_done(self):
         if self.running:

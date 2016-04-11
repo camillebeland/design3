@@ -21,5 +21,6 @@ convert = {
     '{"forme": "cercle"}':{'shape':'circle'},
     '{"forme": "carre"}':{'shape':'square'},
     '{"forme": "triangle"}':{'shape':'triangle'},
-    '{"forme": "pentagone"}':{'shape':'pentagon'}
+    '{"forme": "pentagone"}':{'shape':'pentagon'},
+    '{"forme": "rectangle"}': {'shape': 'square'}
 }

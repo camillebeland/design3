@@ -3,7 +3,7 @@ from maestroControl import maestro
 # classe permettant de controller le moteur du prehenseur
 # le servomoteur doit etre branche sur le 3e port (milieu)
 class PrehenseurRotationControl:
-	
+
     def __init__(self, usb):
         #paramètres identifies
         self.__MIN = 4300
@@ -15,10 +15,10 @@ class PrehenseurRotationControl:
         self.setSpeed()
         self.__controller.setRange(self.__CHANNEL, self.__MIN, self.__MAX)
         self.sleep()
-    
+
     # position de repos
     def sleep(self):
-    	self.__controller.setTarget(self.__CHANNEL, self.__MIN)
+        self.__controller.setTarget(self.__CHANNEL, self.__MIN)
 
     #methode permettant de definir la potition du servomoteur
     #units: position on unites, de 0 a 90
@@ -30,7 +30,7 @@ class PrehenseurRotationControl:
     # 0 = max speed
     # 1 = min speed (1 minute pour rotation complete)
     # 60 = 1 seconde pour rotation complete
-    def setSpeed(self, speed = 0):
+    def setSpeed(self, speed = 40):
         self.__controller.setSpeed(self.__CHANNEL, speed)
 
     #methode permettant d'obtenir la position actuelle
