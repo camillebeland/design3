@@ -127,9 +127,9 @@ def get_manchester():
         print(any_error)
         raise any_error
     if code is None:
-        return jsonify({'code', ''})
+        return {'code', ''}
     else:
-        return jsonify({'code': code.__str__()})
+        return {'code': code.__str__()}
 
 
 @app.route('/manchester/<code>', methods=['POST'])
@@ -144,13 +144,12 @@ def post_manchester_code(code):
 
 @app.route('/island', methods=['GET'])
 def get_island():
-    clue = None
     try:
         clue = robot.get_island_clue()
     except Exception as any_error:
         print(any_error)
         raise any_error
-    return jsonify({clue})
+    return clue
 
 
 @app.route('/island/<clue>', methods=['POST'])
