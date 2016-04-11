@@ -163,12 +163,7 @@ find_robot_position_param = {
 }
 
 find_treasures_param = {
-    'median_blur_kernel_size': 5,
-    'gaussian_blur_kernel_size': 11,
-    'gaussian_blur_sigma_x': 0,
-    'canny_threshold1': 0,
-    'canny_threshold2': 50,
-    'canny_aperture_size': 5,
+    'blur_kernel_size': 7,
     'dilate_kernel_size': 0,
     'dilate_iterations': 3,
     'erode_kernel_size': 0,

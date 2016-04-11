@@ -21,6 +21,10 @@ class ImageWrapper:
     def read_image(self):
         return self.__image
 
+    def filter_blur(self, kernel_size=(7,7)):
+        filtered_image = self.__open_cv.blur(self.__image, kernel_size)
+        return ImageWrapper(filtered_image)
+    
     def filter_median_blur(self, kernel_size=5):
         filtered_image = self.__open_cv.medianBlur(self.__image, kernel_size)
         return ImageWrapper(filtered_image)
