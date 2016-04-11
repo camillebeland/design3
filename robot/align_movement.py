@@ -30,6 +30,7 @@ class AlignMovement:
         is_aligned = False
         while not is_aligned:
             target_x = self.__position_deamon.get_position_from_vision()[0]
+            print(target_x)
             if target_x is 0:
                 continue
             self.move_distance = self.__compute_move_direction__(target_x)

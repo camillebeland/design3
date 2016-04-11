@@ -11,3 +11,7 @@ class TreasureEasiestPath:
         treasures_positions = list(map(lambda treasure: Position(treasure['x'], treasure['y']), treasures))
         paths = list(map(lambda pos: {'length': len(self.__pathfinder.find_path(position, pos)) + len(self.__pathfinder.find_path(pos, target_island_position)), 'treasure': pos}, treasures_positions))
         return min(paths, key=lambda x: x['length'])['treasure']
+
+    def reset_attributes(self, pathfinder, worldmap):
+        self.__pathfinder = pathfinder
+        self.__worldmap = worldmap

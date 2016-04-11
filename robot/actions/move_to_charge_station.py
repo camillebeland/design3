@@ -5,6 +5,7 @@ class MoveToChargeStationAction(Action):
 
     def start(self):
         print('Moving To Charge Station')
+        self._context.robot.lift_prehenseur_down()
         self.__facing_charge_station_angle = 270
         recharge_station_position = self._context.worldmap.get_recharge_station_position()
         self._context.robot.move_to(recharge_station_position, self.__rotate)

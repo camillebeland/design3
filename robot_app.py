@@ -51,10 +51,11 @@ import cv2
 from robot.treasure_easiest_path import TreasureEasiestPath
 from utils.position import Position
 from unittest.mock import *
-
+from vision_utils.camera_config_script import init_camera_parameters
 
 def camera_builder(camera_config, camera_id, camera_width, camera_height):
     if camera_config == "webcam":
+        init_camera_parameters()
         open_cv_camera = cv2.VideoCapture(camera_id)
         WIDTH_PARAMETER_ID = 3
         HEIGHT_PARAMETER_ID = 4
@@ -220,11 +221,12 @@ if __name__ == '__main__':
     action_machine.bind('find_island_clue_done', 'find_island')
     action_machine.bind('find_island_done', 'find_best_treasure')
     action_machine.bind('find_best_treasure_done', 'move_to_treasure')
-    action_machine.bind('move_to_treasure_done', 'pick_up_treasure')
+    action_machine.bind('move_to_treasure_done', 'align_treasure')
+    action_machine.bind('align_treasure_done', 'pick_up_treasure')
     action_machine.bind('pick_up_treasure_done', 'move_to_target_island')
     action_machine.bind('move_to_target_island_done', 'drop_down_treasure')
     action_machine.bind('drop_down_treasure_done', 'end_action')
 
-
+    vision_refresher.refresh()
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
     robot_web_controller.run(host, port)
