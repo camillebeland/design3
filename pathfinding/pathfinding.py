@@ -30,6 +30,8 @@ class PathFinder:
         closest_node = self.__graph.nodes()[0]
         smallest_distance = closest_node.distance(point)
         for node in self.__graph.nodes():
+            if node.contains_point(point):
+                return node
             new_distance = node.distance(point)
             if new_distance < smallest_distance:
                 closest_node = node
