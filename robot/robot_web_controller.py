@@ -172,6 +172,7 @@ def send_action_to_robot(action):
         print(error)
         raise error
 
+
 @app.route('/actions')
 def get_actions():
     events = None

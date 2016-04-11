@@ -31,6 +31,8 @@ class VisionService:
 
         charging_station = self.__charging_station_detector.find_polygon_color(image, default_camille_polygon_params, self.worldmap_contour["pixels_per_meter"])
 
+        treasures = self.__filter_treasure_by_wall_side(treasures)
+
         worldmap = {
             'circles': circles,
             'triangles': triangles,
@@ -39,6 +41,7 @@ class VisionService:
             'treasures': treasures,
             'charging-station': charging_station
         }
+
         return worldmap
 
     def eliminate_first_frames(self):
@@ -76,7 +79,7 @@ class VisionService:
                 'center': ((purple_square['x'] + purple_circle['x'])/2, (purple_square['y'] + purple_circle['y'])/2),
                 'angle': angle
             }
-            return {'center' : robot_position['center'],
+            return {'center': robot_position['center'],
                     'angle': robot_position['angle']}
 
     def init_worldmap_contour(self):
@@ -99,51 +102,71 @@ class VisionService:
         angle_in_deg = degrees(angle_in_rad)
         return -angle_in_deg
 
+    def __filter_treasure_by_wall_side(self, treasures):
+        treasures_filtered = list()
+        for treasure in treasures:
+            side = None
+            approximated_left_limit = 0
+            approximated_top_limit = 975
+            approximated_bottom_limit = 250
+
+            if treasure["y"] < approximated_bottom_limit:
+                side = "bottom"
+            elif treasure["x"] < approximated_left_limit:
+                side = "left"
+            elif treasure["y"] > approximated_top_limit:
+                side = "top"
+
+            if side is not None:
+                treasures_filtered.append(treasure)
+
+        return treasures_filtered
+
 
 default_camille_circle_params = {
-    'median_blur_kernel_size' : 5,
-    'gaussian_blur_kernel_size' : 9,
-    'gaussian_blur_sigma_x' : 2,
-    'hough_circle_min_distance' : 10,
-    'hough_circle_param1' : 50,
-    'hough_circle_param2' : 30,
-    'hough_circle_min_radius' : 20,
-    'hough_circle_max_radius' : 120
+    'median_blur_kernel_size': 5,
+    'gaussian_blur_kernel_size': 9,
+    'gaussian_blur_sigma_x': 2,
+    'hough_circle_min_distance': 10,
+    'hough_circle_param1': 50,
+    'hough_circle_param2': 30,
+    'hough_circle_min_radius': 20,
+    'hough_circle_max_radius': 120
 }
 
 default_camille_polygon_params = {
-    'median_blur_kernel_size' : 5,
-    'gaussian_blur_kernel_size' : 11,
-    'gaussian_blur_sigma_x' : 0,
-    'canny_threshold1' : 0,
-    'canny_threshold2' : 50,
-    'canny_aperture_size' : 5,
-    'dilate_kernel_size' : 0,
-    'dilate_iterations' : 2,
-    'erode_kernel_size' : 0,
-    'erode_iterations' : 2,
-    'polygonal_approximation_error' : 4
+    'median_blur_kernel_size': 5,
+    'gaussian_blur_kernel_size': 11,
+    'gaussian_blur_sigma_x': 0,
+    'canny_threshold1': 0,
+    'canny_threshold2': 50,
+    'canny_aperture_size': 5,
+    'dilate_kernel_size': 0,
+    'dilate_iterations': 2,
+    'erode_kernel_size': 0,
+    'erode_iterations': 2,
+    'polygonal_approximation_error': 4
 }
 
 find_robot_position_param = {
-    'median_blur_kernel_size' : 5,
-    'gaussian_blur_kernel_size' : 11,
-    'gaussian_blur_sigma_x' : 0,
-    'canny_threshold1' : 0,
-    'canny_threshold2' : 50,
-    'canny_aperture_size' : 5,
-    'dilate_kernel_size' : 0,
-    'dilate_iterations' : 2,
-    'erode_kernel_size' : 0,
-    'erode_iterations' : 2,
-    'polygonal_approximation_error' : 4
+    'median_blur_kernel_size': 5,
+    'gaussian_blur_kernel_size': 11,
+    'gaussian_blur_sigma_x': 0,
+    'canny_threshold1': 0,
+    'canny_threshold2': 50,
+    'canny_aperture_size': 5,
+    'dilate_kernel_size': 0,
+    'dilate_iterations': 2,
+    'erode_kernel_size': 0,
+    'erode_iterations': 2,
+    'polygonal_approximation_error': 4
 }
 
 find_treasures_param = {
-    'blur_kernel_size' : 7,
-    'dilate_kernel_size' : 0,
-    'dilate_iterations' : 3,
-    'erode_kernel_size' : 0,
-    'erode_iterations' : 3,
-    'polygonal_approximation_error' : 4
+    'blur_kernel_size': 7,
+    'dilate_kernel_size': 0,
+    'dilate_iterations': 3,
+    'erode_kernel_size': 0,
+    'erode_iterations': 3,
+    'polygonal_approximation_error': 4
 }
