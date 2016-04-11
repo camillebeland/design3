@@ -4,6 +4,7 @@ from utils.position import Position
 
 class MoveToTreasureAction(Action):
     def start(self):
+        self.running = True
         print('Moving to Treasure')
         self.treasure_position = self._context.robot.get_target_treasure_position()
         print(self.treasure_position)
@@ -16,7 +17,12 @@ class MoveToTreasureAction(Action):
         self._context.robot.rotate_towards_treasure(self.treasure_position, self.rotate_done)
 
     def rotate_done(self):
-        self._context.event_listener.notify_event(self._end_message)
+        if self.running:
+            self._context.event_listener.notify_event(self._end_message)
+        self.running = False
 
     def stop(self):
-        raise NotImplementedError
+        print("Move to treasure asked to stop")
+        self._context.robot.stop()
+        self.running = False
+

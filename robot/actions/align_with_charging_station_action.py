@@ -6,6 +6,7 @@ import time
 
 class AlignWithChargingStationAction(Action):
     def start(self):
+        self.running = True
         self._context.robot.set_camera_angle(10, 0)
         time.sleep(2)
         try:
@@ -14,6 +15,7 @@ class AlignWithChargingStationAction(Action):
                                            min_distance_to_target=2, marker_position_x=1365, time_sleep=0.25)
             align_movement.start(self.__align_done)
         except Exception as e:
+            self.running = False
             print(e)
 
     def __align_done(self):
@@ -26,4 +28,11 @@ class AlignWithChargingStationAction(Action):
         self.recharge_done()
 
     def recharge_done(self):
-        self._context.event_listener.notify_event(self._end_message)
+        if self.running:
+            self._context.event_listener.notify_event(self._end_message)
+        self.running = False
+
+    def stop(self):
+        print("Align with charging station asked to stop")
+        self._context.robot.stop()
+        self.running = False

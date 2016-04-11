@@ -4,6 +4,7 @@ import time
 class MoveToChargeStationAction(Action):
 
     def start(self):
+        self.running = True
         print('Moving To Charge Station')
         self._context.robot.lift_prehenseur_down()
         self.__facing_charge_station_angle = 270
@@ -19,8 +20,12 @@ class MoveToChargeStationAction(Action):
         time.sleep(3)
         self._context.robot.move(60, 0)
         time.sleep(2)
-        self._context.event_listener.notify_event(self._end_message)
+        if self.running:
+            self._context.event_listener.notify_event(self._end_message)
+        self.running = False
 
     def stop(self):
-        #TODO
-        raise NotImplementedError()
+        print("move to charge station asked to stop")
+        self._context.robot.stop()
+        self.running = False
+
