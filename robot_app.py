@@ -183,7 +183,6 @@ if __name__ == '__main__':
     align_treasure = AlignWithTreasureAction(context, 'align_treasure_done')
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
 
-
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('discover_manchester_code', discover_manchester_code)
     action_machine.register('pick_up_treasure', pick_up_treasure)
@@ -198,7 +197,6 @@ if __name__ == '__main__':
     action_machine.register('align_charging_station', align_charging_station)
     action_machine.register('align_treasure', align_treasure)
     action_machine.register("scan_treasures", scan_treasure)
-
 
     action_machine.bind('move_to_charge_station', 'move_to_charge_station')
     action_machine.bind('align_charging_station', 'align_charging_station')
@@ -226,6 +224,7 @@ if __name__ == '__main__':
     action_machine.bind('pick_up_treasure_done', 'move_to_target_island')
     action_machine.bind('move_to_target_island_done', 'drop_down_treasure')
     action_machine.bind('drop_down_treasure_done', 'end_action')
+    action_machine.bind('stop', 'end_action')
 
     vision_refresher.refresh()
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
