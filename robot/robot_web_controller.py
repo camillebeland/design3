@@ -192,3 +192,12 @@ def recalculate_world_map():
         print(any_error)
         raise any_error
     return "OK"
+
+
+@socket_io.on('fetchTime')
+def robot_fetch_sequence_time():
+    try:
+        socket_io.emit('timeUpdate', {'time': action_machine.get_time_since_beginning()})
+    except Exception as any_error:
+        print(any_error)
+        raise any_error
