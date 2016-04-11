@@ -34,7 +34,7 @@ marker_params = {
     'dilate_iterations' : 1,
     'erode_kernel_size' : 0,
     'erode_iterations' : 1,
-    'max_delta_position' : 75
+    'max_delta_position' : 150
 }
     
 track_treasure_params = {
@@ -44,18 +44,18 @@ track_treasure_params = {
     'dilate_iterations' : 5,
     'erode_kernel_size' : 0,
     'erode_iterations' : 5,
-    'min_area': 6,
-    'max_area': 1000,
-    'max_delta_position' : 75
+    'min_area': 24,
+    'max_area': 4000,
+    'max_delta_position' : 150
 }
 
 mask_recharge_params = {
     'gaussian_blur_kernel_size' : 5,
     'gaussian_blur_sigma_x' : 0,
     'dilate_kernel_size' : 0,
-    'dilate_iterations' : 20,
+    'dilate_iterations' : 80,
     'erode_kernel_size' : 0,
-    'erode_iterations' : 3
+    'erode_iterations' : 12
 }
 
 

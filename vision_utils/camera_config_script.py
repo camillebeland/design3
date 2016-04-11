@@ -4,9 +4,10 @@ import cv2
 
 def init_camera_parameters():
     call(["uvcdynctrl", "-s", "White Balance Temperature, Auto", "0"])
-    call(["uvcdynctrl", "-s", "White Balance Temperature", "4000"])
-    call(["uvcdynctrl", "-s", "Exposure, Auto", "0"])
-    call(["uvcdynctrl", "-s", "Exposure (Absolute)",  "500"])
+    call(["uvcdynctrl", "-s", "White Balance Temperature", "2000"])
+    call(["uvcdynctrl", "-s", "Exposure, Auto", "1"])
+    call(["uvcdynctrl", "-s", "Exposure, Auto Priority", "0"])
+    call(["uvcdynctrl", "-s", "Exposure (Absolute)",  "200"])
 
 
 def test():

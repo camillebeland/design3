@@ -12,7 +12,7 @@ class EmbeddedRechargeStationDetector:
     def track_marker_position(self, image, mask_params, marker_params , opencv=cv2):
         #camera must be in correct orientation (straight)
         #blue mask
-        resized = image.resize(400)
+        resized = image.resize(800)
         erode_kernel_size = mask_params['erode_kernel_size']
         erode_iterations = mask_params['erode_iterations']
         dilate_kernel_size = mask_params['dilate_kernel_size']
@@ -26,7 +26,7 @@ class EmbeddedRechargeStationDetector:
             .dilate(dilate_kernel_size, dilate_iterations)
             .erode(erode_kernel_size, dilate_iterations - erode_iterations)
             .find_contours())
-        
+
         if (len(contours) == 0):
             self.__lost()
             return False
@@ -96,7 +96,7 @@ class EmbeddedRechargeStationDetector:
         
     def get_tracked_marker_position(self):
         if (self.consecutive_tracked_frame > 15):
-            return (self.tracked_marker_position[0]*4,self.tracked_marker_position[1]*4)
+            return (self.tracked_marker_position[0]*2,self.tracked_marker_position[1]*2)
         else:
             return (0,0)
     
