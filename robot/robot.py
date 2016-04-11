@@ -76,14 +76,14 @@ class Robot:
     def rotate(self, angle, callback=None):
         current_angle = self.get_angle()
         target_angle = (current_angle + angle) % 360
-        while abs(target_angle - current_angle) > 1.5:
+        while abs(target_angle - current_angle) > 1:
             current_angle = self.get_angle()
             print("current_angle")
             print(current_angle)
             print("target angle")
             print(target_angle)
             self.__wheels.rotate(target_angle - current_angle)
-            sleep(2)
+            sleep(1)
         if callback is not None:
             callback()
 
