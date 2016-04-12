@@ -52,6 +52,7 @@ from robot.treasure_easiest_path import TreasureEasiestPath
 from utils.position import Position
 from unittest.mock import *
 from vision_utils.camera_config_script import init_camera_parameters
+from robot.timer import Timer
 
 def camera_builder(camera_config, camera_id, camera_width, camera_height):
     if camera_config == "webcam":
@@ -166,7 +167,8 @@ if __name__ == '__main__':
         EmbeddedTreasureDetector(),
         EmbeddedRechargeStationDetector())
 
-    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path)
+    timer = Timer()
+    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer)
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
     drop_down_treasure = DropDownTreasure(context, 'drop_down_treasure_done')
@@ -227,5 +229,5 @@ if __name__ == '__main__':
     action_machine.bind('stop', 'end_action')
 
     vision_refresher.refresh()
-    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
+    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, timer)
     robot_web_controller.run(host, port)
