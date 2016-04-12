@@ -1,11 +1,13 @@
 from robot.action import Action
 import time
 
+
 class MoveToChargeStationAction(Action):
 
     def start(self):
         self.running = True
         print('Moving To Charge Station')
+        self._context.timer.start()
         self._context.robot.lift_prehenseur_down()
         self.__facing_charge_station_angle = 270
         self.__recharge_station_position = self._context.worldmap.get_recharge_station_position()
@@ -19,7 +21,7 @@ class MoveToChargeStationAction(Action):
         self._context.robot.move_to(self.__recharge_station_position, self.__move_to_done)
 
     def __move_to_done(self):
-        self._context.robot.move(0, -230)
+        self._context.robot.move(0, -100)
         time.sleep(3)
         self._context.robot.move(60, 0)
         time.sleep(2)

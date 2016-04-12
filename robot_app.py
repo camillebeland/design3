@@ -52,6 +52,7 @@ from robot.treasure_easiest_path import TreasureEasiestPath
 from utils.position import Position
 from unittest.mock import *
 from vision_utils.camera_config_script import init_camera_parameters
+from robot.timer import Timer
 
 def camera_builder(camera_config, camera_id, camera_width, camera_height):
     if camera_config == "webcam":
@@ -132,27 +133,27 @@ if __name__ == '__main__':
 
         arduino_pid = config.getint('robot', 'arduino-pid')
         arduino_vid = config.getint('robot', 'arduino-vid')
-        #polulu_pid = config.getint('robot', 'polulu-pid')
-        #polulu_vid = config.getint('robot', 'polulu-vid')
+        polulu_pid = config.getint('robot', 'polulu-pid')
+        polulu_vid = config.getint('robot', 'polulu-vid')
         arduino_baudrate = config.getint('robot', 'arduino-baudrate')
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
-        #polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
-        polulu_port_hardcoded = serial.Serial(port='/dev/ttyACM0', timeout=1) #TODO port hardcodé pour tester
+        polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
+        polulu_port_hardcoded = '/dev/ttyACM0' 
         assert(len(list(arduino_port)) != 0)
-        #assert(len(list(polulu_port)) != 0)
-        #real_polulu_port = min(map(lambda x: x.device, polulu_port))
-        # polulu_port_serial = serial.Serial(port=real_polulu_port, timeout=1)
+        assert(len(list(polulu_port)) != 0)
+        real_polulu_port = min(map(lambda x: x.device, polulu_port))
+        polulu_serial_port = serial.Serial(port=real_polulu_port, timeout=1)
         arduino_serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=1)
 
         wheels = WheelsUsbController(arduino_serial_port, WheelsUsbCommands())
         corrected_wheels = WheelsCorrectionLayer(wheels, pixel_per_meters)
         manchester_antenna = ManchesterAntennaUsbController(arduino_serial_port)
         battery = Battery(arduino_serial_port)
-        prehenseur = PrehenseurRotationControl(polulu_port_hardcoded)
+        prehenseur = PrehenseurRotationControl(polulu_serial_port)
         magnet = Magnet(arduino_serial_port, prehenseur)
         robot_service = RobotService(island_server_address)
-        camera_rotation = CameraRotationControl(polulu_port_hardcoded)
+        camera_rotation = CameraRotationControl(polulu_serial_port)
 
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_destination=min_distance_to_destination)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None,
@@ -166,7 +167,8 @@ if __name__ == '__main__':
         EmbeddedTreasureDetector(),
         EmbeddedRechargeStationDetector())
 
-    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path)
+    timer = Timer()
+    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer)
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
     drop_down_treasure = DropDownTreasure(context, 'drop_down_treasure_done')
@@ -227,5 +229,5 @@ if __name__ == '__main__':
     action_machine.bind('stop', 'end_action')
 
     vision_refresher.refresh()
-    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine)
+    robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, timer)
     robot_web_controller.run(host, port)

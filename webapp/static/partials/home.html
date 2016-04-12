@@ -7,6 +7,8 @@
 
     <h2>System state</h2>
     <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
+        <label>Time:</label>
+        <label class="timer"><span>{{timer.minutes}}: {{timer.seconds}}</span></label>
         <label ng-show="robot.ready">Robot ready <img class="readinessLed" src="../static/img/greenLed.png"/></label>
         <label ng-show="!robot.ready">Robot not ready <img class="readinessLed" src="../static/img/redLed.png"/></label>
         <label>

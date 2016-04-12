@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask.ext.socketio import SocketIO
 from flask_cors import CORS
 from utils.position import Position
@@ -12,12 +12,13 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 
-def inject(a_robot, a_vision_refresher, a_robot_service, an_action_machine):
-    global robot, vision_refresher, robot_service, action_machine
+def inject(a_robot, a_vision_refresher, a_robot_service, an_action_machine, a_timer):
+    global robot, vision_refresher, robot_service, action_machine, timer
     robot = a_robot
     robot_service = a_robot_service
     action_machine = an_action_machine
     vision_refresher = a_vision_refresher
+    timer = a_timer
 
 
 def run(host, port):
@@ -193,4 +194,15 @@ def recalculate_world_map():
         print(any_error)
         raise any_error
     return "OK"
+
+
+@socket_io.on('fetchTime')
+def robot_fetch_sequence_time():
+    try:
+        time_in_seconds = timer.get_time_since_beginning()
+        minutes, seconds = divmod(time_in_seconds, 60)
+        socket_io.emit('timeUpdate', {'minutes': minutes, "seconds": seconds})
+    except Exception as any_error:
+        print(any_error)
+
 

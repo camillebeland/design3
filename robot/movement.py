@@ -82,7 +82,7 @@ class Movement:
             # control
             self.__control.move(relative_target.x, relative_target.y)
             sleep(self.__loop_time)
-
+        self.stop_any_movement()
         if callback is not None:
             callback()
         self.__current_path = list()

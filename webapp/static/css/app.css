@@ -28,6 +28,9 @@ body {
     background-color: #D3D3D3;
     border: 1px solid black;
 }
+.systemStatePanel label{
+  display:block;
+}
 .btn-group{
     padding-bottom: 10px;
 }
@@ -37,4 +40,7 @@ body {
 .readinessLed{
   height:15px;
   display:inline;
+}
+.timer{
+  font-size:x-large;
 }

@@ -6,8 +6,6 @@ class PickUpTreasureAction(Action):
     def start(self):
         self.running = True
         print('Picking Up Treasure')
-        self._context.robot.lift_prehenseur_down()
-        sleep(1)
         self._context.robot.activate_magnet()
         sleep(0.2)
         self._context.robot.move(-15, 0)
