@@ -14,13 +14,13 @@ class RobotService:
 
 
 convert = {
-    '{"couleur": "bleu"}':{'color':'blue'},
-    '{"couleur": "rouge"}':{'color':'red'},
-    '{"couleur": "jaune"}':{'color':'yellow'},
-    '{"couleur": "vert"}':{'color':'green'},
-    '{"forme": "cercle"}':{'shape':'circle'},
-    '{"forme": "carre"}':{'shape':'square'},
-    '{"forme": "triangle"}':{'shape':'triangle'},
-    '{"forme": "pentagone"}':{'shape':'pentagon'},
+    '{"couleur": "bleu"}': {'color': 'blue'},
+    '{"couleur": "rouge"}': {'color': 'red'},
+    '{"couleur": "jaune"}': {'color': 'yellow'},
+    '{"couleur": "vert"}': {'color': 'green'},
+    '{"forme": "cercle"}': {'shape': 'circle'},
+    '{"forme": "carre"}': {'shape': 'square'},
+    '{"forme": "triangle"}': {'shape': 'triangle'},
+    '{"forme": "pentagone"}': {'shape': 'pentagon'},
     '{"forme": "rectangle"}': {'shape': 'square'}
 }

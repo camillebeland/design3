@@ -149,8 +149,8 @@ var Robot = angular.module('Robot', [])
                 method: 'GET',
                 url: 'http://' + ROBOT_HOST + '/island'
             }).then(function successCallback(response) {
-                if (response.data.island !== '') {
-                    clue = response.data;
+                clue = response.data;
+                if (clue !== "") {
                     if (clue.color !== undefined)
                         robotModel.island = clue.color;
                     else
