@@ -24,11 +24,18 @@ website.controller('displayControlsController', ['$scope', '$rootScope', '$http'
     $rootScope.$broadcast('visionRobotToggleOff');
   };
 
+  $scope.startGame = function() {
+      $scope.recalculateMap().then(function () {
+          $rootScope.$broadcast('startGame');
+      }, function(){
+          $rootScope.$broadcast('startGame');
+      })
+  };
+
   $scope.recalculateMap = function(){
     $http({
         method: 'POST',
-        url: 'http://' + ROBOT_HOST + '/robot/vision/refresh',
+        url: 'http://' + ROBOT_HOST + '/robot/vision/refresh'
     });
   };
-
 }]);

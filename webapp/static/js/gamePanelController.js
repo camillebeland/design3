@@ -1,4 +1,4 @@
-website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService', function($scope, $rootScope, robotService) {
+website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService', '$controller', function($scope, $rootScope, robotService) {
 
     $scope.continueSequence = false;
 
@@ -56,6 +56,10 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
 
     $scope.startSequence = function() {
         robotService.sendAction($scope.sequenceToStart);
-    }
+    };
+
+    $scope.$on('startGame', function (event) {
+        $scope.actionMoveToChargeStation()
+    });
 
 }]);
