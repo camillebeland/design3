@@ -12,7 +12,7 @@ class MoveToTargetIslandAction(Action):
         self._context.robot.rotate_towards(self.island_position, self.rotate_done)
 
     def rotate_done(self):
-        self._context.robot.move(90,0)
+        self._context.robot.move(85,0)
         time.sleep(2) 
         if self.running:
             self._context.event_listener.notify_event(self._end_message)

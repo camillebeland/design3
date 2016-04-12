@@ -83,7 +83,7 @@ class Robot:
             print("target angle")
             print(target_angle)
             self.__wheels.rotate(target_angle - current_angle)
-            sleep(1)
+            sleep(2)
         if callback is not None:
             callback()
 
