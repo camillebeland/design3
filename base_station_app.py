@@ -36,7 +36,7 @@ def run():
 
     camera = camera_builder(camera_config, camera_id, camera_width, camera_height)
     vision = VisionService(camera, IslandDetector(), TreasureDetector(), TableCalibrator(), RobotDetector(), ChargingStationDetector())
-    vision.init_worldmap_contour()
+    vision.init_worldmap_contour_and_charging_station()
     worldmap = vision.build_map()
 
     base_station_web_controller.inject(camera, refresh_time, worldmap, vision)

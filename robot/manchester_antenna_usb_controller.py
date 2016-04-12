@@ -11,7 +11,7 @@ class ManchesterAntennaUsbController:
         self.serial_port = serial_port
 
     def __validate_manchester_code(self, code):
-        is_valid = True;
+        is_valid = True
         if len(code) != 1:
             is_valid = False
         elif not str(code).isalpha():

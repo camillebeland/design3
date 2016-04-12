@@ -29,8 +29,6 @@ class MoveToChargeStationAction(Action):
             self._context.event_listener.notify_event(self._end_message)
         self.running = False
 
-
-
     def stop(self):
         print("move to charge station asked to stop")
         self._context.robot.stop()

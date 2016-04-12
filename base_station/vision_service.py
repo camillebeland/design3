@@ -29,9 +29,9 @@ class VisionService:
 
         treasures.extend(self.__treasure_detector.find_treasures(image, find_treasures_param))
 
-        charging_station = self.__charging_station_detector.find_polygon_color(image, default_camille_polygon_params, self.worldmap_contour["pixels_per_meter"])
+        charging_station = self.charging_station
 
-        treasures = self.__filter_treasure_by_wall_side(treasures)
+        treasures = self.__filter_treasure_by_wall_side(treasures, self.worldmap_contour['table_contour'])
 
         worldmap = {
             'circles': circles,
@@ -82,7 +82,7 @@ class VisionService:
             return {'center': robot_position['center'],
                     'angle': robot_position['angle']}
 
-    def init_worldmap_contour(self):
+    def init_worldmap_contour_and_charging_station(self):
         worldmap_contour = {}
         print('trying to get calibration data')
         while not worldmap_contour:
@@ -90,6 +90,10 @@ class VisionService:
             worldmap_contour = self.__table_calibrator.get_table_contour(image, default_camille_polygon_params)
         print('got calibration data')
         self.worldmap_contour = worldmap_contour
+        image_for_charging_station = ImageWrapper(self.__camera.get_frame())
+        masked_image = image_for_charging_station.mask_image(self.worldmap_contour['table_contour'])
+        self.charging_station = self.__charging_station_detector.find_polygon_color(masked_image, default_camille_polygon_params,
+                                                                           self.worldmap_contour["pixels_per_meter"])
 
     def get_calibration_data(self):
         return self.worldmap_contour
@@ -102,19 +106,20 @@ class VisionService:
         angle_in_deg = degrees(angle_in_rad)
         return -angle_in_deg
 
-    def __filter_treasure_by_wall_side(self, treasures):
+    def __filter_treasure_by_wall_side(self, treasures, table_corners):
         treasures_filtered = list()
         for treasure in treasures:
             side = None
-            approximated_left_limit = 0
-            approximated_top_limit = 975
-            approximated_bottom_limit = 250
+            approximated_left_limit = table_corners[0][0]
+            approximated_top_limit = table_corners[2][1]
+            approximated_bottom_limit = table_corners[0][1]
+            tolerance = 100
 
-            if treasure["y"] < approximated_bottom_limit:
+            if (approximated_bottom_limit - tolerance) <= treasure["y"] < (approximated_bottom_limit + tolerance):
                 side = "bottom"
-            elif treasure["x"] < approximated_left_limit:
+            elif (approximated_bottom_limit - tolerance) <= treasure["x"] < (approximated_left_limit + tolerance):
                 side = "left"
-            elif treasure["y"] > approximated_top_limit:
+            elif (approximated_top_limit - tolerance) <= treasure["y"] < (approximated_top_limit + tolerance):
                 side = "top"
 
             if side is not None:

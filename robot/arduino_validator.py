@@ -1,7 +1,7 @@
 class ArduinoValidator:
 
     def validate_percentage(self, percentage):
-        is_valid = True;
+        is_valid = True
 
         if not str(percentage).isnumeric():
             is_valid = False

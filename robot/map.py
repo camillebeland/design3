@@ -37,9 +37,9 @@ class Map:
         return Position(target_island['x'], target_island['y'])
 
     def filter_by_clue(self, island, clue):
-        if('color' in clue.keys()):
+        if 'color' in clue.keys():
             return island['color'] == clue['color']
-        elif('shape' in clue.keys()):
+        elif 'shape' in clue.keys():
             return island['shape'] == clue['shape']
         else:
             return False

@@ -8,7 +8,8 @@ class MoveToTreasureAction(Action):
         self.running = True
         print('Moving to Treasure')
         self.treasure_position = self._context.robot.get_target_treasure_position()
-        self.facing_angle = self.__find_facing_angle_when_upfront(self.treasure_position)
+        self.facing_angle = self.__find_facing_angle_when_upfront(self.treasure_position,
+                                                                  self._context.self._context.worldmap.table_calibration_service.get_table_corners())
         wall_distance = 180
         position_ajustment = Position(-cos(2*pi*self.facing_angle/360.0), sin(2*pi*self.facing_angle/360.0)) * wall_distance
         print(self.facing_angle, position_ajustment)
@@ -30,21 +31,23 @@ class MoveToTreasureAction(Action):
     def rotate_towards_treasure(self, callback=None):
         self._context.robot.rotate_to(self.facing_angle, callback)
 
-    def __find_facing_angle_when_upfront(self, treasure_position):
+    def __find_facing_angle_when_upfront(self, treasure_position, table_corners):
         facing_angle = None
         gripper_offset = 270
-        approximated_left_limit = 0
-        approximated_top_limit = 975
-        approximated_bottom_limit = 250
+        tolerance = 100
+        approximated_left_limit = table_corners[0][0]
+        approximated_top_limit = table_corners[2][1]
+        approximated_bottom_limit = table_corners[0][1]
 
-        if treasure_position.y < approximated_bottom_limit:
+        if (approximated_bottom_limit - tolerance) <= treasure_position < (approximated_bottom_limit + tolerance):
             facing_angle = 180
-        elif treasure_position.x < approximated_left_limit:
+        elif (approximated_bottom_limit - tolerance) <= treasure_position < (approximated_left_limit + tolerance):
             facing_angle = 270
-        elif treasure_position.y > approximated_top_limit:
+        elif (approximated_top_limit - tolerance) <= treasure_position < (approximated_top_limit + tolerance):
             facing_angle = 0
         elif facing_angle is None:
             facing_angle = 180
+
         return facing_angle + gripper_offset
 
     def stop(self):
