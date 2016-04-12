@@ -21,7 +21,7 @@ class MoveToChargeStationAction(Action):
         self._context.robot.move_to(self.__recharge_station_position, self.__move_to_done)
 
     def __move_to_done(self):
-        self._context.robot.move(0, -230)
+        self._context.robot.move(0, -100)
         time.sleep(3)
         self._context.robot.move(60, 0)
         time.sleep(2)

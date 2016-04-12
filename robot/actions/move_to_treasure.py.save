@@ -1,7 +1,6 @@
 from robot.action import Action
 from utils.position import Position
 from math import cos, sin, pi
-import time
 
 class MoveToTreasureAction(Action):
     def start(self):
@@ -22,7 +21,6 @@ class MoveToTreasureAction(Action):
 
     def rotate_done(self):
         self._context.robot.lift_prehenseur_down()
-        time.sleep(0.5)
         if self.running:
             self._context.event_listener.notify_event(self._end_message)
         self.running = False
