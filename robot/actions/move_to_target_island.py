@@ -9,6 +9,9 @@ class MoveToTargetIslandAction(Action):
         self._context.robot.move_to_target(self.island_position, self.path_done)
 
     def path_done(self):
+        self._context.robot.rotate_towards(self.island_position, self.second_rotate_torwards)
+
+    def second_rotate_torwards(self):
         self._context.robot.rotate_towards(self.island_position, self.rotate_done)
 
     def rotate_done(self):
