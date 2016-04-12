@@ -3,6 +3,7 @@ from threading import Thread
 import math
 from utils.math import rotate_vector
 from utils.position import Position
+from robot.connection_lost_exception import ConnectionLostException
 
 
 class Movement:
@@ -35,7 +36,11 @@ class Movement:
     def move_to_thread(self, final_destination, callback):
         while self.__should_move and self.__not_close_enough_to_destination(final_destination):
             # sense
-            self.__actual_position = self.__sense.get_robot_position()
+            try:
+                self.__actual_position = self.__sense.get_robot_position()
+            except ConnectionLostException as exception:
+                print(exception)
+                continue
             self.__actual_robot_angle = self.__sense.get_robot_angle()
             # compute
             self.__current_path = self.__compute.find_path(self.__actual_position, final_destination)

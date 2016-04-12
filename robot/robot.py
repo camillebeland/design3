@@ -1,5 +1,7 @@
 from time import sleep
 from math import atan2, degrees
+from robot.connection_lost_exception import ConnectionLostException
+from utils.position import Position
 
 
 class Robot:
@@ -15,6 +17,7 @@ class Robot:
         self.__manchester_code = ''
         self.__island_clue = ''
         self.__camera_rotation_control = camera_rotation
+        self.__position = Position(0,0)
 
     def init_vision(self, pathfinder):
         self.__pathfinder = pathfinder
@@ -24,7 +27,11 @@ class Robot:
         self.__wheels.move(delta_x, delta_y)
 
     def get_position(self):
-        return self.__world_map.get_robot_position()
+        try:
+            self.__position = self.__world_map.get_robot_position()
+        except ConnectionLostException as exception:
+            print(exception)
+        return self.__position
 
     def get_angle(self):
         return self.__world_map.get_robot_angle()
