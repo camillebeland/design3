@@ -194,8 +194,3 @@ def recalculate_world_map():
         raise any_error
     return "OK"
 
-
-@socket_io.on('disconnect')
-def disconnect():
-    print('Base station client disconnected')
-    robot.stop()
