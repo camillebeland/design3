@@ -28,7 +28,7 @@ class MeshBuilder:
         self.__create_cell__()
 
     def get_mesh(self):
-        return Mesh(self.cell.partition_cells(self.polygons, 100))
+        return Mesh(self.cell.partition_cells(self.polygons, 10))
 
     def __create_cell__(self):
         self.cell = Cell(self.width, self.height, self.x, self.y)
