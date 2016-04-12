@@ -1,21 +1,46 @@
 body {
-  background-color: #90a4ae;
+    background-color: #90a4ae;
 }
 .navbar {
-  background-color: #333;
-  border-color: #9d9d9d;
+    background-color: #333;
+    border-color: #9d9d9d;
 }
 #mapCanvas {
   background-color: white;
   border: 1px solid black;
+  margin: 0 10px 0 0;
 }
 .tab-pane {
-  background-color: white;
-  min;height:200px;
+    background-color: white;
+    min-height: 100px;
 }
 .nav-tabs a {
-  color: black;
+    color: black;
 }
-.optionPanelControls{
-  padding: 10px;
+.optionPanelControls {
+    padding: 10px;
+}
+.optionPanelControls label {
+    display: block;
+}
+.systemStatePanel{
+    min-height:300px;
+    background-color: #D3D3D3;
+    border: 1px solid black;
+}
+.systemStatePanel label{
+  display:block;
+}
+.btn-group{
+    padding-bottom: 10px;
+}
+.notImplemented{
+  color: #d1d1e0
+}
+.readinessLed{
+  height:15px;
+  display:inline;
+}
+.timer{
+  font-size:x-large;
 }

@@ -1,10 +1,12 @@
+from configparser import ConfigParser
 from tkinter import *
 from tkinter import filedialog
-from PIL import Image, ImageTk
 from tkinter.scrolledtext import ScrolledText
-from configparser import ConfigParser
+
 import cv2
-from base_station.camera_service import CameraService
+from PIL import Image, ImageTk
+
+from vision_utils.camera_service import CameraService
 
 if __name__ == '__main__':
 
@@ -12,12 +14,12 @@ if __name__ == '__main__':
     main_panel = PanedWindow()
     main_panel.pack()
     open_cv_camera = cv2.VideoCapture(0)
-    open_cv_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 900)
-    open_cv_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+    open_cv_camera.set(3, 1600)
+    open_cv_camera.set(4, 1200)
     camera = CameraService(open_cv_camera,cv2)
     assert(open_cv_camera.isOpened())
 
-    img = Image.open('/home/adam/Projects/design3/base_station/mock_image.jpg')
+    img = Image.open('mock_image.jpg')
     width, height = img.size
     left_panel = PanedWindow(main_panel, orient=VERTICAL)
     main_panel.add(left_panel)

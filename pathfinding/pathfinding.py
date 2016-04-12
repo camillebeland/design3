@@ -1,109 +1,61 @@
-import networkx as nx
+import networkx
 from functools import reduce
+from pathfinding.cell import Cell
+from utils.position import Position
+
 
 class PathFinder:
-    def __init__(self, mesh):
-        self.__graph = nx.Graph()
+    def __init__(self, mesh, polygons=[]):
+        self.__mesh = mesh
+        self.__graph = networkx.Graph()
         for cell in mesh.get_cells():
             self.__graph.add_node(cell)
             for other_cell in mesh.get_cells():
-                if(cell.is_adjacent_to(other_cell)):
+                if cell.is_adjacent_to(other_cell):
                     self.__graph.add_edge(cell, other_cell)
+        self.__obstacles = list(map(self.__polygon_to_cell, polygons))
+
+
+    def __polygon_to_cell(self, polygon):
+        return Cell(polygon.size, polygon.size, polygon.x, polygon.y)
+
+    def get_mesh(self):
+        return self.__mesh
+
+    def any_obstacles_contains_point(self, point):
+        any_obstacles_contains_point  = reduce(lambda x,y : x or y, map(lambda obstacle : obstacle.contains_point(point),self.__obstacles))
+        return any_obstacles_contains_point
+
+    def find_closest_node_to(self, point):
+        closest_node = self.__graph.nodes()[0]
+        smallest_distance = closest_node.distance(point)
+        for node in self.__graph.nodes():
+            if node.contains_point(point):
+                return node
+            new_distance = node.distance(point)
+            if new_distance < smallest_distance:
+                closest_node = node
+                smallest_distance = new_distance
+        return closest_node
 
 
     def find_path(self, from_point, to_point):
-        from_cell = None
-        to_cell = None
-        for cell in self.__graph.nodes():
-            if(cell.contains_point(from_point)):
-                from_cell = cell
-            if(cell.contains_point(to_point)):
-                to_cell = cell
+        from_cell = self.find_closest_node_to(from_point)
+        to_cell = self.find_closest_node_to(to_point)
 
-        cell_path = nx.astar_path(self.__graph, from_cell, to_cell)
-        path = list(map(lambda cell : (cell.x, cell.y), cell_path))
-        if(len(path) ==1):
+        try:
+            cell_path = networkx.astar_path(self.__graph, from_cell, to_cell)
+        except:
+            raise Exception('No Path found!')
+        path = list()
+        for cell in cell_path:
+            path.append(Position(cell.x, cell.y))
+        if len(path) == 1:
             path.pop()
             path.append(to_point)
         else:
             path.pop(0)
             path.pop()
-            path.insert(0,from_point)
+            path.insert(0, from_point)
             path.append(to_point)
         return path
-
-
-class Cell:
-    def __init__(self, width, height, x, y):
-        self.width = width
-        self.height = height
-        self.x = x
-        self.y = y
-
-    def area(self):
-        return self.width * self.height
-
-    def split(self):
-        return [
-            Cell(self.width/2.0, self.height/2.0, self.x - self.width/4.0,self.y -self.height/4.0),
-            Cell(self.width/2.0, self.height/2.0, self.x - self.width/4.0,self.y +self.height/4.0),
-            Cell(self.width/2.0, self.height/2.0, self.x + self.width/4.0,self.y -self.height/4.0),
-            Cell(self.width/2.0, self.height/2.0, self.x + self.width/4.0,self.y +self.height/4.0),
-        ]
-
-    def contains_any(self, obstacles):
-        return reduce(lambda x,y : x or y,
-                      map(self.contains, obstacles),
-                      False
-        )
-
-    def __str__(self):
-        return "({0},{1},{2},{3})".format(self.x, self.y, self.width, self.height)
-
-    def contains(self, obstacle):
-        return obstacle.contains(self)
-
-    def contains_point(self, point):
-        x, y = point
-        return (x >= (self.x - self.width/2.0) and
-                x <= (self.x + self.width/2.0) and
-                y >= (self.y - self.height/2.0) and
-                y <= (self.y + self.height/2.0))
-
-    def is_adjacent_to(self, other_cell):
-        return (((abs(self.x - other_cell.x) - (self.width + other_cell.width)/2.0) < 1e-6 and
-                abs(self.y - other_cell.y) < (self.height + other_cell.height)/2.0) or
-                ((abs(self.y - other_cell.y) - (self.height + other_cell.height)/2.0) < 1e-6 and
-                abs(self.x - other_cell.x) < (self.width + other_cell.width)/2.0))
-
-    def partitionCells(self, obstacles, area_treshold):
-        if(self.area() < area_treshold):
-            return []
-        elif(self.contains_any(obstacles)):
-            childCells = self.split()
-            return reduce(lambda x, y: x+y,
-                          map(lambda cell: cell.partitionCells(obstacles, area_treshold), childCells))
-        else:
-            return [self]
-
-class Mesh:
-    def __init__(self, cells):
-        self.__cells = cells
-
-    def get_cells(self):
-        return self.__cells
-
-class polygon:
-    def __init__(self, x, y, size):
-        self.x = x
-        self.y = y
-        self.size = size
-
-    def distance(self, target):
-        return (self.x - target.x)**2 + (self.y - target.y)**2
-
-    def contains(self, cell):
-        return (abs(self.x - cell.x) <= (cell.width + self.size)/2.0 and
-                abs(self.y - cell.y) <= (cell.height + self.size)/2.0)
-
-

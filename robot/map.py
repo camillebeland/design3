@@ -1,4 +1,52 @@
 import numpy as np
+from utils.position import Position
+
+class Map:
+    def __init__(self, vision_daemon, worldmap_service, table_calibration_service):
+        self.vision_daemon = vision_daemon
+        self.worldmap_service = worldmap_service
+        self.table_calibration_service = table_calibration_service
+
+    def get_robot_position(self):
+        return self.vision_daemon.get_robot_position_from_vision()
+
+    def get_robot_angle(self):
+        return self.vision_daemon.get_robot_angle_from_vision() % 360
+
+    def relative_position(self, position):
+        robot_current_position = self.get_robot_position()
+        matrix = rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
+        return Position(matrix[0], matrix[1])
+
+    def get_recharge_station_position(self):
+        position = self.worldmap_service.get_charging_station_position()
+        charging_station_position = Position(position["x"], position["y"])
+        return charging_station_position
+
+    def get_table_corners(self):
+        return self.table_calibration_service.get_table_corners()
+
+    def get_treasure_closest_to(self, position):
+        #TODO
+        pass
+
+    def find_island_with_clue(self, clue):
+        islands = self.worldmap_service.get_islands()
+        target_islands = list(filter(lambda island: self.filter_by_clue(island, clue), islands))
+        target_island = target_islands.pop()
+        return Position(target_island['x'], target_island['y'])
+
+    def filter_by_clue(self, island, clue):
+        if 'color' in clue.keys():
+            return island['color'] == clue['color']
+        elif 'shape' in clue.keys():
+            return island['shape'] == clue['shape']
+        else:
+            return False
+
+
+def rotate_vector(theta, vector):
+    return np.dot(rotation_matrix(theta), vector)
 
 
 def cos(angle):
@@ -11,47 +59,3 @@ def sin(angle):
 
 def rotation_matrix(theta):
     return np.array([[cos(theta), -1*sin(theta)], [sin(theta), cos(theta)]])
-
-
-def rotate_vector(theta, vector):
-    return np.dot(rotation_matrix(theta), vector)
-
-
-class Map:
-    def __init__(self, width, height):
-        self._width = width
-        self._height = height
-        self._robot_position = np.array([width / 2, height / 2])
-        self._robot_angle = 0;
-
-    def set_robot_position(self, x, y):
-        if not self.__is_inside_boundaries(x,y):
-            raise Exception("Robot out of map boundaries : {0} , {1}".format(x,y))
-        else:
-            self._robot_position = np.array([x, y])
-
-    def set_robot_angle(self, angle):
-        self._robot_angle = angle
-
-    def get_robot_position(self):
-        return self._robot_position.tolist()
-
-    def get_robot_angle(self):
-        return self._robot_angle
-
-    def get_robot_angle(self):
-        return self._robot_angle
-
-    def move_robot(self, delta_x, delta_y):
-        delta = rotate_vector(- self._robot_angle, np.array([delta_x, delta_y]))
-        self.set_robot_position(self._robot_position[0] + delta[0], self._robot_position[1] + delta[1])
-
-    def rotate_robot(self, angle):
-        self._robot_angle += angle
-        self._robot_angle = self._robot_angle % 360
-
-    def __is_inside_boundaries(self,x, y):
-        return x > 0 and x < self._width and y > 0 and y < self._height
-
-    def relative_position(self, position):
-        return rotate_vector(self._robot_angle, np.array(position) - np.array(self._robot_position))

@@ -3,6 +3,7 @@ import os
 
 
 def get_config():
+
     print("Reading configuration file")
     config = configparser.ConfigParser()
 
@@ -13,3 +14,5 @@ def get_config():
 
     config.get('robot', 'port')
     return config
+
+

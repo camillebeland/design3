@@ -3,12 +3,13 @@
 case "$1" in
 	start) 
 		echo "Starting servers"
-		python web_app.py &
-		export WEB_APP_PID=$!
-		python robot_app.py &
-		export ROBOT_APP_PID=$!
 		python base_station_app.py &
 		export BASE_STATION_APP_PID=$!
+		sleep 2s
+		python robot_app.py &
+		export ROBOT_APP_PID=$!
+		python web_app.py &
+		export WEB_APP_PID=$!
 		;;
 	stop)
 		echo "Stopping servers"

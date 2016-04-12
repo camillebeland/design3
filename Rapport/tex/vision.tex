@@ -39,7 +39,6 @@ Un coutour correspond à une série de point formant une aire fermé. Différent
 \item Filtre par taille (largeur, hauteur et aire)
 \end{enumerate}
 
-
 Explication: Le filtre gaussien permet premièrement d'enlever une partie du bruit dans l'image et de l'uniformiser. Ensuite, un filtre spécifique de couleur pour chaque type d'île et les trésor est utilisé, s'en suit une image binaire. Afin d'enlever les petits points non désirés dans l'image binaire, une série d'erode et de dilate est appliqué. Il est à noter que la quantité d'ittération est moindre pour les trésors afin de ne pas les perdre en raison de leur petites. Ensuite, on trouve tous les contours et on les approximes en des polygons simples. Enfin, chaque contour approximé est analyser en fonction de sa taille, de son nombre de point (forme) et de son aire afin de correspondre aux spécification d'une île ou d'un trésor. 
 
 \subsection{Masque de la table}

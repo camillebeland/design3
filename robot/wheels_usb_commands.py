@@ -1,6 +1,6 @@
-
 def encode(string):
     return string.encode(encoding='utf8')
+
 
 class WheelsUsbCommands:
     def __init__(self):
@@ -16,9 +16,8 @@ class WheelsUsbCommands:
         return self.__rotate('r', angle)
 
     def __rotate(self, direction, angle):
-        assert(abs(angle)<180)
+        assert(abs(angle)<=180)
         return encode("(r"+direction)+bytes([angle])+encode(")")
-
 
     def move_slow(self, x_pos, y_pos):
         return self.__move('m', x_pos, y_pos)

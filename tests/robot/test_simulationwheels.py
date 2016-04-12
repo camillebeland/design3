@@ -1,7 +1,9 @@
-from nose.tools import *
-from nose import with_setup
-from robot.simulation_robot import SimulationWheels
 from time import sleep
+
+from nose import with_setup
+from nose.tools import *
+from robot.simulation.simulation_robot import SimulationWheels
+
 
 class MockedMap:
     def __init__(self):
@@ -30,20 +32,20 @@ def setup():
     mockedworldmap.__init__()
     wheels.__init__(mockedworldmap, wheels_velocity=SPEED, refresh_time=FAST_REFRESH_TIME_IN_MS)
 
+
 def teardown():
     pass
+
 
 @with_setup(setup=setup, teardown=teardown)
 def test_when_initiated_wheels_has_no_target():
     assert_equal([0,0], wheels.target)
 
-@with_setup(setup=setup, teardown=teardown)
-def test_when_initiated_wheels_are_running():
-    assert_true(wheels.running)
 
 @with_setup(setup=setup, teardown=teardown)
 def test_when_initiated_wheels_has_no_directions():
     assert_equal([0,0], wheels.direction)
+
 
 @with_setup(setup=setup, teardown=teardown)
 def test_given_started_wheels_when_move_a_distance_then_robot_has_moved_a_distance():
@@ -59,10 +61,12 @@ def test_given_started_wheels_when_move_zero_distance_then_robot_has_not_moved()
     sleep(TIME_TO_GO_A_DISTANCE_IN_SECONDS)
     assert_equal_with_error(0,mockedworldmap.robotdistance[0], PRECISION)
 
+
 @with_setup(setup=setup, teardown=teardown)
 def test_given_started_wheels_when_rotate_wheels_of_angle_then_robot_has_rotate_an_angle():
     wheels.rotate(AN_ANGLE)
     assert_equal(AN_ANGLE, mockedworldmap.robotangle)
+
 
 def assert_equal_with_error(expected, actual, error):
     actual_error = expected - actual

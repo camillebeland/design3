@@ -1,12 +1,14 @@
-from flask import Flask, Response, jsonify, request
-from flask_cors import CORS
 import time
-import base_station.logger as logger
-from base_station.logger import Logger
-import json
+
+from flask import Flask, Response, jsonify
+from flask_cors import CORS
+import logging
 
 app = Flask(__name__)
 CORS(app)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 def inject_mock_map(mock_app):
@@ -14,12 +16,12 @@ def inject_mock_map(mock_app):
     app = mock_app
 
 
-def inject(a_camera, a_refresh_time, the_worldmap):
-    global camera, refresh_time, worldmap, logger
+def inject(a_camera, a_refresh_time, the_worldmap, a_vision_service):
+    global camera, refresh_time, worldmap, vision_service
     camera = a_camera
     refresh_time = a_refresh_time
     worldmap = the_worldmap
-    logger = Logger()
+    vision_service = a_vision_service
 
 
 def generate_frame(camera, refresh_time):
@@ -29,8 +31,7 @@ def generate_frame(camera, refresh_time):
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + bytes_frame + b'\r\n\r\n')
 
 
-def run(host, port):
-    logger.info("Starting the base station app at "+str(port))
+def run_base_app(host, port):
     app.run(host=host, port=port, threaded=True)
 
 
@@ -40,16 +41,29 @@ def video_feed():
 
 
 def cell_to_json(cell):
-    return {'x': cell.x, 'y':cell.y, 'width':cell.width, 'height':cell.height}
+    return {'x': cell.x, 'y': cell.y, 'width': cell.width, 'height': cell.height}
+
+
+@app.route('/refresh_worldmap', methods=['POST'])
+def refresh_worldmap():
+    global worldmap
+    worldmap = vision_service.build_map()
 
 
 @app.route('/worldmap')
-def worldmap():
-    return jsonify({'circles' : worldmap['circles'], 'triangles': worldmap['triangles'],
-                    'squares': worldmap['squares'], 'pentagons': worldmap['pentagons']})
+def fetch_worldmap():
+    return jsonify({'circles': worldmap['circles'], 'triangles': worldmap['triangles'],
+                    'squares': worldmap['squares'], 'pentagons': worldmap['pentagons'],
+                    'treasures':worldmap['treasures'], 'chargingStation': worldmap['charging-station']})
 
 
-@app.route('/logger/info', methods=['POST'])
-def log_info():
-    logger.info(request.json['message'])
-    return "OK"
+@app.route('/vision/robot')
+def fetch_position():
+    robot_position = vision_service.find_robot_position()
+    return jsonify(robot_position)
+
+
+@app.route('/vision/calibration_data', methods=['GET'])
+def get_calibration_data():
+    data = vision_service.get_calibration_data()
+    return jsonify({'pixels_per_meter': data['pixels_per_meter'], 'table_corners': data['table_contour'].tolist()})
