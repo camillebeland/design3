@@ -18,15 +18,20 @@ Arduino Pin	Register
 7					OCR4B
 8					OCR4C
 9					OCR2B
-10					OCR2A
-11					OCR1A
-12					OCR1B
-13					OCR0A
-44					OCR5C
-45					OCR5B
-46					OCR5A
+10				OCR2A
+11				OCR1A
+12				OCR1B
+13				OCR0A
+44				OCR5C
+45				OCR5B
+46				OCR5A
 
 */
+
+// MOTOR A -> Channel 1
+// MOTOR B -> Channel 2
+// MOTOR C -> Channel 3
+// MOTOR D -> Channel 4
 
 #define INT_ENCODER_A_CH1 18
 #define INT_ENCODER_A_CH2 0
@@ -55,18 +60,23 @@ Arduino Pin	Register
 #define PIN_TWO_MOTOR_C 41
 #define PIN_TWO_MOTOR_D 37
 
-#define ZERO_SPEED 50 // PWM COMMAND for near start
+#define ZERO_SPEED_A 60 // PWM COMMAND for near start
+#define ZERO_SPEED_B 60
+#define ZERO_SPEED_C 60
+#define ZERO_SPEED_D 60
 
 #define FREQ 20 //  Hz
-#define DEFAULT_SPEED 1000 // TICKS PER SEC
-#define SLOW_SPEED 500
-#define ROTATE_SPEED 500
-#define ROTATE_DIAMETER 195.56 //mm
+#define DEFAULT_SPEED 1300 // TICKS PER SEC
+#define SLOW_TRIGGER 500
+#define MIN_SPEED 300
+#define SLOW_SPEED 750
+#define ROTATE_SPEED 750
+#define ROTATE_DIAMETER 190 //mm
 
-#define KSI 0.0075 // for delta motors
-#define KSP 0.015// for delta motors
-#define KI 0.03 // for speed PID
-#define KP 0.05 //for speed PID
+#define KSI 0.015 // for delta motors
+#define KSP 0.04// for delta motors
+#define KI 0.01 // for speed PID
+#define KP 0.04 //for speed PID
 
 #define TICKS_PER_MM 15.34	 //  including slip 
 #define WHEEL_DIAMETER 69.85 //mm

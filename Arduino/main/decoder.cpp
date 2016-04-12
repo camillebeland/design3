@@ -26,7 +26,7 @@ bool decode_byte(unsigned char byte) {
 
   bool byte_decoded = false;
 
-  if (byte == START_CHAR) {
+  if (byte == START_CHAR and current_state != PARAMETERS) {
     reset_decoder;
   };
 
@@ -37,7 +37,6 @@ bool decode_byte(unsigned char byte) {
         current_state = FUNCTION;
         byte_decoded = true;
         param_count = 0;
-        //Serial.println("Start CHAR detected");
         Timer4.start();
       }
       else {
@@ -50,12 +49,10 @@ bool decode_byte(unsigned char byte) {
       if (byte == 's') {
         current_function = STOP;
         current_state = END;
-        //Serial.println("Function stop detected");
       }
       else if (byte == 'm' || byte == 'M') {
         current_function = MOVE;
         param_count = 4;
-        //Serial.println("Function move detected");
         if (byte == 'm') {
           speed_param = SLOW_SPEED;
         }
@@ -66,7 +63,6 @@ bool decode_byte(unsigned char byte) {
       }
       else if (byte == 'r') {
         current_function = ROTATE;
-        //Serial.println("Function rotate detected");
         param_count = 2;
         current_state = PARAMETERS;
       }
@@ -80,7 +76,6 @@ bool decode_byte(unsigned char byte) {
 		param_count = 0;
 		current_state = END;
 	  }
-    
 	  else if(byte == 't'){
 		current_function = TEST;
 		param_count = 0;
@@ -107,31 +102,20 @@ bool decode_byte(unsigned char byte) {
     case PARAMETERS:
       byte_decoded = true;
       if (param_count > 0) {
-        if (byte == END_CHAR) {
-          byte_decoded = false;
-          current_state = IDLE;
-        }
         params[4 - param_count] = byte;
         param_count--;
-		
       }
-      //cover errors
       if (param_count < 1) {
         byte_decoded = true;
         current_state = END;
       }
-      //Serial.println("Parameter detected");
       break;
 
     case END:
       byte_decoded = true;
-
       if (byte == END_CHAR) {
         parse_and_call();
-        current_state =  IDLE;
-        //Serial.println("End CHAR detected");
       }
-      //cover errors
       else {
         byte_decoded = false;
       }
@@ -139,8 +123,7 @@ bool decode_byte(unsigned char byte) {
       break;
 
     default:
-      current_state = IDLE;
-      byte_decoded = false;
+      reset_decoder()
       break;
 
   }
@@ -190,14 +173,30 @@ bool parse_and_call() {
       else if (ONOFF == 'f') {
         toggle_magnet_OFF();
       }
+	  else if(ONOFF == 'c'){
+		toggle_recharge_ON();
+	  }
+	  else if(ONOFF == 'd'){
+		toggle_recharge_OFF();
+	  }
+	  else if(ONOFF == 'x'){
+		toggle_discharge_ON();
+		toggle_magnet_ON();
+	  }
+	  else if(ONOFF == 'z'){
+		toggle_discharge_OFF();
+		toggle_magnet_OFF();
+	  }
 	  break;
 	case MANCHESTER:
 		serial_write(get_ASCII());
 		break;
 	case MAGNET_VOLTAGE:
 		serial_write(get_capacitor_percent());
+		break;
 	case BATTERY:
 		serial_write(get_battery_percent());
+		break;
 	case TEST:
 		test();
 		break;
@@ -211,6 +210,5 @@ bool parse_and_call() {
 
 
 void TIMEOUT_ISR() {
-
   reset_decoder();
 }
