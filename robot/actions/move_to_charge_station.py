@@ -10,18 +10,18 @@ class MoveToChargeStationAction(Action):
         self._context.timer.start()
         self._context.robot.lift_prehenseur_down()
         self.__facing_charge_station_angle = 270
-        recharge_station_position = self._context.worldmap.get_recharge_station_position()
-        self._context.robot.move_to(recharge_station_position, self.__rotate)
+        self.__recharge_station_position = self._context.worldmap.get_recharge_station_position()
+        self._context.robot.move_to(self.__recharge_station_position, self.__rotate)
 
     def __rotate(self):
         robot_angle = self._context.worldmap.get_robot_angle()
         self._context.robot.rotate(self.__facing_charge_station_angle - robot_angle, self.__rotate_done)
 
     def __rotate_done(self):
-        self._context.robot.move_to(recharge_station_position, self.__move_to_done)
+        self._context.robot.move_to(self.__recharge_station_position, self.__move_to_done)
 
     def __move_to_done(self):
-        self._context.robot.move(0, -180)
+        self._context.robot.move(0, -230)
         time.sleep(3)
         self._context.robot.move(60, 0)
         time.sleep(2)
