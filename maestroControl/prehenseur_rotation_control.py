@@ -13,6 +13,7 @@ class PrehenseurRotationControl:
         self.__controller = maestro.Controller(usb)
         #init des parametres
         self.__controller.setRange(self.__CHANNEL, self.__MIN, self.__MAX)
+        self.__setSpeed()
         self.sleep()
 
     # position de repos
