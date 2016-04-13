@@ -46,7 +46,8 @@ website.controller('homeController', ['$scope', function($scope) {
     RECHARGE: "recharge",
     SCAN_TREASURES : "scan_treasures",
     ALIGN_WITH_CHARGING_STATION : "align_charging_station",
-    ALIGN_WITH_TREASURE : "align_treasure"
+    ALIGN_WITH_TREASURE : "align_treasure",
+    REFRESH_IMAGE: "refresh_image"
   });
 
   var init = function() {
