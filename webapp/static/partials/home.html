@@ -11,11 +11,13 @@
         <label class="timer"><span>{{timer.minutes}}: {{timer.seconds}}</span></label>
         <label ng-show="robot.ready">Robot ready <img class="readinessLed" src="../static/img/greenLed.png" /></label>
         <label ng-show="!robot.ready">Robot not ready <img class="readinessLed" src="../static/img/redLed.png" /></label>
+        <label ng-show="robot.hasStartedSequence">Has started sequence <img class="readinessLed" src="../static/img/greenLed.png" /></label>
+        <label ng-show="!robot.hasStartedSequence">Sequence not started yet <img class="readinessLed" src="../static/img/redLed.png" /></label>
         <label>
             Robot's angle: <span ng-bind="robot.angle"></span>&deg;
         </label>
         <label>
-            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>/3 V
+            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>/3V
         </label>
         <label>
             Manchester code : <span ng-bind="robot.manchesterCode"></span>
@@ -80,9 +82,9 @@
                     </label>
                     <label>Islands and treasures toggle
                         <label>
-                            <input type="radio" name="islandToggle" ng-click="islandToggleOn()"></input>On</label>
+                            <input type="radio" name="islandToggle" checked="true" ng-click="islandToggleOn()"></input>On</label>
                         <label>
-                            <input type="radio" name="islandToggle" checked="true" ng-click="islandToggleOff()"></input>Off</label>
+                            <input type="radio" name="islandToggle" ng-click="islandToggleOff()"></input>Off</label>
                     </label>
                     <label>Show vision's tracking of robot
                         <label>

@@ -55,5 +55,7 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
     $scope.startFromBeginning = function() {
         var actionCompleted = function(){$rootScope.$broadcast('backendMapHasRefreshed')};
         robotService.sendAction(window.actionsEnum.REFRESH_IMAGE, actionCompleted);
+        robotModel = robotService.getRobotModel();
+        robotModel.hasStartedSequence = true
     }
 }]);
