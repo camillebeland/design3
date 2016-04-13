@@ -50,14 +50,10 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
 
     $scope.startSequence = function() {
         robotService.sendAction($scope.sequenceToStart);
-    }
+    };
 
-    $scope.startSequence = function(){
-        var whenActionCompleted = robotService.sendAction(window.actionsEnum.REFRESH_IMAGE);
-        whenActionCompleted.then(function(){
-            $rootScope.$broadcast('backendMapHasRefreshed');
-          };
-        })
+    $scope.startFromBeginning = function() {
+        var actionCompleted = function(){$rootScope.$broadcast('backendMapHasRefreshed')};
+        robotService.sendAction(window.actionsEnum.REFRESH_IMAGE, actionCompleted);
     }
-
 }]);

@@ -120,10 +120,11 @@ var Robot = angular.module('Robot', [])
             });
         };
 
-        this.sendAction = function(action) {
+        this.sendAction = function(action, callback) {
             $http({
                 method: 'POST',
                 url: 'http://' + ROBOT_HOST + '/actions/' + action
+            }).then(function () {if (callback !== undefined){callback()}
             });
         };
 
