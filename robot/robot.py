@@ -76,10 +76,6 @@ class Robot:
     def move_to_target(self, target, callback):
         self.__movement.move_to_target(target, callback)
 
-    def find_move_to(self, position):
-        #TODO
-        pass
-
     def rotate(self, angle, callback=None):
         current_angle = self.get_angle()
         target_angle = (current_angle + angle) % 360
@@ -129,6 +125,7 @@ class Robot:
 
     def set_camera_angle(self, vertical_angle, horizontal_angle):
         self.__camera_rotation_control.setHor(horizontal_angle)
+        sleep(0.5)
         self.__camera_rotation_control.setVert(vertical_angle)
 
     def get_island_clue(self):
