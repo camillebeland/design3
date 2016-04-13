@@ -184,7 +184,7 @@ var Robot = angular.module('Robot', [])
         });
 
         var convertIntoVoltage = function(percentageCharge) {
-            var totalCapacitorVoltage = 2.7;
+            var totalCapacitorVoltage = 3;
             convertedVoltage = percentageCharge * totalCapacitorVoltage / 100;
             convertedVoltage = convertedVoltage.toPrecision(3)
             return convertedVoltage;

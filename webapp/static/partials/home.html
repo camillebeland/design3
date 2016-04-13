@@ -15,7 +15,7 @@
             Robot's angle: <span ng-bind="robot.angle"></span>&deg;
         </label>
         <label>
-            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>/2.7 V
+            Capacitor's charge: <span ng-bind="robot.capacitorLevel"></span>/3 V
         </label>
         <label>
             Manchester code : <span ng-bind="robot.manchesterCode"></span>
@@ -96,7 +96,11 @@
 
             <div id="game" class="tab-pane fade">
                 <div class="container optionPanelControls" ng-controller="gamePanelController">
-                    <label>Choose a game sequence to play</label>
+                    <button class="btn btn-success goButton" ng-click="startFromBeginning()">
+                        Start from beginning
+                    </button>
+
+                    <label>Or choose a game sequence to play</label>
                     <div class="btn-toolbar">
                         <div class="dropdown btn-group">
                             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
@@ -104,18 +108,18 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
+                                <li><a href ng-click="actionScanTreasures()" style="color:#d1d1e0">Scan Treasures</a></li>
                                 <li><a href ng-click="actionMoveToChargeStation()">move to charge station</a></li>
+                                <li><a href ng-click="actionsAlignWithChargingStation()">align with charging station</a></li>
+                                <li><a href ng-click="actionRecharge()">recharge</a></li>
                                 <li><a href ng-click="actionReadManchester()">read manchester code</a></li>
                                 <li><a href ng-click="actionFindIsland()">find island</a></li>
-                                <li><a href ng-click="actionMoveToTargetIsland()">move to target island</a></li>
-                                <li><a href ng-click="actionDropdownTreasure()">dropdown treasure</a></li>
                                 <li><a href ng-click="actionFindBestTreasure()">find best treasure</a></li>
                                 <li><a href ng-click="actionMoveToTreasure()">move to treasure</a></li>
-                                <li><a href ng-click="actionPickUpTreasure()">pick up treasure</a></li>
-                                <li><a href ng-click="actionRecharge()">recharge</a></li>
-                                <li><a href ng-click="actionScanTreasures()">Scan Treasures</a></li>
-                                <li><a href ng-click="actionsAlignWithChargingStation()">align with charging station</a></li>
                                 <li><a href ng-click="actionAlignWithTreasure()">align with treasure</a></li>
+                                <li><a href ng-click="actionPickUpTreasure()">pick up treasure</a></li>
+                                <li><a href ng-click="actionMoveToTargetIsland()">move to target island</a></li>
+                                <li><a href ng-click="actionDropdownTreasure()">dropdown treasure</a></li>
                             </ul>
                         </div>
                         <button class="btn btn-primary btn-group" ng-click="startSequence()">

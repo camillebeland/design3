@@ -44,3 +44,6 @@ body {
 .timer{
   font-size:x-large;
 }
+.goButton{
+    margin-bottom: 20px;
+}

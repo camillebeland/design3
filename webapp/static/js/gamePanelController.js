@@ -52,4 +52,6 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
         robotService.sendAction($scope.sequenceToStart);
     }
 
+    
+
 }]);
