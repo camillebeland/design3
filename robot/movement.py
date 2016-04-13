@@ -39,7 +39,8 @@ class Movement:
             # sense
             try:
                 self.__actual_position = self.__sense.get_robot_position()
-            except NoConnectionException as exception:
+                print(self.__actual_position)
+            except Exception as exception:
                 print(exception)
                 continue
             self.__actual_position = self.__sense.get_robot_position()

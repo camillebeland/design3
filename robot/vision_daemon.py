@@ -3,6 +3,7 @@ import time
 from utils.position import Position
 
 import requests
+from robot.no_connection_exception import NoConnectionException
 
 
 class VisionDaemon:
@@ -33,7 +34,7 @@ class VisionDaemon:
         while self.running:
             time.sleep(0.05)
             try:
-                response = requests.get(str(self.base_station_address) + '/vision/robot')
+                response = requests.get(str(self.base_station_address) + '/vision/robot', timeout=0.3)
                 response.raise_for_status()
                 if not response.json():
                     print("Robot position is not found, base station returned nothing")
