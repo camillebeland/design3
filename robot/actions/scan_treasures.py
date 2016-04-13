@@ -5,7 +5,7 @@ from robot.treasure_angle_to_worldmap_positon_converter import TreasureAngleToWo
 class ScanTreasuresAction(Action):
     def __rotate(self):
         self.running = True
-        self._context.robot.rotate_to(180, self.scan_treasures())
+        self._context.robot.rotate_to(180, self.scan_treasures)
 
     def start(self):
         self.__rotate()
