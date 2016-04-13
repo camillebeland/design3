@@ -1,0 +1,2 @@
+class NoConnectionException(Exception):
+    pass

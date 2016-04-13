@@ -129,9 +129,9 @@ def get_manchester():
         print(any_error)
         raise any_error
     if code is None:
-        return {'code', ''}
+        return jsonify({'code', ''})
     else:
-        return {'code': code.__str__()}
+        return jsonify({'code': code.__str__()})
 
 
 @app.route('/manchester/<code>', methods=['POST'])
@@ -151,7 +151,7 @@ def get_island():
     except Exception as any_error:
         print(any_error)
         raise any_error
-    return clue
+    return jsonify(clue)
 
 
 @app.route('/island/<clue>', methods=['POST'])
