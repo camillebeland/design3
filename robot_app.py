@@ -213,7 +213,8 @@ if __name__ == '__main__':
     action_machine.bind("recharge", "recharge")
     action_machine.bind("scan_treasures", "scan_treasures")
     action_machine.bind('align_treasure', 'align_treasure')
-    action_machine.bind('start', 'move_to_charge_station')
+    action_machine.bind('start', 'scan_treasures')
+    action_machine.bind('scan_treasures_done', 'move_to_charge_station')
     action_machine.bind('move_to_charge_station_done', 'align_charging_station')
     action_machine.bind('align_charging_station_done', 'recharge')
     action_machine.bind('recharge_done', 'discover_manchester_code')
@@ -227,6 +228,8 @@ if __name__ == '__main__':
     action_machine.bind('move_to_target_island_done', 'drop_down_treasure')
     action_machine.bind('drop_down_treasure_done', 'end_action')
     action_machine.bind('stop', 'end_action')
+
+    scan_treasure.start()
 
     vision_refresher.refresh()
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, timer)
