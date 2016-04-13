@@ -9,7 +9,11 @@ class MoveToTreasureAction(Action):
         print('Moving to Treasure')
         self.treasure_position = self._context.robot.get_target_treasure_position()
         self.facing_angle = self.__find_facing_angle_when_upfront(self.treasure_position, self._context.worldmap.table_calibration_service.get_table_corners())
-        wall_distance = 180
+        if(abs(self.facing_angle - 180.0) <= 5.0):
+            print('Un tresor du fond !!!!')
+            wall_distance = 180*2
+        else:
+            wall_distance = 180
         position_ajustment = Position(-cos(2*pi*self.facing_angle/360.0), sin(2*pi*self.facing_angle/360.0)) * wall_distance
         print(self.facing_angle, position_ajustment)
         try:

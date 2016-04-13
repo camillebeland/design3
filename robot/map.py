@@ -18,6 +18,9 @@ class Map:
         matrix = rotate_vector(self.get_robot_angle(), np.array(position.to_tuple()) - np.array(robot_current_position.to_tuple()))
         return Position(matrix[0], matrix[1])
 
+    def add_treasures(self, treasures):
+        self.worldmap_service.add_treasures(treasures)
+
     def get_recharge_station_position(self):
         position = self.worldmap_service.get_charging_station_position()
         charging_station_position = Position(position["x"], position["y"])

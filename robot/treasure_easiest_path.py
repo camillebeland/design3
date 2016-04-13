@@ -9,6 +9,7 @@ class TreasureEasiestPath:
 
     def find_easiest_treasure_from(self, position, target_island_position):
         treasures = self.__worldmap.get_treasures()
+        print(self.__worldmap, treasures)
         treasures_positions = list(map(lambda treasure: Position(treasure['x'], treasure['y']), treasures))
         paths = list(map(lambda treasure_position: {'length': self.__find_path_length(position, treasure_position, target_island_position), 'treasure': treasure_position}, treasures_positions))
         return min(paths, key=lambda x: x['length'])['treasure']

@@ -21,7 +21,7 @@ class AlignWithTreasureAction(Action):
 
     def __align_done(self):
         self._context.robot.set_camera_angle(90, 0)
-        self._context.robot.move(130, 0)
+        self._context.robot.move(260, 0)
         time.sleep(1)
         if self.running:
             self._context.event_listener.notify_event(self._end_message)

@@ -16,8 +16,8 @@ class ScanTreasuresAction(Action):
             self._context.embedded_camera.get_treasure_angles(), self._context.robot)
 
         treasures = treasures_position_converter.get_treasures()
-        self._context.worldmap.worldmap_service.add_treasures(treasures)
-        print(self._context.worldmap.worldmap_service.get_treasures())
+        self._context.worldmap.add_treasures(treasures)
+        print(self._context.worldmap.worldmap_service, self._context.worldmap.worldmap_service.get_treasures())
 
         if self.running:
             self._context.event_listener.notify_event(self._end_message)

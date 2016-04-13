@@ -161,7 +161,7 @@ if __name__ == '__main__':
                   manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet, camera_rotation = camera_rotation)
 
     treasure_easiest_path = TreasureEasiestPath()
-    vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners, treasure_easiest_path)
+    vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners, treasure_easiest_path, world_map_service)
     action_machine = ActionMachine()
     embedded_vision_service = EmbeddedVisionService(
         camera,
