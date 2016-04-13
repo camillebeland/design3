@@ -12,7 +12,7 @@ class VisionRefresher:
         self.__camera = camera
         self.__treasure_easiest_path = treasure_easiest_path
 
-    def refresh(self):
+    def refresh(self, callback=None):
         worldmap = WorldmapService(self.__island_host, self.__island_port)
         polygons = worldmap.get_polygons()
         mesh_builder = MeshBuilder(self.__table_corners, polygons)
@@ -20,3 +20,5 @@ class VisionRefresher:
         pathfinder = PathFinder(mesh, polygons)
         self.__treasure_easiest_path.reset_attributes(pathfinder, worldmap)
         self.__robot.init_vision(pathfinder)
+        if callback is not None:
+            callback()

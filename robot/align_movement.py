@@ -22,29 +22,27 @@ class AlignMovement:
     def __align__(self, callback=None):
         self.__thread = Thread(target=self.__align_thread__, args=(callback,))
         self.__thread.start()
-        self.__move_thread = Thread(target=self.__move_thread__, args=(self.__time_sleep,))
         self.should_move = True
-        self.__move_thread.start()
 
     def __align_thread__(self, callback):
         is_aligned = False
         while not is_aligned:
             target_x = self.__position_deamon.get_position_from_vision()[0]
-            print(target_x)
-            self.move_distance = self.__compute_move_direction__(target_x)
+            self.__compute_move_direction__(target_x)
             if target_x is 0:
                 continue
             if self.__close_enough_to_target__(target_x):
                 self.should_move = False
                 self.__stop_any_movement__()
                 is_aligned = True
+            self.__move__()
         if callback is not None:
             callback()
 
-    def __move_thread__(self, time_sleep):
-        while self.should_move:
+    def __move__(self):
+        if self.should_move:
             self.__robot.move(0, self.move_distance)
-            time.sleep(time_sleep)
+            time.sleep(self.__time_sleep)
 
     def __close_enough_to_target__(self, target):
         if (self.__marker_position_x - self.__min_distance_to_target) <= target <= (self.__marker_position_x + self.__min_distance_to_target):
@@ -56,9 +54,9 @@ class AlignMovement:
         self.__robot.stop()
 
     def __compute_move_direction__(self, target_x):
-        if (target_x is 0 or target_X is __marker_position_x):
+        if target_x is 0 or target_x is self.__marker_position_x:
             return 0
         if target_x > self.__marker_position_x:
-            return -self.__align_move_distance
+            self.move_distance = -self.__align_move_distance
         else:
-            return self.__align_move_distance
+            self.move_distance = self.__align_move_distance

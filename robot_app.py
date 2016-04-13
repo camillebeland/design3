@@ -20,6 +20,7 @@ from robot.wheels_correction_layer import WheelsCorrectionLayer
 from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
 from robot.context import Context
+from robot.actions.refresh_image import RefreshImageAction
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
 from robot.actions.pick_up_treasure import PickUpTreasureAction
 from robot.actions.drop_down_treasure import DropDownTreasure
@@ -168,7 +169,8 @@ if __name__ == '__main__':
         EmbeddedRechargeStationDetector())
 
     timer = Timer()
-    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer)
+    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer, vision_refresher)
+    refresh_image = RefreshImageAction(context, "refresh_image_done")
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
     drop_down_treasure = DropDownTreasure(context, 'drop_down_treasure_done')
@@ -185,6 +187,7 @@ if __name__ == '__main__':
     align_treasure = AlignWithTreasureAction(context, 'align_treasure_done')
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
 
+    action_machine.register("refresh_image", refresh_image)
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('discover_manchester_code', discover_manchester_code)
     action_machine.register('pick_up_treasure', pick_up_treasure)
@@ -200,6 +203,7 @@ if __name__ == '__main__':
     action_machine.register('align_treasure', align_treasure)
     action_machine.register("scan_treasures", scan_treasure)
 
+    action_machine.bind("refresh_image", "refresh_image")
     action_machine.bind('move_to_charge_station', 'move_to_charge_station')
     action_machine.bind('align_charging_station', 'align_charging_station')
     action_machine.bind('find_island', 'find_island')
@@ -213,7 +217,9 @@ if __name__ == '__main__':
     action_machine.bind("recharge", "recharge")
     action_machine.bind("scan_treasures", "scan_treasures")
     action_machine.bind('align_treasure', 'align_treasure')
-    action_machine.bind('start', 'scan_treasures')
+
+    action_machine.bind('start', 'refresh_image')
+    action_machine.bind('refresh_image_done', 'scan_treasures')
     action_machine.bind('scan_treasures_done', 'move_to_charge_station')
     action_machine.bind('move_to_charge_station_done', 'align_charging_station')
     action_machine.bind('align_charging_station_done', 'recharge')
@@ -229,6 +235,5 @@ if __name__ == '__main__':
     action_machine.bind('drop_down_treasure_done', 'end_action')
     action_machine.bind('stop', 'end_action')
 
-    vision_refresher.refresh()
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, timer)
     robot_web_controller.run(host, port)
