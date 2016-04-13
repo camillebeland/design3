@@ -26,9 +26,8 @@ class Map:
     def get_table_corners(self):
         return self.table_calibration_service.get_table_corners()
 
-    def get_treasure_closest_to(self, position):
-        #TODO
-        pass
+    def get_pixel_per_meter_ratio(self):
+        return self.table_calibration_service.get_pixel_per_meter_ratio()
 
     def find_island_with_clue(self, clue):
         islands = self.worldmap_service.get_islands()
