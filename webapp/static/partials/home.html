@@ -9,8 +9,8 @@
     <div class="col-md-2 systemStatePanel" ng-controller="systemStatePanelController">
         <label>Time:</label>
         <label class="timer"><span>{{timer.minutes}}: {{timer.seconds}}</span></label>
-        <label ng-show="robot.ready">Robot ready <img class="readinessLed" src="../static/img/greenLed.png"/></label>
-        <label ng-show="!robot.ready">Robot not ready <img class="readinessLed" src="../static/img/redLed.png"/></label>
+        <label ng-show="robot.ready">Robot ready <img class="readinessLed" src="../static/img/greenLed.png" /></label>
+        <label ng-show="!robot.ready">Robot not ready <img class="readinessLed" src="../static/img/redLed.png" /></label>
         <label>
             Robot's angle: <span ng-bind="robot.angle"></span>&deg;
         </label>
@@ -86,11 +86,9 @@
                     </label>
                     <label>Show vision's tracking of robot
                         <label>
-                            <input type="radio" name="visionRobotToggle"
-                                   ng-click="visionRobotToggleOn()">On</label>
+                            <input type="radio" name="visionRobotToggle" ng-click="visionRobotToggleOn()">On</label>
                         <label>
-                            <input type="radio" name="visionRobotToggle" checked="true"
-                                   ng-click="visionRobotToggleOff()">Off</label>
+                            <input type="radio" name="visionRobotToggle" checked="true" ng-click="visionRobotToggleOff()">Off</label>
                     </label>
                     <button class="btn btn-danger" ng-click="recalculateMap()">Recalculate map</button>
                 </div>
@@ -106,12 +104,12 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
+                                <li><a href ng-click="actionMoveToChargeStation()">move to charge station</a></li>
                                 <li><a href ng-click="actionReadManchester()">read manchester code</a></li>
+                                <li><a href ng-click="actionFindIsland()">find island</a></li>
+                                <li><a href ng-click="actionMoveToTargetIsland()">move to target island</a></li>
                                 <li><a href ng-click="actionDropdownTreasure()">dropdown treasure</a></li>
                                 <li><a href ng-click="actionFindBestTreasure()">find best treasure</a></li>
-                                <li><a href ng-click="actionFindIsland()">find island</a></li>
-                                <li><a href ng-click="actionMoveToChargeStation()">move to charge station</a></li>
-                                <li><a href ng-click="actionMoveToTargetIsland()">move to target island</a></li>
                                 <li><a href ng-click="actionMoveToTreasure()">move to treasure</a></li>
                                 <li><a href ng-click="actionPickUpTreasure()">pick up treasure</a></li>
                                 <li><a href ng-click="actionRecharge()">recharge</a></li>
