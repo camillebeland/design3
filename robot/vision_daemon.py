@@ -37,7 +37,7 @@ class VisionDaemon:
                 response = requests.get(str(self.base_station_address) + '/vision/robot', timeout=0.3)
                 response.raise_for_status()
                 if not response.json():
-                    print("Robot position is not found, base station returned nothing")
+                    pass
                 else:
                     robot_info_json = response.json()
                     robot_info = self.robot_info_assembler.json_to_robot_info(robot_info_json)
@@ -45,7 +45,6 @@ class VisionDaemon:
                 self.__connected = True
             except requests.exceptions.RequestException:
                 self.__connected = False
-                print('can\'t fetch robot position from vision ' + str(self.base_station_address) + ' is not available')
             if self.is_mock:
                 break
 

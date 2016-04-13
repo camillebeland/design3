@@ -53,7 +53,18 @@ class TreasureAngleToWorldmapPositionConverter:
                 detected_treasures.append({'x': treasure_rear_x, 'y' : treasure_rear_y})
             elif treasure_distance == distance_top:
                 detected_treasures.append({'x': treasure_top_x, 'y' : treasure_top_y})
-        return detected_treasures
+        
+        return list(filter(lambda treasure : not self.__near_corners(treasure, table_corners),detected_treasures))
+
+
+    def __near_corners(self, treasure_position, corners):
+        left_limit = corners[0][0]
+        top_limit = corners[2][1]
+        bottom_limit = corners[0][1]
+
+        return (treasure_position['y'] - bottom_limit < 175) or (top_limit - treasure_position['y'] < 175) or (treasure_position['x'] - left_limit > 175)
+        
+
 
     def __compute_camera_position__(self):
         position = self.robot_position
