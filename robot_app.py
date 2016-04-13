@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
     timer = Timer()
     context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer, vision_refresher)
-    refresh_image = RefreshImageAction(context, "refresh_image")
+    refresh_image = RefreshImageAction(context, "refresh_image_done")
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
     drop_down_treasure = DropDownTreasure(context, 'drop_down_treasure_done')
@@ -234,6 +234,5 @@ if __name__ == '__main__':
     action_machine.bind('drop_down_treasure_done', 'end_action')
     action_machine.bind('stop', 'end_action')
 
-    vision_refresher.refresh()
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, timer)
     robot_web_controller.run(host, port)

@@ -12,7 +12,7 @@ class AlignWithTreasureAction(Action):
         align_movement = AlignMovement(treasures_position_deamon, self._context.robot, align_move_distance=1,
                                        min_distance_to_target=2, marker_position_x=893, time_sleep=0.25)
         self._context.robot.set_camera_angle(25, 0)
-        time.sleep(2)
+        time.sleep(0.5)
         try:
             align_movement.start(self.__align_done)
         except Exception as e:
@@ -22,7 +22,7 @@ class AlignWithTreasureAction(Action):
     def __align_done(self):
         self._context.robot.set_camera_angle(90, 0)
         self._context.robot.move(130, 0)
-        time.sleep(2)
+        time.sleep(1)
         if self.running:
             self._context.event_listener.notify_event(self._end_message)
             self.running = False
