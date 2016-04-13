@@ -10,12 +10,18 @@ var Robot = angular.module('Robot', [])
             this.manchesterCode = '';
             this.island = '';
             this.ready = false;
+            this.hasStartedSequence = false;
         };
 
         robotModel = new RobotModel();
 
         this.getRobotModel = function() {
             return robotModel;
+        };
+
+        this.setRobotModel = function(newRobotModel){
+            robotModel = newRobotModel;
+            $rootScope.$broadcast('robotModelUpdated');
         };
 
         this.up = function() {
