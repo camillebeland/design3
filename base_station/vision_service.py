@@ -113,7 +113,7 @@ class VisionService:
             approximated_left_limit = table_corners[0][0]
             approximated_top_limit = table_corners[2][1]
             approximated_bottom_limit = table_corners[0][1]
-            tolerance = 100
+            tolerance = 300
 
             if (approximated_bottom_limit - tolerance) <= treasure["y"] < (approximated_bottom_limit + tolerance):
                 side = "bottom"
