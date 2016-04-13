@@ -3,6 +3,7 @@ from threading import Thread
 import math
 from utils.math import rotate_vector
 from utils.position import Position
+from robot.no_connection_exception import NoConnectionException
 
 
 class Movement:
@@ -34,7 +35,13 @@ class Movement:
 
     def move_to_thread(self, final_destination, callback):
         while self.__should_move and self.__not_close_enough_to_destination(final_destination):
+            sleep(self.__loop_time)
             # sense
+            try:
+                self.__actual_position = self.__sense.get_robot_position()
+            except NoConnectionException as exception:
+                print(exception)
+                continue
             self.__actual_position = self.__sense.get_robot_position()
             self.__actual_robot_angle = self.__sense.get_robot_angle()
             # compute
@@ -42,15 +49,18 @@ class Movement:
             target = self.find_relative_target(self.__current_path)
             # control
             self.__control.move(target.x, target.y)
-            sleep(self.__loop_time)
 
         if callback is not None:
             callback()
         self.__current_path = list()
 
     def __not_close_enough_to_destination(self, destination):
-        self.__actual_distance = distance_between(self.__sense.get_robot_position(), destination)
-        return self.__actual_distance > self.__min_distance_to_destination
+        try:
+            self.__actual_distance = distance_between(self.__sense.get_robot_position(), destination)
+            return self.__actual_distance > self.__min_distance_to_destination
+        except NoConnectionException as exception:
+            print('(Ignored) : ',exception)
+            return True
 
     def find_relative_target(self, path):
         if len(path) is 0:
@@ -73,23 +83,31 @@ class Movement:
 
     def move_to_target_thread(self, target, callback):
         while self.__should_move and self.__not_close_enough_to_target(target):
+            sleep(self.__loop_time)
             # sense
-            self.__actual_position = self.__sense.get_robot_position()
+            try:
+                self.__actual_position = self.__sense.get_robot_position()
+            except NoConnectionException as exception:
+                print(exception)
+                continue
             self.__actual_robot_angle = self.__sense.get_robot_angle()
             # compute
             self.__current_path = self.__compute.find_path(self.__actual_position, target)
             relative_target = self.find_relative_target(self.__current_path)
             # control
             self.__control.move(relative_target.x, relative_target.y)
-            sleep(self.__loop_time)
         self.stop_any_movement()
         if callback is not None:
             callback()
         self.__current_path = list()
 
     def __not_close_enough_to_target(self, target):
-        self.__actual_distance = distance_between(self.__sense.get_robot_position(), target)
-        return self.__actual_distance > self.__min_distance_to_target
+        try:
+            self.__actual_distance = distance_between(self.__sense.get_robot_position(), target)
+            return self.__actual_distance > self.__min_distance_to_target
+        except NoConnectionException as exception:
+            print('(Ignored) : ', exception)
+            return True
 
     def stop_any_movement(self):
         self.__should_move = False
