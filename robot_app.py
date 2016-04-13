@@ -229,8 +229,6 @@ if __name__ == '__main__':
     action_machine.bind('drop_down_treasure_done', 'end_action')
     action_machine.bind('stop', 'end_action')
 
-    scan_treasure.start()
-
     vision_refresher.refresh()
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, timer)
     robot_web_controller.run(host, port)
