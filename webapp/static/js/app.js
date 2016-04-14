@@ -29,7 +29,7 @@ website.controller('homeController', ['$scope', function($scope) {
   window.ISLAND_CLUE_REFRESH_RATE = 2000;
   window.PATH_REFRESH_TIME_IN_MS = POSITION_REFRESH_TIME_IN_MS;
   window.CANVAS_REFRESH_TIME_IN_MS = 100;
-  window.TIMER_REFRESH_TIME_IN_MS = 5000;
+  window.TIMER_REFRESH_TIME_IN_MS = 10000;
   window.BACKEND_IMAGE_HEIGHT = 1200;
   window.BACKEND_IMAGE_WIDTH = 1600;
   window.CANVAS_HEIGHT = 600;
@@ -47,7 +47,8 @@ website.controller('homeController', ['$scope', function($scope) {
     SCAN_TREASURES : "scan_treasures",
     ALIGN_WITH_CHARGING_STATION : "align_charging_station",
     ALIGN_WITH_TREASURE : "align_treasure",
-    REFRESH_IMAGE: "refresh_image"
+    REFRESH_IMAGE: "refresh_image",
+    START_TIMER: "start_timer"
   });
 
   var init = function() {
