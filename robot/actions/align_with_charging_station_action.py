@@ -12,7 +12,7 @@ class AlignWithChargingStationAction(Action):
         try:
             charging_station_position_deamon = ChargingStationPositionDeamon(self._context.embedded_camera)
             align_movement = AlignMovement(charging_station_position_deamon, self._context.robot, align_move_distance=1,
-                                           min_distance_to_target=2, marker_position_x=1270, time_sleep=0.25)
+                                           min_distance_to_target=2, marker_position_x=1270, time_sleep=0.30)
             align_movement.start(self.__align_done)
         except Exception as e:
             self.running = False

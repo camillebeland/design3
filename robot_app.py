@@ -33,6 +33,7 @@ from robot.actions.find_best_treasure import FindBestTreasureAction
 from robot.actions.find_island import FindIslandAction
 from robot.actions.move_to_target_island import MoveToTargetIslandAction
 from robot.actions.move_to_treasure import MoveToTreasureAction
+from robot.actions.start_timer import StartTimerAction
 from robot.vision_daemon import VisionDaemon
 from robot.actions.scan_treasures import ScanTreasuresAction
 from robot.movement import Movement
@@ -141,7 +142,7 @@ if __name__ == '__main__':
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
-        polulu_port_hardcoded = '/dev/ttyACM0' 
+        polulu_port_hardcoded = '/dev/ttyACM0'
         assert(len(list(arduino_port)) != 0)
         assert(len(list(polulu_port)) != 0)
         real_polulu_port = min(map(lambda x: x.device, polulu_port))
@@ -192,11 +193,8 @@ if __name__ == '__main__':
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
     refresh_map_second_time = RefreshImageAction(context, 'second_refresh_done')
 
-<<<<<<< HEAD
     action_machine.register("second_refresh", refresh_map_second_time)
-=======
     action_machine.register("start_timer", start_timer)
->>>>>>> development
     action_machine.register("refresh_image", refresh_image)
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('discover_manchester_code', discover_manchester_code)
