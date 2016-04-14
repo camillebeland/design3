@@ -26,6 +26,21 @@ class PathFinder:
         any_obstacles_contains_point  = reduce(lambda x,y : x or y, map(lambda obstacle : obstacle.contains_point(point),self.__obstacles))
         return any_obstacles_contains_point
 
+    def find_closest_node_to_neighbors(self, nodes, point):
+        graph = networkx.Graph()
+        graph.add_nodes_from(nodes)
+        closest_node = graph.nodes()[0]
+        smallest_distance = closest_node.distance(point)
+        for node in graph.nodes():
+            if node.contains_point(point):
+                return node
+            new_distance = node.distance(point)
+            if new_distance < smallest_distance:
+                closest_node = node
+                smallest_distance = new_distance
+        return closest_node
+
+
     def find_closest_node_to(self, point):
         closest_node = self.__graph.nodes()[0]
         smallest_distance = closest_node.distance(point)
@@ -41,7 +56,7 @@ class PathFinder:
 
     def find_path(self, from_point, to_point):
         from_cell = self.find_closest_node_to(from_point)
-        to_cell = self.find_closest_node_to(to_point)
+        to_cell = self.find_closest_node_to_neighbors(networkx.node_connected_component(self.__graph, from_cell), to_point)
 
         try:
             cell_path = networkx.astar_path(self.__graph, from_cell, to_cell)
