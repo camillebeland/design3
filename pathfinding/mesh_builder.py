@@ -20,8 +20,8 @@ class MeshBuilder:
 
         top = Polygon(self.x, self.y + self.height / 2 + self.width / 2, self.width + padding)
         bottom = Polygon(self.x, self.y - self.height / 2 - self.width / 2, self.width + padding)
-        left = Polygon(self.x - self.width / 2 - self.height / 2, self.y, self.height + padding)
-        right = Polygon(self.x + self.width / 2 + self.height / 2, self.y, self.height + padding)
+        left = Polygon(self.x - self.width / 2 - self.height / 2, self.y, self.height + padding + 40)
+        right = Polygon(self.x + self.width / 2 + self.height / 2, self.y, self.height + padding + 40)
 
         self.polygons.extend([top, bottom, right, left])
 

@@ -15,7 +15,8 @@ class PrehenseurRotationControl:
         #init des parametres
         self.__controller.setRange(self.__CHANNEL, self.__MIN, self.__MAX)
         #self.__setSpeed()
-        self.sleep()
+        cmd = chr(0xa1)
+        usb.write(cmd.encode(encoding='UTF-8'))
 
     # position de repos
     def sleep(self):

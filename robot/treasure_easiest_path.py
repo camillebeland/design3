@@ -30,7 +30,7 @@ class TreasureEasiestPath:
         self.__worldmap = worldmap
 
     def __calculate_islands_risk(self, treasure_position):
-        islands = self.__worldmap.worldmap_service.get_islands()
+        islands = self.__worldmap.get_islands()
         islands_positions = list(map(lambda island: Position(island["x"], island["y"]), islands))
         islands_remoteness = list(map(lambda island_position: island_position.distance(treasure_position), islands_positions))
         closest_island_distance = min(islands_remoteness)

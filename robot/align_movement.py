@@ -11,6 +11,7 @@ class AlignMovement:
         self.__marker_position_x = marker_position_x
         self.__time_sleep = time_sleep
         self.move_distance = 0
+        self.should_move = False
 
     def __init_vision__(self):
         self.__position_deamon.start_fetching_position_from_vision()
