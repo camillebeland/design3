@@ -170,6 +170,7 @@ if __name__ == '__main__':
 
     timer = Timer()
     context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer, vision_refresher)
+    start_timer = StartTimerAction(context, "start_timer_done")
     refresh_image = RefreshImageAction(context, "refresh_image_done")
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
@@ -187,6 +188,7 @@ if __name__ == '__main__':
     align_treasure = AlignWithTreasureAction(context, 'align_treasure_done')
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
 
+    action_machine.register("start_timer", start_timer)
     action_machine.register("refresh_image", refresh_image)
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('discover_manchester_code', discover_manchester_code)
@@ -203,6 +205,7 @@ if __name__ == '__main__':
     action_machine.register('align_treasure', align_treasure)
     action_machine.register("scan_treasures", scan_treasure)
 
+    action_machine.bind("start_timer", "start_timer")
     action_machine.bind("refresh_image", "refresh_image")
     action_machine.bind('move_to_charge_station', 'move_to_charge_station')
     action_machine.bind('align_charging_station', 'align_charging_station')
@@ -218,7 +221,8 @@ if __name__ == '__main__':
     action_machine.bind("scan_treasures", "scan_treasures")
     action_machine.bind('align_treasure', 'align_treasure')
 
-    action_machine.bind('start', 'refresh_image')
+    action_machine.bind('start', 'start_timer')
+    action_machine.bind("start_timer_done", "refresh_image")
     action_machine.bind('refresh_image_done', 'move_to_charge_station')
     action_machine.bind('move_to_charge_station_done', 'align_charging_station')
     action_machine.bind('align_charging_station_done', 'recharge')

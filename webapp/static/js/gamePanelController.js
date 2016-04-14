@@ -54,7 +54,7 @@ website.controller('gamePanelController', ['$scope', '$rootScope', 'RobotService
 
     $scope.startFromBeginning = function() {
         var actionCompleted = function(){$rootScope.$broadcast('backendMapHasRefreshed')};
-        robotService.sendAction(window.actionsEnum.REFRESH_IMAGE, actionCompleted);
+        robotService.sendAction(window.actionsEnum.START_TIMER, actionCompleted);
         robotModel = robotService.getRobotModel();
         robotModel.hasStartedSequence = true
     }
