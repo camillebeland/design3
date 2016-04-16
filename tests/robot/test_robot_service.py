@@ -13,7 +13,8 @@ class TestRobotService:
         code_letter = "A"
         payload = {'code': code_letter}
         mock_response = Mock()
-        expected_response_text = "blue triangle"
+        expected_response_text = '{"couleur": "bleu"}'
+        expected_response = {'color': 'blue'}
         mock_response.text = expected_response_text
         mock_requests_framework.get.return_value = mock_response
 
@@ -22,7 +23,7 @@ class TestRobotService:
 
         # Then
         mock_requests_framework.get.assert_called_once_with("https://192.168.0.2/", verify=False, params=payload)
-        assert_equals(expected_response_text, response)
+        assert_equals(expected_response, response)
 
 
 
