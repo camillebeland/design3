@@ -1,9 +1,9 @@
 import threading
 import time
-from utils.position import Position
 
 import requests
-from robot.no_connection_exception import NoConnectionException
+from robot.exceptions.no_connection_exception import NoConnectionException
+from utils.position import Position
 
 
 class VisionDaemon:

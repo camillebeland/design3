@@ -1,4 +1,4 @@
-class InvalidManchesterCodeError(Exception):
+class InvalidManchesterCodeException(Exception):
 
     def __init__(self, value):
         self.value = value

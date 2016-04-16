@@ -1,5 +1,4 @@
 from threading import Thread
-import time
 from vision_utils.double_sided_buffer import DoubleSidedBuffer
 
 

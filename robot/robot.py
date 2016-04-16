@@ -1,7 +1,8 @@
-from time import sleep
 from math import atan2, degrees
+from time import sleep
+
+from robot.exceptions.no_connection_exception import NoConnectionException
 from utils.position import Position
-from robot.no_connection_exception import NoConnectionException
 
 
 class Robot:

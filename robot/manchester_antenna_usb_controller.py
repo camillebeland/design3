@@ -1,4 +1,4 @@
-from robot.errors.invalid_manchester_code_error import InvalidManchesterCodeError
+from robot.exceptions.invalid_manchester_code_exception import InvalidManchesterCodeException
 
 
 def encode(string):
@@ -18,7 +18,7 @@ class ManchesterAntennaUsbController:
             is_valid = False
 
         if not is_valid:
-            raise InvalidManchesterCodeError("invalid code is: "+ str(code))
+            raise InvalidManchesterCodeException("invalid code is: " + str(code))
 
     def get_manchester_code(self):
         self.serial_port.write(encode("(c)"))
