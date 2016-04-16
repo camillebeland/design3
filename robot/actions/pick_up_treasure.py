@@ -10,6 +10,8 @@ class PickUpTreasureAction(Action):
         sleep(0.2)
         self._context.robot.move(-15, 0)
         sleep(2)
+        self._context.robot.lift_prehenseur_down()
+        sleep(1)
         self._context.robot.lift_prehenseur_up()
         sleep(3)
         self._context.robot.deactivate_magnet()

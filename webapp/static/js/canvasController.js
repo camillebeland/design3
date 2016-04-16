@@ -210,6 +210,11 @@ website.controller('canvasController', ['$scope', 'RobotService', 'MapService', 
         hideRobotPositionFromVision();
     });
 
+    $scope.$on('backendMapHasRefreshed', function(event){
+        stage.removeChild(allIslands);
+        showIslands();
+    })
+
     setInterval(function() {
         robot_socket.emit('fetchPath');
     }, PATH_REFRESH_TIME_IN_MS);

@@ -3,7 +3,7 @@ from unittest.mock import *
 from nose.tools import *
 from nose.tools import assert_equals
 
-from robot.errors.invalid_manchester_code_error import InvalidManchesterCodeError
+from robot.exceptions.invalid_manchester_code_exception import InvalidManchesterCodeException
 from robot.manchester_antenna_usb_controller import ManchesterAntennaUsbController
 
 
@@ -22,7 +22,7 @@ class TestManchesterAntennaUsbController:
         # Then
         assert_equals(a_valid_code, actual_code)
 
-    @raises(InvalidManchesterCodeError)
+    @raises(InvalidManchesterCodeException)
     def test_get_manchester_code_should_raise_error_if_code_not_valid(self):
         # Given
         mock_serial_port = Mock()

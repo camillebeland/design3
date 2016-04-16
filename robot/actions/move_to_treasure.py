@@ -8,8 +8,7 @@ class MoveToTreasureAction(Action):
         self.running = True
         print('Moving to Treasure')
         self.treasure_position = self._context.robot.get_target_treasure_position()
-        self.facing_angle = self.__find_facing_angle_when_upfront(self.treasure_position,
-                                                                  self._context.self._context.worldmap.table_calibration_service.get_table_corners())
+        self.facing_angle = self.__find_facing_angle_when_upfront(self.treasure_position, self._context.worldmap.table_calibration_service.get_table_corners())
         wall_distance = 180
         position_ajustment = Position(-cos(2*pi*self.facing_angle/360.0), sin(2*pi*self.facing_angle/360.0)) * wall_distance
         print(self.facing_angle, position_ajustment)
@@ -39,11 +38,11 @@ class MoveToTreasureAction(Action):
         approximated_top_limit = table_corners[2][1]
         approximated_bottom_limit = table_corners[0][1]
 
-        if (approximated_bottom_limit - tolerance) <= treasure_position < (approximated_bottom_limit + tolerance):
+        if (approximated_bottom_limit - tolerance) <= treasure_position.y < (approximated_bottom_limit + tolerance):
             facing_angle = 180
-        elif (approximated_bottom_limit - tolerance) <= treasure_position < (approximated_left_limit + tolerance):
+        elif (approximated_left_limit - tolerance) <= treasure_position.x < (approximated_left_limit + tolerance):
             facing_angle = 270
-        elif (approximated_top_limit - tolerance) <= treasure_position < (approximated_top_limit + tolerance):
+        elif (approximated_top_limit - tolerance) <= treasure_position.y < (approximated_top_limit + tolerance):
             facing_angle = 0
         elif facing_angle is None:
             facing_angle = 180

@@ -1,4 +1,5 @@
 import serial
+import time
 import serial.tools.list_ports as lp
 from configuration import configuration
 from robot import robot_web_controller
@@ -20,6 +21,7 @@ from robot.wheels_correction_layer import WheelsCorrectionLayer
 from robot.worldmap_service import WorldmapService
 from robot.action_machine import ActionMachine
 from robot.context import Context
+from robot.actions.refresh_image import RefreshImageAction
 from robot.actions.move_to_charge_station import MoveToChargeStationAction
 from robot.actions.pick_up_treasure import PickUpTreasureAction
 from robot.actions.drop_down_treasure import DropDownTreasure
@@ -31,6 +33,7 @@ from robot.actions.find_best_treasure import FindBestTreasureAction
 from robot.actions.find_island import FindIslandAction
 from robot.actions.move_to_target_island import MoveToTargetIslandAction
 from robot.actions.move_to_treasure import MoveToTreasureAction
+from robot.actions.start_timer import StartTimerAction
 from robot.vision_daemon import VisionDaemon
 from robot.actions.scan_treasures import ScanTreasuresAction
 from robot.movement import Movement
@@ -139,11 +142,11 @@ if __name__ == '__main__':
         ports = lp.comports()
         arduino_port = list(filter(lambda port: port.pid == arduino_pid and port.vid == arduino_vid, ports))
         polulu_port = list(filter(lambda port: port.pid == polulu_pid and port.vid == polulu_vid, ports))
-        polulu_port_hardcoded = '/dev/ttyACM0' 
+        polulu_port_hardcoded = '/dev/ttyACM0'
         assert(len(list(arduino_port)) != 0)
         assert(len(list(polulu_port)) != 0)
         real_polulu_port = min(map(lambda x: x.device, polulu_port))
-        polulu_serial_port = serial.Serial(port=real_polulu_port, timeout=1)
+        polulu_serial_port = serial.Serial(port=real_polulu_port)
         arduino_serial_port = serial.Serial(port=arduino_port[0].device, baudrate=arduino_baudrate, timeout=1)
 
         wheels = WheelsUsbController(arduino_serial_port, WheelsUsbCommands())
@@ -158,7 +161,9 @@ if __name__ == '__main__':
     movement = Movement(compute=None, sense=world_map, control=wheels, loop_time=loop_time, min_distance_to_destination=min_distance_to_destination)
     robot = Robot(wheels=corrected_wheels, world_map=world_map, pathfinder=None,
                   manchester_antenna=manchester_antenna, movement=movement, battery=battery, magnet=magnet, camera_rotation = camera_rotation)
-
+    robot.lift_prehenseur_up()
+    time.sleep(1)
+    robot.lift_prehenseur_down()
     treasure_easiest_path = TreasureEasiestPath()
     vision_refresher = VisionRefresher(robot, base_station_host, base_station_port, camera, table_corners, treasure_easiest_path)
     action_machine = ActionMachine()
@@ -168,7 +173,9 @@ if __name__ == '__main__':
         EmbeddedRechargeStationDetector())
 
     timer = Timer()
-    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer)
+    context = Context(robot, robot_service, world_map, embedded_vision_service, action_machine, treasure_easiest_path, timer, vision_refresher)
+    start_timer = StartTimerAction(context, "start_timer_done")
+    refresh_image = RefreshImageAction(context, "refresh_image_done")
     move_to_charge_station = MoveToChargeStationAction(context, 'move_to_charge_station_done')
     pick_up_treasure = PickUpTreasureAction(context, 'pick_up_treasure_done')
     drop_down_treasure = DropDownTreasure(context, 'drop_down_treasure_done')
@@ -184,7 +191,11 @@ if __name__ == '__main__':
     align_charging_station = AlignWithChargingStationAction(context, 'align_charging_station_done')
     align_treasure = AlignWithTreasureAction(context, 'align_treasure_done')
     move_to_treasure = MoveToTreasureAction(context, 'move_to_treasure_done')
+    refresh_map_second_time = RefreshImageAction(context, 'second_refresh_done')
 
+    action_machine.register("second_refresh", refresh_map_second_time)
+    action_machine.register("start_timer", start_timer)
+    action_machine.register("refresh_image", refresh_image)
     action_machine.register('move_to_charge_station', move_to_charge_station)
     action_machine.register('discover_manchester_code', discover_manchester_code)
     action_machine.register('pick_up_treasure', pick_up_treasure)
@@ -200,6 +211,8 @@ if __name__ == '__main__':
     action_machine.register('align_treasure', align_treasure)
     action_machine.register("scan_treasures", scan_treasure)
 
+    action_machine.bind("start_timer", "start_timer")
+    action_machine.bind("refresh_image", "refresh_image")
     action_machine.bind('move_to_charge_station', 'move_to_charge_station')
     action_machine.bind('align_charging_station', 'align_charging_station')
     action_machine.bind('find_island', 'find_island')
@@ -213,9 +226,14 @@ if __name__ == '__main__':
     action_machine.bind("recharge", "recharge")
     action_machine.bind("scan_treasures", "scan_treasures")
     action_machine.bind('align_treasure', 'align_treasure')
-    action_machine.bind('start', 'move_to_charge_station')
+    action_machine.bind("second_refresh", "second_refresh")
+
+    action_machine.bind('start', 'start_timer')
+    action_machine.bind("start_timer_done", "refresh_image")
+    action_machine.bind('refresh_image_done', 'move_to_charge_station')
     action_machine.bind('move_to_charge_station_done', 'align_charging_station')
-    action_machine.bind('align_charging_station_done', 'recharge')
+    action_machine.bind('align_charging_station_done', 'second_refresh')
+    action_machine.bind('second_refresh_done', 'recharge')
     action_machine.bind('recharge_done', 'discover_manchester_code')
     action_machine.bind('discover_manchester_code_done', 'find_island_clue')
     action_machine.bind('find_island_clue_done', 'find_island')
@@ -228,6 +246,5 @@ if __name__ == '__main__':
     action_machine.bind('drop_down_treasure_done', 'end_action')
     action_machine.bind('stop', 'end_action')
 
-    vision_refresher.refresh()
     robot_web_controller.inject(robot, vision_refresher, robot_service, action_machine, timer)
     robot_web_controller.run(host, port)

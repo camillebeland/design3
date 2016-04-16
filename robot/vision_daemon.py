@@ -1,8 +1,9 @@
 import threading
 import time
-from utils.position import Position
 
 import requests
+from robot.exceptions.no_connection_exception import NoConnectionException
+from utils.position import Position
 
 
 class VisionDaemon:
@@ -12,12 +13,16 @@ class VisionDaemon:
         self.robot_info_assembler = assembler
         self.start_fetching_robot_position_from_vision()
         self.is_mock = is_mock
+        self.__connected = False
 
     def get_robot_position_from_vision(self):
-        if self.last_robot_info_from_vision:
-            return Position(self.last_robot_info_from_vision['x'], self.last_robot_info_from_vision['y'])
+        if self.__connected:
+            if self.last_robot_info_from_vision:
+                return Position(self.last_robot_info_from_vision['x'], self.last_robot_info_from_vision['y'])
+            else:
+                return Position(0, 0)
         else:
-            return Position(0, 0)
+            raise NoConnectionException('Cannot connect to base station')
 
     def get_robot_angle_from_vision(self):
         if self.last_robot_info_from_vision:
@@ -29,16 +34,17 @@ class VisionDaemon:
         while self.running:
             time.sleep(0.05)
             try:
-                response = requests.get(str(self.base_station_address) + '/vision/robot')
+                response = requests.get(str(self.base_station_address) + '/vision/robot', timeout=0.3)
                 response.raise_for_status()
                 if not response.json():
-                    print("Robot position is not found, base station returned nothing")
+                    pass
                 else:
                     robot_info_json = response.json()
                     robot_info = self.robot_info_assembler.json_to_robot_info(robot_info_json)
                     self.last_robot_info_from_vision = robot_info
+                self.__connected = True
             except requests.exceptions.RequestException:
-                print('can\'t fetch robot position from vision ' + str(self.base_station_address) + ' is not available')
+                self.__connected = False
             if self.is_mock:
                 break
 

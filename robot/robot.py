@@ -1,5 +1,8 @@
-from time import sleep
 from math import atan2, degrees
+from time import sleep
+
+from robot.exceptions.no_connection_exception import NoConnectionException
+from utils.position import Position
 
 
 class Robot:
@@ -15,6 +18,7 @@ class Robot:
         self.__manchester_code = ''
         self.__island_clue = ''
         self.__camera_rotation_control = camera_rotation
+        self.__position = Position(0,0)
 
     def init_vision(self, pathfinder):
         self.__pathfinder = pathfinder
@@ -24,7 +28,11 @@ class Robot:
         self.__wheels.move(delta_x, delta_y)
 
     def get_position(self):
-        return self.__world_map.get_robot_position()
+        try:
+            self.__position = self.__world_map.get_robot_position()
+        except NoConnectionException as exception:
+            print('(Ignored) : ', exception)
+        return self.__position
 
     def get_angle(self):
         return self.__world_map.get_robot_angle()
@@ -68,10 +76,6 @@ class Robot:
 
     def move_to_target(self, target, callback):
         self.__movement.move_to_target(target, callback)
-
-    def find_move_to(self, position):
-        #TODO
-        pass
 
     def rotate(self, angle, callback=None):
         current_angle = self.get_angle()
@@ -122,6 +126,7 @@ class Robot:
 
     def set_camera_angle(self, vertical_angle, horizontal_angle):
         self.__camera_rotation_control.setHor(horizontal_angle)
+        sleep(0.5)
         self.__camera_rotation_control.setVert(vertical_angle)
 
     def get_island_clue(self):

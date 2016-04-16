@@ -32,5 +32,5 @@ var MapModule = angular.module('MapModule', [])
           }, function errorCallback(response) {
               console.log("error getting robot position from vision on base_station");
           });
-      }
+      };
     }]);
