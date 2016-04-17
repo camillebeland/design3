@@ -2,7 +2,7 @@ import math
 from threading import Thread
 from time import sleep
 
-from robot.errors.no_connection_exception import NoConnectionException
+from robot.exceptions.no_connection_exception import NoConnectionException
 from utils.math import rotate_vector
 from utils.position import Position
 
