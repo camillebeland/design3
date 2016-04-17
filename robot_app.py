@@ -39,7 +39,7 @@ from robot.actions.scan_treasures import ScanTreasuresAction
 from robot.movement import Movement
 from robot.magnet import Magnet
 from robot.simulation.magnet_simulation import MagnetSimulation
-from maestroControl.prehenseur_rotation_control import PrehenseurRotationControl
+from maestro_control.prehenseur_rotation_control import PrehenseurRotationControl
 from robot.vision_refresher import VisionRefresher
 from vision_utils.camera_service import CameraService
 from vision_utils.mock_camera_service import MockCameraService
@@ -49,7 +49,7 @@ from robot.vision.embedded_recharge_station_detector import EmbeddedRechargeStat
 from robot.table_calibration_service import TableCalibrationService
 from robot.actions.align_with_treasure import AlignWithTreasureAction
 from robot.actions.align_with_charging_station_action import AlignWithChargingStationAction
-from maestroControl.camera_rotation_control import CameraRotationControl
+from maestro_control.camera_rotation_control import CameraRotationControl
 import cv2
 from robot.treasure_easiest_path import TreasureEasiestPath
 from utils.position import Position

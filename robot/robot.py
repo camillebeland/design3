@@ -125,9 +125,9 @@ class Robot:
         self.__magnet.lift_down()
 
     def set_camera_angle(self, vertical_angle, horizontal_angle):
-        self.__camera_rotation_control.setHor(horizontal_angle)
+        self.__camera_rotation_control.set_horizontal(horizontal_angle)
         sleep(0.5)
-        self.__camera_rotation_control.setVert(vertical_angle)
+        self.__camera_rotation_control.set_vertical(vertical_angle)
 
     def get_island_clue(self):
         return self.__island_clue
