@@ -1,7 +1,7 @@
 \section{Transmission et décodage du code manschester}
 
-Afin de transmettre le code manchester entre la station de base et le robot, un module transmetteur et un récepteur de fréquence radio 433 MHz sont utilisée.
-Pour ce faire, un microcontroleur de type Arduino Mega se trouvant à la station de base lit d'abord le code manchester en se synchronisant par interuption
+Afin de transmettre le code manchester entre la station de base et le robot, un module transmetteur et un récepteur de fréquence radio 433 MHz sont utilisés.
+Pour ce faire, un microcontrôleur de type Arduino Mega se trouvant à la station de base lit d'abord le code manchester en se synchronisant par interuption
 sur le signal de l'horloge, sans le décoder. Par la suite, un port TX est utilisé afin de diffuser en continu le code avec un baudrate de 600 dans le transmetteur
 RF. Sur le robot, le récepteur RF est branché sur un port RX avec le même baudrate que le transmetteur. Il suffit alors de lire le contenu du buffer
 série 4 fois (4x8 bits) afin d'obtenir les 32 bits du code manchester qui est décodé par la suite sur le Arduino. Le Arduino décode continuellement le
