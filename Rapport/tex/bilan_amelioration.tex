@@ -1,0 +1,28 @@
+\section{Améliorations potentielles du robot}
+
+Réaliser que le produit final n'est pas parfait est une étape importante dans le processus de design si l'on souhaite observer une amélioration. Le robot était loin d'être parfait, et plusieurs améliorations possibles auraient pu être faites si plus de temps était fourni.
+
+\subsection{Disposition physique du microcontrolleur}
+Ne pas fixer le arduino sous le robot en ayant comme seul isolant le plastique de l’emballage du arduino. En effet, il n’aurait suffit que d’un mince trou dans le plastique pour court-circuité le microcontroleur.
+
+\subsection{Callback du Arduino à la fin d’une commande complétée}
+En ajoutant un \textit{callback} à la fin d’un mouvement du Arduino, le programme n’aurait pas eu besoin de renvoyer la commande de mouvement à toutes les 250 ms. Le programme pourrait alors laisser le Arduino travailler et terminer sa commande. Cela éviterait de renvoyer une commande pendant un déplacement, qui en raison du délais de la vision, créait un dépassement de la commande à tout coup puisque la position détectée et la position réelle étaient différentes.
+
+\subsection{Estimation de la position à partir des encodeurs}
+En estimant la position du robot à partir des encodeurs, le robot aurait pu être autonome même quand la caméra world ne pouvait plus le détecter. Ce mode de fonctionnement aurait permis au robot d’aller facilement au fond de la table sans perdre le contrôle sur sa position.
+
+\subsection{Vision des trésors du fond}
+Avoir eut plus de temps nous aurions terminé l'intégration de la gestion des trésors du fond qui sont hors de portée de la caméra world. En effet nous pouvions les détecter et les ajouter à notre "worldmap", mais nous n'avions pas un système de déplacement assez robuste alors nous avons préféré ne pas les prendre en compte.
+Ce qui nous amène au point que nous aurions voulu améliorer le déplacement du robot dans des zones sans vision du dessus.
+
+\subsection{Système de traitement des erreurs dans le séquenceur}
+Nous aurions aimé avoir le temps d’ajouter de la robustesse au séquenceur des actions du robot. Par exemple, si le robot échappe le trésor, il aurait été possible de le détecter avec la caméra embarquée et de recommencer l’action. De la même façon, si aucun chemin n’est trouvé par le robot pour se rendre au trésor ciblé ou à l’île cible, la vision ou le manchester auraient pu être rafraîchis et l’algorithme recommencé. 
+
+\subsection{Logger}
+Au cours du développement nous avons enlevé la composante "logger" du système afin d'enlever de la complexité, mais finalement celui-ci se serait avéré assez utile. Surtout lors des derniers tests lorsque le robot est tout intégré et que nous ne voulons pas avoir à l'ouvrir pour savoir ce qui se passe.
+
+\subsection{Interface}
+Nous aurions aussi aimé améliorer l'interface en ajoutant plus d'information, tout en améliorant son accessibilité. Par exemple nous aurions ajouté l'information sur le niveau de charge de la batterie et un "feedback" dans la section de lancement des différentes séquences.
+
+\subsection{Alimentation}
+Il aurait été préférable d’avoir un fusible pour chacune des composantes du robot. Une meilleure préparation en vue de l’assemblage du robot aurait permis de constater que la longueur des fils utilisés était inutilement trop grande pour les divers interrupteurs. Aussi, il aurait été plus sage de mettre un plus grand nombre de condensateurs de découplage. 

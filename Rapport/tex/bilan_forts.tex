@@ -1,0 +1,31 @@
+\section{Points forts du robot}
+
+Analyser les points forts du projet permet de conserver les bons choix de design pour les projets futurs. Cela permet aussi de s'encourager et de regarder le projet avec fierté.
+
+\subsection{Vision World}
+
+La vision de la caméra world était très solide. En effet, un masque était d’abord construit de façon à couper l’image autour de la surface de jeu de façon à limiter l'environnement où détecter les îles et les trésors. Les coins de la table étaient trouvés grâce au carré vert de calibration au centre de la table. Les algorithmes de détection des îles et des trésors avaient des filtres de couleurs larges afin de pouvoir s’adapter à plusieurs situation lumineuses différentes. Pour ensuite différencier les îles où les trésors du bruits ou de d’autres objets aux couleurs similaires, des filtres de dimensions, de formes et de positions précis pouvaient être utilisés en raison du fait que la caméra était statique. Le résultat était une détection parfaite de tous les éléments à tous les coups.
+
+\subsection{Asservissement des moteurs}
+L'asservissement des moteurs nous a permi de faire tous les mouvements nécéssaires avec une grande précision. Les mouvements étaient entièrement omnidirectionels et indépendants de l’angle du robot. Six boucles PID furent utilisées sur le microcontroleur: Une indépendante pour chaque moteur, en vitesse, et une par paire de roues ayant la même orientation, en position. La première boucle en vitesse était très rapide et permettaient d’aller a des vitesses élevées sans dépassement. La deuxième faisait toute la magie: en comparant la position des roues opposés, la boucle assurait que les roues étaients toujours au même point dans leur commande respective, et donc garantit un mouvement en ligne droite. Lorsqu’une roue est bloquée pendant un instant, elle est accélérée afin de surmonter l’obstacle tandis que l’autre est freinée. Lorsqu’une roue se met à glisser et accélère subitement, elle est freinée par l’état de l’autre roue. Lorsqu’il y a un désiquilibre de poids sur le robot causant l’accélération d’une roue, la boucle compense cette différence.
+
+\subsection{Préhenseur et système de recharge}
+Le préhenseur construit est certainement un point fort du robot. Une base en bois lui offre une structure solide qui permet de se coller sur le trésor sans s’abimer. Il peut également effectuer une rotation afin de garder le trésor dans une position de rétention permettant d’économiser de l’énergie. Ce choix de design a sauvé beaucoup de temps sur la conception du système d’électroaimant, puisque la rotation du préhenseur permet une prise de trésor peu couteuse en énergie.
+
+De plus, le système d’alimentation de la bobine est construit avec un asservissement analogique, donc le microcontroleur n’a qu’à envoyer un 5V pour l’activer et un 0V pour l’éteindre. Ce système était une excellente décision, réduisant la logique du microcontroleur et le traitement nécéssaire pour activer le préhenseur. C’est également le cas pour l’activation de la recharge du condensateur, interfacé avec une commande 0-5V.
+
+D’ailleurs, la séquence de dépot du trésor active l’électroaimant avant de descendre le trésor, permettant de garder un controle absolu sur le trésor.
+
+Finalement, la structure du préhenseur et de la bobine d’induction est construite avec un ressort, permettant au robot d’épouser l’angle du mur du trésor et de la station de recharge lors du contact.
+
+\subsection{Alignement à l'aide de la vision embarquée}
+Le système d’alignement du robot avec les trésors et la station de recharge est très rapide. L’excellent asservissement de la position du robot et la vision world précise permettent d’abord de positionner le robot à un endroit très près du trésor, dans le bon angle. À cet instant, seul un petit ajustement latéral est requis, ce qui est accompli avec la caméra embarqué. Il ne suffit que d’identifier et de “track” la cible (à plus de 30 images/seconde) et de se déplacer dans la bonne direction (gauche ou droite) avec une répétition rapide (5 Hz) de petits mouvements  (mouvement minimum des roues) jusqu’à ce que le robot soit enligné avec la cible. Cette séquence a permis à notre robot de s'aligner très précisément (2-3 mm) dans un intervalle de temps très petit (4-5 secondes).
+
+\subsection{Robustesse aux pertes de connexion}
+La séquence complète de jeu a été divisée en plusieurs actions, qui pouvaient alors être chainées afin d'accomplir un tour du jeu. Ceci nous permettait de vérifier lors des étapes cruciales que le robot possédait bien une connection Wi-Fi. Lorsque cela se produisait, nous stoppions aussi tout mouvement puisqu'une boucle de rétroaction impliquant le Wi-Fi est nécessaire pour obtenir un bon déplacement.
+
+\subsection{Simulation logicielle du robot}
+Nous avons programmé une simulation logicielle de la plupart des actions du robot telles que le déplacement suivant le chemin trouvé. La simulation était intégrée avec la vision de la caméra world qui était reproduite à partir d’images de la table. Il donc possible de voir le robot simulé se déplacer en évitant les îles détectées par la vision dans l’interface web. Cette simulation nous a permis de voir les effet de notre code tôt dans le projet et de corriger plusieurs erreurs, qui, autrement ne seraient apparus que lors de l’intégration avec les composantes matérielles.
+
+\subsection{Alimentation}
+La présence d’interrupteur pour chaque composante permettait de faire la sélection en alimentation des composantes seulement sollicitées lors des bancs de test. De plus, lorsque l’ensemble des composantes était alimenté par la batterie, le robot était fonctionnel jusqu’à 3h consécutif. Ce temps d’utilisation est en lien direct avec le choix d’une batterie de 5200mAh. Un fusible d’entrée s’est avéré utile, et lors d’un mauvais branchement d’un dévolteur, nous avons constaté l’importance de sa présence sur le circuit d’alimentation.

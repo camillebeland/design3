@@ -1,0 +1,12 @@
+\section{Retour sur les choix de design (Si le projet était à refaire...)}
+
+Maintenant que le projet est terminé, plusieurs choix sont regrettés. Il est essentiel de regarder le projet avec du recul et de se demander qu'est-ce qui aurait pu être changé dès le début du projet pour faciliter la tâche. Ainsi, si le projet était à refaire du début, certaines choses seraient faites autrement.
+
+\subsection{Revoir le choix du langage de programmation}
+Puisque le python n’est pas un langage typé, nous avons passé beaucoup de temps à régler des erreurs de types. Aussi, à la fin notre programme était assez gros et plusieurs classes étaient injectées, donc l’autocomplétion n’était pas possible, ce qui a aggravé le problème. Par conséquent, si c’était a refaire, nous considérerions les langages typés dans le choix du langage même si le python nous a avantagé dans la rapidité de développement de l’architecture réseau et par sa facilité d’utilisation avec OpenCV.
+
+\subsection{Tests fonctionnels}
+Les tests fonctionnels avec tout le système intégré sont absolument essentiels pour ce type de projet. Nous en avons bien sûr fait mais pas suffisamment. Des tests plus long, s'étirant sur une semaine par exemple, nous auraient permis de d'essayer toutes les configurations possibles et de corriger la plupart des problèmes et faiblesses de notre robot, tout en nous assurant des bonnes nuit de sommeil. Bien sûr afin d'y arriver, il faut s'assurer de contrôler toute "feature envy"
+
+\subsection{Alimentation}
+Obtenir les dévolteurs le plus tôt possible. Le délai d’attente que nous avons eu pour la réception de ceux-ci et la contrainte de temps pour mettre en marche le robot nous a forcés à fabriquer le PCB de l’alimentation sans la présence de dévolteurs, outre celui de l'ordinateur embarqué. Avec une réception hâtive des dévolteurs. Nous aurions pu incorporer l’ensemble des dévolteurs au PCB de l’alimentation. Ceci aurait éliminé ainsi un grand nombre de fils. De plus, le détecteur au DEL de basse tension de la batterie manquait de précision. Si c’était à refaire, nous commanderions un indicateur de basse tension avec affiche de la tension de la batterie. 
